@@ -6160,7 +6160,7 @@ def _validate_pim_kernel_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_graph_community_cert_family(base_dir: str) -> Optional[str]:
-    """QA Graph Community Cert family [158] — certifies QA feature map dimensions (qa21=21, qa27=27, qa83=83) and community detection benchmarks on standard networks. Chromogeometry check: C*C+F*F=G*G. Checks GC_1+DIM/CHROMO/BENCH/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Graph Community Cert family [158] — certifies QA feature map dimensions (qa21=21, qa27=27, qa83=83, confirmed real 2026-07-06 via live import of feature_map.py) and community detection benchmarks on standard networks. Chromogeometry check: C*C+F*F=G*G, RE-VERIFIED 2026-07-06: found+fixed a real arithmetic bug (fixture declared F=264 for (b,e)=(8,13), true value is 272, with a falsely-declared residual=0 that the validator never recomputed -- hardened GC_CHROMO to genuinely recompute C/F/G from b,e). Also found+replaced fabricated benchmark numbers (karate "louvain" 0.68/0.69 and football "qa_spectral_X" 0.45/0.72/0.55 matched no real computation anywhere in qa_lab/qa_graph/) with independently-reproduced real Louvain results (karate 0.4905/0.5942/0.4266, football 0.8069/0.8903/0.6046) -- same finding class as [180]. Checks GC_1+DIM/CHROMO(hardened)/BENCH/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_graph_community_cert_v1")
     validator = os.path.join(fam_dir, "qa_graph_community_cert_validate.py")
@@ -14004,7 +14004,7 @@ FAMILY_SWEEPS = [
      "qa_pim_kernel_cert_v1", True),
     (158, "QA Graph Community Cert family",
      _validate_graph_community_cert_family,
-     "QA feature map dimensions qa21=21 qa27=27 qa83=83; chromogeometry C*C+F*F=G*G; benchmark graphs football/karate; checks GC_1+DIM/CHROMO/BENCH/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "QA feature map dimensions qa21=21 qa27=27 qa83=83 (confirmed real); chromogeometry C*C+F*F=G*G (RE-VERIFIED 2026-07-06, fixed real F=264->272 bug + hardened to recompute, not fixture-trust); benchmark graphs football/karate (RE-VERIFIED: replaced fabricated 0.68/0.45 numbers with real reproduced Louvain 0.4905/0.8069); checks GC_1+DIM/CHROMO(hardened)/BENCH/W/F; 1 PASS + 1 FAIL; self-test ok",
      "158_qa_graph_community_cert",
      "qa_graph_community_cert_v1", True),
     (159, "QA Observer Core Cert family",

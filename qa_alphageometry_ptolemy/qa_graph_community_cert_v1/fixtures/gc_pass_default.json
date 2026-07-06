@@ -6,6 +6,8 @@
   "created_utc": "2026-04-02T02:00:00Z",
   "_fixture_purpose": "Canonical PASS: correct dimensions, chromogeometry identity, benchmark metrics in range",
 
+  "source_grounding": "Chromogeometry C/F/G identity is Wildberger chromogeometry (Wildberger, 2005). Benchmark method is Louvain community detection (Blondel & Guillaume, 2008).",
+
   "feature_dimensions": {
     "qa21": 21,
     "qa27": 27,
@@ -18,22 +20,22 @@
       {"b": 1, "e": 1, "C": 4, "F": 3, "G": 5, "C2_plus_F2_minus_G2": 0},
       {"b": 1, "e": 2, "C": 12, "F": 5, "G": 13, "C2_plus_F2_minus_G2": 0},
       {"b": 3, "e": 5, "C": 80, "F": 39, "G": 89, "C2_plus_F2_minus_G2": 0},
-      {"b": 8, "e": 13, "C": 546, "F": 264, "G": 610, "C2_plus_F2_minus_G2": 0}
+      {"b": 8, "e": 13, "C": 546, "F": 272, "G": 610, "C2_plus_F2_minus_G2": 0}
     ]
   },
 
   "benchmark_results": [
     {"graph": "karate", "nodes": 34, "edges": 78, "method": "louvain",
-     "ari": 0.68, "nmi": 0.69, "modularity": 0.42,
-     "note": "Zachary karate club — 2 ground truth communities"},
-    {"graph": "football", "nodes": 115, "edges": 613, "method": "qa_spectral_X",
-     "ari": 0.45, "nmi": 0.72, "modularity": 0.55,
-     "note": "College football — 12 conferences, QA X-invariant weighting"}
+     "ari": 0.4905, "nmi": 0.5942, "modularity": 0.4266,
+     "note": "Zachary karate club — 2 ground truth communities (real 'club' attribute). Independently reproduced 2026-07-06 via networkx.algorithms.community.louvain_communities(seed=42) against the real karate_club_graph()."},
+    {"graph": "football", "nodes": 115, "edges": 613, "method": "louvain",
+     "ari": 0.8069, "nmi": 0.8903, "modularity": 0.6046,
+     "note": "College football — 12 conferences ground truth, Louvain finds 10 communities. Independently reproduced 2026-07-06 via networkx.algorithms.community.louvain_communities(seed=42) against the real codex_on_QA/data/football.graphml."}
   ],
 
   "witnesses": [
     {"graph": "karate", "direction": [1, 1],
-     "observation": "QA feature-weighted spectral clustering on Zachary karate club produces 2 clusters matching ground truth with ARI=0.68"}
+     "observation": "Louvain community detection on the real Zachary karate club graph produces ARI=0.4905 vs the real 'club' attribute ground truth (independently reproduced 2026-07-06)."}
   ],
 
   "validation_checks": [

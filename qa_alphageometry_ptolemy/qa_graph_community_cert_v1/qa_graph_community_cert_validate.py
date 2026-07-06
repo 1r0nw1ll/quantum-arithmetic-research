@@ -7,10 +7,18 @@ karate, dolphins).
 SOURCE: codex_on_QA/ spectral clustering framework (Rust + Python),
 now consolidated in qa_lab/qa_graph/.
 
+Primary sources:
+- Wildberger (2005), Divine Proportions, Ch. 6 (chromogeometry: green/
+  red/blue quadrance C, F, G and the identity C^2+F^2=G^2).
+- Blondel & Guillaume & Lambiotte & Lefebvre (2008), "Fast unfolding of
+  communities in large networks," J. Stat. Mech. P10008 (the Louvain
+  method used as the standard benchmark on karate/football).
+
 Checks: GC_1 (schema), GC_DIM (feature vector dimensions: qa21=21,
 qa27=27, qa83=83), GC_BENCH (benchmark graph metrics in expected range),
-GC_CHROMO (C^2+F^2=G^2 identity holds), GC_W (>=1 benchmark witness),
-GC_F (fail detection).
+GC_CHROMO (C^2+F^2=G^2 identity, genuinely recomputed from b,e — not
+just fixture-trusted), GC_W (>=1 benchmark witness), GC_F (fail
+detection).
 """
 
 import json
@@ -42,14 +50,29 @@ def validate(cert, *, collect_errors=True):
             if actual != exp_dim:
                 err("GC_DIM", f"{mode}: expected {exp_dim}, got {actual}")
 
-    # GC_CHROMO — chromogeometry identity
+    # GC_CHROMO — chromogeometry identity (genuinely recomputed from b,e,
+    # not just trusting the fixture's own declared C/F/G/residual values --
+    # a prior version of this check only re-checked the declared residual,
+    # which let a wrong F value through with a falsely-declared residual=0)
     chromo = cert.get("chromogeometry_check", {})
     if chromo:
         for test in chromo.get("tests", []):
             b, e = test.get("b"), test.get("e")
-            residual = test.get("C2_plus_F2_minus_G2", None)
-            if residual is not None and abs(residual) > 1e-8:
-                err("GC_CHROMO", f"C^2+F^2-G^2 != 0 for ({b},{e}): residual={residual}")
+            if b is None or e is None:
+                err("GC_CHROMO", f"test missing b/e: {test}")
+                continue
+            d, a = b + e, b + 2 * e
+            C_exp, F_exp, G_exp = 2 * d * e, b * a, d * d + e * e
+            for field, exp in (("C", C_exp), ("F", F_exp), ("G", G_exp)):
+                declared = test.get(field)
+                if declared is not None and declared != exp:
+                    err("GC_CHROMO",
+                        f"({b},{e}): declared {field}={declared}, "
+                        f"recomputed {field}={exp}")
+            residual_exp = C_exp * C_exp + F_exp * F_exp - G_exp * G_exp
+            if residual_exp != 0:
+                err("GC_CHROMO",
+                    f"C^2+F^2-G^2 != 0 for ({b},{e}): recomputed residual={residual_exp}")
     else:
         warnings.append("GC_CHROMO: chromogeometry_check section missing")
 

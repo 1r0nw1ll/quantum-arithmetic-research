@@ -26,7 +26,7 @@ After grokking, the operator IS the DFT on Z/53Z — a cyclic rotation whose eig
 
 For Z/pZ, the DFT has floor(p/2)+1 distinct frequency pairs (including the DC component). Schiffman shows mode count approaches this maximum under weight decay.
 
-**QA prediction for m=9 (CORRECTED 2026-04-08):** The DFT on Z/9Z has floor(9/2)+1 = 5 conjugate-frequency pairs: {0}, {1,8}, {2,7}, {3,6}, {4,5}. However, the A1-compliant QA step function produces **9 orbit families** for mod-9 (6 cosmos[12] + 2 satellite[4] + 1 singularity[1]), not 5. The DFT frequency count and the QA family count are distinct quantities: the former counts Fourier modes of Z/9Z, the latter counts orbits of F=[[0,1],[1,1]] on (Z/9Z)^2. The relationship between the two is non-trivial and depends on the representation theory of the step function, not just the modulus.
+**QA prediction for m=9 (RE-CORRECTED 2026-07-06 — see Verification Note):** The DFT on Z/9Z has floor(9/2)+1 = 5 conjugate-frequency pairs: {0}, {1,8}, {2,7}, {3,6}, {4,5}. The A1-compliant QA step function produces **5 orbit families** for mod-9 (3 cosmos[24] + 1 satellite[8] + 1 singularity[1]) — the "9 families (6 cosmos[12] + 2 satellite[4] + 1 singularity[1])" figure in the 2026-04-08 correction below was itself the product of a `qa_step` implementation bug (found and fixed during the [198] Pudelko audit, 2026-07-05/06), not the true QA orbit count. With the bug fixed, the DFT frequency count (5) and the QA orbit-family count (5) for m=9 now numerically coincide — whether this reflects a genuine mathematical connection or is a coincidence specific to m=9 remains open (see V5).
 
 ### ACE as observer projection
 
@@ -41,7 +41,7 @@ Schiffman finds 3D cores for 4-state Markov chains. Three independently trained 
 1. **V1**: Eigenvalue transition from |lambda|<1 to |lambda|=1 documented at grokking epoch
 2. **V2**: Post-grokking operator eigenvalues are roots of unity on Z/pZ (within numerical tolerance)
 3. **V3**: Mode count for trained mod-p model matches floor(p/2)+1 — **CONFIRMED for m=97** (17 modes post-grokking, compressing from 251)
-4. **V4**: CORRECTED — DFT frequency pairs (5 for m=9) ≠ QA orbit families (9 for m=9). These are distinct quantities. The original claim conflated them.
+4. **V4**: RE-CORRECTED 2026-07-06 — DFT frequency pairs (5 for m=9) and QA orbit families (5 for m=9, not 9 — the "9" was a qa_step bug, see Verification Note) now numerically coincide. Whether this reflects a real connection is open (V5).
 5. **V5**: DFT conjugate-frequency pairing vs QA norm-class pairing — OPEN (relationship non-trivial for composite moduli)
 
 ## Dependencies
@@ -72,11 +72,11 @@ Schiffman finds 3D cores for 4-state Markov chains. Three independently trained 
 ### QA-native experiments — DIFFERENT APPROACH
 Standard grokking is not QA-compliant (uses 0-indexed addition, standard transformer). QA-native experiments using orbit-cycling + resonance coupling (`qa_bateson_coupling_experiment.py`) show:
 - Orbit families are exact invariants of QA step (not learned — conserved)
-- L1 coupling preserves all 9 families; unstructured L2 destroys them
+- L1 coupling preserves all 5 families (corrected 2026-07-06, was "9" due to the [198] qa_step bug); unstructured L2 destroys them
 - The Schiffman eigenvalue transition phenomenon applies to PRIME moduli; composite moduli require hierarchical (Hensel) discovery
 
-### V4 correction
-Prior claim: "mode count = 5 = QA orbit count for m=9." Actual A1-compliant orbit count for m=9 is **9 families** (not 5). The floor(p/2)+1 formula applies to Z/pZ for prime p; it does not directly apply to composite m=9.
+### V4 correction (RE-CORRECTED 2026-07-06)
+Original 2026-04-08 claim: "mode count = 5 = QA orbit count for m=9," corrected at the time to "actual A1-compliant orbit count for m=9 is 9 families (not 5)." That 2026-04-08 correction was itself wrong: the "9 families" figure came from a `qa_step` implementation bug (`e_new` computed from the already-updated `b_new` instead of the original `(b,e)`), found and fixed during the [198] Pudelko audit. The true QA orbit count for m=9 is **5** (3 cosmos[24] + 1 satellite[8] + 1 singularity[1]) — independently reconfirmed by direct simulation. So the *original* 2026-04-08 claim ("mode count = 5 = QA orbit count") was numerically right about both counts being 5, even though whether that numerical coincidence reflects a genuine connection (rather than being specific to m=9) is still open — see V5.
 
 ## Scripts
 
@@ -85,7 +85,7 @@ Prior claim: "mode count = 5 = QA orbit count for m=9." Actual A1-compliant orbi
 
 ## Status
 
-PARTIALLY VERIFIED — eigenvalue transition confirmed at m=97 (prime). m=9 requires QA-native approach, not standard grokking. V4 corrected (9 families, not 5).
+PARTIALLY VERIFIED — eigenvalue transition confirmed at m=97 (prime). m=9 requires QA-native approach, not standard grokking. V4 re-corrected 2026-07-06 (5 families, not 9 — the "9" was a qa_step bug).
 
 ## Verification Note (2026-07-05)
 
@@ -118,3 +118,31 @@ No fabrication found. This cert's own honest self-correction history
 (the V4 correction distinguishing DFT frequency pairs from QA orbit
 families) is a good example of the practice this audit cycle has been
 encouraging elsewhere.
+
+## Verification Note (2026-07-06) — correcting the 2026-07-05 note above
+
+The praise in the note directly above turned out to be premature: the
+"V4 correction" it called "a good example of honest self-correction"
+was itself built on a wrong number. During the separate [198] Pudelko
+audit (2026-07-05/06), found and fixed a real `qa_step` implementation
+bug shared across three experiment scripts, including
+`qa_bateson_coupling_experiment.py` (cited by this cert). That bug
+produced a wrong QA orbit-family count of 9 for mod-9; the true count,
+confirmed independently by direct simulation and now consistent across
+every other cert this cycle that touches m=9 orbit structure, is 5 (3
+cosmos of 24 + 1 satellite of 8 + 1 singularity).
+
+This means the *original* pre-2026-04-08 claim in this cert ("mode
+count = 5 = QA orbit count for m=9") was numerically correct about both
+figures being 5 — the 2026-04-08 "correction" that changed this to "9
+families, not 5" was the actual regression, not an improvement. Fixed
+the doc throughout (mathematical content, V4, the correction narrative,
+status line) to reflect the true count and to be transparent about this
+reversal rather than silently re-editing history.
+
+**Lesson for this audit cycle**: a cert's own "honest self-correction"
+narrative isn't automatically trustworthy just because it's framed as
+one — the correction itself can be wrong, and confirming "the cert
+transparently documents its own history" isn't the same as confirming
+the corrected number is actually right. Independently recompute, don't
+just check that a correction narrative exists.

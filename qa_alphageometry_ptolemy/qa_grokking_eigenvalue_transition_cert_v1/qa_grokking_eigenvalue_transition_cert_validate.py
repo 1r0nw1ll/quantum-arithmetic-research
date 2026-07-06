@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Validator for QA_GROKKING_EIGENVALUE_TRANSITION_CERT.v1 [family 199]."""
+"""Validator for QA_GROKKING_EIGENVALUE_TRANSITION_CERT.v1 [family 199].
+
+Primary source: Schiffman, "Transformers Converge to Invariant
+Algorithmic Cores," arxiv.org/abs/2602.22600.
+"""
 
 QA_COMPLIANCE = "cert_validator - grokking eigenvalue transition partial cert; observer projection evidence kept separate from QA orbit-family count"
 
@@ -34,7 +38,11 @@ def _run_checks(fixture):
     correction = fixture.get("mode_count_correction", {})
     results["GET_CORRECTION"] = (
         correction.get("dft_frequency_pairs_m9") == 5
-        and correction.get("qa_orbit_families_m9") == 9
+        # Fixed 2026-07-06: true QA orbit-family count for m=9 is 5 (3
+        # cosmos[24] + 1 satellite[8] + 1 singularity[1]), not 9 -- the
+        # "9" was a qa_step implementation bug found and fixed during
+        # the [198] Pudelko audit. See docs/families/199_*.md.
+        and correction.get("qa_orbit_families_m9") == 5
         and correction.get("distinct_quantities") is True
     )
 

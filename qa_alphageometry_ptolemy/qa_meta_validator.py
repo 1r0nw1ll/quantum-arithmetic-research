@@ -6961,7 +6961,7 @@ def _validate_pudelko_modular_periodicity_cert_family(base_dir: str) -> Optional
 
 
 def _validate_grokking_eigenvalue_transition_cert_family(base_dir: str) -> Optional[str]:
-    """QA Grokking Eigenvalue Transition Cert family [199] — partial-verification cert separating DFT mode count from QA orbit-family count; self-test ok"""
+    """QA Grokking Eigenvalue Transition Cert family [199] — partial-verification cert separating DFT mode count from QA orbit-family count; self-test ok. RE-VERIFIED 2026-07-06: the cert's own "V4 correction" (qa_orbit_families_m9=9) was itself wrong -- that "9" was the same qa_step bug found and fixed during the [198] Pudelko audit. True count is 5, now hardcoded in the validator and fixtures; both this session's own earlier praise of the "9" correction (2026-07-05 note) and the underlying claim have been corrected."""
     return _validate_self_tested_family(
         base_dir,
         "qa_grokking_eigenvalue_transition_cert_v1",
@@ -14309,7 +14309,7 @@ FAMILY_SWEEPS = [
      "qa_pudelko_modular_periodicity_cert_v1", True),
     (199, "QA Grokking Eigenvalue Transition Cert family",
      _validate_grokking_eigenvalue_transition_cert_family,
-     "Schiffman grokking eigenvalue transition mapped to QA with m=97 prime-control evidence, m=9 non-grokking composite target, and explicit DFT frequency-pair vs QA orbit-family correction; checks GET_1+STATUS/PRIME/COMPOSITE/CORRECTION/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "Schiffman grokking eigenvalue transition mapped to QA with m=97 prime-control evidence, m=9 non-grokking composite target, and explicit DFT frequency-pair vs QA orbit-family correction; checks GET_1+STATUS/PRIME/COMPOSITE/CORRECTION/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. RE-VERIFIED 2026-07-06: fixed qa_orbit_families_m9 from a buggy 9 to the true 5 (same qa_step bug as [198]); both counts now coincide with the DFT frequency-pair count.",
      "199_qa_grokking_eigenvalue_transition_cert",
      "qa_grokking_eigenvalue_transition_cert_v1", True),
     (200, "QA Spherical Grokking Theorem NT Cert family",

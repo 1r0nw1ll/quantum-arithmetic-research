@@ -41,9 +41,16 @@ np.random.seed(42)
 M = 9
 
 def qa_step(b, e, m=M):
-    """A1-compliant QA step."""
-    b_new = ((b + e - 1) % m) + 1
-    e_new = ((e + b_new - 1) % m) + 1
+    """A1-compliant QA step.
+
+    Fixed 2026-07-06: was computing e_new from the already-updated
+    b_new instead of the original (b,e) -- the same shared bug found
+    and fixed across qa_hensel_selforg_experiment.py,
+    qa_hensel_orbit_cycling_experiment.py, and
+    qa_bateson_coupling_experiment.py during the [198] Pudelko audit.
+    """
+    b_new = e
+    e_new = ((b + e - 1) % m) + 1
     return b_new, e_new
 
 def classify_orbit(b, e, m=M):

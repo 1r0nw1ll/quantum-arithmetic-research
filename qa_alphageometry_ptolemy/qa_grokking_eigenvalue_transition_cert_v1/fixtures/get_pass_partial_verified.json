@@ -17,8 +17,9 @@
   },
   "mode_count_correction": {
     "dft_frequency_pairs_m9": 5,
-    "qa_orbit_families_m9": 9,
-    "distinct_quantities": true
+    "qa_orbit_families_m9": 5,
+    "distinct_quantities": true,
+    "_note": "Corrected 2026-07-06: qa_orbit_families_m9 was 9 (a qa_step bug fixed during the [198] Pudelko audit); true value is 5 (3 cosmos[24]+1 satellite[8]+1 singularity[1]). Both counts now numerically coincide with dft_frequency_pairs_m9=5; distinct_quantities remains true in the conceptual sense (different mathematical objects), not as a claim they differ in value."
   },
   "source_attribution": "Schiffman arXiv 2602.22600 plus local qa_spherical_grokking_mod9.py and qa_bateson_coupling_experiment.py results documented 2026-04-08.",
   "witnesses": [

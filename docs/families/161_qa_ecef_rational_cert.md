@@ -56,3 +56,22 @@ For integer/fixed-point systems (FPGA, embedded LiDAR, drone processors):
 ## Validator
 
 `qa_alphageometry_ptolemy/qa_ecef_rational_cert_v1/qa_ecef_rational_cert_validate.py --self-test`
+
+## Verification Note (2026-07-06)
+
+Independently recomputed s_φ/s_λ for all six witness cities from their
+real lat/lon coordinates — all match the doc's table (two entries round
+differently in the 4th decimal: Tokyo 0.3402 vs 0.3401, São Paulo
+0.5284 vs 0.5285 — negligible rounding, not a bug). Independently
+computed both classical ECEF (X,Y,Z via sin/cos) and rational ECEF
+(X²,Y²,Z² via spreads/crosses) from scratch using the real WGS84
+constants (a=6378137.0, e²=2f−f², confirmed in the [156] audit) for all
+six cities: all differences are float-precision noise on the order of
+10⁻³ to 10⁻¹⁹ m², far under the claimed <0.1 m² tolerance — exactly what
+an algebraic identity should produce. Confirmed the fundamental
+X²+Y²=(N+h)²c_φ identity follows trivially from c_λ+s_λ=1.
+
+Validator confirmed genuinely computing both classical and rational
+forms live using the real WGS84 constants and comparing them at
+runtime, not fixture-trusting. `--self-test` passes on both fixtures.
+No bugs found.

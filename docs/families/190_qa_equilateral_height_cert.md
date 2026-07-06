@@ -18,15 +18,19 @@ Element S = d²e = d·X = D·e: Dale Pond's 25th QA element. Dale labeled it "He
 
 ### Verification (7 directions)
 
-| (b,e) | d | S | d·X | D·e |
-|-------|---|---|-----|-----|
-| (1,1) | 2 | 4 | 2×2=4 | 4×1=4 |
-| (2,1) | 3 | 9 | 3×3=9 | 9×1=9 |
-| (3,2) | 5 | 50 | 5×10=50 | 25×2=50 |
-| (5,2) | 7 | 98 | 7×14=98 | 49×2=98 |
-| (5,3) | 8 | 192 | 8×24=192 | 64×3=192 |
+| (b,e) | d | W | S | d·X | D·e | height=W√3/2 |
+|-------|---|---|---|-----|-----|--------------|
+| (1,1) | 2 | 8 | 4 | 2×2=4 | 4×1=4 | 6.93 |
+| (2,1) | 3 | 15 | 9 | 3×3=9 | 9×1=9 | 12.99 |
+| (3,2) | 5 | 45 | 50 | 5×10=50 | 25×2=50 | 38.97 |
+| (5,2) | 7 | 77 | 98 | 7×14=98 | 49×2=98 | 66.68 |
+| (5,3) | 8 | 112 | 192 | 8×24=192 | 64×3=192 | 97.00 |
+| (7,3) | 10 | 160 | 300 | 10×30=300 | 100×3=300 | 138.56 |
+| (8,3) | 11 | 187 | 363 | 11×33=363 | 121×3=363 | 161.95 |
 
-All three definitions give identical results (algebraic identity).
+All three definitions give identical results (algebraic identity). S never
+equals the true equilateral height `W√3/2` for any of the 7 directions —
+independently verified 2026-07-06, see Verification Note.
 
 ## Checks
 
@@ -54,3 +58,33 @@ All three definitions give identical results (algebraic identity).
 
 - `fixtures/eh_pass_height.json` — 7 directions with S verified three ways
 - `fixtures/eh_fail_wrong_s.json` — FAIL fixture for testing
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed all three formulas (`S=d²e`, `S=d·X`, `S=D·e`)
+for all 7 witness directions from scratch — exact matches throughout.
+The validator (`qa_equilateral_height_cert_validate.py`) already
+genuinely recomputes `d, D, X` from `(b,e)` live, not fixture-trusting.
+
+**Independently re-verified the cert's own self-correction** (per the
+[[feedback_shared_script_bug_propagation]] lesson — a cert's "we caught
+our own error" narrative isn't automatically right, recompute it):
+computed the true equilateral-triangle height `W·√3/2` for all 7
+directions using `W` from cert [152] and confirmed `S ≠ W·√3/2` in every
+single case (e.g. Unity Block: `S=4` vs `height≈6.93`) — the correction
+of Dale Pond's original "Height of equilateral triangle" label is
+genuinely right, not just asserted.
+
+**Found a real internal inconsistency the correction had introduced**:
+the fixture's own `cross_references` section (referencing cert [152])
+still said "S = equilateral height" — repeating Dale's original,
+already-disproven label right after the fixture's own header had
+corrected it. This wasn't caught by the validator (which doesn't check
+`cross_references` at all — a free-text field). Fixed the
+cross-reference to state the correction instead of contradicting it.
+
+Also completed the doc's table, which was headed "Verification (7
+directions)" but only listed 5 rows — added the missing (7,3) and (8,3)
+witnesses, plus a `height=W√3/2` column making the disproof directly
+visible in the doc rather than only in prose. `--self-test` passes on
+both fixtures.

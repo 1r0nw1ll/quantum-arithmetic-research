@@ -6556,7 +6556,7 @@ def _validate_dale_circle_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_equilateral_height_cert_family(base_dir: str) -> Optional[str]:
-    """QA Equilateral Height Cert family [190] — certifies element S=d²e=d*X=D*e, Dale Pond's equilateral triangle height (#25 in svpwiki.com QA Elements). Three equivalent definitions verified for 7 directions. Connects to [152] W side and [189] circle. Checks EH_1+S/DX/DE/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Equilateral Height Cert family [190] — certifies element S=d²e=d*X=D*e, Dale Pond's 25th QA element (svpwiki.com item #25), labeled "Height of equilateral triangle" but geometrically S is a rectangle area d*(C/2), NOT a height (Dale's label is wrong). RE-VERIFIED 2026-07-06: all 3 equivalent definitions independently reconfirmed for all 7 directions; independently re-verified the cert's own self-correction by computing the true equilateral height W*sqrt(3)/2 for all 7 directions and confirming S never equals it; found+fixed a real internal inconsistency where the fixture's own cross_references section still repeated Dale's disproven "S=equilateral height" label after the fixture's header had already corrected it (uncaught since cross_references isn't validator-checked); doc's "7 directions" table only had 5 rows, completed. Connects to [152] W side and [189] circle. Checks EH_1+S/DX/DE/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_equilateral_height_cert_v1")
     validator = os.path.join(fam_dir, "qa_equilateral_height_cert_validate.py")
@@ -14264,7 +14264,7 @@ FAMILY_SWEEPS = [
      "qa_dale_circle_cert_v1", True),
     (190, "QA Equilateral Height Cert family",
      _validate_equilateral_height_cert_family,
-     "Element S=d²e=d*X=D*e; Dale Pond equilateral triangle height (#25 svpwiki.com); three equivalent definitions; 7 directions verified; connects [152] W side + [189] circle; checks EH_1+S/DX/DE/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Element S=d²e=d*X=D*e (#25 svpwiki.com, Dale's 'equilateral height' label is geometrically WRONG -- S is a rectangle area, RE-VERIFIED 2026-07-06 incl. fixing a stale cross_references entry that still repeated the disproven label); three equivalent definitions; 7 directions verified; connects [152] W side + [189] circle; checks EH_1+S/DX/DE/W/F; 1 PASS + 1 FAIL; self-test ok",
      "190_qa_equilateral_height_cert",
      "qa_equilateral_height_cert_v1", True),
     (191, "QA Bateson Learning Levels Cert family",

@@ -9,6 +9,8 @@
 
   "source_attribution": "Dale Pond, 'Quantum Arithmetic Elements', svpwiki.com, item 25: 'S = d*X = Height of equilateral triangle' — NOTE: geometric label is incorrect; S is a rectangle area d×(C/2), not a triangle height",
 
+  "source_grounding": "QA-2 Ch 7 equilateral triangle element W is (Iverson, 1991). The true equilateral height formula used to independently disprove Dale's label is standard rational-trig geometry (Wildberger, 2005).",
+
   "element_defined": {
     "S": {
       "formula_1": "d*d*e",
@@ -65,7 +67,7 @@
   ],
 
   "cross_references": [
-    {"family": 152, "name": "QA Equilateral Triangle Cert", "relation": "W = equilateral side; S = equilateral height"},
+    {"family": 152, "name": "QA Equilateral Triangle Cert", "relation": "W = equilateral side; S is NOT the equilateral height (corrected 2026-07-06 -- this cross-reference previously repeated Dale's incorrect label after the fixture's own header already corrected it; S = d*(C/2), a rectangle area, verified != W*sqrt(3)/2 for all 7 witnesses)"},
     {"family": 189, "name": "QA Dale Circle Cert", "relation": "P,Q,R derived from same W; S+W+P form equilateral-circle bridge"},
     {"family": 148, "name": "QA Sixteen Identities Cert", "relation": "S extends the 16 identities to 17+ (with P,Q,R = 20+)"}
   ],

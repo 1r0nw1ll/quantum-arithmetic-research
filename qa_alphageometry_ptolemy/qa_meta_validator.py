@@ -4228,7 +4228,7 @@ def _validate_engineering_core_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_spread_period_cert_family(base_dir: str) -> Optional[str]:
-    """QA Spread Period Cert family [128] — certifies that the QA cosmos orbit period for modulus m equals the Pisano period π(m) of the Fibonacci sequence mod m (= order of Fibonacci shift F=[[0,1],[1,1]] in GL₂(Z/mZ)); π(9)=24, π(7)=16, π(3)=8; spread polynomial S_n(s) cycles after π(m) steps; checks SP1-SP5 (schema, Pisano period, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=7 period=16) + 1 FAIL (PISANO_PERIOD_MISMATCH+MATRIX_PERIOD_WRONG: claimed period=12 for m=9 — projective vs linear order confusion); self-test ok"""
+    """QA Spread Period Cert family [128] — certifies that the QA cosmos orbit period for modulus m equals the Pisano period π(m) of the Fibonacci sequence mod m (= order of Fibonacci shift F=[[0,1],[1,1]] in GL₂(Z/mZ)); π(9)=24, π(7)=16, π(3)=8; spread polynomial S_n(s) cycles after π(m) steps. RE-VERIFIED 2026-07-06: independently recomputed the full 9-modulus illustrative table via direct orbit simulation + real matrix powers -- all pi(m)/cosmos-state counts exact; found+fixed a real error in the m=24 row of the (uncertified, illustrative-only) "F^(pi/2) mod m" column, which claimed -I but F^12 mod 24 actually gives 17*I, not 23*I=-I; not in any fixture, no validator impact. Checks SP1-SP5 (schema, Pisano period, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=7 period=16) + 1 FAIL (PISANO_PERIOD_MISMATCH+MATRIX_PERIOD_WRONG: claimed period=12 for m=9 — projective vs linear order confusion); self-test ok"""
     import subprocess
     spc_dir   = os.path.join(base_dir, "qa_spread_period_cert_v1")
     validator = os.path.join(spc_dir, "qa_spread_period_cert_validate.py")
@@ -13939,7 +13939,7 @@ FAMILY_SWEEPS = [
      "qa_projection_obstruction_cert", True),
     (128, "QA Spread Period Cert family",
      _validate_spread_period_cert_family,
-     "Pisano period = QA cosmos orbit: cosmos period for modulus m = π(m) = Fibonacci period mod m = ord(F) in GL₂(Z/mZ); π(9)=24, π(7)=16, π(3)=8; checks SP1-SP5 (schema, Pisano period, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=7 period=16) + 1 FAIL (PISANO_PERIOD_MISMATCH+MATRIX_PERIOD_WRONG: claimed period=12 for m=9); self-test ok",
+     "Pisano period = QA cosmos orbit: cosmos period for modulus m = π(m) = Fibonacci period mod m = ord(F) in GL₂(Z/mZ); π(9)=24, π(7)=16, π(3)=8 (RE-VERIFIED 2026-07-06, fixed real m=24 F^(pi/2) table error, no fixture impact); checks SP1-SP5 (schema, Pisano period, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=7 period=16) + 1 FAIL (PISANO_PERIOD_MISMATCH+MATRIX_PERIOD_WRONG: claimed period=12 for m=9); self-test ok",
      "128_qa_spread_period",
      "qa_spread_period_cert_v1", True),
     (127, "QA UHG Null Cert family",

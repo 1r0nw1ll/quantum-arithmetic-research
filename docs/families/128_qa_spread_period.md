@@ -28,13 +28,13 @@ to s after π(m) steps (because the angle group has order π(m)).
 |---|------|----------------|-----------------|
 | 2 | 3 | — (odd period) | 3 |
 | 3 | 8 | −I | 8 |
-| 4 | 6 | — | 12 |
+| 4 | 6 | — (F³=[[1,2],[2,3]] ≠ −I) | 12 |
 | 5 | 20 | −I | 20 |
 | 6 | 24 | −I | 24 |
 | 7 | 16 | −I | 48 |
-| 8 | 12 | — | 48 |
+| 8 | 12 | — (F⁶=5·I mod 8 ≠ −I=7·I) | 48 |
 | 9 | 24 | −I | 72 |
-| 24 | 24 | −I | 504 |
+| 24 | 24 | 17·I mod 24, **≠ −I** (corrected 2026-07-06; −I=23·I mod 24) | 504 |
 
 When F^{π/2} = −I, the affine QA translation cancels and the affine orbit period equals
 the linear matrix order (proven in family [126]).
@@ -90,3 +90,30 @@ isometry dynamics (group theory) + UHG null points (geometry) + Pisano periods (
 
 `ok=True` means the certificate is internally consistent:
 detected failure types == declared `fail_ledger`, and `result` field is consistent.
+
+## Verification Note (2026-07-06)
+
+Independently recomputed the full "Standard Pisano periods" table from
+scratch for all 9 moduli by directly simulating the `(b,e)→(e,(b+e) mod m)`
+orbit map over every state in `(Z/mZ)²` and by computing real matrix
+powers of `F=[[0,1],[1,1]]` mod m: every `π(m)` value and every "QA
+cosmos states" count matches exactly (e.g. m=9: π=24, 72 cosmos + 8
+satellite + 1 singularity = 81 = 9², matching the project's established
+orbit structure). The validator (`qa_spread_period_cert_validate.py`)
+only checks the two certified fixtures (m=9, m=7) and genuinely
+recomputes the Pisano period and `F^period≡I` there — no bugs.
+
+**Found and fixed a real computational error in the illustrative table**
+(not in any certified fixture): the `F^{π/2} mod m` column claimed
+`m=24 → −I`, but directly computing `F^12 mod 24` gives `17·I`, not
+`23·I` (`−1 mod 24 = 23`). Every other even-π(m) row was independently
+re-verified as correctly stated (3, 5, 6, 7, 9 genuinely give `−I` at
+the half-period; 4 and 8 correctly show "—" since their half-period
+powers are genuinely not `−I` either). Corrected the m=24 cell and added
+the computed matrix value for transparency. Not certified by any
+fixture, so this was a pure documentation-table error with no
+downstream validator impact — but worth noting for anyone reading the
+table: m=24 is the one modulus in this list where the
+"F^(π/2)=−I ⟹ affine period = linear order" precondition genuinely does
+NOT hold, which could matter for future work extending this cert to
+m=24 specifically (not investigated further here).

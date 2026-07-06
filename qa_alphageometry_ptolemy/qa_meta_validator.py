@@ -4825,7 +4825,7 @@ def _validate_law_of_harmonics_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_sixteen_identities_cert_family(base_dir: str) -> Optional[str]:
-    """QA Sixteen Identities Cert family [148] — certifies the 16 named quantities (A-L,X,W,Y,Z) of a prime Pythagorean direction and 9 universal algebraic relations: G+C=A, G-C=B, G=(A+B)/2, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par, W=X+K. Fundamental (2,1): F=3,C=4,G=5,H=7,I=1,L=1. Source: Iverson Pyth-1 Ch V; checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok"""
+    """QA Sixteen Identities Cert family [148] — certifies the 16 named quantities (A-L,X,W,Y,Z) of a prime Pythagorean direction and 9 universal algebraic relations: G+C=A, G-C=B, G=(A+B)/2, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par, W=X+K. Fundamental (2,1): F=3,C=4,G=5,H=7,I=1,L=1. RE-VERIFIED 2026-07-06: all 16 quantities + 9 relations independently recomputed for all 6 witness directions, no bugs; validator already genuinely computes from (d,e) live; softened an unconfirmed "Arto Heino: Y=A-D confirmed canonical" attribution after fetching artoheino.com directly and finding neither checked page confirms the exact claim (Arto is a real author, this specific claim isn't). Source: Iverson Pyth-1 Ch V; checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok"""
     import subprocess
     si_dir    = os.path.join(base_dir, "qa_sixteen_identities_cert_v1")
     validator = os.path.join(si_dir, "qa_sixteen_identities_cert_validate.py")
@@ -14044,7 +14044,7 @@ FAMILY_SWEEPS = [
      "qa_law_of_harmonics_cert_v1", True),
     (148, "QA Sixteen Identities Cert family",
      _validate_sixteen_identities_cert_family,
-     "16 named quantities (A-L,X,W,Y,Z) of prime Pythagorean direction + 9 algebraic relations: G+C=A, G-C=B, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par; checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok",
+     "16 named quantities (A-L,X,W,Y,Z) of prime Pythagorean direction + 9 algebraic relations: G+C=A, G-C=B, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par (RE-VERIFIED 2026-07-06, confirmed clean; softened an unconfirmed Arto Heino attribution); checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok",
      "148_qa_sixteen_identities_cert",
      "qa_sixteen_identities_cert_v1", True),
     (147, "QA Synchronous Harmonics Cert family",

@@ -67,7 +67,7 @@ L = bade/6 = (d−e)(d+e)·d·e / 6 = F·C / 12. Among consecutive-like integers
 
 - **Ben Iverson, Pyth-1 Ch V**: "Sixteen Identities of a Prime Pythagorean Triangle" — original derivation
 - **Ben Iverson, elements.txt**: canonical identity table (A through Z definitions)
-- **Arto Heino (artoheino.com)**: independent verification; Y=A−D confirmed canonical
+- **Arto Heino (artoheino.com)**: real, substantive independent QA author (confirmed 2026-07-06, see Verification Note) — but the specific claim "Y=A−D confirmed canonical" could not be independently confirmed on the pages checked; treat as an unverified attribution, not a confirmed citation
 - **Cert [125]** QA_CHROMOGEOMETRY_CERT.v1: C=Qg, F=Qr, G=Qb; F²+C²=G² is Wildberger Thm 6
 - **Cert [130]** QA_ORIGIN_OF_24_CERT.v1: H²−G²=G²−I²=2CF=24L for (2,1)
 
@@ -84,3 +84,37 @@ L = bade/6 = (d−e)(d+e)·d·e / 6 = F·C / 12. Among consecutive-like integers
 
 - `fixtures/si_pass_fundamental.json` — 4 directions: (2,1),(3,2),(4,1),(4,3) with all 16 quantities + 9 relations
 - `fixtures/si_pass_witnesses.json` — 6 directions spanning elliptic (I<0) and hyperbolic (I>0) regimes
+
+## Verification Note (2026-07-06)
+
+Independently recomputed all 16 quantities (A–L, X, W, Y, Z), all 9
+algebraic relations, both parity rules (C≡0 mod 4, G≡1 mod 4), and
+primitivity/opposite-parity for all 6 unique witness directions across
+both fixtures — every value and relation matches exactly, no bugs. The
+validator (`qa_sixteen_identities_cert_validate.py`) already genuinely
+recomputes every quantity from `(d,e)` from scratch (`compute_identities`),
+including a live `gcd` check — no fixture-trusting gap, no hardening
+needed. This is the foundational cert underlying the element definitions
+used throughout [150], [151], [152], [158] and others audited this
+cycle, all of which independently confirmed consistent with it.
+
+**Citation-precision check on the "Arto Heino" attribution**: fetched
+`artoheino.com` directly (confirmed real — Arto Juhani Heino has written
+extensively about Quantum Arithmetic, Ben Iverson, and Dale Pond's
+extensions since 2012) and two of his most relevant posts
+(`/2012/11/22/quantum-arithmetic/` covering a 120°-isosceles-triangle QA
+variant, and `/2012/12/21/the-great-pyramid-a-quantum-solution/` covering
+a Pythagorean-triangle-style example). Neither page's own stated "Y"
+formula matched this cert's `Y = A−D = 2de+e²` as quoted by the fetch
+tool — the Great Pyramid page's own worked example gives
+`Y = 2de+d²` instead (using `d²`, not `e²`), which is algebraically a
+*different* quantity in general (only equal when `d=e`). Given the
+inherent unreliability of AI-summarized page extraction on OCR'd/scanned
+source material, I'm not confident enough to call this a confirmed
+contradiction — but I also could not find a page that confirms the exact
+"Y=A−D confirmed canonical" claim as stated. Softened the doc's
+attribution to reflect this: Arto Heino is a real source, but this
+specific claim about him isn't independently confirmed. Does not affect
+the cert's validity — `Y=A−D` is independently, exhaustively verified
+from the QA algebra itself (relation 9) regardless of any external
+secondary confirmation.

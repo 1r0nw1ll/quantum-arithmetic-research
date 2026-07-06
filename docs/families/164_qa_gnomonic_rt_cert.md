@@ -95,3 +95,30 @@ The gnomonic projection was always a spread/cross computation in disguise — cl
 - [156] QA_WGS84_ELLIPSE_CERT.v1 — Earth = QA quantum ellipse
 - [161] QA_ECEF_RATIONAL_CERT.v1 — ECEF coordinates via spreads/crosses
 - [163] QA_DEAD_RECKONING_CERT.v1 — T-operator exact DR on the same lattice
+
+## Verification Note (2026-07-06)
+
+Self-contained cartography/RT math; the gnomonic projection's defining
+property (great circles project to straight lines) is a well-known,
+foundational fact of map projection theory, not independently
+re-searched. Independently recomputed everything from scratch:
+
+- All three Berggren moves from (2,1) — M_A→(3,2), M_B→(5,2), M_C→(4,1)
+  — and their (C,F,G) triples (12,5,13), (20,21,29), (8,15,17) all
+  confirmed exact via C=2de, F=d²-e², G=d²+e², C²+F²=G².
+- Q=spread_c/cross_c=tan²(c) confirmed exact at 4 test angles.
+- **Independently re-derived the specific London/45°-bearing collinearity
+  claim from raw spherical geometry** (not just re-checked the fixture's
+  numbers): computed 5 points along a real great circle from London
+  (51.5°N, 0.1°W) at initial bearing 45° using the standard spherical
+  direct-geodesic formula, projected each through the classical gnomonic
+  equations, and checked collinearity via cross product — got values
+  ~10⁻¹⁷ to 10⁻¹⁸, actually *exceeding* the cert's claimed <10⁻¹⁵
+  precision. This independently reproduces the defining gnomonic
+  property from first principles, not just from the cert's own witness
+  data.
+
+Validator confirmed genuinely computing every check (classical vs RT
+quadrance, collinearity via live cross-product, Berggren triple
+arithmetic) at runtime, not fixture-trusting. `--self-test` passes on
+both fixtures. No bugs found.

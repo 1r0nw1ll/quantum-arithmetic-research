@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=bragg_rt_fixtures"
-"""QA Bragg RT Cert family [157] — certifies Bragg's law as rational trigonometry.
+"""QA Bragg RT Cert family [160] — certifies Bragg's law as rational trigonometry.
+
+Primary source: W.H. Bragg & W.L. Bragg, "The Reflection of X-rays by
+Crystals," Proc. R. Soc. A 88, 428-438 (1913). DOI: 10.1098/rspa.1913.0040
 
 TIER 1 — EXACT ALGEBRAIC REFORMULATION:
   Classical:  nλ = 2d·sin(θ)
@@ -86,6 +89,23 @@ def validate_bragg_reflection(refl):
     else:
         if lhs != rhs:
             errors.append(f"BRT_BRAGG: n²Q_λ={lhs} ≠ 4Q_d·s={rhs} (exact)")
+
+    # Cross-check Q_d against the cubic Miller-index formula a²/(h²+k²+l²)
+    # when h,k,l,a_lattice are present -- catches a declared Q_d that is
+    # internally self-consistent with s but doesn't actually match the
+    # crystal geometry it claims to represent (found 2026-07-06: (1,1,1)
+    # NaCl had a rounded-to-integer Q_d that was off by 1/3).
+    h, k, l = refl.get("h"), refl.get("k"), refl.get("l")
+    a_lattice = refl.get("a_lattice")
+    if h is not None and k is not None and l is not None and a_lattice is not None:
+        Q_miller = h * h + k * k + l * l
+        if Q_miller > 0:
+            expected_Qd = Fraction(a_lattice * a_lattice, Q_miller)
+            if Q_d != expected_Qd:
+                errors.append(
+                    f"BRT_BRAGG: declared Q_d={Q_d} != a²/(h²+k²+l²)={expected_Qd} "
+                    f"for ({h},{k},{l})"
+                )
 
     return errors
 

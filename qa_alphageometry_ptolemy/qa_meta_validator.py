@@ -4384,7 +4384,7 @@ def _validate_ecef_rational_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_bragg_rt_cert_family(base_dir: str) -> Optional[str]:
-    """QA Bragg RT Cert family [160] — certifies Bragg's law as rational trigonometry: n²Q_λ=4Q_d·s. Derivation: square nλ=2d·sinθ. Miller Q(h,k,l)=h²+k²+l². Crystal spreads: cubic=1, hexagonal γ=3/4. NaCl Cu Kα 4 reflections exact. Tier 1 algebraic identity. Checks BRT_1+BRAGG/MILLER/SPREAD/PYTH/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Bragg RT Cert family [160] — certifies Bragg's law as rational trigonometry: n²Q_λ=4Q_d·s. Derivation: square nλ=2d·sinθ. Miller Q(h,k,l)=h²+k²+l². Crystal spreads: cubic=1, hexagonal γ=3/4. NaCl Cu Kα 4 reflections exact. Tier 1 algebraic identity. Checks BRT_1+BRAGG/MILLER/SPREAD/PYTH/W/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed a real bug (NaCl (1,1,1) Q_d was rounded to an integer, breaking exactness since 56402^2 isn't divisible by 3), hardened validator to cross-check Q_d against a^2/(h^2+k^2+l^2), confirmed Bragg 1913 DOI and tetrahedral/hexagonal spread math independently."""
     import subprocess
     brt_dir   = os.path.join(base_dir, "qa_bragg_rt_cert_v1")
     validator = os.path.join(brt_dir, "qa_bragg_rt_cert_validate.py")
@@ -13994,7 +13994,7 @@ FAMILY_SWEEPS = [
      "qa_ecef_rational_cert_v1", True),
     (160, "QA Bragg RT Cert family",
      _validate_bragg_rt_cert_family,
-     "Bragg's law as rational trigonometry: n²Q_λ=4Q_d·s (square both sides of nλ=2d·sinθ); Miller Q(h,k,l)=h²+k²+l² for cubic; crystal spreads: cubic all=1, hexagonal γ=3/4; NaCl Cu Kα 4 reflections exact integer arithmetic; Tier 1 algebraic identity; checks BRT_1+BRAGG/MILLER/SPREAD/PYTH/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Bragg's law as rational trigonometry: n²Q_λ=4Q_d·s (square both sides of nλ=2d·sinθ); Miller Q(h,k,l)=h²+k²+l² for cubic; crystal spreads: cubic all=1, hexagonal γ=3/4; NaCl Cu Kα 4 reflections exact rational arithmetic; Tier 1 algebraic identity; checks BRT_1+BRAGG/MILLER/SPREAD/PYTH/W/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed rounded-Q_d bug on (1,1,1) reflection, hardened validator to cross-check Q_d against Miller formula.",
      "160_qa_bragg_rt_cert",
      "qa_bragg_rt_cert_v1", True),
     (157, "QA PIM Kernel Cert family",

@@ -18,6 +18,7 @@
       "label": "NaCl (1,0,0) n=1 Cu Kα",
       "n": 1,
       "h": 1, "k": 0, "l": 0,
+      "a_lattice": 56402,
       "Q_lambda": "237344836",
       "Q_d": "3181185604",
       "s": "59336209/3181185604",
@@ -28,6 +29,7 @@
       "label": "NaCl (1,1,0) n=1 Cu Kα",
       "n": 1,
       "h": 1, "k": 1, "l": 0,
+      "a_lattice": 56402,
       "Q_lambda": "237344836",
       "Q_d": "1590592802",
       "s": "59336209/1590592802",
@@ -38,16 +40,18 @@
       "label": "NaCl (1,1,1) n=1 Cu Kα",
       "n": 1,
       "h": 1, "k": 1, "l": 1,
+      "a_lattice": 56402,
       "Q_lambda": "237344836",
-      "Q_d": "1060395201",
-      "s": "59336209/1060395201",
+      "Q_d": "3181185604/3",
+      "s": "178008627/3181185604",
       "_theta_deg": 13.68,
-      "_note": "Q_d=56402²/3 — BUT 56402² mod 3 ≠ 0, so use rational: Q_d=3181185604/3"
+      "_note": "Corrected 2026-07-06: Q_d=56402²/3 is NOT an integer (56402² mod 3 = 1), so the previous entry rounded Q_d down to 1060395201 and declared s=59336209/1060395201 -- self-consistent with the rounded Q_d but not the true exact value. The true exact rational is Q_d=3181185604/3 (non-integer, still exact), s=178008627/3181185604."
     },
     {
       "label": "NaCl (2,0,0) n=1 Cu Kα",
       "n": 1,
       "h": 2, "k": 0, "l": 0,
+      "a_lattice": 56402,
       "Q_lambda": "237344836",
       "Q_d": "795296401",
       "s": "59336209/795296401",
@@ -104,7 +108,7 @@
   },
 
   "sources": [
-    "W.H. Bragg & W.L. Bragg, Proc. R. Soc. A 88, 428-438 (1913)",
+    "W.H. Bragg & W.L. Bragg, Proc. R. Soc. A 88, 428-438 (1913). DOI: 10.1098/rspa.1913.0040",
     "N.J. Wildberger, Divine Proportions (2005), Ch. 1-5",
     "Ben Iverson, Pythagoras and the Quantum World, Vol. 4 (Crystal Universe)",
     "NaCl lattice constant: a=5.6402 Å (ICSD, standard reference)"

@@ -97,3 +97,17 @@ Observer layer: none (no floats, no statistics, direct equality checks only)
 mod-p pairing [423]→[424]. Together [421]+[431] give the full Galois/Frobenius
 interpretation of δ(p) for all primes, underlying the general WSS criterion
 established (without the Galois interpretation) in [429].
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-implemented the Galois ring
+R_p = (ℤ/p²ℤ)[φ]/(φ²−φ−1) from scratch and verified all ring identities
+(φ̃²=φ̃+1, ψ̃²=ψ̃+1, φ̃ψ̃=−1, s̃²=5) for all inert primes ≤200, plus the
+Binet-mod-p² formula for 225 (prime, n) cases — all exact matches.
+Genuine falsifiable algebra, no fixture-trusting gap. This closes the
+independent audit of the entire orbit-theory/Galois-representation
+cluster [384]-[431] (48 certs): two real bugs found and fixed
+([390]/[395]'s LMFDB index misalignment), four doc-table transcription
+errors found and fixed ([405]-[408]), one large hardcoded dataset
+verified genuine via brute-force search ([403]), and every other cert
+independently reproduced clean.

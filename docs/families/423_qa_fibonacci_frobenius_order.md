@@ -74,3 +74,12 @@ The empirical 35.5% vs theoretical 37.4% is consistent with the slow logarithmic
 | [424] | Inert Frobenius: Frob_p swaps φ̃↔ψ̃ in 𝔽_{p²}; α(p)\|p+1 |
 
 **Open**: Artin's conjecture — the precise density A of primitive primes (for φ̃/ψ̃ as a primitive root generator) requires GRH.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified ord(φ̃/ψ̃)=α(p) for
+all 609 split primes ≤10,000 in a fresh script (own Tonelli-Shanks +
+multiplicative-order implementation) — zero mismatches — and
+independently recomputed the primitive-prime count: exactly 216/609,
+fraction 0.35468, matching the doc precisely. Genuine, honestly
+reported empirical statistic, not fabricated.

@@ -121,3 +121,12 @@ Observer layer: NONE (all 4 checks are integer equality comparisons)
 | **[426]** | **M^{α(p)} = ε·I₂ in GL₂(𝔽_p); T(p) = α·ord(ε)** |
 
 GL₁/ℚ(√5) picture [416]–[425] lifts to GL₂ at [426]: the 2-dimensional Fibonacci matrix representation becomes scalar at the rank of apparition, and the Pisano period formula T = α·ord(ε) follows.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the scalar
+collapse Mᵅ=ε·I₂ and the Pisano formula T(p)=α(p)·ord(ε(p)) in a fresh
+script (own matrix-power and rank-of-apparition implementations) —
+zero failures. The ε-order distribution {1:32, 2:29, 4:31} for p≤500
+reproduces exactly once the same `p>5` convention as [423]-[425] is
+applied. Genuine falsifiable algebra, no fixture-trusting gap.

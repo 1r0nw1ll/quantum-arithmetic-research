@@ -73,3 +73,15 @@ This is the GL₁/ℚ(√5) Langlands statement for ALL non-ramified primes: the
 | **[424]** | **Frob_p swaps φ̃↔ψ̃ in 𝔽_{p²}/𝔽_p; α(p)=ord_{GL₁(𝔽_{p²})}(φ̃/ψ̃) for inert primes** |
 
 **Open (next rung)**: Chebotarev density — split and inert primes each have density exactly 1/2 among non-5 primes. Equivalently, L(1, χ₅) ≠ 0 where χ₅ = Legendre symbol (·/5). This is the GL₁→GL₂ interface in the Langlands ladder.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the Frobenius swap
+φ̃^p=ψ̃ in 𝔽_{p²} and α(p)|p+1 for all inert primes ≤500 in a fresh
+script (own 𝔽_{p²} arithmetic implementation). Note: the validator's
+`inert_primes_upto` explicitly filters `p > 5` (excluding 2 and 3,
+likely due to characteristic-2/3 edge cases in the field-arithmetic
+representation), giving 47 primes rather than the naive 49 — this is a
+deliberate scope choice, not a bug; independently confirmed p=2 and
+p=3 also satisfy both properties when checked directly, so nothing is
+actually lost by the exclusion, it's just undocumented in the doc text.

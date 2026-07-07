@@ -131,3 +131,13 @@ Observer layer (float, lawful):
 The Lucas bridge C2 connects the GL₂ trace (L_n as tr(M^n), cert [426] C1) to the
 GL₂ scalar (ε(p), cert [426] C3). The equal-thirds equidistribution C4 is the GL₂
 density theorem: the three Pisano types are Chebotarev-equidistributed.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced every reported count
+exactly in a fresh script (own matrix-power/rank-of-apparition
+implementation): overall type counts {1:412, 2:408, 4:406} (n=1226),
+p≡3 mod 4 stratum {1:307, 2:311} (n=618), and p≡1 mod 4 stratum
+{1:105, 2:97, 4:406} — all exact matches, including the striking 2/3
+Type-4 dominance within the p≡1 mod 4 stratum. Genuine, honestly
+reported empirical result, no fixture-trusting gap.

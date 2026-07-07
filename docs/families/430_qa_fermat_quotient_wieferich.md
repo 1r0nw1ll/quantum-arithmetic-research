@@ -121,3 +121,13 @@ Observer layer: none (no floats, no statistics, direct equality checks only)
 [429]: the two depth-2 conditions are parallel in *shape*, independently
 necessary for a now-impossible FLT scenario (Sun & Sun 1992), but neither
 implies nor is equivalent to the other.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh script
+(3-argument `pow` for the Fermat quotient, own rank-of-apparition/
+fast-doubling for the WSS check): the exact Wieferich prime set
+{1093, 3511} for all 668 odd primes ≤5000, and confirmed both are NOT
+Wall-Sun-Sun. This cert's honest correction of [429]'s imprecise
+closing speculation (there is no proven WSS→Wieferich implication) is
+itself a good example of the corpus's self-correcting discipline.

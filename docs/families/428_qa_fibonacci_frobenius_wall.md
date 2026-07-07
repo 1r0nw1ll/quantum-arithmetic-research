@@ -104,3 +104,10 @@ the Wall zero (C3). Together with [427], this means α(p) is sandwiched:
 (the Pisano period is an exact multiple of α). The next natural rung ([429])
 is lifting to ℤ/p²ℤ: does α(p²) equal p·α(p) (the generic case) or α(p)
 (a Wall-Sun-Sun prime)?
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified all four
+congruences (F_p≡(5/p), L_p≡1, Wall zero, α(p)|p−(5/p)) in a fresh
+script for all primes in [3,1000] — zero failures. Genuine falsifiable
+number theory, no fixture-trusting gap.

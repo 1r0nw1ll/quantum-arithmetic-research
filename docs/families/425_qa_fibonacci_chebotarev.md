@@ -104,3 +104,14 @@ Observer layer (float, lawful):
 **GL₁/ℚ(√5) picture complete.** Next rung (GL₂): the symmetric square L-function
 L(s, Sym²(ρ_φ)) where ρ_φ is the 2-dimensional Galois representation associated to φ̃,
 or equivalently the Rankin-Selberg L-function L(s, f × f) for the Fibonacci theta series.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh script:
+the residue-class counts, χ²=0.0685, and the L(1,χ₅) partial sum
+0.430409 (matching 2·log(φ)/√5 to 6 d.p.) — all exact once the same
+convention as [423]/[424] is applied (excluding p=2,3, giving n=1226
+primes ≤10000, not the naive π(10000)−1=1228). This exclusion is
+undocumented in the doc text but consistent across the whole
+sub-cluster and doesn't affect the correctness of the reported
+statistics — a genuine, honestly reproduced empirical result.

@@ -120,3 +120,14 @@ No float arithmetic anywhere — all modular computations stay integer even mod 
 The next rung ([430]?) would be the connection between Wall-Sun-Sun primes and
 Wieferich primes: if p is WSS, then 2^{p-1} ≡ 1 (mod p²) (Wieferich criterion) under
 certain conditions — making WSS primes doubly exotic.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh script:
+zero WSS candidates (v_p(F_α)=1, never ≥2) for all primes in [5,500],
+and α(p²)=p·α(p) exactly for a sample of 60 primes via direct
+independent rank-of-apparition computation mod p². Genuine falsifiable
+number theory, no fixture-trusting gap. Note: this cert's own closing
+speculative remark about a WSS→Wieferich implication was later
+correctly identified as imprecise and fixed in cert [430] — a good
+example of honest self-correction within the corpus.

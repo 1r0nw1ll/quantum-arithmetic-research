@@ -129,6 +129,7 @@ def self_test():
     expected = {
         "kt_pass_triune_mapping.json": True,
         "kt_pass_brinton_laws.json": True,
+        "kt_fail_bad_mapping.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

@@ -14137,7 +14137,7 @@ FAMILY_SWEEPS = [
      "qa_t_operator_coherence_cert_v1", True),
     (153, "QA Keely Triune Cert family",
      _validate_keely_triune_cert_family,
-     "Keely triune (Enharmonic/Dominant/Harmonic) → QA orbits (Satellite/Singularity/Cosmos); {3,6,9}=singularity=Tesla 3-6-9 (RE-VERIFIED 2026-07-06, fixed A1 no-zero bug + a false 'always div by 5' product claim); LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok",
+     "Keely triune (Enharmonic/Dominant/Harmonic) → QA orbits (Satellite/Singularity/Cosmos); {3,6,9}=singularity=Tesla 3-6-9 (RE-VERIFIED 2026-07-06, fixed A1 no-zero bug + a false 'always div by 5' product claim); LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added kt_fail_bad_mapping.json (swapped DOMINANT/HARMONIC mapping + wrong LCM), confirmed no print-corruption bug present.",
      "153_qa_keely_triune_cert",
      "qa_keely_triune_cert_v1", True),
     (152, "QA Equilateral Triangle Cert family",

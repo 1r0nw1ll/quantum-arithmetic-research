@@ -80,6 +80,7 @@ Professor Daniel Brinton derived three laws from Keely's Triune:
 
 - `fixtures/kt_pass_triune_mapping.json` — full mapping + partition + periods + {3,6,9} + Tesla note
 - `fixtures/kt_pass_brinton_laws.json` — Brinton's three Laws of Being mapped to orbit dynamics
+- `fixtures/kt_fail_bad_mapping.json` — Falsifier: swaps DOMINANT↔HARMONIC orbit assignments and declares a wrong LCM (999 instead of 24) (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -112,3 +113,11 @@ claim wasn't checked by any validator field (free-text witness). Fixed
 to state the correct, narrower claim.
 
 `--self-test` passes on both fixtures after all fixes.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). Confirmed no
+`result=="FAIL"` short-circuit branch exists (no print-corruption bug
+risk). Added `fixtures/kt_fail_bad_mapping.json` with two independent
+planted defects (swapped DOMINANT/HARMONIC orbit mapping, wrong LCM) and
+wired it into `self_test()`; verified both KT_MAP and KT_LCM genuinely
+catch their respective defects.

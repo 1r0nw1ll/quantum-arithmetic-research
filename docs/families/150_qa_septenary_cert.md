@@ -78,6 +78,7 @@ Opposite pairs on the doubling circle sum to 9: (1,8), (2,7), (4,5). This is the
 
 - `fixtures/sp_pass_group_structure.json` — full group proof: cycle, complement, diagonals, parity
 - `fixtures/sp_pass_qa_connection.json` — QA orbit connection: singularity partition, Euler/Pisano ratio
+- `fixtures/sp_fail_bad_cycle.json` — Falsifier: doubling cycle with a wrong step (8→9 instead of 8→7) and a diagonal pair (2,6) that doesn't sum to 9 (added 2026-07-07)
 
 ## Sources
 
@@ -115,3 +116,11 @@ before and after (it doesn't statically flag pure math constants), but
 the fixture-level data is now consistent with the rest of the project.
 `--self-test` passes on both fixtures; verified the hardened `SP_COMP`
 check still correctly rejects a reintroduced `[0,3,6]`.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). No `result=="FAIL"`
+short-circuit exists (no print-corruption bug risk). Added
+`fixtures/sp_fail_bad_cycle.json` with two independent planted defects
+(a wrong doubling-cycle step 8→9 instead of 8→7; a diagonal pair (2,6)
+that sums to 8 not 9) and wired it into `self_test()`; verified SP_CYCLE
+and SP_DIAG both genuinely catch their respective defects.

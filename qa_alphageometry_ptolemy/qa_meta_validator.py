@@ -14152,7 +14152,7 @@ FAMILY_SWEEPS = [
      "qa_par_number_cert_v1", True),
     (150, "QA Septenary Cert family",
      _validate_septenary_cert_family,
-     "{1,2,4,5,7,8}=(Z/9Z)* mod-9 unit group; doubling cycle period 6=phi(9); complement {3,6,9}=singularity (RE-VERIFIED 2026-07-06, fixed A1 no-zero bug); diagonal pairs sum to 9; parity cross-over; checks SP_1+GROUP/CYCLE/COMP/DIAG/PAR/W/F; 2 PASS; self-test ok",
+     "{1,2,4,5,7,8}=(Z/9Z)* mod-9 unit group; doubling cycle period 6=phi(9); complement {3,6,9}=singularity (RE-VERIFIED 2026-07-06, fixed A1 no-zero bug); diagonal pairs sum to 9; parity cross-over; checks SP_1+GROUP/CYCLE/COMP/DIAG/PAR/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added sp_fail_bad_cycle.json (wrong doubling step + wrong diagonal pair), confirmed no print-corruption bug present.",
      "150_qa_septenary_cert",
      "qa_septenary_cert_v1", True),
     (149, "QA Law of Harmonics Cert family",

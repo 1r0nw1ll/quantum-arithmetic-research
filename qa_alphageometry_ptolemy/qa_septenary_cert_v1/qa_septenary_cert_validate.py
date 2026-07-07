@@ -137,6 +137,7 @@ def self_test():
     expected = {
         "sp_pass_group_structure.json": True,
         "sp_pass_qa_connection.json": True,
+        "sp_fail_bad_cycle.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

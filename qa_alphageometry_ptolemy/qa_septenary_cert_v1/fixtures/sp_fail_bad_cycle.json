@@ -1,0 +1,51 @@
+{
+  "schema_version": "QA_SEPTENARY_CERT.v1",
+  "certificate_id": "qa.cert.septenary.fail.bad_cycle.v1",
+  "cert_type": "qa_septenary_cert",
+  "title": "Septenary FAIL: falsifier with wrong doubling-cycle step and wrong diagonal pair",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), same (Z/9Z)* group as the PASS fixtures (Hardy and Wright, 2008), ISBN 978-0-19-921986-5.",
+
+  "_fixture_purpose": "Falsifier: declares a doubling cycle where step 8->7 is wrongly replaced with 8->9 (should trip SP_CYCLE, since 8*2 mod 9 = 7 not 9/0), and a diagonal pair (2,6) that does not sum to 9 (should trip SP_DIAG).",
+
+  "septenary_set": [1, 2, 4, 5, 7, 8],
+  "doubling_cycle": [1, 2, 4, 8, 9, 5],
+  "cycle_period": 6,
+  "complement_set": [3, 6, 9],
+
+  "diagonal_pairs": [[1, 8], [2, 6], [4, 5]],
+
+  "parity_sums": {
+    "even_elements": [2, 4, 8],
+    "even_sum": 14,
+    "even_digital_root": 5,
+    "odd_elements": [1, 5, 7],
+    "odd_sum": 13,
+    "odd_digital_root": 4,
+    "note": "correct, kept valid so this fixture isolates the defects to the cycle and diagonal pairs"
+  },
+
+  "group_proof": {
+    "generator": 2,
+    "powers_mod_9": [1, 2, 4, 8, 7, 5],
+    "note": "correct reference values, kept valid"
+  },
+
+  "validation_checks": [
+    {"check_id": "SP_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "SP_GROUP","description": "{1,2,4,5,7,8} = (Z/9Z)* verified", "passed": true},
+    {"check_id": "SP_CYCLE","description": "FALSIFIER: cycle step 8->9 should be 8->7 (8*2 mod 9 = 16 mod 9 = 7)", "passed": false},
+    {"check_id": "SP_COMP", "description": "{3,6,9} = complement", "passed": true},
+    {"check_id": "SP_DIAG", "description": "FALSIFIER: pair (2,6) sums to 8 not 9, and 6 is not in the septenary set", "passed": false},
+    {"check_id": "SP_PAR",  "description": "even sum=14, odd sum=13", "passed": true},
+    {"check_id": "SP_W",    "description": "6 elements witnessed in cycle (1,2,4,8,9,5 -- note 9 is not a real septenary element)", "passed": true},
+    {"check_id": "SP_F",    "description": "cycle starts from 1", "passed": true}
+  ],
+
+  "fail_ledger": [
+    "SP_CYCLE: cycle step 3: 8x2 mod 9 = 7 != 9",
+    "SP_DIAG: diagonal_pair[1] (2,6): sum=8 != 9",
+    "SP_DIAG: diagonal_pair[1] (2,6): not both in septenary set"
+  ],
+  "result": "FAIL"
+}

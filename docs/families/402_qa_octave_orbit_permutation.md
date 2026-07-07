@@ -64,3 +64,11 @@ This is not a coincidence: the Pisano period of Cosmos is 24 = 2×12, and the Co
 - Extends [401] (Octave Transformation: integer-level transform)
 - Extends [398] (Five Families Complete Partition: Table 1 = the 9×9 grid σ permutes)
 - Connected to [281] (Pisano periods: Cosmos period = 24 = 2×|12-cycle|)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh, separate
+script: σ is a bijection on all 81 digital-root pairs, cycle type is
+exactly {1:1, 4:2, 12:6}, and the order of σ is exactly 12 (checked
+σᵏ=identity fails for k<12, holds at k=12). Genuine falsifiable
+permutation-group computation, no fixture-trusting gap.

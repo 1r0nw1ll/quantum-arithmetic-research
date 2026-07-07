@@ -52,3 +52,12 @@ Pell solutions in {1..30}²: (1,1),(3,2),(7,5),(17,12) — 4 pairs.
 - Extends [398] (Five Families Complete Partition — Layer 0)
 - Layer 2 of the three-layer taxonomy in the Five Families paper
 - Fermat boundary = Pell solutions |b²−2e²|=1; connects to classical Pell equation theory
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh, separate
+script (own C=2de/F=ab/G=e²+d² implementation): the algebraic identity
+C−F=2e²−b² holds for all tested pairs; exhaustive count over
+b,e∈{1..30} coprime gives exactly 4 Fermat pairs, 30 Pythagoras pairs
+(b=1), and 15 primitive Plato pairs (e=1, b odd) — all exact matches.
+Genuine falsifiable algebra, no fixture-trusting gap.

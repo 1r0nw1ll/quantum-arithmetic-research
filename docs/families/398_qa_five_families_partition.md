@@ -62,3 +62,11 @@ This cert directly supports the Five Families paper's main theorem. Extends:
 - [281] (Pisano-Orbit Correspondence: period=8=π(3), 24=π(9))
 - [212] (Fibonacci Hypergraph: orbit multiset (24,24,24,8,1))
 - [211] (Cayley Bateson Filtration: Gamma_L1 components)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the full partition in
+a fresh, separate script (digital-root T-step, not reusing validator
+code): all 5 orbits reproduce the exact sizes 24/24/24/8/1, are
+pairwise disjoint, and their union is exactly all 81 digital-root
+pairs. Genuine falsifiable combinatorics, no fixture-trusting gap.

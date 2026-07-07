@@ -55,3 +55,11 @@ The octave transformation maps Cosmos/Satellite generators (primitives) to their
 - Extends [400] (BEDA Classical Subfamilies — Layer 2)
 - Provides Layer 1 gender structure to the three-layer taxonomy
 - (1,1) male → (2,1) female: Fibonacci seed → Lucas seed; octave twin relationship
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the full octave
+transform (d'=a, a'=2d, C'=2F, F'=2C, G'=2G) in a fresh script for all
+400 pairs b,e∈{1..20} — 400/400 pass, zero failures — and confirmed
+169 primitive pairs produce a female triple with gcd exactly 2. Genuine
+falsifiable algebra, no fixture-trusting gap.

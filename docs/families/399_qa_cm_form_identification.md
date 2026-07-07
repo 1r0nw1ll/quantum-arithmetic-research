@@ -73,3 +73,16 @@ Cert [398] (Five Families partition) is the shadow of this tower at the mod-9 le
 - **C3**: Conjugate e + σ_F(e) = −1 rational; matches LMFDB norm-11 eigenvalues — PASS
 - **C4**: 7 primes: zero/non-zero pattern matches CM prediction — PASS
 - **C5**: disc(e/ℚ) = 125 = level norm — PASS
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs, no repeat of the [390]/[395] indexing issue
+(this cert has its own separate hardcoded `LMFDB_DATA` dict keyed by
+norm, not a duplicated positional array, so there's no analogous
+misalignment risk). Independently re-fetched the real LMFDB page for
+2.2.5.1-125.1-a and confirmed exactly: CM=yes over ℚ(√5), level norm
+125, eigenvalue field defined by x²+x−31=0 (matches e²+e−31=0), zero
+eigenvalues at norms 4/5/9/19/29, and eigenvalues e/−e−1 at norm 11
+(−e−1 = (2,−5) in the doc's (u,v) coordinates, confirmed by direct
+computation) and e−5 at norm 31. All hardcoded data verified genuine,
+not fabricated.

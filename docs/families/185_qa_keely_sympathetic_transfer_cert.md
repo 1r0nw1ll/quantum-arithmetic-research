@@ -60,3 +60,34 @@ These laws describe **dynamic transfer** — how vibratory energy moves between 
 
 - `fixtures/kst_pass_reachability.json` — same-orbit reachability with path lengths
 - `fixtures/kst_fail_cross_orbit.json` — falsifier claiming cross-orbit path exists
+
+## Verification Note (2026-07-06)
+
+Independently walked every witness path step by step via the real QA
+T-operator `(b,e)→(e,qa_mod(b+e,m))`: (1,1)→(1,2)→(2,3)→(3,5)→(5,8)→
+(8,4) (5 steps, matching declared `path_length`), and the (3,3)→(3,6)
+one-step satellite transfer — all exact. Independently reconfirmed
+every reachability/obstruction example's orbit classification from
+scratch (COSMOS/SATELLITE/SINGULARITY via the standard `v_3` rule) —
+all correct, including that `(1,1)` genuinely cannot reach `(9,9)`
+(different orbits under the T-operator's bijective structure). No data
+was wrong.
+
+**Found and hardened a much larger fixture-trusting gap than [184]'s**
+(this cert's sibling): `KST_REACH` previously only warned if
+`both_orbit` was *missing*, never checked it was *correct* or that
+`reachable` matched. `KST_PATH` only checked that `path_length` was an
+*integer type*, never that the declared path was a real T-operator walk
+or that the length matched. Worst: `KST_BLOCK` checked
+`ex.get("source_orbit", ex.get("orbit1")) == ex.get("target_orbit", ex.get("orbit2"))`
+— but neither `source_orbit`/`orbit1` nor `target_orbit`/`orbit2` exists
+anywhere in this fixture's actual data (obstruction examples only have
+`source_b/e`, `target_b/e`, and a free-text `reason` string) — both
+sides of the comparison were always `None`, so the check **never
+actually ran** for any obstruction example, silently. Hardened all
+three: `KST_REACH`/`KST_BLOCK` now classify orbits directly from
+`(b,e,modulus)` and check both the classification and the
+reachable/obstructed conclusion; `KST_PATH` now walks each declared path
+step-by-step via the real T-operator and cross-checks `path_length`.
+Verified the hardened checks reject both a mislabeled cross-orbit pair
+and a broken path step.

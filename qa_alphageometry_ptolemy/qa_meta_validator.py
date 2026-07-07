@@ -6446,7 +6446,7 @@ def _validate_keely_structural_ratio_cert_family(base_dir: str) -> Optional[str]
 
 
 def _validate_keely_sympathetic_transfer_cert_family(base_dir: str) -> Optional[str]:
-    """QA Keely Sympathetic Transfer Cert family [185] — certifies Keely's 7 sympathetic transfer laws (Laws 5,6,7,8,17,37,40) as QA reachability and path structure. Category 2 of Vibes framework. Sympathetic oscillation=orbit co-membership; discord=reachability obstruction; triad concordance condition. Checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Keely Sympathetic Transfer Cert family [185] — certifies Keely's 7 sympathetic transfer laws (Laws 5,6,7,8,17,37,40) as QA reachability and path structure. Category 2 of Vibes framework. Sympathetic oscillation=orbit co-membership; discord=reachability obstruction; triad concordance condition. RE-VERIFIED 2026-07-06: independently walked all witness paths via the real T-operator and reconfirmed all orbit classifications, no data bugs found. Hardened a severe fixture-trusting gap -- KST_BLOCK previously compared "orbit1"/"orbit2" keys that don't exist anywhere in the fixture (always None==None, silently vacuous); KST_REACH only checked both_orbit was present, not correct; KST_PATH only checked path_length was an int. All three now genuinely recompute orbit classification and walk the T-operator path; verified rejection of planted errors. Checks KST_1+LAWS/REACH(hardened)/BLOCK(hardened)/PATH(hardened)/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_keely_sympathetic_transfer_cert_v1")
     validator = os.path.join(fam_dir, "qa_keely_sympathetic_transfer_cert_validate.py")
@@ -14239,7 +14239,7 @@ FAMILY_SWEEPS = [
      "qa_keely_structural_ratio_cert_v1", True),
     (185, "QA Keely Sympathetic Transfer Cert family",
      _validate_keely_sympathetic_transfer_cert_family,
-     "Keely's 7 sympathetic transfer laws (5,6,7,8,17,37,40) → QA reachability/path structure; Category 2 Vibes framework; orbit co-membership=sympathy, discord=obstruction, triad concordance; checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Keely's 7 sympathetic transfer laws (5,6,7,8,17,37,40) → QA reachability/path structure; Category 2 Vibes framework; orbit co-membership=sympathy, discord=obstruction, triad concordance (RE-VERIFIED 2026-07-06, fixed a silently-vacuous KST_BLOCK check + hardened KST_REACH/KST_PATH to genuinely recompute); checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok",
      "185_qa_keely_sympathetic_transfer_cert",
      "qa_keely_sympathetic_transfer_cert_v1", True),
     (186, "QA Keely Dominant Control Cert family",

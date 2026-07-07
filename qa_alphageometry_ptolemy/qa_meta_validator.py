@@ -14472,7 +14472,7 @@ FAMILY_SWEEPS = [
      "qa_circle_impossibility_cert_v1", True),
     (208, "QA Quadrance Product Cert family",
      _validate_quadrance_product_cert_family,
-     "Every QA area element is irreducibly a two-factor product of role-distinct base elements. S1 (b*b product form) is structural: product preserves two-factor roles, power operator collapses them. 1*1=1 is area, not scalar. Square = rectangle with equal values, distinct roles. Parallels [207] circle impossibility. Will Dale 2026-04-08. Checks QP_1+PRODUCT/ROLE/S1/AREA_MIN/DIM/SQUARE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "Every QA area element is irreducibly a two-factor product of role-distinct base elements. S1 (b*b product form) is structural: product preserves two-factor roles, power operator collapses them. 1*1=1 is area, not scalar. Square = rectangle with equal values, distinct roles. Parallels [207] circle impossibility. Will Dale 2026-04-08. Checks QP_1+PRODUCT/ROLE/S1/AREA_MIN/DIM/SQUARE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-07: all fixture arithmetic hand-confirmed correct, but found and fixed a fixture-trusting gap — QP_WITNESS only checked for the presence of a '*' character (a witness could declare a wrong product string and still pass) and QP_AREA_MIN only did a '1*1' substring check. Hardened both to genuinely evaluate every declared product string and brute-force the claimed area minima over S_m; verified the hardening catches planted arithmetic errors.",
      "208_qa_quadrance_product_cert",
      "qa_quadrance_product_cert_v1", True),
 

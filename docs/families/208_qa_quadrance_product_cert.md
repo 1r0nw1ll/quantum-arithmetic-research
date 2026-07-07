@@ -100,4 +100,25 @@ Will Dale, 2026-04-08. Insight articulated during SVP wiki propositions mapping 
 
 - Validator: `qa_alphageometry_ptolemy/qa_quadrance_product_cert_v1/qa_quadrance_product_cert_validate.py`
 - Fixtures: 1 PASS + 1 FAIL
-- Self-test: pending
+- Self-test: PASS (verified 2026-07-07)
+
+## Verification Note (2026-07-07)
+
+Independently hand-verified every numeric witness in
+`qp_pass_product_table.json`: all 4 witnesses' `(b,e,d,a)` tuples and all
+declared product values (B, E, C, F, J) recompute correctly — no data
+errors found.
+
+**Found and fixed a real fixture-trusting gap in the validator**: `QP_WITNESS`
+only checked that a declared product string contained a `*` character
+(e.g. `"C": "2*3*1=6"`) — it never evaluated the string, so a witness
+declaring `"C": "2*3*1=999"` would have passed silently. Similarly,
+`QP_AREA_MIN` only did a substring check for `"1*1"` — it never brute-forced
+whether the declared minima were actually correct. Hardened both:
+`QP_WITNESS` now genuinely evaluates every `"expr=value"` product string
+(digit/`*` grammar only, no `eval()`) and cross-checks named elements
+(B, E, C, F, J, X) against the actual recomputed `(b,e,d,a)`; `QP_AREA_MIN`
+now brute-forces `B_min`/`E_min`/`C_min` over the declared modulus and
+compares against the declared values. Verified the hardening catches
+planted arithmetic errors (tested by mutating a witness's declared `C`
+value and a declared minimum, confirming both are now flagged).

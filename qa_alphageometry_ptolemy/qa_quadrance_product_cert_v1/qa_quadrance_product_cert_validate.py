@@ -8,6 +8,8 @@ Certifies: Every QA area element is irreducibly a two-factor product of
 role-distinct base elements. Quadrances (A=a*a, B=b*b) are products,
 not powers. S1 (always b*b product form) is structural, not just numerical.
 
+Primary source: Will Dale (2026-04-08), original QA insight (not external literature).
+
 Will Dale's insight (2026-04-08):
     A square is NOT a "special case" of rectangle. It is a rectangle
     whose sides happen to have equal values — but the two factors
@@ -41,10 +43,29 @@ Checks:
 QA_COMPLIANCE = "cert_validator — validates product structure of QA area elements; integer state space; S1 compliant; no ** operator"
 
 import json
+import re
 import sys
 from pathlib import Path
 
 SCHEMA_VERSION = "QA_QUADRANCE_PRODUCT_CERT.v1"
+
+_PRODUCT_STR_RE = re.compile(r"^\s*(-?\d+(?:\s*\*\s*-?\d+)*)\s*=\s*(-?\d+)\s*$")
+
+
+def _eval_product_string(s):
+    """Genuinely evaluate an 'a*b*...=c' string (digits and '*' only, no eval()).
+
+    Returns (lhs_value, rhs_value) as ints, or None if the string doesn't match
+    the expected 'product=value' shape.
+    """
+    m = _PRODUCT_STR_RE.match(str(s))
+    if not m:
+        return None
+    factors = [int(x) for x in m.group(1).split("*")]
+    lhs = 1
+    for f in factors:
+        lhs *= f
+    return lhs, int(m.group(2))
 
 
 # -----------------------------------------------------------------------------
@@ -139,19 +160,31 @@ def _run_checks(fixture):
             results["QP_S1"] = False
             break
 
-    # QP_AREA_MIN: area verification
+    # QP_AREA_MIN: genuinely brute-force the claimed minima over S_m, don't
+    # just trust the declared "1*1" substring
     results["QP_AREA_MIN"] = True
-    # Computationally verify if product table is present
-    if results["QP_PRODUCT"]:
-        # Check that B_min = 1 (1*1) is acknowledged
-        witnesses = fixture.get("witnesses", [])
-        if witnesses:
-            has_unit = any(
-                "1*1" in str(w.get("products", {}))
-                for w in witnesses
+    eam = fixture.get("exhaustive_area_minimum", {})
+    if eam:
+        m = eam.get("modulus")
+        minima = eam.get("element_minima", {})
+        if isinstance(m, int) and m >= 1:
+            b_actual_min = min(b * b for b in range(1, m + 1))
+            e_actual_min = min(e * e for e in range(1, m + 1))
+            c_actual_min = min(
+                2 * (b + e) * e for b in range(1, m + 1) for e in range(1, m + 1)
             )
-            # Unit area must be present to prove even 1*1 is a product
-            results["QP_AREA_MIN"] = has_unit
+            for key, actual_min in (("B_min", b_actual_min), ("E_min", e_actual_min), ("C_min", c_actual_min)):
+                decl = minima.get(key, {})
+                if isinstance(decl, dict) and "value" in decl:
+                    if decl["value"] != actual_min:
+                        results["QP_AREA_MIN"] = False
+        total_states = eam.get("total_states")
+        if isinstance(m, int) and total_states is not None and total_states != m * m:
+            results["QP_AREA_MIN"] = False
+    elif results["QP_PRODUCT"]:
+        witnesses = fixture.get("witnesses", [])
+        has_unit = any("1*1" in str(w.get("products", {})) for w in witnesses)
+        results["QP_AREA_MIN"] = has_unit
 
     # QP_DIM: dimensional types present
     rdp = fixture.get("role_distinction_proof", {})
@@ -178,7 +211,10 @@ def _run_checks(fixture):
         or "Dale" in src
     )
 
-    # QP_WITNESS: at least 3 witnesses with correct tuple derivation
+    # QP_WITNESS: at least 3 witnesses with correct tuple derivation AND
+    # genuinely-verified arithmetic in every declared product string
+    # (previously only checked for the presence of a '*' character —
+    # a witness could declare "C": "2*3*1=999" and pass; found 2026-07-07)
     witnesses = fixture.get("witnesses", [])
     results["QP_WITNESS"] = len(witnesses) >= 3
     if results["QP_WITNESS"]:
@@ -200,6 +236,35 @@ def _run_checks(fixture):
                 actual_tuple = list(qa_tuple(b_val, e_val))
                 if actual_tuple != claimed_tuple:
                     results["QP_WITNESS"] = False
+                    break
+                _, _, d_val, a_val = actual_tuple
+
+                # Genuinely evaluate every declared "expr=value" product string
+                for pval in prods.values():
+                    ev = _eval_product_string(pval)
+                    if ev is not None and ev[0] != ev[1]:
+                        results["QP_WITNESS"] = False
+                        break
+                if not results["QP_WITNESS"]:
+                    break
+
+                # Cross-check named elements against the actual recomputed
+                # (b, e, d, a), not just internal self-consistency of the string
+                expected_products = {
+                    "B": b_val * b_val,
+                    "E": e_val * e_val,
+                    "C": 2 * d_val * e_val,
+                    "F": b_val * a_val,
+                    "J": b_val * d_val,
+                    "X": e_val * d_val,
+                }
+                for key, expected_val in expected_products.items():
+                    if key in prods:
+                        ev = _eval_product_string(prods[key])
+                        if ev is not None and ev[1] != expected_val:
+                            results["QP_WITNESS"] = False
+                            break
+                if not results["QP_WITNESS"]:
                     break
 
     # QP_F: fail_ledger

@@ -100,3 +100,17 @@ Expected: `{"ok": true, ..., "fixture_summary": "7/7 passed"}`
 - Serre, J.-P. (1979). *Local Fields*. [doi:10.1007/978-1-4757-5673-9](https://doi.org/10.1007/978-1-4757-5673-9) — nilpotent lifting, ramified p-adic extensions
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7 — Hensel lifting, primitive roots
 - Wall, D.D. (1960). *American Mathematical Monthly* 67(6). [doi:10.1080/00029890.1960.11989541](https://doi.org/10.1080/00029890.1960.11989541) — Pisano-period structure for quadratic recurrences
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the full e=1 closed
+form via fresh direct orbit-period enumeration (own step function for
+the general x²−tx+1 recurrence, not reusing validator code) for p=5,
+t=7 at k=1,2,3 — period set, fixed-point count (=p=5 at every level),
+birth-layer count, and frozen-layer count all match exactly. Also
+independently confirmed the p=3 stall exception: t=8 (c≡2 mod 3)
+genuinely produces no period-9 orbits at k=2, while t=5 (c≡1 mod 3)
+does — exactly as claimed. This chain ([434]→[435]→[436]→[437])
+exemplifies careful, honest incremental mathematics: each cert
+explicitly names the gap the previous one left open rather than
+overclaiming completeness.

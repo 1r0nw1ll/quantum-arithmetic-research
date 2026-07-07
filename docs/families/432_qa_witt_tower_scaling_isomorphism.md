@@ -131,3 +131,14 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "6/6 pass
 - Wall, D.D. (1960). [doi.org/10.1080/00029890.1960.11989541](https://doi.org/10.1080/00029890.1960.11989541) — Pisano period tower
 - Serre, J.-P. (1979). *Local Fields*. [doi.org/10.1007/978-1-4757-5673-9](https://doi.org/10.1007/978-1-4757-5673-9) §II.4
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the split-unequal
+multiplicity formulas count_new(p·ord_min)=(p−1)/ord_min and
+count_new(p·ord_max)=(p−1)(p²+p−1)/ord_max from scratch (fresh direct
+orbit-period enumeration on (ℤ/p²ℤ)², not reusing validator code) for
+all 4 primes {11,19,29,31} — exact match in every case. This is
+genuinely rigorous, honestly-scoped algebraic number theory (explicit
+"what this cert does NOT claim" sections throughout), no
+fixture-trusting gap.

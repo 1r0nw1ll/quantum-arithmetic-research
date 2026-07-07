@@ -128,3 +128,15 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "5/5 pass
 - Wall, D.D. (1960). [doi.org/10.1080/00029890.1960.11989541](https://doi.org/10.1080/00029890.1960.11989541) — Pisano period tower
 - Serre, J.-P. (1979). *Local Fields*. [doi.org/10.1007/978-1-4757-5673-9](https://doi.org/10.1007/978-1-4757-5673-9) §II.4
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in fresh, separate
+scripts (not reusing validator code): the recursive period-set law
+Periods_nt(p^(k+1))=Periods_nt(p^k)∪p·Periods_nt(p^k) for p∈{7,11,13};
+the split-unequal multiplicity formulas at k=3 for p=11 (n_min=2,
+n_max=1451, both matching the closed form exactly); and the
+inert/split-equal closed form at k=2,3 for p=7 (21, 147, both exact).
+Genuine, carefully-scoped algebraic number theory with an honest
+"standing hypothesis, not proven impossible" caveat on the underlying
+non-Wall-Sun-Sun assumption. No fixture-trusting gap.

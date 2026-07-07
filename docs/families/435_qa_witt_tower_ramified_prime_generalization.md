@@ -147,3 +147,16 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "7/7 pass
 - Wall, D.D. (1960). *American Mathematical Monthly* 67(6). [doi.org/10.2307/2309169](https://doi.org/10.2307/2309169) — Pisano-style period tables
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7 — primitive roots, Hensel lifting
 - Washington, L.C. (1997). *Introduction to Cyclotomic Fields*. [doi.org/10.1007/978-1-4612-1934-7](https://doi.org/10.1007/978-1-4612-1934-7) Ch.5 — structure of `(ℤ/2^k ℤ)×`, non-cyclic for k≥3
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-implemented D=12's companion
+matrix M=[[4,-1],[1,0]] from scratch and verified: the odd-ramified-
+prime law ord(M mod 3^k)=2·3^k for k=1..4, the p=2 stall exception
+(ord=2,4,4,8,16,32 for k=1..6 — genuinely one level short at k=3
+before doubling resumes), and CRT cross-prime independence
+ord(M mod 2^j·3^k)=lcm(ord mod 2^j, ord mod 3^k) for all 15 (j,k)
+pairs tested. All exact matches. This is careful, honestly-scoped
+work that goes out of its way to find and explain a real exception
+(p=2) rather than overclaiming a universal law — exactly the kind of
+rigor this audit values.

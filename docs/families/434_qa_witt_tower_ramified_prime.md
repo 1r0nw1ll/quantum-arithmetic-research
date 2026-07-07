@@ -141,3 +141,13 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "5/5 pass
 - Serre, J.-P. (1979). *Local Fields*. [doi.org/10.1007/978-1-4757-5673-9](https://doi.org/10.1007/978-1-4757-5673-9) — ramification theory
 - Wall, D.D. (1960). [doi.org/10.1080/00029890.1960.11989541](https://doi.org/10.1080/00029890.1960.11989541) — Pisano period table (π(5)=20)
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7 — primitive roots, Hensel lifting
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the full
+birth/jump/freeze closed form via fresh direct orbit-period enumeration
+on (ℤ/5^kℤ)² (not reusing validator code) for k=1..4 — every period set
+and every count(P_L,k) value (including the k=4 counts {6,30,150,125})
+matches the doc's closed form exactly, corroborating the doc's own
+cited k=6 brute-force result. Genuine, carefully-derived algebra
+(Jordan-block mechanism), no fixture-trusting gap.

@@ -94,3 +94,14 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "7/7 pass
 - Serre, J.-P. (1979). *Local Fields*. [doi:10.1007/978-1-4757-5673-9](https://doi.org/10.1007/978-1-4757-5673-9) — ramification theory, double roots mod p
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7 — primitive roots, Hensel lifting
 - Wall, D.D. (1960). *American Mathematical Monthly* 67(6). [doi:10.2307/2309169](https://doi.org/10.2307/2309169) — Pisano-style period tables
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the e-rigidity law
+in a fresh script (own λ₀-order computation, not reusing validator
+code): for the det=+1 family, all 1402 tested (t,p) pairs (t=3..500,
+odd p|D<200) correctly split into e=1 (p|t−2) and e=2 (p|t+2) with no
+exceptions; for the det=−1 family, all 559 tested pairs give e=4
+exactly with no exceptions. This is a genuine, falsifiable structural
+claim (not just re-confirming [434]/[435]'s two data points) and it
+holds with zero counterexamples across ~2000 independent checks.

@@ -4909,7 +4909,7 @@ def _validate_septenary_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_law_of_harmonics_cert_family(base_dir: str) -> Optional[str]:
-    """QA Law of Harmonics Cert family [149] — certifies Iverson's formal law of harmonic resonance: two QN products sharing all but one prime factor each are harmonic; harmony ratio=min(id1,id2)/max(id1,id2); all QN products divisible by 6; Fibonacci QN chain shows adjacent harmonic pattern; source: Iverson QA-3 Ch 4; checks LH_1+ALIQ/IDEN/RATIO/DIV6/W/F; 2 PASS; self-test ok"""
+    """QA Law of Harmonics Cert family [149] — certifies Iverson's formal law of harmonic resonance: two QN products sharing all but one prime factor each are harmonic; harmony ratio=min(id1,id2)/max(id1,id2); all QN products divisible by 6; Fibonacci QN chain shows adjacent harmonic pattern; source: Iverson QA-3 Ch 4; checks LH_1+ALIQ/IDEN/RATIO/DIV6/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean, no bugs -- independently recomputed every pair's QN products/aliquot sets/identity primes/ratios by hand. Added first FAIL fixture (genuinely wrong data, not a result=FAIL short-circuit) to close a real coverage gap."""
     import subprocess
     lh_dir    = os.path.join(base_dir, "qa_law_of_harmonics_cert_v1")
     validator = os.path.join(lh_dir, "qa_law_of_harmonics_cert_validate.py")
@@ -14157,7 +14157,7 @@ FAMILY_SWEEPS = [
      "qa_septenary_cert_v1", True),
     (149, "QA Law of Harmonics Cert family",
      _validate_law_of_harmonics_cert_family,
-     "Iverson's formal law: two QN products sharing all but one prime factor each are harmonic; ratio=min(id)/max(id); all products÷6; Fibonacci chain adjacency pattern; checks LH_1+ALIQ/IDEN/RATIO/DIV6/W/F; 2 PASS; self-test ok",
+     "Iverson's formal law: two QN products sharing all but one prime factor each are harmonic; ratio=min(id)/max(id); all products÷6; Fibonacci chain adjacency pattern; checks LH_1+ALIQ/IDEN/RATIO/DIV6/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean; added first FAIL fixture to close a real coverage gap.",
      "149_qa_law_of_harmonics_cert",
      "qa_law_of_harmonics_cert_v1", True),
     (148, "QA Sixteen Identities Cert family",

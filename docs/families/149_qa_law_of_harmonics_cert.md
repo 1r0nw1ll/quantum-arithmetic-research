@@ -60,3 +60,28 @@ All QN products b×e×(b+e)×(b+2e) are divisible by 6 — guaranteed by the str
 
 - `fixtures/lh_pass_harmonic_pairs.json` — 5 pairs (4 harmonic at 5:7 + 1 non-harmonic fundamental)
 - `fixtures/lh_pass_fibonacci_chain.json` — Fibonacci QN chain showing adjacent harmonic pattern + non-harmonic contrasts
+- `fixtures/lh_fail_bad_ratio.json` — falsifier: wrong QN product + wrong harmony ratio (added 2026-07-06)
+
+## Verification Note (2026-07-06)
+
+Independently recomputed every pair's QN products, aliquot sets,
+identity primes, and harmony ratios by hand across both PASS fixtures
+(e.g. (1,4): d=5,a=9, P=1×4×5×9=180=2²×3²×5; vs (1,3) P=84=2²×3×7;
+shared {2,3}; identity primes {5} vs {7}; ratio 5/7=0.7143) — all
+correct, including the subtler non-harmonic cases (male/female (1,1)
+vs (2,1) both reducing to identity ∅; non-adjacent Fibonacci pair
+(1,2)/(2,3) sharing the full prime set {2,3,5} with no identity primes
+either side). Confirmed `analyze_pair` already genuinely recomputes
+gcd/prime-factorization from primitives, not fixture-trusting. No bugs.
+
+**Found and closed one real gap**: this family had zero FAIL fixtures,
+the same pattern found in siblings [142]/[143]/[132]. Unlike those,
+this validator's `validate()` has no `result=="FAIL"` short-circuit —
+it always runs the real checks — so the new
+`fixtures/lh_fail_bad_ratio.json` plants genuinely wrong data (a wrong
+QN product, a wrong harmony ratio) rather than relying on an early
+return. Verified both planted errors are genuinely caught. Directly
+tested the meta-validator's `_validate_law_of_harmonics_cert_family`
+wrapper after the change (learned from cert [132]'s latent
+print-corruption bug to always re-check this) — no hidden issues found
+here.

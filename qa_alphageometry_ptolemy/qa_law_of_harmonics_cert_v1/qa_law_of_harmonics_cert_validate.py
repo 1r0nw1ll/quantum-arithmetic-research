@@ -24,6 +24,8 @@ Checks: LH_1 (schema), LH_ALIQ (aliquot set computed correctly),
 LH_IDEN (identity primes correct), LH_RATIO (harmony ratio correct),
 LH_DIV6 (all QN products divisible by 6), LH_W (>=4 harmonic pairs),
 LH_F (fundamental product P=6 present).
+
+Primary source: Iverson, B., QA-3 Ch 4, Law of Harmonics (Iverson, 1991).
 """
 
 import json
@@ -169,9 +171,16 @@ def validate(cert, *, collect_errors=True):
 def self_test():
     here = os.path.dirname(os.path.abspath(__file__))
     fix_dir = os.path.join(here, "fixtures")
+    # lh_fail_bad_ratio.json (added 2026-07-06 to close a real fixture-
+    # coverage gap -- this family previously had zero FAIL fixtures)
+    # plants genuinely wrong data (not just a declared result="FAIL"
+    # short-circuit like some sibling cert validators): validate() has
+    # no early-return-on-FAIL branch here, so it must actually detect
+    # the planted product/ratio errors, hence should_pass=False.
     expected = {
         "lh_pass_harmonic_pairs.json": True,
         "lh_pass_fibonacci_chain.json": True,
+        "lh_fail_bad_ratio.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

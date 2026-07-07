@@ -1,0 +1,52 @@
+{
+  "schema_version": "QA_LAW_OF_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.law_of_harmonics.fail.bad_ratio.v1",
+  "cert_type": "qa_law_of_harmonics_cert",
+  "title": "Law of Harmonics FAIL: demonstrates a wrong harmony ratio and a wrong product",
+
+  "sources": [
+    "Iverson, B., QA-3 Ch 4, Law of Harmonics (Iverson, 1991)",
+    "Memory/qa_source_texts.md harmonic resonance definition (Dale, 2026)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants two independent, deterministically detectable violations: (1) pair[0] declares product1=31 instead of the correct b*e*d*a=1*2*3*5=30 for QN (1,2); (2) pair[1] declares harmony_ratio=0.5 instead of the correct min(5,7)/max(5,7)=0.7143 for the (1,3)/(2,3) pair.",
+
+  "harmonic_pairs": [
+    {
+      "qn1": {"b": 1, "e": 2}, "product1": 31,
+      "qn2": {"b": 1, "e": 3}, "product2": 84,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 5, "identity_prime_2": 7,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "deliberately wrong: product1 should be 1*2*3*5=30, not 31"
+    },
+    {
+      "qn1": {"b": 1, "e": 3}, "product1": 84,
+      "qn2": {"b": 2, "e": 3}, "product2": 240,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 7, "identity_prime_2": 5,
+      "is_harmonic": true, "harmony_ratio": 0.5,
+      "note": "deliberately wrong: harmony_ratio should be min(5,7)/max(5,7)=0.7143, not 0.5"
+    },
+    {
+      "qn1": {"b": 3, "e": 1}, "product1": 60,
+      "qn2": {"b": 1, "e": 3}, "product2": 84,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 5, "identity_prime_2": 7,
+      "is_harmonic": true, "harmony_ratio": 0.7143
+    },
+    {
+      "qn1": {"b": 1, "e": 1}, "product1": 6,
+      "qn2": {"b": 1, "e": 2}, "product2": 30,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": null, "identity_prime_2": null,
+      "is_harmonic": false, "harmony_ratio": null
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "LH_ALIQ", "message": "pair[0] product1 declared=31, computed=30"},
+    {"check_id": "LH_RATIO", "message": "pair[1] ratio declared=0.5, computed=0.7143"}
+  ],
+  "result": "FAIL"
+}

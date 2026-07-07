@@ -90,3 +90,11 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "8/8 pass
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*, 2nd ed. ISBN 978-0-387-97329-6. Ch. 13: Cassini identity (F_{n−1}F_{n+1}−F_n²=(−1)^n), norm form multiplicativity.
 - Serre, J.-P. (1979). *Local Fields*. ISBN 978-0-387-90236-7. Witt vectors W_n(𝔽_{p²}), p-adic logarithm, structure of (ℤ[φ]/(p^n))^×.
 - Crandall, R., Dilcher, K. & Pomerance, C. (1997). A search for Wieferich and Wilson primes. *Mathematics of Computation* 66:433–449. doi:10.1090/S0025-5718-97-00791-6. (Wall-Sun-Sun prime search up to 10^14.)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh, separate
+script: π(p²)=p·π(p) exactly for all 11 tested primes {3,5,7,11,13,17,
+19,23,29,41,59}; the Cassini identity N(σᵏ(1,0))=(−1)^(k+1) holds for
+k=0..9. Genuine falsifiable number theory building correctly on cert
+[391]'s norm-negation identity. No fixture-trusting gap.

@@ -48,3 +48,12 @@ Bridges to: [390] (GL_2 HMF Galois symmetry using LMFDB)
 The chain from [385]→[394]→[390] is: *structural identification* → *GL_1 orbit
 computation* → *GL_2 eigenvalue symmetry*. Cert [394] is the missing oracle step
 that makes the QA Frobenius computation explicit.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified F_p ≡ (5/p) mod p in a
+fresh, separate script for all odd primes ≤500 (Legendre symbol via
+Euler's criterion, Fibonacci via direct integer recurrence) — zero
+mismatches. This cert does not touch the LMFDB eigenvalue arrays (unlike
+[390]/[395]) so it was unaffected by the index-misalignment bug found in
+that pair. Genuine falsifiable number theory, no fixture-trusting gap.

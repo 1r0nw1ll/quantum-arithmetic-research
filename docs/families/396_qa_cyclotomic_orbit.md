@@ -87,3 +87,13 @@ Extends: [391] (Cassini/σ on ℤ[φ]), [394] (GL₁ Frobenius from orbit), [395
 
 Infrastructure for: [397] FUTURE — CM Hecke character `ψ(𝔭) ∈ ℤ[ζ₅]` with
 `N_{ℚ(ζ₅)/ℚ(√5)}(ψ(𝔭)) = N(𝔭) = p`; requires CM form label from LMFDB.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-implemented the 4×4 companion
+matrices C and G from scratch in a fresh script and verified C⁵=I₄,
+G⁴=I₄, G≠I, G²≠I via direct matrix exponentiation — exact match. Also
+independently recomputed the quartic norm form N(a+bζ₅)=a⁴−a³b+a²b²−ab³+b⁴
+for the 4 generators, confirming N(2+ζ₅)=11, N(2−ζ₅)=31, N(3+ζ₅)=61,
+N(4+3ζ₅)=181 exactly (all genuine primes ≡1 mod 5). Genuine falsifiable
+algebra, no fixture-trusting gap.

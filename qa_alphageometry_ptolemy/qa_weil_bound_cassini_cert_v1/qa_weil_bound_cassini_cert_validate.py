@@ -60,10 +60,14 @@ import math
 # ──────────────────────────────────────────────────────────────────────────
 # LMFDB eigenvalue data — hardcoded from cert [390] (2026-06-11 fetch)
 # Ordering: prime ideals of Z[phi] sorted by norm N(p), skipping level 31
+# FIXED 2026-07-07: this array is a duplicate of cert [390]'s data and had the
+# same bug -- the level-31 Atkin-Lehner values were never stripped, misaligning
+# every index from 9 onward by 2 slots relative to PRIME_LIST below. Propagated
+# sideways from [390]; fixed here identically (see [390]'s Verification Note).
 # ──────────────────────────────────────────────────────────────────────────
 
 EIGS_31_1 = [
-    -3, -2, 2, 4, -4, -4, 4, -2, -2, -1, 8, -6, -6, 2, 12, -4,
+    -3, -2, 2, 4, -4, -4, 4, -2, -2, -6, -6, 2, 12, -4,
     6, -2, 0, -8, 0, 16, -6, 10, 6, -10, 6, -10, -20, 4, 4, -20,
     6, -10, 8, 16, -6, 4, -12, -10, 22, 0, 16, 16, 24, -12, -4, 6,
     -26, -24, 0, -14, 26, 12, 12, -10, -18, 0, 0, -30, 18, -30, 8, 8,

@@ -78,3 +78,14 @@ The totally-negative discriminant closes the Langlands ladder at the CM/degree-4
 | GL₂ exact | [390] | a_f exact (LMFDB data) |
 | K/F infra | [396] | ℤ[ζ₅]: C^5=I, G^4=I, partial trace |
 | CM | **[397]** | **Relative norm + totally-negative discriminant** |
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived all 5 claims from
+scratch in a fresh script (own ℤ[φ] multiplication implementation, not
+reusing validator code) for the 4 generators (2,1),(2,−1),(3,1),(4,3):
+relative norm N_{K/F}(a+bζ₅)=(a²−ab+b²)+ab·φ, the tower law
+N_{F/ℚ}(N_{K/F}(π))=N_{K/ℚ}(π)=p (11/31/61/181), the CM norm
+factorization N_{K/F}(π)·σ_F(N_{K/F}(π))=p, and the totally-negative
+discriminant −b²(2+φ) — all exact matches. Genuine falsifiable
+algebraic number theory, no fixture-trusting gap.

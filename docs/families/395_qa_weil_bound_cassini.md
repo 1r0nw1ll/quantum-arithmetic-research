@@ -53,3 +53,20 @@ Extends: [391] (Cassini identity and sigma=phi-multiplication on ℤ[φ]),
 
 The discriminant sign flip is the structural bridge from the Cassini chain
 ([391]→[392]→[394]) to the GL₂ Weil theory.
+
+## Verification Note (2026-07-07)
+
+**Found and fixed a real bug propagated sideways from cert [390].** This
+cert independently duplicates the same hardcoded `EIGS_31_1` LMFDB
+eigenvalue array as [390], and had the identical index-misalignment bug
+(the level-31 Atkin-Lehner values were never stripped, shifting every
+prime index ≥9 by 2 slots — see [390]'s Verification Note for the full
+diagnosis). Applied the identical fix here (deleted the 2 level-31
+entries). Re-ran the validator after the fix — C1-C5 all still pass,
+and an independent fresh re-check of the Weil bound (|a|²<4N) across all
+34 corrected prime-ideal entries confirms zero violations. The
+underlying Cassini→Weil sign-flip theorem is genuinely true and
+unaffected by the bug (the Weil bound is a much looser inequality than
+the exact-eigenvalue-equality checks in [390], so it happened to hold
+either way) — but the specific (prime, eigenvalue) pairs reported for
+p≥41 were wrong before this fix, same as in [390].

@@ -126,3 +126,26 @@ The I₁ image of the (2,1) fundamental (H=7,I=1) is (H',I')=(1,7), which is exa
 
 - `fixtures/k4_pass_group_axioms.json` — group table + algebraic proofs + 3 witnesses
 - `fixtures/k4_pass_witnesses.json` — 6 general witnesses at H/E/Pell-boundary/large
+- `fixtures/k4_fail_bad_group_table.json` — falsifier: broken group-table entry + wrong F value (added 2026-07-06)
+
+## Verification Note (2026-07-06)
+
+Independently recomputed F, C, G, H, I from (d,e) by hand for every
+witness in both PASS fixtures (e.g. (5,2): F=21, C=20, G=29, H=41, I=-1;
+(12,5): F=119, C=120, G=169, H=239, I=1 — Plimpton Row 1) — all correct.
+Confirmed the validator's `check_direction`/`check_group_table` already
+genuinely recompute from primitives (not fixture-trusting): planted a
+wrong F value and a broken group-table entry via ad-hoc regression
+tests, both correctly rejected. This is one of the stronger validators
+found in this audit cycle — no bugs found in the certified math.
+
+**Found and closed one real gap**: this family had zero FAIL fixtures
+(the only test coverage gap present). Added
+`fixtures/k4_fail_bad_group_table.json`, planting two independent,
+genuinely-detectable violations (a group-table closure break and a
+witness with wrong F/H/I) — confirmed both are caught by the existing
+`check_group_table`/`check_direction` functions when checked directly
+(the FAIL-declared cert itself short-circuits `validate()`'s detailed
+checks, matching this project's standard convention for FAIL fixtures,
+e.g. [189] Dale Circle). Updated `_self_test()` to include the new
+fixture.

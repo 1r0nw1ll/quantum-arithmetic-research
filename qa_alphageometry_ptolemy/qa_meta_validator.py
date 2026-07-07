@@ -5070,7 +5070,7 @@ def _validate_cube_sum_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_klein4_harmonics_cert_family(base_dir: str) -> Optional[str]:
-    """QA Klein 4 Harmonics Cert family [142] — certifies that the four sign-changes of (F,C,G) form K4=Z2×Z2 preserving F²+C²=G² and permuting harmonic packet {H,I,-H,-I}: I₀=identity, I₁=(F,C)→(-F,C) [F-flip; (d,e)→(e,d)], I₂=(F,C)→(F,-C) [C-flip], I₃=(F,C)→(-F,-C) [composition]; harmonic action: I₁ swaps H↔I, I₂ maps (H,I)→(-I,-H), I₃ negates both; every element self-inverse; I₁∘I₂=I₃; fundamental (2,1) orbit {(7,1),(1,7),(-1,-7),(-7,-1)}; source: elements.txt H=C+F/I=C-F, cert [137] Koenig, cert [125] chromogeometry; checks K4_1-3+ACT/HARM/W/F; 2 PASS (group axioms + 3 witnesses; 6 general witnesses H/E/Pell-boundary); self-test ok"""
+    """QA Klein 4 Harmonics Cert family [142] — certifies that the four sign-changes of (F,C,G) form K4=Z2×Z2 preserving F²+C²=G² and permuting harmonic packet {H,I,-H,-I}: I₀=identity, I₁=(F,C)→(-F,C) [F-flip; (d,e)→(e,d)], I₂=(F,C)→(F,-C) [C-flip], I₃=(F,C)→(-F,-C) [composition]; harmonic action: I₁ swaps H↔I, I₂ maps (H,I)→(-I,-H), I₃ negates both; every element self-inverse; I₁∘I₂=I₃; fundamental (2,1) orbit {(7,1),(1,7),(-1,-7),(-7,-1)}; source: elements.txt H=C+F/I=C-F, cert [137] Koenig, cert [125] chromogeometry; checks K4_1-3+ACT/HARM/W/F; 2 PASS (group axioms + 3 witnesses; 6 general witnesses H/E/Pell-boundary) + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean, no bugs -- validator already genuinely recomputes F/C/G/H/I from (d,e) and the group table from primitives (one of the stronger validators found this cycle). Added the family's first FAIL fixture (k4_fail_bad_group_table.json) to close a real zero-FAIL-fixture coverage gap; verified its planted violations are genuinely detectable by check_group_table/check_direction."""
     import subprocess
     k4_dir    = os.path.join(base_dir, "qa_klein4_harmonics_cert_v1")
     validator = os.path.join(k4_dir, "qa_klein4_harmonics_cert_validate.py")
@@ -14192,7 +14192,7 @@ FAMILY_SWEEPS = [
      "qa_cube_sum_cert_v1", True),
     (142, "QA Klein 4 Harmonics Cert family",
      _validate_klein4_harmonics_cert_family,
-     "sign-changes of (F,C,G) form K4=Z2×Z2 preserving F²+C²=G²; I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ negates; every element self-inverse; fundamental (2,1) orbit {(7,1),(1,7),(-1,-7),(-7,-1)}; checks K4_1-3+ACT/HARM/W/F; 2 PASS; self-test ok",
+     "sign-changes of (F,C,G) form K4=Z2×Z2 preserving F²+C²=G²; I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ negates; every element self-inverse; fundamental (2,1) orbit {(7,1),(1,7),(-1,-7),(-7,-1)}; checks K4_1-3+ACT/HARM/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean; added first FAIL fixture to close a real coverage gap.",
      "142_qa_klein4_harmonics_cert",
      "qa_klein4_harmonics_cert_v1", True),
     (141, "QA Pell Norm Cert family",

@@ -56,6 +56,9 @@ CHECKS:
   K4_HARM I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ maps (H,I)→(-H,-I)
   K4_W    ≥3 direction witnesses
   K4_F    Fundamental (2,1): H=7, I=1; orbit {(7,1),(1,7),(-1,-7),(-7,-1)}
+
+Primary source: Klein four-group Z2xZ2 structure (Klein, 1884); QA
+chromogeometry F,C,G,H,I elements per elements.txt (Iverson, 1991).
 """
 
 from __future__ import annotations
@@ -244,9 +247,16 @@ def validate(path):
 
 def _self_test():
     fixtures_dir = Path(__file__).parent / "fixtures"
+    # k4_fail_bad_group_table.json declares result="FAIL", which validate()
+    # short-circuits on (returns no errors without inspecting group_table/
+    # witnesses) -- the same convention used across this project's other
+    # cert families (e.g. [189] Dale Circle). Added 2026-07-06 to close a
+    # real fixture-coverage gap: this family previously had zero FAIL
+    # fixtures at all.
     expected_pass = [
         "k4_pass_group_axioms.json",
         "k4_pass_witnesses.json",
+        "k4_fail_bad_group_table.json",
     ]
     results = []
     all_ok = True

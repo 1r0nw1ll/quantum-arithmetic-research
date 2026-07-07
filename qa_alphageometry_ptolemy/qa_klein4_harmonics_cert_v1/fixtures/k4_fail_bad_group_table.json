@@ -1,0 +1,44 @@
+{
+  "schema_version": "QA_KLEIN4_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.klein4.fail.bad_group_table.v1",
+  "cert_type": "qa_klein4_harmonics_cert",
+  "title": "Klein 4 Harmonics FAIL: demonstrates a broken group table and a wrong F value",
+
+  "sources": [
+    "Klein four-group Z2xZ2 closure/self-inverse structure (Klein, 1884)",
+    "QA chromogeometry F,C,G,H,I elements, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants two independent, deterministically detectable violations: (1) group_table[1][2] declares 0 (identity) instead of the correct I1*I2=I3=3, breaking closure/associativity of K4=Z2xZ2; (2) witness (2,1) declares F=99 instead of the correct F=d*d-e*e=3, which also breaks the Pythagorean invariant F^2+C^2=G^2 (99^2+16=9817 != 25).",
+
+  "group_table": [
+    [0, 1, 2, 3],
+    [1, 0, 0, 2],
+    [2, 3, 0, 1],
+    [3, 2, 1, 0]
+  ],
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1,
+      "F": 99, "C": 4, "G": 5, "H": 103, "I": -95,
+      "check": "deliberately wrong: F should be d*d-e*e=3, not 99"
+    },
+    {
+      "d": 3, "e": 2,
+      "F": 5, "C": 12, "G": 13, "H": 17, "I": 7,
+      "check": "correct witness, included so the fixture isn't trivially all-wrong"
+    },
+    {
+      "d": 4, "e": 1,
+      "F": 15, "C": 8, "G": 17, "H": 23, "I": -7,
+      "check": "correct witness"
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "K4_3", "message": "group_table[1][2] declared 0, expected I1∘I2=I3=3"},
+    {"check_id": "K4_2", "message": "witness (2,1) declared F=99, expected d*d-e*e=3; also breaks F²+C²=G²"}
+  ],
+  "result": "FAIL"
+}

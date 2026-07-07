@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=inertial_nav_fixtures"
-"""QA Inertial Nav Cert family [170] — certifies zero computational drift
+"""QA Inertial Nav Cert family [176] — certifies zero computational drift
 # RT1_OBSERVER_FILE: inertial navigation — observer coordinate layer
 of QA T-operator navigation vs classical INS O(ε√N) error growth.
+
+(Family number corrected 2026-07-06: this docstring said "[170]",
+stale/mismatched against the actual FAMILY_SWEEPS registration [176].)
+
+Primary source: Savage, P.G. (2000) Strapdown Inertial Navigation
+Integration Algorithm Design, J. Guidance, Control, and Dynamics;
+Goldberg, D. (1991) What Every Computer Scientist Should Know About
+Floating-Point Arithmetic, ACM Computing Surveys (IEEE 754 ULP bounds).
 
 TIER 1 — COMPUTATIONAL PROOF:
 
@@ -41,7 +49,14 @@ Checks
 ------
 IN_1         schema_version == 'QA_INERTIAL_NAV_CERT.v1'
 IN_QA_EXACT  QA T-operator gives identical state via iteration and matrix
-IN_DRIFT     classical error grows as √N (verified by regression)
+IN_DRIFT     classical error genuinely recomputed via a 300-trial averaged
+             Monte Carlo simulation and compared to the declared value
+             within a 30% relative tolerance (hardened 2026-07-06 --
+             previously only checked declared classical_error > 0, never
+             actually calling classical_dr_error/classical_dr_error_rms
+             despite both being defined in this module; skipped for the
+             ULP noise level, which is at the edge of float64 epsilon and
+             not meaningfully Monte-Carlo-simulable, see Verification Note)
 IN_ZERO      QA error = 0 for all witness routes
 IN_RATIO     classical/QA ratio documented
 IN_W         at least 3 route witnesses at different noise levels
@@ -93,6 +108,34 @@ def classical_dr_error(n_steps, step_dist, noise_sigma, seed=42):
     return error
 
 
+def classical_dr_error_rms(n_steps, step_dist, noise_sigma, trials=300, seed=42):
+    """RMS classical DR error averaged over many independent trials.
+
+    A single classical_dr_error() realization is one noisy sample path and
+    does not reliably reproduce the theoretical epsilon*d*sqrt(N) scaling
+    law (added 2026-07-06: a single seed=42 run showed ~1.5x-2.2x growth
+    for a 10x increase in N, not the expected sqrt(10)~=3.16x). Averaging
+    the squared error over many trials converges to the real RMS and
+    reproduces sqrt(N) scaling to within a few percent.
+    """
+    rng = random.Random(seed)
+    bearing = 45.0
+    rad = math.radians(bearing)
+    sin_b = math.sin(rad)
+    cos_b = math.cos(rad)
+    sq_sum = 0.0
+    for _ in range(trials):
+        x_noisy = y_noisy = 0.0
+        for _ in range(n_steps):
+            x_noisy += step_dist * (sin_b + rng.gauss(0, noise_sigma))
+            y_noisy += step_dist * (cos_b + rng.gauss(0, noise_sigma))
+        x_ref = n_steps * step_dist * sin_b
+        y_ref = n_steps * step_dist * cos_b
+        e = math.hypot(x_ref - x_noisy, y_ref - y_noisy)
+        sq_sum += e * e
+    return math.sqrt(sq_sum / trials)
+
+
 def validate(cert, *, collect_errors=True):
     errors = []
     warnings = []
@@ -129,7 +172,9 @@ def validate(cert, *, collect_errors=True):
         if qa_error != 0:
             err("IN_ZERO", f"witness {i}: qa_error={qa_error}, must be 0")
 
-        # IN_DRIFT — classical error data
+        # IN_DRIFT — classical error genuinely recomputed via averaged
+        # Monte Carlo simulation, not just checked for positivity.
+        step_dist_m = w.get("step_dist_m", 1000.0)
         noise_levels = w.get("noise_levels", [])
         for j, nl in enumerate(noise_levels):
             sigma = nl.get("sigma")
@@ -140,6 +185,21 @@ def validate(cert, *, collect_errors=True):
                 # Verify error is positive (sanity)
                 if classical_err <= 0:
                     err("IN_DRIFT", f"witness {i} noise {j}: classical_error={classical_err} <= 0")
+                elif sigma <= 1e-14:
+                    # ULP-level noise is at/below float64 epsilon (~2.22e-16);
+                    # Monte Carlo averaging is not meaningful at this scale
+                    # (can genuinely round to exactly 0 across trials), so
+                    # this level is a documented exception, not simulated.
+                    pass
+                else:
+                    recomputed = classical_dr_error_rms(n, step_dist_m, sigma)
+                    if recomputed > 0:
+                        rel_err = abs(classical_err - recomputed) / recomputed
+                        if rel_err > 0.30:
+                            err("IN_DRIFT",
+                                f"witness {i} noise {j}: declared classical_error={classical_err:.4g} "
+                                f"but genuine 300-trial recompute gives {recomputed:.4g} "
+                                f"(relative diff {rel_err:.1%}, tolerance 30%)")
 
                 # IN_RATIO — ratio should be documented
                 ratio = nl.get("ratio_classical_qa")

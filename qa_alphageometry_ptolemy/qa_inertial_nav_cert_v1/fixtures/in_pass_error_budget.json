@@ -15,37 +15,40 @@
       "b0": 1, "e0": 1, "n_steps": 100,
       "final_b": 5, "final_e": 8,
       "qa_error": 0,
+      "step_dist_m": 1000.0,
       "noise_levels": [
-        {"label": "ULP (IEEE 754)", "sigma": 1e-15, "classical_error": 7.28e-11, "ratio_classical_qa": "infinity"},
-        {"label": "Trig table", "sigma": 1e-10, "classical_error": 1.69e-06, "ratio_classical_qa": "infinity"},
-        {"label": "MEMS IMU", "sigma": 1e-06, "classical_error": 1.69e-02, "ratio_classical_qa": "infinity"},
-        {"label": "Cheap IMU", "sigma": 1e-03, "classical_error": 16.9, "ratio_classical_qa": "infinity"}
+        {"label": "ULP (IEEE 754)", "sigma": 1e-15, "classical_error": 1.14e-10, "ratio_classical_qa": "infinity", "_note": "illustrative only -- 1e-15 is at float64 epsilon, not independently Monte-Carlo-verified by IN_DRIFT"},
+        {"label": "Trig table", "sigma": 1e-10, "classical_error": 1.466e-06, "ratio_classical_qa": "infinity"},
+        {"label": "MEMS IMU", "sigma": 1e-06, "classical_error": 1.466e-02, "ratio_classical_qa": "infinity"},
+        {"label": "Cheap IMU", "sigma": 1e-03, "classical_error": 14.66, "ratio_classical_qa": "infinity"}
       ],
-      "_note": "100 legs × 1km at 45°. QA: T^100(1,1) = T^4(1,1) = (5,8). Exact."
+      "_note": "100 legs x 1km at 45deg. QA: T^100(1,1) = T^4(1,1) = (5,8). Exact. classical_error values are 300-trial averaged RMS (genuinely recomputed by IN_DRIFT via classical_dr_error_rms), not a single noisy Monte Carlo sample."
     },
     {
       "label": "1000-step route",
       "b0": 1, "e0": 1, "n_steps": 1000,
       "final_b": 13, "final_e": 16,
       "qa_error": 0,
+      "step_dist_m": 1000.0,
       "noise_levels": [
-        {"label": "Trig table", "sigma": 1e-10, "classical_error": 2.60e-06, "ratio_classical_qa": "infinity"},
-        {"label": "MEMS IMU", "sigma": 1e-06, "classical_error": 2.61e-02, "ratio_classical_qa": "infinity"},
-        {"label": "Cheap IMU", "sigma": 1e-03, "classical_error": 26.1, "ratio_classical_qa": "infinity"}
+        {"label": "Trig table", "sigma": 1e-10, "classical_error": 4.487e-06, "ratio_classical_qa": "infinity"},
+        {"label": "MEMS IMU", "sigma": 1e-06, "classical_error": 4.487e-02, "ratio_classical_qa": "infinity"},
+        {"label": "Cheap IMU", "sigma": 1e-03, "classical_error": 44.87, "ratio_classical_qa": "infinity"}
       ],
-      "_note": "Error grows ~√10 from 100→1000 steps (√N scaling)."
+      "_note": "Error grows ~3.06x from 100->1000 steps (theoretical sqrt(10)~=3.16x; corrected 2026-07-06 -- a prior single-seed Monte Carlo sample showed only ~1.54x here and did not actually reproduce sqrt(N) scaling; a 300-trial average converges much closer to theory)."
     },
     {
       "label": "10000-step route",
       "b0": 1, "e0": 1, "n_steps": 10000,
       "final_b": 13, "final_e": 16,
       "qa_error": 0,
+      "step_dist_m": 1000.0,
       "noise_levels": [
-        {"label": "Trig table", "sigma": 1e-10, "classical_error": 5.56e-06, "ratio_classical_qa": "infinity"},
-        {"label": "MEMS IMU", "sigma": 1e-06, "classical_error": 5.71e-02, "ratio_classical_qa": "infinity"},
-        {"label": "Cheap IMU", "sigma": 1e-03, "classical_error": 57.1, "ratio_classical_qa": "infinity"}
+        {"label": "Trig table", "sigma": 1e-10, "classical_error": 1.41e-05, "ratio_classical_qa": "infinity"},
+        {"label": "MEMS IMU", "sigma": 1e-06, "classical_error": 0.141, "ratio_classical_qa": "infinity"},
+        {"label": "Cheap IMU", "sigma": 1e-03, "classical_error": 141, "ratio_classical_qa": "infinity"}
       ],
-      "_note": "10000 legs. Cheap IMU drift = 57m. QA drift = 0m. For submarine or underground nav, this is the difference between finding the exit and being lost."
+      "_note": "10000 legs. Cheap IMU drift ~= 141m (300-trial averaged RMS; corrected 2026-07-06, was 57.1m from a single unconverged Monte Carlo sample). QA drift = 0m regardless. For submarine or underground nav, this is the difference between finding the exit and being lost."
     }
   ],
 
@@ -57,8 +60,8 @@
   },
 
   "sources": [
-    "INS error analysis: Savage, Strapdown Inertial Navigation (2000)",
-    "IEEE 754 ULP bounds: Goldberg, What Every Computer Scientist Should Know (1991)",
+    "INS error analysis: Strapdown Inertial Navigation Integration Algorithm Design (Savage, 2000)",
+    "IEEE 754 ULP bounds: What Every Computer Scientist Should Know About Floating-Point Arithmetic (Goldberg, 1991)",
     "QA Dead Reckoning: cert [163] QA_DEAD_RECKONING_CERT.v1",
     "T-operator: Iverson, Pythagorean Families"
   ],

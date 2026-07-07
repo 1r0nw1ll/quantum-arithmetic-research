@@ -14312,7 +14312,7 @@ FAMILY_SWEEPS = [
      "qa_cross_domain_invariance_cert_v1", True),
     (176, "QA Inertial Nav Cert family",
      _validate_inertial_nav_cert_family,
-     "Zero drift proof: classical INS O(ε√N) vs QA exact 0; 3 routes × 4 noise levels (ULP/trig/MEMS/cheap); ratio→∞; FPGA: ~10% logic of sin/cos pipeline; Theorem NT: only error = observer projection; Tier 1 computational; checks IN_1+QA_EXACT/DRIFT/ZERO/RATIO/W/F; 1 PASS+1 FAIL; self-test ok",
+     "Zero drift proof: classical INS O(ε√N) vs QA exact 0; 3 routes × 4 noise levels (ULP/trig/MEMS/cheap); ratio→∞; FPGA: ~10% logic of sin/cos pipeline; Theorem NT: only error = observer projection; Tier 1 computational; checks IN_1+QA_EXACT/DRIFT/ZERO/RATIO/W/F; 1 PASS+1 FAIL; self-test ok. VERIFIED 2026-07-06: IN_DRIFT was fixture-trusted (only checked positivity; classical_dr_error() was dead code, never called). Hardened to genuinely recompute via a new 300-trial averaged classical_dr_error_rms and compare within 30% tolerance. Found the shipped fixture's classical_error values were single-seed Monte Carlo samples that did NOT reproduce the claimed sqrt(N) scaling law (~1.54x/2.19x growth per 10x step increase, not sqrt(10)~=3.16x) -- regenerated with genuinely converged 300-trial values. T-operator exactness (IN_QA_EXACT) was already genuinely computed and confirmed correct. Also fixed a stale '[170]' family-number typo in the validator's own docstring.",
      "176_qa_inertial_nav_cert",
      "qa_inertial_nav_cert_v1", True),
     (177, "QA Planetary QN Cert family",

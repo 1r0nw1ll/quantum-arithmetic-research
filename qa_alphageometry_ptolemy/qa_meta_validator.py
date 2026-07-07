@@ -14242,7 +14242,7 @@ FAMILY_SWEEPS = [
      "../qa_prime_bounded_certificate_scaling_cert_v1", True),
     (162, "QA Human Needs SDT Cert family",
      _validate_human_needs_sdt_cert_family,
-     "SDT 3 basic needs (Autonomy/Competence/Relatedness) = QA 3 paired types: (b,e) generators, (d,DeltaT) state+derivative, (a,SigmaT) reach+integral; canonical mapping: certainty=b, variety=e, significance=d, connection=a, growth=DeltaT, contribution=SigmaT; 5/5 structural predictions confirmed (SDT n=48550); Theorem NT compliant (observer projection); checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok. VERIFIED 2026-07-05: fixed mislabeled citation (Martela et al. 2022, not Ryan & Deci), 0 arithmetic mismatches.",
+     "SDT 3 basic needs (Autonomy/Competence/Relatedness) = QA 3 paired types: (b,e) generators, (d,DeltaT) state+derivative, (a,SigmaT) reach+integral; canonical mapping: certainty=b, variety=e, significance=d, connection=a, growth=DeltaT, contribution=SigmaT; 5/5 structural predictions confirmed (SDT n=48550); Theorem NT compliant (observer projection); checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-05: fixed mislabeled citation (Martela et al. 2022, not Ryan & Deci), 0 arithmetic mismatches. Follow-up 2026-07-07: closed the zero-FAIL-fixture gap, added hn_fail_bad_derivation.json (wrong d_derived + wrong SigmaT.sa), confirmed no print-corruption bug present.",
      "162_qa_human_needs_sdt_cert",
      "qa_human_needs_sdt_cert_v1", True),
     (163, "QA Dead Reckoning Cert family",

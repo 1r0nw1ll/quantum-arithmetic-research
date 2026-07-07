@@ -87,6 +87,7 @@ The mapping is an **observer-layer projection**, not a claim that psychological 
 
 - `fixtures/hn_pass_structural_alignment.json` — Core claim: 6-need → 3-SDT → 3-QA-type mapping with 5 structural predictions, Theorem NT compliance, source grounding
 - `fixtures/hn_pass_derivation_chain.json` — Algebraic verification: concrete QA tuples showing derivation, DeltaT, SigmaT all preserve QA structure; fundamental theorem witness Sigma(DeltaT) = T(n) - T(0)
+- `fixtures/hn_fail_bad_derivation.json` — Falsifier: wrong `d_derived` (999 instead of 3) and a `SigmaT` sum that matches neither the tuple sums nor `sb+2*se` (added 2026-07-07)
 
 ## Verification Note (2026-07-05)
 
@@ -126,3 +127,12 @@ Cert); corrected to [162] to match the registry and this doc.
 
 No other bugs found. `qa_meta_validator.py`'s FAMILY_SWEEPS entry and
 function docstring updated with a VERIFIED note.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster noted after the [125-139]
+print-corruption sweep). Confirmed this validator does not have that
+latent print-corruption bug (no `result=="FAIL"` short-circuit branch
+exists at all). Added `fixtures/hn_fail_bad_derivation.json` with two
+independent planted defects (wrong `d_derived`, wrong `SigmaT.sa`) and
+wired it into `self_test()`; verified both HN_DERIV and HN_SIGMA
+genuinely catch their respective defects.

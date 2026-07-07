@@ -200,6 +200,7 @@ def self_test():
     expected = {
         "hn_pass_structural_alignment.json": True,
         "hn_pass_derivation_chain.json": True,
+        "hn_fail_bad_derivation.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

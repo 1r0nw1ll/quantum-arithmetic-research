@@ -29,9 +29,18 @@ Checks:
   DC_Q       — Q = P for all witnesses (diameter = circumference)
   DC_R       — R = W*W for all witnesses
   DC_W       — W correctly derived from (b,e) tuple
+  DC_D_A     — declared d, a fields (if present) match the A2-derived
+                d=b+e, a=b+2e, not just internally recomputed and
+                silently ignored (hardened 2026-07-06 -- previously a
+                witness's own declared d/a were never cross-checked
+                against anything, only used to compute d_val/a_val fresh)
   DC_SRC     — source attribution to Dale Pond present
   DC_WITNESS — at least 3 witnesses with verified elements
   DC_F       — fail_ledger well-formed
+
+Primary source: Pond, D. (svpwiki.com), "Quantum Arithmetic Elements",
+Unpublished Notes, December 1998. QA A2 derived-coordinate axiom
+(d=b+e, a=b+2e) per Iverson (1991).
 """
 
 QA_COMPLIANCE = "cert_validator — validates Dale circle elements P,Q,R; no float state"
@@ -89,6 +98,15 @@ def validate(path):
         # Compute derived values
         d_val = b + e  # A2: derived
         a_val = e + d_val  # A2: derived
+
+        # DC_D_A: declared d, a (if present) match the A2-derived values,
+        # not just silently ignored in favor of freshly recomputed ones.
+        d_decl = w.get("d")
+        if d_decl is not None and d_decl != d_val:
+            errors.append(f"DC_D_A: witness[{idx}] declared d={d_decl}, expected b+e={d_val}")
+        a_decl = w.get("a")
+        if a_decl is not None and a_decl != a_val:
+            errors.append(f"DC_D_A: witness[{idx}] declared a={a_decl}, expected b+2e={a_val}")
 
         # DC_W: W correctly derived
         W_expected = d_val * (e + a_val)

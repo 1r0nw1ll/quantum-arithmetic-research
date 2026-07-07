@@ -6534,7 +6534,7 @@ def _validate_keely_phenomenological_cert_family(base_dir: str) -> Optional[str]
 
 
 def _validate_dale_circle_cert_family(base_dir: str) -> Optional[str]:
-    """QA Dale Circle Cert family [189] — certifies Dale Pond's integer circle construction. Three new elements: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area). Pi disappears in QA circular units. Source: svpwiki.com 1998. Checks DC_1+P/Q/R/W/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Dale Circle Cert family [189] — certifies Dale Pond's integer circle construction. Three new elements: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area). Pi disappears in QA circular units. Source: svpwiki.com 1998. Checks DC_1+P/Q/R/W/D_A/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: independently recomputed W/P/Q/R for all 7 witnesses (already correct); added DC_D_A to cross-check declared d/a against A2-derived b+e/b+2e (previously read but never verified)."""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_dale_circle_cert_v1")
     validator = os.path.join(fam_dir, "qa_dale_circle_cert_validate.py")
@@ -14259,7 +14259,7 @@ FAMILY_SWEEPS = [
      "qa_keely_phenomenological_cert_v1", True),
     (189, "QA Dale Circle Cert family",
      _validate_dale_circle_cert_family,
-     "Dale Pond's integer circle: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area); pi disappears; svpwiki.com 1998; checks DC_1+P/Q/R/W/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "Dale Pond's integer circle: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area); pi disappears; svpwiki.com 1998; checks DC_1+P/Q/R/W/D_A/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: recomputed W/P/Q/R for all 7 witnesses by hand (correct); added DC_D_A cross-check of declared d/a vs A2-derived values (previously unverified).",
      "189_qa_dale_circle_cert",
      "qa_dale_circle_cert_v1", True),
     (190, "QA Equilateral Height Cert family",

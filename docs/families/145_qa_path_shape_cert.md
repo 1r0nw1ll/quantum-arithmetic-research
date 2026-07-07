@@ -73,6 +73,7 @@ A **path shape** is the generator sequence (g₁, g₂, ..., gₙ). Four classes
 
 - `fixtures/ps_pass_four_shapes.json` — one witness per shape class (3 steps each) from root (2,1)
 - `fixtures/ps_pass_invariants.json` — 5 paths: 5-step UNIFORM_B/C/A + two MIXED with different orderings
+- `fixtures/ps_fail_bad_class.json` — Falsifier: an all-M_B path mislabeled MIXED instead of UNIFORM_B, plus a wrong F value in its first step (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -87,3 +88,11 @@ example (2,1)→M_B→(5,2)→M_A→(8,5)→M_C→(18,5) also independently
 reproduced exactly. The validator (`qa_path_shape_cert_validate.py`)
 already genuinely recomputes every move and invariant live from the
 declared path, no fixture-trusting gap.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). No `result=="FAIL"`
+short-circuit exists (no print-corruption bug risk). Added
+`fixtures/ps_fail_bad_class.json` with two independent planted defects
+(an all-M_B path mislabeled MIXED instead of UNIFORM_B; a wrong F value
+in its first step) and wired it into `self_test()`; verified both
+PS_CLASS and PS_2 genuinely catch their respective defects.

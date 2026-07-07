@@ -14177,7 +14177,7 @@ FAMILY_SWEEPS = [
      "qa_path_scale_cert_v1", True),
     (145, "QA Path Shape Cert family",
      _validate_path_shape_cert_family,
-     "four shape classes: UNIFORM_A (consecutive integers), UNIFORM_B (Pell chain, norm alternates), UNIFORM_C (constant e, arithmetic d), MIXED (2+ generators); primitivity preserved (RE-VERIFIED 2026-07-06, confirmed clean); checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok",
+     "four shape classes: UNIFORM_A (consecutive integers), UNIFORM_B (Pell chain, norm alternates), UNIFORM_C (constant e, arithmetic d), MIXED (2+ generators); primitivity preserved (RE-VERIFIED 2026-07-06, confirmed clean); checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added ps_fail_bad_class.json (mislabeled UNIFORM_B as MIXED + wrong F value), confirmed no print-corruption bug present.",
      "145_qa_path_shape_cert",
      "qa_path_shape_cert_v1", True),
     (144, "QA Male/Female Octave Cert family",

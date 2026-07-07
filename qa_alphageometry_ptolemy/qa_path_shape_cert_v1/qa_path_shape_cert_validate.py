@@ -24,6 +24,9 @@ matches moves), PS_INV_B (Pell alternation for UNIFORM_B), PS_INV_C
 
 Source: Ben Iverson Koenig tree, Barning 1963/Hall 1970/Price 2008,
 certs [134] Egyptian Fraction, [135] Pythagorean Tree, [141] Pell Norm.
+
+Primary source: three-generator Pythagorean tree (Barning, 1963) and
+(Hall, 1970).
 """
 
 import json
@@ -186,6 +189,7 @@ def self_test():
     expected = {
         "ps_pass_four_shapes.json": True,
         "ps_pass_invariants.json": True,
+        "ps_fail_bad_class.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

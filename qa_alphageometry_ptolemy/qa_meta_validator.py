@@ -4677,7 +4677,7 @@ def _validate_megalithic_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_paired_pisano_cert_family(base_dir: str) -> Optional[str]:
-    """QA Paired Pisano Cert family [179] — Fib pairs 2.25x higher both-divide rate (0.526 vs 0.234), p=0.0017. Tier 3. Checks PP_1+PAIRS/STAT/RATIO/ORDER/MECH/HONEST/W/F; 1 PASS+1 FAIL; self-test ok"""
+    """QA Paired Pisano Cert family [179] — Fib pairs 2.25x higher both-divide rate (0.526 vs 0.234), p=0.0017. Tier 3. Checks PP_1+PAIRS/STAT/RATIO/ORDER/MECH/HONEST/W/RECOMPUTE/F; 1 PASS+1 FAIL; self-test ok. VERIFIED 2026-07-06: overall/order-1 headline stats independently reproduced exactly; all 9 per-pair rates and the order_analysis breakdown table were wrong (order 3 even reversed sign vs Fibonacci) -- hardened to genuinely recompute from real Pisano periods, fixed fixture."""
     import subprocess
     d = os.path.join(base_dir, "qa_paired_pisano_cert_v1")
     v = os.path.join(d, "qa_paired_pisano_cert_validate.py")
@@ -14327,7 +14327,7 @@ FAMILY_SWEEPS = [
      "qa_megalithic_cert_v1", True),
     (179, "QA Paired Pisano Cert family",
      _validate_paired_pisano_cert_family,
-     "Paired Pisano divisibility: Fib pairs 2.25x higher both-divide rate (0.526 vs 0.234), Mann-Whitney p=0.0017; order-1 3.77x p=0.028; mechanism: lcm(p,q)=p*q smaller for Fib; product-matched 56%; 4:1 exception (Kirkwood); Tier 3; checks PP_1+PAIRS/STAT/RATIO/ORDER/MECH/HONEST/W/F; 1 PASS+1 FAIL; self-test ok",
+     "Paired Pisano divisibility: Fib pairs 2.25x higher both-divide rate (0.526 vs 0.234), Mann-Whitney p=0.0017; order-1 3.77x p=0.028; mechanism: lcm(p,q)=p*q smaller for Fib; product-matched 56%; 4:1 exception (Kirkwood); Tier 3; checks PP_1+PAIRS/STAT/RATIO/ORDER/MECH/HONEST/W/RECOMPUTE/F; 1 PASS+1 FAIL; self-test ok. VERIFIED 2026-07-06: independently re-ran qa_pisano_paired_divisibility.py -- top-level overall/order-1 headline statistics matched exactly, but ALL 9 shipped per-pair both_divide_rate values were wrong, and order_analysis had wrong pair-to-order groupings ((8,3) mislabeled order 4, actually order 5) and wrong stats for every row -- order 3's true ratio is 0.83 (Fibonacci UNDERPERFORMS), which had directly contradicted this cert's own 'mechanism.exception' text about the 4:1 pair beating Fibonacci at order-3. Hardened validator to genuinely recompute Pisano periods + per-pair rates + order stats; fixed fixture. Paper (papers/in-progress/fibonacci-resonance/) does not cite any of the broken numbers, only the general mechanism concept -- confirmed not otherwise affected.",
      "179_qa_paired_pisano_cert",
      "qa_paired_pisano_cert_v1", True),
     (180, "QA H-Null Modularity Cert family",

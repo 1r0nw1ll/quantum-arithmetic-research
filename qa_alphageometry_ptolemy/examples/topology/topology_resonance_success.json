@@ -1,89 +1,98 @@
 {
   "certificate_id": "topology_resonance_caps24_001",
   "certificate_type": "TOPOLOGY_RESONANCE_CERT",
-  "timestamp": "2026-02-07T00:00:00Z",
-  "version": "1.0.0",
-  "schema": "QA_TOPOLOGY_RESONANCE_CERT.v1",
-  "success": true,
-  "generator_set": ["sigma", "mu", "lambda2", "nu"],
-  "state_descriptor": {
-    "state_family": "caps_n_n",
-    "n": 24,
-    "seed": 17
+  "generator_grounding": {
+    "caveat": "sigma/mu/lambda2/nu are canonical generator labels with no concrete state-space implementation anywhere in this codebase (added 2026-07-06). The recompute checks verify the transition_trace is internally self-consistent (declared per-step deltas sum to the declared before/after witnesses) but cannot and do not verify that these numbers are a genuine consequence of applying a real generator operation, unlike e.g. cert [27]'s elliptic correspondence where the curve equation is concretely defined and independently recomputable.",
+    "status": "abstract_symbolic"
   },
-  "topology_witness": {
-    "scc_count_before": 3,
-    "scc_count_after": 5,
-    "betti_0_before": 3,
-    "betti_0_after": 5,
-    "betti_1_before": 2,
-    "betti_1_after": 4,
-    "resonance_score": "7/10",
-    "resonance_threshold": "3/5",
-    "resonance_certified": true
+  "generator_set": [
+    "sigma",
+    "mu",
+    "lambda2",
+    "nu"
+  ],
+  "invariants": {
+    "connected_component_first_class": true,
+    "no_reduction_axiom": true,
+    "packet_conservation": true,
+    "phase_lock": true,
+    "scc_monotone_non_decreasing": true
   },
   "phase_witness": {
-    "phase_24_before": 11,
     "phase_24_after": 11,
-    "phase_9_before": 4,
+    "phase_24_before": 11,
     "phase_9_after": 4,
+    "phase_9_before": 4,
     "phase_preserved": true
   },
-  "invariants": {
-    "scc_monotone_non_decreasing": true,
-    "phase_lock": true,
-    "packet_conservation": true,
-    "no_reduction_axiom": true,
-    "connected_component_first_class": true
+  "qa_interpretation": {
+    "lattice_position": "scc_monotone \u2227 phase_lock \u2227 resonance_certified",
+    "note": "Caps(N,N) transition preserves phase and improves component reachability",
+    "success_type": "TOPOLOGY_RESONANCE_CERTIFIED"
   },
   "recompute_inputs": {
-    "trace_schema": "QA_TOPOLOGY_TRACE.v1",
-    "trace_digest": "sha256:9a7814595e9712c6f197bf0d3559db170256b0ea4fee8851ea362b75d589ae3c",
-    "scc_algorithm": "tarjan_v1",
     "initial_state": {
-      "scc_count": 3,
       "phase_24": 11,
       "phase_9": 4,
-      "resonance_score": "1/2"
+      "resonance_score": "1/2",
+      "scc_count": 3
     },
+    "scc_algorithm": "tarjan_v1",
+    "trace_digest": "sha256:9a7814595e9712c6f197bf0d3559db170256b0ea4fee8851ea362b75d589ae3c",
+    "trace_schema": "QA_TOPOLOGY_TRACE.v1",
     "transition_trace": [
       {
-        "step_index": 1,
         "generator": "sigma",
+        "phase_24": 11,
+        "phase_9": 4,
+        "resonance_delta": "1/20",
         "scc_count": 3,
-        "phase_24": 11,
-        "phase_9": 4,
-        "resonance_delta": "1/20"
+        "step_index": 1
       },
       {
-        "step_index": 2,
         "generator": "mu",
-        "scc_count": 4,
         "phase_24": 11,
         "phase_9": 4,
-        "resonance_delta": "1/20"
+        "resonance_delta": "1/20",
+        "scc_count": 4,
+        "step_index": 2
       },
       {
-        "step_index": 3,
         "generator": "lambda2",
-        "scc_count": 4,
         "phase_24": 11,
         "phase_9": 4,
-        "resonance_delta": "1/20"
+        "resonance_delta": "1/20",
+        "scc_count": 4,
+        "step_index": 3
       },
       {
-        "step_index": 4,
         "generator": "nu",
-        "scc_count": 5,
         "phase_24": 11,
         "phase_9": 4,
-        "resonance_delta": "1/20"
+        "resonance_delta": "1/20",
+        "scc_count": 5,
+        "step_index": 4
       }
     ]
   },
-  "qa_interpretation": {
-    "success_type": "TOPOLOGY_RESONANCE_CERTIFIED",
-    "lattice_position": "scc_monotone ∧ phase_lock ∧ resonance_certified",
-    "note": "Caps(N,N) transition preserves phase and improves component reachability"
-  }
+  "schema": "QA_TOPOLOGY_RESONANCE_CERT.v1",
+  "state_descriptor": {
+    "n": 24,
+    "seed": 17,
+    "state_family": "caps_n_n"
+  },
+  "success": true,
+  "timestamp": "2026-02-07T00:00:00Z",
+  "topology_witness": {
+    "betti_0_after": 5,
+    "betti_0_before": 3,
+    "betti_1_after": 4,
+    "betti_1_before": 2,
+    "resonance_certified": true,
+    "resonance_score": "7/10",
+    "resonance_threshold": "3/5",
+    "scc_count_after": 5,
+    "scc_count_before": 3
+  },
+  "version": "1.0.0"
 }

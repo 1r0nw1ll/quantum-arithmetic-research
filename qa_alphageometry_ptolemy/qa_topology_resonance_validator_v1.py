@@ -362,6 +362,42 @@ class TopologyResonanceValidator:
             )
             return
 
+        # generator_grounding: the generator_set {sigma, mu, lambda2, nu}
+        # is never implemented anywhere as a concrete state-space
+        # operation (added 2026-07-06) -- unlike e.g. cert [27]'s elliptic
+        # correspondence, there is no equation to recompute the trace's
+        # scc_count/phase_24/phase_9/resonance_delta values against. The
+        # existing recompute checks below only verify the trace is
+        # internally self-consistent (deltas sum to the declared
+        # before/after witnesses), never that the declared numbers are a
+        # genuine consequence of applying a real "sigma"/"mu"/"lambda2"/
+        # "nu" operation. Require an honest caveat declaring this, so the
+        # cert cannot be mistaken for grounded the way [27] now is.
+        grounding = cert.get("generator_grounding")
+        if not isinstance(grounding, dict):
+            self._add_result(
+                "consistency.generator_grounding",
+                ValidationLevel.CONSISTENCY,
+                ValidationStatus.FAILED,
+                "generator_grounding block required: sigma/mu/lambda2/nu have no concrete "
+                "state-space implementation anywhere in the codebase, so this cert can only "
+                "certify internal trace self-consistency, not genuine generator semantics",
+            )
+        elif grounding.get("status") == "abstract_symbolic" and not grounding.get("caveat"):
+            self._add_result(
+                "consistency.generator_grounding",
+                ValidationLevel.CONSISTENCY,
+                ValidationStatus.FAILED,
+                "generator_grounding.status='abstract_symbolic' requires a non-empty caveat",
+            )
+        else:
+            self._add_result(
+                "consistency.generator_grounding",
+                ValidationLevel.CONSISTENCY,
+                ValidationStatus.PASSED,
+                f"generator_grounding declared: {grounding.get('status')}",
+            )
+
         topo = cert.get("topology_witness", {})
         phase = cert.get("phase_witness", {})
         inv = cert.get("invariants", {})
@@ -896,6 +932,17 @@ def create_demo_success_certificate() -> Dict[str, Any]:
             "success_type": "TOPOLOGY_RESONANCE_CERTIFIED",
             "lattice_position": "scc_monotone ∧ phase_lock ∧ resonance_certified",
             "note": "Caps(N,N) transition preserves phase and improves component reachability",
+        },
+        "generator_grounding": {
+            "status": "abstract_symbolic",
+            "caveat": "sigma/mu/lambda2/nu are canonical generator labels with no concrete "
+                      "state-space implementation anywhere in this codebase (added 2026-07-06). "
+                      "The recompute checks verify the transition_trace is internally "
+                      "self-consistent (declared per-step deltas sum to the declared "
+                      "before/after witnesses) but cannot and do not verify that these numbers "
+                      "are a genuine consequence of applying a real generator operation, unlike "
+                      "e.g. cert [27]'s elliptic correspondence where the curve equation is "
+                      "concretely defined and independently recomputable.",
         },
     }
 

@@ -94,3 +94,66 @@ python qa_meta_validator.py
 ## Changelog
 
 - **v1.0.0** (2026-02-07): First cert emission + bundle manifest with validator.
+- **2026-07-06**: See Verification Note below — same class of gap as
+  cert [27], plus a required honest `generator_grounding` caveat added.
+
+## Verification Note (2026-07-06)
+
+Follow-up to auditing sibling cert [27] (Elliptic Correspondence), which
+had a fully fabricated demo trace undetected by two stacked gaps
+(meta-validator only checked bundle file-hash integrity; the validator's
+own "Level 3 recompute" was a stub). Checked whether family [19] has the
+same gaps.
+
+**Gap 1 (same as [27], confirmed and fixed)**: the meta-validator's
+family [19] wrapper (`_validate_topology_bundle_if_present`) only ran
+the bundle-manifest file-hash integrity check, never invoking
+`qa_topology_resonance_validator_v1.py`'s real Level 1-3 validator on
+certificate content. Fixed: now also runs the real validator against the
+reference success/failure certs after the hash check passes.
+
+**Gap 2 (different from [27], more fundamental, partially open)**:
+unlike [27], this validator's own Level 3 "recompute" check is NOT a
+stub — it genuinely re-derives `scc_count`/`phase_24`/`phase_9`/
+`resonance_score` from the trace and cross-checks them against the
+declared before/after witness fields (confirmed correct: `--demo` passes
+all checks). **However**, the canonical generators `{sigma, mu, lambda2,
+nu}` referenced throughout this cert family are never implemented
+anywhere in the codebase as concrete operations on a real state space —
+they are bare string labels checked only for set membership
+(`VALID_GENERATORS = {"sigma", "mu", "lambda2", "nu"}`). `QA_MAP__TOPOLOGY_RESONANCE.yaml`'s
+`source_paper` field is a vague "QA topology reachability notes (Caps(N,N)
+program)" with no author/year/DOI, unlike essentially every other cert
+in this repo. This means the existing recompute check can only ever
+verify **internal trace self-consistency** (declared per-step deltas sum
+to the declared endpoints) — it cannot and does not verify that the
+declared numbers are a genuine consequence of applying a real generator
+operation, because no such operation exists in code to check against.
+
+This is architecturally different from [27]: [27] had a well-defined
+target (the curve equation) that the data simply failed to satisfy;
+[19]'s target (what `sigma`/`mu`/`lambda2`/`nu` concretely compute) was
+never specified in the first place, so there is nothing to independently
+recompute against beyond the trace's own internal arithmetic. Inventing
+generator semantics now would be fabricating new mathematical content
+under the guise of an audit fix, not verifying existing content — out of
+scope for this pass.
+
+**Fix applied instead**: added a required `generator_grounding` field
+(`status`: `"abstract_symbolic"` or `"concrete_implementation"`, plus a
+non-empty `caveat` string when abstract) to the schema and a new
+`consistency.generator_grounding` validator check, so this cert can no
+longer be mistaken for grounded the way [27] now is. Verified the check
+rejects a missing/malformed grounding block. Updated the reference cert,
+example fixture, sha256 sidecar, and bundle manifest accordingly.
+
+**Not fixed / genuinely open**: defining concrete semantics for
+`sigma`/`mu`/`lambda2`/`nu` (so their effect on SCC/phase/resonance could
+be independently recomputed rather than merely self-consistency-checked)
+would be new mathematical design work, not an audit fix. Left as an
+honestly-flagged gap via the new `generator_grounding` caveat rather than
+silently passing as if grounded.
+
+**Follow-up**: family [28] Graph Structure bundle uses the identical
+generic bundle-manifest pattern and was flagged in [27]'s audit as a
+likely-same-gap candidate — not yet checked.

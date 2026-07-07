@@ -1492,6 +1492,17 @@ def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
     """
     Run topology bundle validator if the bundle file exists.
 
+    Hardened 2026-07-06 (same fix as cert [27]'s elliptic bundle):
+    previously only checked file-hash integrity, never invoked the real
+    qa_topology_resonance_validator_v1.py Level 1-3 validator on the
+    certificate content. Now also runs it against the reference success
+    and failure certs. Also added a generator_grounding requirement to
+    validate_consistency itself, since sigma/mu/lambda2/nu have no
+    concrete state-space implementation anywhere in this codebase --
+    the recompute checks can only verify trace self-consistency, not
+    genuine generator semantics (unlike [27]'s elliptic correspondence,
+    which has a concretely defined curve equation).
+
     Returns:
         None on success,
         skip reason string if bundle is missing.
@@ -1505,6 +1516,29 @@ def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
         errors = result.get("errors", [])
         head = "; ".join(errors[:3]) if errors else "unknown topology bundle validation error"
         raise RuntimeError(head)
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_topology_resonance_validator_v1 import TopologyResonanceValidator, ValidationLevel
+
+    for rel_path in (
+        "certs/QA_TOPOLOGY_RESONANCE_CERT.v1.json",
+        "examples/topology/topology_phase_break_failure.json",
+    ):
+        abs_path = os.path.join(base_dir, rel_path)
+        with open(abs_path) as f:
+            cert = json.load(f)
+        report = TopologyResonanceValidator(strict=True).validate(
+            cert, level=ValidationLevel.RECOMPUTE
+        )
+        if not report.all_passed:
+            failures = [
+                f"{r.check_name}: {r.message}"
+                for r in report.results
+                if r.status.value == "failed"
+            ]
+            raise RuntimeError(f"{rel_path}: {'; '.join(failures[:5])}")
+
     return None
 
 
@@ -13636,7 +13670,10 @@ FAMILY_SWEEPS = [
      "semantics + witness + counterexamples", "18_datastore", ".", False),
     (19, "QA Topology Resonance bundle",
      _validate_topology_bundle_if_present,
-     "bundle manifest verified", "19_topology_resonance", ".", False),
+     "bundle manifest verified + genuine Level 1-3 validator recompute (hardened 2026-07-06, "
+     "same class of fix as [27]); requires an honest generator_grounding caveat since "
+     "sigma/mu/lambda2/nu have no concrete state-space implementation anywhere",
+     "19_topology_resonance", ".", False),
     (20, "QA Datastore view family",
      _validate_datastore_view_family_if_present,
      "semantics + witness + counterexamples", "20_datastore_view", ".", False),

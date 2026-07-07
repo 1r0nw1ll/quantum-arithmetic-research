@@ -161,12 +161,21 @@
     "qa_interpretation": {
       "type": "object",
       "additionalProperties": true
+    },
+    "generator_grounding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "caveat"],
+      "properties": {
+        "status": { "type": "string", "enum": ["abstract_symbolic", "concrete_implementation"] },
+        "caveat": { "type": "string", "minLength": 1 }
+      }
     }
   },
   "allOf": [
     {
       "if": { "properties": { "success": { "const": true } } },
-      "then": { "required": ["topology_witness", "phase_witness", "invariants", "recompute_inputs"] }
+      "then": { "required": ["topology_witness", "phase_witness", "invariants", "recompute_inputs", "generator_grounding"] }
     },
     {
       "if": { "properties": { "success": { "const": false } } },

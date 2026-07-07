@@ -80,3 +80,20 @@ Two mathematical structures referenced:
 Chapter XVII contains no floating-point mathematics. All references are to integer-valued structures: coprimality counts via φ(n), Fibonacci bead chains (integer sequences), and modular arithmetic foundations. The ode's value is structural (indexing all themes developed in Ch.I–XVI), not computational.
 
 **Depends on**: [367] Prime Number Symmetry (φ(30)=8, φ(60)=16); [370] BABTHE Dual Bead Chain (N=1,O=7 example); [371] Fibonacci Coprime Structure (aliphatic chain coprimality)
+
+## Verification Note (2026-07-07)
+
+Mixed-tier cert, confirmed clean but with a caveat worth recording. C4
+and C5's mathematical content is genuinely computed and independently
+reproduces exactly (phi(30)=8, phi(60)=16 via fresh gcd-sieve; BABTHE
+N=1,O=7 chain (1,7,8,15,41,56,97) and the 2/97=1/56+1/679+1/776 unit
+fraction identity). C3's four-tuple derivation rule also holds for 5
+fresh (b,e) pairs. However, C1 and C2 are tautological: they assert
+hardcoded literary facts about the poem (chapter number, stanza count,
+anchor-name order) equal themselves — these checks cannot fail by
+construction, since they don't derive anything, they just restate the
+doc's own claims as Python literals. This is fine for textual/historical
+claims (which are not computable, only readable from the primary
+source), but it means C1/C2 carry no independent verification weight —
+only C3/C4/C5 do. No fixture-trusting gap in the genuinely
+computational claims.

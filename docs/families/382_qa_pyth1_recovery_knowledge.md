@@ -87,3 +87,17 @@ The school-founding year 529 = 23² reduces to the Singularity class, and the 30
 Chapter I is a historical narrative about Pythagoras's biography, travels, and the transmission of ancient mathematical knowledge. The QA structure certified here (birth year, civilizational epoch, temporal gaps, generation counts, school-founding year) is embedded in the chapter's historical claims. The historical reconstruction is an observer-projection; the QA analysis concerns the integer arithmetic of the reported dates and counts.
 
 **Depends on**: [354] Third Dimension (Myriad 10000 mod 24=16); [374] QA and Energy (seed product=6); [376] Metaphysics Myriad (portal octave 52 mod 24=4); [378] Billy's Story (1000 mod 24=16); [381] Two Forms of Energy (600 mod 24=0; 300 mod 24=12; 529=23² Singularity-class)
+
+## Verification Note (2026-07-07)
+
+Arithmetic independently re-verified and correct — no bugs (580 mod
+24=4; 9400 mod 24=16, 9400=24×391+16=24×391+16 with 391=17×23; 1548 mod
+24=12; 340 mod 24=4, 340=4×5×17; 529=23², 529 mod 24=1; 30 mod 24=6;
+600/400/300 mod 24 = 0/16/12, 3×12=36≡12 mod 24). This is the same
+narrative-numerology tier as [377]-[381]: Pythagoras's biographical
+dates (birth year, travel years, school founding) are historical
+narrative claims from Ch.I, and the mod-24 residue-matching across
+them (and against other certs' numbers) is post-hoc coincidence, not a
+falsifiable theorem — with only 24 residues, matches across a large
+pool of extracted dates/counts are expected by chance. The modular
+arithmetic and factorizations themselves are correct throughout.

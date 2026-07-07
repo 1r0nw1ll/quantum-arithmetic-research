@@ -83,3 +83,16 @@ The lifetime-count / starting-age / Atlantis-residue all converge on 8 = 2³, th
 Chapter 9 is a biographical narrative of a child's past-life regression sessions. The QA structure certified here (cannon/target counts, castle counts, population counts, historical dates, age spans) is embedded in the chapter's descriptions and quotations. The past-life memories are observer-projection reports — the QA analysis concerns the integer arithmetic of the reported quantities, not the metaphysical claims about reincarnation.
 
 **Depends on**: [354] Third Dimension (Myriad 10000 mod 24=16); [375] Spirituality (49 mod 24=1, 9 mod 9=0); [376] Metaphysics Myriad (4-par portal, 5040/24=210); [377] Children Past Lives (4-par age structure)
+
+## Verification Note (2026-07-07)
+
+Arithmetic independently re-verified and correct — no bugs (9=3×3 mod
+9=0; 3000=24×5³; 10000/11000/1000 mod 24; 4+4=8=2³). Same
+narrative-numerology caveat as [374]/[377]: these quantities (cannon
+counts, castle counts, population figures, historical dates) are drawn
+from a child's past-life-regression anecdote, and the significance
+attached to shared mod-24/mod-9 residues across otherwise-unrelated
+narrative details is retroactive pattern-matching, not a falsifiable
+mathematical claim. The arithmetic is sound; the "confirmations" are
+numerology layered on correct modular arithmetic. See [374]'s note for
+the full framing.

@@ -97,3 +97,16 @@ Observer-projection accuracy: |20612/6561 − π| ≈ 1.62×10⁻⁶ < 10⁻⁴.
 Chapter 5 discusses Sympathetic Harmonics in terms of wavelet frequencies, but all QA claims are integer-structured. The float comparison in C5 is an observer-projection (measurement of the approximation quality) — the QA claim itself is purely the coprimality and factorization structure of 20612 and 6561. The Law of Harmonics operates on prime factor sets (discrete), not on continuous frequency values.
 
 **Depends on**: [358] Myriad and Octave Structure (QN product structure, Myriad of Music); [367] Prime Number Symmetry (coprimality and prime factor structure)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified (fresh, separate
+computation) the genuinely falsifiable arithmetic: 5153 is prime,
+20612=4×5153, 6561=3⁸, gcd(20612,6561)=1, |20612/6561−π|≈1.62×10⁻⁶,
+4896=2⁵×3²×17, 5040=7!, 144=12², 2310=2×3×5×7×11, 2730=2×3×5×7×13,
+10920=5×8×13×21, 43680=16×5×21×26, 43680/10920=4 — all match exactly.
+Unlike the historical/biographical certs later in this cluster
+([377]-[383]), this cert's core claims (QN tuple products, prime
+factorizations, GCDs) are genuine within-theory arithmetic that could
+have been wrong — they are not narrative-number residue-coincidences.
+No fixture-trusting gap.

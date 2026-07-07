@@ -111,3 +111,16 @@ For all three to be integers simultaneously, Y1 must be divisible by lcm(297, 99
 - The minimum solution structure via lcm of rational denominators
 
 **Depends on**: [371] Fibonacci Coprime Structure (coprimeness/divisibility context); [370] BABTHE (unit fractions from Rhind Papyrus — same ancient source as the cattle problem)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the bull solution
+in a fresh Fraction snippet (Y1+5/6·X1=W1, Y1+9/20·Z1=X1,
+Y1+13/42·W1=Z1 all hold exactly for W1=2226,X1=1602,Y1=891,Z1=1580),
+the divisibility conditions, and the C5 minimum-solution table
+(lcm(297,99,891)=891; Y1=297→Z1=1580/3 and Y1=594→Z1=3160/3 both
+non-integer, Y1=891 and Y1=1782 both integer) — all match exactly. The
+validator (`qa_pyth2_cattle_problem_cert_validate.py`) genuinely
+derives alpha/beta/gamma algebraically from the 3-equation
+underdetermined system rather than hardcoding them, then asserts
+lcm(denominators)=891 — no fixture-trusting gap.

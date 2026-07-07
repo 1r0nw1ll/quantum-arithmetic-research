@@ -84,3 +84,19 @@ The 600-year destruction interval and the 4-element structure together encode: 6
 Chapter XI is a historical introduction/review chapter covering Atlantis archaeological evidence, the Ishango counting bone, Pythagorean school history, and a brief review of Vol. I concepts. The QA structure certified here (Atlantis date, artifact date, sea level, school duration, destruction period, element count) is embedded in the chapter's historical narrative. All historical dates and physical measurements are observer-projection reports; the QA analysis concerns the integer arithmetic of the reported quantities.
 
 **Depends on**: [354] Third Dimension (Myriad residue 16); [367] Prime Number Symmetry (φ(30)=8); [374] QA and Energy (seed product=6); [376] Metaphysics Myriad (portal octave mod24=4); [378] Billy's Story (residue 8=2³); [379] Human Spirit (600 mod24=0); [382] Pyth-1 Recovery of Knowledge (Pythagoras 580 BC, Atlantis 9400yr)
+
+## Verification Note (2026-07-07)
+
+Arithmetic independently re-verified and correct — no bugs (9600 mod
+24=0, 9400 mod 24=16, diff=200 mod 24=8; 7000 mod 24=16, 8 primes ≤19
+matches φ(30)=8 genuinely from cert [367]; 100 mod 24=4, gcd(100,24)=4;
+529−505=24 exactly, both mod 24=1, 505=5×101; 600 mod 24=0,
+600/4=150 mod 24=6). Closes the Iverson Pyth1/2/3 corpus cluster
+(354-383). Same narrative-numerology tier as [377]-[382]: Ch.XI's
+historical/archaeological claims (Atlantis dates, Ishango bone,
+sea-level drop, school duration) are narrative content, and most of
+the cross-cert residue-matching is post-hoc coincidence rather than
+theorem — with the notable exception of the φ(30)=8 connection to
+cert [367], which is a genuine, independently-established mathematical
+fact (not just a residue coincidence). The modular arithmetic itself
+is correct throughout.

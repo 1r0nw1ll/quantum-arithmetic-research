@@ -86,3 +86,16 @@ Three independent Myriad-class appearances in a single physical scenario (altitu
 Chapter 12 presents the physics of two complementary energy forms, stop-frame discretization of energy, color theory, and a dowsing investigation of TWA flight 800. The QA structure certified here (phase angles, frame rates, color counts, Myriad/octave counts, altitude and speed) is embedded in the chapter's physical and metaphysical exposition. The energy physics claims and dowsing reports are observer-projection outputs; the QA analysis concerns the integer arithmetic of the reported quantities.
 
 **Depends on**: [354] Third Dimension (Myriad 10000 mod 24=16); [374] QA and Energy (male seed product=6); [375] Spirituality (7×7=49 mod 24=1 Singularity-class); [378] Billy's Story (9 mod 9=0; residue 8=2³)
+
+## Verification Note (2026-07-07)
+
+Arithmetic independently re-verified and correct — no bugs (180 mod
+24=12, 360 mod 24=0; 16 mod 24=16, 32 mod 24=8, ratio=2; 7×7=49 mod
+24=1; 3+3=6, 3×3=9 mod 9=0; 13000 mod 24=16, 400 mod 24=16, product
+5200000 mod 24=16). Same narrative-numerology caveat as
+[374]/[377]-[380]: phase angles, frame rates, color-theory counts, and
+the TWA-800 altitude/speed figures are drawn from a physics/dowsing
+narrative chapter, and the claimed "closure of the Myriad class under
+multiplication" from three cherry-picked quantities in one scenario is
+not a general theorem — it's a coincidence noted post hoc. The modular
+arithmetic itself is correctly computed throughout.

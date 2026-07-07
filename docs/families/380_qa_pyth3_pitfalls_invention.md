@@ -83,3 +83,15 @@ Sparky Sweet's Vacuum Triode Amplifier: levitation begins above 5 kilowatts.
 Chapter 11 is a cautionary narrative about research management, commercial pitfalls, and government suppression. The QA structure certified here (energy thresholds, pricing doublings, research costs, page pricing, innovation dates) is embedded in the chapter's historical case studies and economic advice. The commercial and political claims are observer-projection reports; the QA analysis concerns the integer arithmetic of the reported quantities.
 
 **Depends on**: [354] Third Dimension (Myriad 10000 mod 24=16); [376] Metaphysics Myriad (portal octave 52 mod 24=4); [377] Children Past Lives (chromatic 12=3+4); [378] Billy's Story (5000 mod 24=8=2³); [379] Human Spirit (3000=24×5³, 600-year gap)
+
+## Verification Note (2026-07-07)
+
+Arithmetic independently re-verified and correct — no bugs (5000 mod
+24=8; pricing doublings $10→$160 with ratio 16=2⁴; 40000 mod 24=16,
+gcd(40000,24)=8; 3000 mod 24=0; 1948 mod 24=4, 1948=81×24+4). Same
+narrative-numerology caveat as [374]/[377]-[379]: kilowatt thresholds,
+pricing figures, lab costs, and Searl's 1948 date are drawn from an
+anecdotal case-study chapter, and the cross-chapter residue-matching
+("same residue as cert [378] C4") is retroactive coincidence-hunting
+across a large pool of arbitrary numbers, not a falsifiable claim. The
+modular arithmetic computed is correct throughout.

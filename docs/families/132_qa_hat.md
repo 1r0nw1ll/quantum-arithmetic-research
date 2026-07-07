@@ -1,4 +1,4 @@
-# [131] QA Half-Angle Tangent Cert
+# [132] QA Half-Angle Tangent Cert
 
 **Schema**: `QA_HAT_CERT.v1`
 **Directory**: `qa_alphageometry_ptolemy/qa_hat_cert_v1/`
@@ -51,6 +51,48 @@ The HAT spread relationship `s = E/G` connects directly to Wildberger's rational
 |---------|------|----------|
 | `hat_pass_fundamental.json` | Anchor — (d,e)=(2,1), 3-4-5, Fibonacci box det=1 | PASS |
 | `hat_pass_witnesses.json` | 5 witnesses d=2..5, general theorem | PASS |
+| `hat_fail_bad_hat1.json` | Falsifier: wrong HAT1 fraction + broken Fibonacci-box determinant (added 2026-07-06) | FAIL |
+
+## Verification Note (2026-07-06)
+
+Independently recomputed F, C, G, HAT1, HAT2, spread, and the Fibonacci
+box determinant by hand for every witness in both PASS fixtures (e.g.
+(5,2): F=21,C=20,G=29, HAT1=2/5, HAT2=3/7, spread=4/29, box=[[2,3],[5,7]]
+det=2*7-3*5=-1) — all correct. Confirmed `check_direction`/
+`check_witness` already genuinely recompute from (d,e) rather than
+trusting fixture data (verified via a planted-error regression test).
+No bugs in the certified math.
+
+**Found and fixed a real, confirmed doc/docstring bug**: both this
+family doc's title and the validator's own docstring/argparse
+description said "family 131" / "[131]", but the actual
+`qa_meta_validator.py` registration is family **132** (matches the file
+name `132_qa_hat.md` and the doc slug `"132_qa_hat"`). Fixed both.
+
+**Found and closed one real gap**: this family had zero FAIL fixtures,
+the same pattern found in sibling certs [142]/[143]. Added
+`fixtures/hat_fail_bad_hat1.json` with two independent, genuinely-
+detectable planted violations (wrong HAT1 fraction, wrong Fibonacci-box
+determinant) — confirmed both caught by `check_witness` directly.
+Updated `_self_test()` accordingly.
+
+**Adding the FAIL fixture exposed a second, real, previously-latent
+bug**: `validate()` had a stray `print("  SKIP detailed checks — cert
+declares FAIL")` inside the `result == "FAIL"` short-circuit branch.
+This is harmless when `validate()` is called interactively via `main()`,
+but `_self_test()` calls `validate()` in-process and expects `main()`'s
+`--self-test` output to be pure JSON on stdout — the meta-validator's
+subprocess wrapper (`_validate_hat_cert_family` in `qa_meta_validator.py`)
+captures that stdout and does `json.loads()` on it. With no FAIL fixture
+in the family, `validate()` was never called with `result=="FAIL"`
+during self-test, so this print statement never fired and the bug
+stayed dormant. Adding `hat_fail_bad_hat1.json` triggered it immediately
+— the full meta-validator sweep failed with `qa_hat_cert self-test
+returned non-JSON: Expecting value: line 1 column 1 (char 0)`. Removed
+the print statement; re-ran the full 464-family sweep to confirm it now
+passes cleanly. This is a genuine example of a coverage fix (adding a
+missing FAIL fixture) surfacing a real, independent bug that pure code
+review would not have caught.
 
 ## Connection to Prior Art Convergence Stack
 

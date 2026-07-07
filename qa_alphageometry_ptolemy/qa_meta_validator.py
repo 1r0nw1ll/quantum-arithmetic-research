@@ -4399,7 +4399,7 @@ def _validate_projection_obstruction_cert_family(base_dir: str) -> Optional[str]
 
 
 def _validate_hat_cert_family(base_dir: str) -> Optional[str]:
-    """QA HAT Cert family [131] — certifies H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F), HAT₂=(d-e)/(d+e)=F/(G+C), spread s=E/G=HAT₁²/(1+HAT₁²); Fibonacci box [[e,d-e],[d,d+e]]; checks HAT_1-HAT_8+HAT_W/F; 2 PASS (fundamental 3-4-5, 5-witness general); self-test ok"""
+    """QA HAT Cert family [132] — certifies H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F), HAT₂=(d-e)/(d+e)=F/(G+C), spread s=E/G=HAT₁²/(1+HAT₁²); Fibonacci box [[e,d-e],[d,d+e]]; checks HAT_1-HAT_8+HAT_W/F; 2 PASS (fundamental 3-4-5, 5-witness general) + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean, no bugs in the math -- fixed a real stale '[131]' family-number typo present in this docstring, the validator's own docstring, and the family doc's title (all three said 131, actual registration is 132). Added first FAIL fixture to close a real coverage gap (same pattern as [142]/[143]); doing so exposed a second, previously-latent bug -- a stray print() in validate()'s FAIL short-circuit corrupted --self-test's stdout JSON once a FAIL fixture actually existed to trigger it (this wrapper's own subprocess json.loads() failed with 'Expecting value: line 1 column 1'). Fixed by removing the print; full 464-family sweep re-confirmed clean."""
     import subprocess
     hat_dir   = os.path.join(base_dir, "qa_hat_cert_v1")
     validator = os.path.join(hat_dir, "qa_hat_cert_validate.py")
@@ -14077,7 +14077,7 @@ FAMILY_SWEEPS = [
      "qa_chromogeometry_cert_v1", True),
     (132, "QA HAT Cert family",
      _validate_hat_cert_family,
-     "H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F) [primary], HAT₂=(d-e)/(d+e)=F/(G+C) [secondary]; spread s=E/G=HAT₁²/(1+HAT₁²) [Wildberger]; Fibonacci box [[e,d-e],[d,d+e]]; Price Fibonacci box cols = QA generation matrix entries; proportionality: HAT fractions carry QA element meaning; checks HAT_1-8+HAT_W/F; 2 PASS; self-test ok",
+     "H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F) [primary], HAT₂=(d-e)/(d+e)=F/(G+C) [secondary]; spread s=E/G=HAT₁²/(1+HAT₁²) [Wildberger]; Fibonacci box [[e,d-e],[d,d+e]]; Price Fibonacci box cols = QA generation matrix entries; proportionality: HAT fractions carry QA element meaning; checks HAT_1-8+HAT_W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean; fixed a stale family-number typo ([131]->132 in three places); added first FAIL fixture.",
      "132_qa_hat",
      "qa_hat_cert_v1", True),
     (135, "QA Pythagorean Tree Cert family",

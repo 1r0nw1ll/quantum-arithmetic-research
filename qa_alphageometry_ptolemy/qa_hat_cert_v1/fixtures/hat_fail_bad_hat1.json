@@ -1,0 +1,51 @@
+{
+  "schema_version": "QA_HAT_CERT.v1",
+  "certificate_id": "qa.cert.hat.fail.bad_hat1.v1",
+  "cert_type": "qa_hat_cert",
+  "title": "HAT FAIL: demonstrates a wrong HAT1 fraction and a broken Fibonacci-box determinant",
+
+  "sources": [
+    "The Pythagorean Tree: A New Species (Price, 2008)",
+    "QA chromogeometry elements, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants two independent, deterministically detectable violations in the general_theorem witness format: (1) direction (3,2) declares HAT1_num/HAT1_den=1/2 instead of the correct e/d=2/3; (2) the same witness declares a Fibonacci box determinant of 99 instead of the correct 2*5-1*3=7.",
+
+  "general_theorem": {
+    "statement": "For all d>e>0 with gcd(d,e)=1 and d+e odd: HAT1=e/d=C/(G+F), HAT2=(d-e)/(d+e)=F/(G+C), s=E/G=HAT1^2/(1+HAT1^2)"
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1, "triple": "3-4-5",
+      "F": 3, "C": 4, "G": 5,
+      "HAT1_num": 1, "HAT1_den": 2,
+      "HAT2_num": 1, "HAT2_den": 3,
+      "spread_num": 1, "spread_den": 5,
+      "fibonacci_box": [[1,1],[2,3]], "det": 1
+    },
+    {
+      "d": 3, "e": 2, "triple": "5-12-13",
+      "F": 5, "C": 12, "G": 13,
+      "HAT1_num": 1, "HAT1_den": 2,
+      "HAT2_num": 1, "HAT2_den": 5,
+      "spread_num": 4, "spread_den": 13,
+      "fibonacci_box": [[2,1],[3,5]], "det": 99,
+      "check": "deliberately wrong: HAT1 should be e/d=2/3, not 1/2; det should be 2*5-1*3=7, not 99"
+    },
+    {
+      "d": 4, "e": 1, "triple": "8-15-17",
+      "F": 15, "C": 8, "G": 17,
+      "HAT1_num": 1, "HAT1_den": 4,
+      "HAT2_num": 3, "HAT2_den": 5,
+      "spread_num": 1, "spread_den": 17,
+      "fibonacci_box": [[1,3],[4,5]], "det": -7
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "HAT_2", "message": "witness (3,2) declared HAT1=1/2, expected e/d=2/3"},
+    {"check_id": "HAT_W/F", "message": "witness (3,2) declared Fibonacci box det=99, expected 2*5-1*3=7"}
+  ],
+  "result": "FAIL"
+}

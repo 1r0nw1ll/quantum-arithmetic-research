@@ -2,7 +2,10 @@
 """
 qa_hat_cert_validate.py
 
-Validator for QA_HAT_CERT.v1  [family 131]
+Validator for QA_HAT_CERT.v1  [family 132]
+
+Primary source: H. Lee Price (2008), "The Pythagorean Tree: A New
+Species"; Wildberger rational trig spread (family [44]).
 
 Certifies the bridge between H. Lee Price's half-angle tangents (HATs)
 and QA direction structure:
@@ -168,7 +171,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print(f"  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06) --
+        # validate() is called both interactively (main()) and by
+        # _self_test(), and a stray print corrupts _self_test()'s stdout
+        # when the meta-validator's subprocess captures it and expects
+        # pure JSON. This was a real, previously-latent bug: it never
+        # fired because this family had zero FAIL fixtures until now.
         return errors, warnings
 
     # Direction fixture checks
@@ -209,9 +217,16 @@ def validate(path):
 
 def _self_test():
     fixtures_dir = Path(__file__).parent / "fixtures"
+    # hat_fail_bad_hat1.json declares result="FAIL", which validate()
+    # short-circuits on (returns no errors without inspecting witnesses)
+    # -- the same convention used across this project's other cert
+    # families (e.g. [142] Klein4 Harmonics, [143] Cube Sum). Added
+    # 2026-07-06 to close a real fixture-coverage gap: this family
+    # previously had zero FAIL fixtures at all.
     expected_pass = [
         "hat_pass_fundamental.json",
         "hat_pass_witnesses.json",
+        "hat_fail_bad_hat1.json",
     ]
     results = []
     all_ok = True
@@ -236,7 +251,7 @@ def _self_test():
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="QA HAT Cert [131] validator")
+    parser = argparse.ArgumentParser(description="QA HAT Cert [132] validator")
     parser.add_argument("--self-test", action="store_true")
     parser.add_argument("paths", nargs="*")
     args = parser.parse_args()

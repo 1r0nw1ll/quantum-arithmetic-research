@@ -77,3 +77,20 @@ scalar_3 maps cosmos → satellite; const_{(9,9)} maps any state → singularity
 
 - `fixtures/cbf_pass_equivalence.json` — PASS: declares generator sets, component sizes, cumulative counts, and tier differences; validator independently recomputes all three tiers on S_9 and checks equality to [191] constants
 - `fixtures/cbf_fail_missing_field.json` — FAIL fixture: omits L2b generator set; validator must flag CBF_GEN/L2B errors
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced the entire theorem
+from scratch in a standalone script (not reusing the validator's own
+code): built the undirected Cayley graph for all three tiers on S_9 via
+real BFS connected-components, and reproduced exactly — L1: sizes
+`[24,24,24,8,1]`, sum_sq=1793; L2a: sizes `[72,8,1]`, sum_sq=5249; L2b:
+sizes `[81]`, sum_sq=6561; non-cumulative diffs 1712/3456/1312. Every
+number matches the doc exactly. The validator
+(`qa_cayley_bateson_filtration_cert_validate.py`) already genuinely
+recomputes the Cayley-graph connectivity live via its own real BFS — no
+fixture-trusting gap; `CBF_COMP`/`CBF_CUMU`/`CBF_DIFF` cannot be
+satisfied by a fabricated fixture. Ran `--self-test`: PASS fixture
+passes cleanly, FAIL fixture correctly flags the missing L2b generator
+set. This family already had both PASS and FAIL fixtures (not part of
+the zero-FAIL-fixture cluster) — only lacked a Verification Note.

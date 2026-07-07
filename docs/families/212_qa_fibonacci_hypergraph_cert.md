@@ -86,3 +86,18 @@ Cosmos orbits have 2 multiset collisions each (out of 24). The satellite orbit h
 
 - `fixtures/hgr_pass_hypergraph.json` — PASS: declares all three theorems with correct constants; validator independently recomputes on S_9 and verifies equality
 - `fixtures/hgr_fail_bad_degree.json` — FAIL: declares per_vertex=35 (wrong; correct is 36) and omits witnesses; validator must flag HGR_DEG and HGR_WIT
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all three theorems
+from scratch in a standalone script (not reusing the validator's own
+code): Theorem 1 sliding window 81/81 on S_9; Theorem 2 vertex degree
+uniform at 36 (total 324); Theorem 3 orbit-multiset collapse
+`[(24,22),(24,22),(24,22),(8,4),(1,1)]` — exact match to the doc's
+declared `(22,22,22,4,1)`. The validator
+(`qa_fibonacci_hypergraph_cert_validate.py`) already genuinely
+recomputes all three theorems live on S_9 — no fixture-trusting gap.
+Ran `--self-test`: PASS fixture passes cleanly, FAIL fixture correctly
+flags the wrong `per_vertex=35`/`total=315` and missing witnesses. This
+family already had both PASS and FAIL fixtures (not part of the
+zero-FAIL-fixture cluster) — only lacked a Verification Note.

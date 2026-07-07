@@ -64,3 +64,32 @@ These laws all describe **static structural relationships** — ratios, proporti
 
 - `fixtures/ksr_pass_mod9.json` — 8 laws mapped to QA invariants with witnesses
 - `fixtures/ksr_fail_wrong_fval.json` — falsifier with incorrect f-value computation
+
+## Verification Note (2026-07-06)
+
+Independently confirmed the f-value formula is a genuine norm identity:
+`f(b,e)=b²+be−e²=N(b+eφ)` in `Z[φ]` (φ=golden ratio), verified
+numerically for 5 pairs against the literal complex-conjugate norm
+computation. Independently reconfirmed all 4 numeric witnesses: (1,1)→
+f=1, C=4,F=3,G=5 (4²+3²=5²); (9,9)→f=81 (SINGULARITY, the fixed point);
+(3,3)→f=9 (SATELLITE), generator step (3,3)→(3,6) stays SATELLITE.
+Keely-quote provenance already audited 2026-07-04 (Vibes-caveat note
+above), not repeated here.
+
+**Found and hardened two real fixture-trusting gaps**: `KSR_CHROMO`
+only checked that declared `C,F,G` were mutually Pythagorean-consistent
+(`C²+F²=G²`), never that they actually equal `2de, d²−e², d²+e²` for the
+witness's own `(b,e)` — a witness could have declared *any* Pythagorean
+triple regardless of its stated `(b,e)`. Similarly, `KSR_CLOSURE` only
+checked that a witness's declared `orbit_family` and
+`next_orbit_family` strings matched *each other*, never that either was
+the *correct* classification for its `(b,e)` — a witness could
+mislabel a genuine SATELLITE state as COSMOS in both fields and still
+pass. Hardened both: `KSR_CHROMO` now recomputes `C,F,G` from raw
+`d=b+e` (per project convention — raw, not qa_mod-wrapped) and compares
+to every declared field; `KSR_CLOSURE` now genuinely classifies orbit
+family from `(b,e,m)` via the standard `v_3`-based rule
+(`SINGULARITY` iff both wrap to `m`; `SATELLITE` iff both divisible by 3;
+else `COSMOS`). Verified both hardened checks reject planted wrong
+values (a bad `C` and a mislabeled-but-internally-consistent orbit).
+`--self-test` passes on both fixtures.

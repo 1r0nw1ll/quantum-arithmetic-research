@@ -6424,7 +6424,7 @@ def _validate_eisenstein_crystal_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_keely_structural_ratio_cert_family(base_dir: str) -> Optional[str]:
-    """QA Keely Structural Ratio Cert family [184] — certifies Keely's 8 structural ratio laws (Laws 2,4,9,10,18,27,29,33) as QA modular invariants. Category 1 of Vibes 5-category framework. Maps pitch=f-value, period divisibility 1|8|24, concordance coupling, chromogeometry C*C+F*F=G*G. Checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Keely Structural Ratio Cert family [184] — certifies Keely's 8 structural ratio laws (Laws 2,4,9,10,18,27,29,33) as QA modular invariants. Category 1 of Vibes 5-category framework. Maps pitch=f-value, period divisibility 1|8|24, concordance coupling, chromogeometry C*C+F*F=G*G. RE-VERIFIED 2026-07-06: f-value confirmed a genuine Z[phi] norm, all witnesses reconfirmed; hardened two real fixture-trusting gaps -- KSR_CHROMO now recomputes C,F,G from raw d=b+e instead of only checking declared C,F,G are mutually Pythagorean-consistent, KSR_CLOSURE now genuinely classifies orbit family via v_3 rule instead of only checking two declared strings match each other; verified both reject planted wrong values. Checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO(hardened)/CLOSURE(hardened)/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_keely_structural_ratio_cert_v1")
     validator = os.path.join(fam_dir, "qa_keely_structural_ratio_cert_validate.py")
@@ -14234,7 +14234,7 @@ FAMILY_SWEEPS = [
      "qa_eisenstein_crystal_cert_v1", True),
     (184, "QA Keely Structural Ratio Cert family",
      _validate_keely_structural_ratio_cert_family,
-     "Keely's 8 structural ratio laws (2,4,9,10,18,27,29,33) → QA modular invariants; Category 1 Vibes framework; pitch=f-value, period 1|8|24, concordance, chromogeometry C*C+F*F=G*G; checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Keely's 8 structural ratio laws (2,4,9,10,18,27,29,33) → QA modular invariants; Category 1 Vibes framework; pitch=f-value, period 1|8|24, concordance, chromogeometry C*C+F*F=G*G (RE-VERIFIED 2026-07-06, hardened KSR_CHROMO+KSR_CLOSURE to genuinely recompute instead of checking declared-field self-consistency); checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok",
      "184_qa_keely_structural_ratio_cert",
      "qa_keely_structural_ratio_cert_v1", True),
     (185, "QA Keely Sympathetic Transfer Cert family",

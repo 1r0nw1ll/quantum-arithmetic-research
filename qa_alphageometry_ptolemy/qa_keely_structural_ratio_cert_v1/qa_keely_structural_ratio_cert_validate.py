@@ -21,10 +21,14 @@ Checks:
   KSR_PERIOD  — period divisibility 1|8|24 certified (Laws 2,4,10)
   KSR_FVAL    — f = b*b + b*e - e*e is integer invariant (Laws 18,27)
   KSR_LCM     — LCM(1,8,24)=24 synchronization (Law 9)
-  KSR_CHROMO  — C*C + F*F = G*G chromogeometry identity (Law 33)
-  KSR_CLOSURE — generator preserves orbit membership (Law 29)
-  KSR_W       — at least 3 witnesses with QA verification
-  KSR_F       — fail_ledger well-formed
+  KSR_CHROMO  — C*C + F*F = G*G chromogeometry identity, genuinely
+                recomputed from raw (b,e) (Law 33)
+  KSR_CLOSURE — orbit family genuinely classified from (b,e,m) via the
+                standard v_3-based rule, not just declared-vs-declared
+                self-consistency (Law 29)
+
+Primary source: Pond, D. (svpwiki.com), Keely's 40 Laws of Vibratory
+Physics. Chromogeometry per Wildberger (2005), Divine Proportions.
 """
 
 QA_COMPLIANCE = "cert_validator — validates Keely structural ratio law mappings; no float state"
@@ -117,21 +121,47 @@ def validate(path):
         if f_decl is not None and f_decl != f_expected:
             errors.append(f"KSR_FVAL: witness[{idx}] f_value={f_decl}, expected b*b+b*e-e*e={f_expected}")
 
-        # KSR_CHROMO: C*C+F*F=G*G (Law 33)
-        d_val = qa_mod(b + e, m)  # A2: derived
-        a_val = qa_mod(b + 2 * e, m)  # A2: derived
+        # KSR_CHROMO: C*C+F*F=G*G (Law 33) -- genuinely recomputed from raw
+        # (b,e) via d=b+e (RAW, not qa_mod-wrapped -- C,F,G always use the
+        # raw derived coordinate per project convention), not just checked
+        # for internal (declared C,F,G) self-consistency.
+        d_raw = b + e
         C_decl = w.get("C")
         F_decl = w.get("F")
         G_decl = w.get("G")
         if C_decl is not None and F_decl is not None and G_decl is not None:
+            C_exp, F_exp, G_exp = 2 * d_raw * e, d_raw * d_raw - e * e, d_raw * d_raw + e * e
+            for field, exp in (("C", C_exp), ("F", F_exp), ("G", G_exp)):
+                declared = w.get(field)
+                if declared != exp:
+                    errors.append(f"KSR_CHROMO: witness[{idx}] declared {field}={declared}, expected {exp} (from d=b+e={d_raw})")
             if C_decl * C_decl + F_decl * F_decl != G_decl * G_decl:
                 errors.append(f"KSR_CHROMO: witness[{idx}] C*C+F*F != G*G ({C_decl}*{C_decl}+{F_decl}*{F_decl} != {G_decl}*{G_decl})")
 
-        # KSR_CLOSURE: generator preserves orbit (Law 29)
+        # KSR_CLOSURE: generator preserves orbit (Law 29) -- genuinely
+        # classifies the orbit family from (b,e,m) via the standard
+        # v_3-based rule, not just checking that two declared strings match.
+        def classify_orbit(bb, ee, mm):
+            b_m, e_m = qa_mod(bb, mm), qa_mod(ee, mm)
+            if b_m == mm and e_m == mm:
+                return "SINGULARITY"
+            if b_m % 3 == 0 and e_m % 3 == 0:
+                return "SATELLITE"
+            return "COSMOS"
+
+        d_val = qa_mod(b + e, m)  # A2: derived, wrapped for the next-state pair
         orbit_decl = w.get("orbit_family")
-        next_b = e
-        next_e = d_val
+        if orbit_decl is not None:
+            orbit_exp = classify_orbit(b, e, m)
+            if orbit_decl != orbit_exp:
+                errors.append(f"KSR_CLOSURE: witness[{idx}] declared orbit_family={orbit_decl}, expected {orbit_exp}")
+
+        next_b, next_e = e, d_val
         next_orbit_decl = w.get("next_orbit_family")
+        if next_orbit_decl is not None:
+            next_orbit_exp = classify_orbit(next_b, next_e, m)
+            if next_orbit_decl != next_orbit_exp:
+                errors.append(f"KSR_CLOSURE: witness[{idx}] declared next_orbit_family={next_orbit_decl}, expected {next_orbit_exp}")
         if orbit_decl is not None and next_orbit_decl is not None:
             if orbit_decl != next_orbit_decl:
                 errors.append(f"KSR_CLOSURE: witness[{idx}] orbit changed from {orbit_decl} to {next_orbit_decl} under generator")

@@ -20,9 +20,9 @@ These three laws describe the **hierarchical control structure** — how the dom
 
 ### Key structures
 
-- **Invariant substrate**: 81 = 9² states partition into exactly three orbits (1 + 8 + 72)
+- **Invariant substrate**: 81 = 9² states partition into exactly three orbits (1 + 8 + 72) — this specific count (81) is for M=9; the underlying invariant-substrate claim (Law 1) is that the M² state space itself is fixed and unchangeable for whatever M is chosen, not that every M divisible by 9 has exactly 81 states
 - **Triune generator**: the QA step operator generates three distinct cycle lengths from one rule
-- **Neutral center**: singularity state (M/3, M/3) is the unique fixed point; it "controls" by being the attractor limit of orbit-averaged dynamics
+- **Neutral center**: singularity state **(M, M)** is the unique fixed point (corrected 2026-07-06 — was previously misstated as "(M/3, M/3)" here, though the certified fixture data always correctly used (9,9); it "controls" by being the attractor limit of orbit-averaged dynamics
 - **Creative/transmissive/attractive**: cosmos creates (maximum exploration), satellite transmits (bounded oscillation), singularity attracts (fixed stability)
 
 ## Checks
@@ -49,10 +49,38 @@ These three laws describe the **hierarchical control structure** — how the dom
 ## Connection to other families
 
 - **[153] Keely Triune**: triune structure is the core of dominant/control
-- **[150] Septenary**: {0,3,6} mod 9 = singularity/dominant residues
+- **[150] Septenary**: {3,6,9} mod 9 = singularity/dominant residues (corrected 2026-07-06 per [150]'s own A1 no-zero fix)
 - **[184] Keely Structural Ratio**: structural invariants that the dominant controls
 
 ## Fixture files
 
 - `fixtures/kdc_pass_hierarchy.json` — 81-state partition, triune generator, singularity fixed point
 - `fixtures/kdc_fail_no_center.json` — falsifier with no singularity state
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed the 81=9² state partition (1+8+72) and that
+`(9,9)` is genuinely a fixed point of the real T-operator
+(`qa_step(9,9,9)=(9,9)`) — the certified fixture data was always
+correct on this point.
+
+**Found and fixed two real doc-only errors** (neither existed in the
+certified fixture): (1) the "Key structures" section stated the
+singularity fixed point as "(M/3, M/3)" — the same class of error
+already found and fixed in cert [181] this cycle (the true fixed point
+is `(M,M)`, confirmed algebraically: `T(M,M)=(M,(2M-1) mod M + 1)=(M,M)`
+for any M). (2) the cross-reference to [150] still cited the old
+`{0,3,6}` singularity residues, not yet updated after [150]'s own A1
+no-zero fix earlier this cycle. Also softened an ambiguous claim that
+"81 states = invariant substrate for all M divisible by 9" (81 is
+specifically `9²`, not the state count for other M) to clarify the
+actual Law-1 claim is that *the* state space is invariant for whatever
+M is chosen, not that 81 is universal.
+
+**Found and hardened a real fixture-trusting gap**: `KDC_SING` only
+checked that `is_fixed_point`/`is_neutral_center` boolean flags were
+`True`, never that the declared `state` actually *was* a fixed point of
+the real T-operator — a witness could declare any non-fixed state with
+`is_fixed_point: true` and pass. Hardened to genuinely recompute
+`qa_step` on the declared state and compare; verified it correctly
+rejects a planted non-fixed-point `[1,1]`.

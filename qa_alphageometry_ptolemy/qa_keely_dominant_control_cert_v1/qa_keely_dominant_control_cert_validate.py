@@ -18,9 +18,15 @@ Checks:
   KDC_LAWS    — all 3 law numbers present
   KDC_SUB     — state space is fixed and invariant (Law 1)
   KDC_TRIUNE  — three manifestations of generator declared (Law 11)
-  KDC_SING    — singularity identified as neutral center/dominant (Law 16)
+  KDC_SING    — singularity's declared state is genuinely a fixed point
+                of the real T-operator, not just a trusted boolean flag
+                (Law 16)
   KDC_W       — at least 3 witnesses
   KDC_F       — fail_ledger well-formed
+
+Primary source: Pond, D. (svpwiki.com), Keely's 40 Laws of Vibratory
+Physics ("Law of Matter and Force", "Law of Force", "Law of
+Neutralization"). QA orbit fixed-point structure per Iverson (1991).
 """
 
 QA_COMPLIANCE = "cert_validator — validates Keely dominant/control law mappings; no float state"
@@ -31,6 +37,16 @@ from pathlib import Path
 
 SCHEMA_VERSION = "QA_KEELY_DOMINANT_CONTROL_CERT.v1"
 REQUIRED_LAWS = frozenset([1, 11, 16])
+
+
+def qa_mod(x, m):
+    """A1-compliant: result in {1,...,m}, never 0."""
+    return ((int(x) - 1) % m) + 1
+
+
+def qa_step(b, e, m):
+    """The QA T-operator: (b,e) -> (e, qa_mod(b+e, m))."""
+    return e, qa_mod(b + e, m)
 
 
 def validate(path):
@@ -87,13 +103,22 @@ def validate(path):
     else:
         warnings.append("KDC_TRIUNE: generator_triune block not declared")
 
-    # KDC_SING: singularity as neutral center (Law 16)
+    # KDC_SING: singularity as neutral center (Law 16) -- genuinely
+    # recompute the T-operator on the declared state instead of trusting
+    # the is_fixed_point/is_neutral_center boolean flags.
     sing = cert.get("singularity_dominant")
     if sing:
         if sing.get("is_fixed_point") is not True:
             errors.append("KDC_SING: singularity must be declared as fixed point")
         if sing.get("is_neutral_center") is not True:
             errors.append("KDC_SING: singularity must be declared as neutral center")
+        state, m = sing.get("state"), sing.get("modulus")
+        if state is not None and m is not None:
+            b, e = state
+            actual_next = list(qa_step(b, e, m))
+            if actual_next != list(state):
+                errors.append(f"KDC_SING: state {state} is NOT a genuine fixed point of the "
+                              f"T-operator (qa_step gives {actual_next})")
     else:
         warnings.append("KDC_SING: singularity_dominant block not declared")
 

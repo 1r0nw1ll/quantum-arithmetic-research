@@ -6468,7 +6468,7 @@ def _validate_keely_sympathetic_transfer_cert_family(base_dir: str) -> Optional[
 
 
 def _validate_keely_dominant_control_cert_family(base_dir: str) -> Optional[str]:
-    """QA Keely Dominant Control Cert family [186] — certifies Keely's 3 dominant/control laws (Laws 1,11,16) as QA orbit hierarchy. Category 3 of Vibes framework. Invariant substrate, triune generator manifestation, singularity as neutral center/dominant. Checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Keely Dominant Control Cert family [186] — certifies Keely's 3 dominant/control laws (Laws 1,11,16) as QA orbit hierarchy. Category 3 of Vibes framework. Invariant substrate, triune generator manifestation, singularity as neutral center/dominant. RE-VERIFIED 2026-07-06: fixture data always correct; fixed two doc-only errors (singularity fixed point mistated as "(M/3,M/3)" instead of "(M,M)", same bug class as [181]; stale [150] cross-reference still citing old {0,3,6}); hardened KDC_SING to genuinely recompute the T-operator on the declared state instead of trusting boolean flags, verified it rejects a planted non-fixed-point. Checks KDC_1+LAWS/SUB/TRIUNE/SING(hardened)/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_keely_dominant_control_cert_v1")
     validator = os.path.join(fam_dir, "qa_keely_dominant_control_cert_validate.py")
@@ -14244,7 +14244,7 @@ FAMILY_SWEEPS = [
      "qa_keely_sympathetic_transfer_cert_v1", True),
     (186, "QA Keely Dominant Control Cert family",
      _validate_keely_dominant_control_cert_family,
-     "Keely's 3 dominant/control laws (1,11,16) → QA orbit hierarchy; Category 3 Vibes framework; invariant substrate, triune generator, singularity=neutral center; checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Keely's 3 dominant/control laws (1,11,16) → QA orbit hierarchy; Category 3 Vibes framework; invariant substrate, triune generator, singularity=neutral center=(M,M) (RE-VERIFIED 2026-07-06, fixed doc-only (M/3,M/3) error + stale [150] ref, hardened KDC_SING to genuinely recompute); checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok",
      "186_qa_keely_dominant_control_cert",
      "qa_keely_dominant_control_cert_v1", True),
     (187, "QA Keely Aggregation Cert family",

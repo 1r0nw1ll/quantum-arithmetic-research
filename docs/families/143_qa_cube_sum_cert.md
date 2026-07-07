@@ -115,3 +115,24 @@ For (a,b,c)=(3,4,5):
 
 - `fixtures/cs_pass_fundamental.json` — main proof: identity, uniqueness (k≤10000), QN product, moduli
 - `fixtures/cs_pass_extended.json` — extended: 5 witnesses (1 cube + 4 non-cube confirming uniqueness)
+- `fixtures/cs_fail_bad_cube_sum.json` — falsifier: wrong cube_sum + wrong uniqueness solution set (added 2026-07-06)
+
+## Verification Note (2026-07-06)
+
+Independently recomputed F, C, G, and F³+C³+G³ by hand for every witness
+in both PASS fixtures — all correct, including a striking near-miss at
+(4,3): cube_sum=29792 vs 31³=29791 (off by exactly 1, correctly
+identified as non-cube). Independently re-ran the brute-force
+`uniqueness_check(10000)` — confirms k=4 is the unique solution, exactly
+matching the cert's declared claim. Confirmed `CS_UNIQ` genuinely
+brute-forces this (not fixture-trusted) by checking the source: `validate()`
+calls `uniqueness_check(up_to)` and compares against declared solutions.
+No bugs found — this validator is genuinely computed throughout.
+
+**Found and closed one real gap**: this family had zero FAIL fixtures,
+the same gap found in sibling cert [142]. Added
+`fixtures/cs_fail_bad_cube_sum.json`, planting two independent,
+genuinely-detectable violations (wrong `cube_sum` for the fundamental
+witness, and a wrong uniqueness `solutions` list including a spurious
+k=7) — confirmed both are caught by `check_direction`/`uniqueness_check`
+when checked directly. Updated `_self_test()` accordingly.

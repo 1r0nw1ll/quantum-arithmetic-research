@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_CUBE_SUM_CERT.v1",
+  "certificate_id": "qa.cert.cube_sum.fail.bad_cube_sum.v1",
+  "cert_type": "qa_cube_sum_cert",
+  "title": "Cube Sum FAIL: demonstrates wrong cube_sum and a wrong uniqueness solution set",
+
+  "sources": [
+    "Newton/Waring power-sum identity (Newton, 1707)",
+    "Fundamental QA Pythagorean triple (3,4,5), elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants two independent, deterministically detectable violations: (1) the fundamental (2,1) witness declares cube_sum=217 instead of the correct 3^3+4^3+5^3=216, which is also then wrongly marked is_perfect_cube=true (217 is not a perfect cube); (2) uniqueness_check.solutions declares [4, 7] instead of the correct [4] for k in [1,1000] (k=7 gives (6^3+7^3+8^3)=216+343+512=1071, not a perfect cube).",
+
+  "uniqueness_check": {
+    "claim": "deliberately wrong: k=4 and k=7 both claimed in [1,1000]",
+    "formula": "(k-1)³+k³+(k+1)³ = 3k(k²+2)",
+    "checked_up_to": 1000,
+    "solutions": [4, 7]
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1,
+      "F": 3, "C": 4, "G": 5,
+      "cube_sum": 217,
+      "is_perfect_cube": true,
+      "check": "deliberately wrong: cube_sum should be 3³+4³+5³=216, not 217; 217 is not a perfect cube either"
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "CS_IDEN", "message": "fundamental (2,1) declared cube_sum=217, expected 216=6³"},
+    {"check_id": "CS_UNIQ", "message": "declared solutions=[4,7] for k in [1,1000], but k=7 gives 1071, not a perfect cube -- only k=4 is a genuine solution"}
+  ],
+  "result": "FAIL"
+}

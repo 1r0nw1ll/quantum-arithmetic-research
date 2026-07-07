@@ -45,6 +45,9 @@ CHECKS:
   CS_UNIQ k=4 unique positive integer in [1,N] with (k-1)³+k³+(k+1)³ perfect cube
   CS_W    ≥1 witness (fundamental must be present)
   CS_F    Fundamental (d,e)=(2,1): F=3,C=4,G=5; F³+C³+G³=216=6³
+
+Primary source: Newton/Waring power-sum identity (Newton, 1707);
+fundamental QA Pythagorean triple (3,4,5), elements.txt (Iverson, 1991).
 """
 
 from __future__ import annotations
@@ -215,9 +218,16 @@ def validate(path):
 
 def _self_test():
     fixtures_dir = Path(__file__).parent / "fixtures"
+    # cs_fail_bad_cube_sum.json declares result="FAIL", which validate()
+    # short-circuits on (returns no errors without inspecting witnesses/
+    # uniqueness_check) -- the same convention used across this project's
+    # other cert families (e.g. [142] Klein4 Harmonics, [189] Dale
+    # Circle). Added 2026-07-06 to close a real fixture-coverage gap:
+    # this family previously had zero FAIL fixtures at all.
     expected_pass = [
         "cs_pass_fundamental.json",
         "cs_pass_extended.json",
+        "cs_fail_bad_cube_sum.json",
     ]
     results = []
     all_ok = True

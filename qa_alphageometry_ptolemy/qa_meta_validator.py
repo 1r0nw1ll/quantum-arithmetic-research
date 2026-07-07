@@ -5047,7 +5047,7 @@ def _validate_male_female_octave_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_cube_sum_cert_family(base_dir: str) -> Optional[str]:
-    """QA Cube Sum Cert family [143] — certifies F³+C³+G³=216=6³ for fundamental QA direction (d,e)=(2,1) with (F,C,G)=(3,4,5): the unique 3D extension of 3²+4²=5² (Pythagorean); (k-1)³+k³+(k+1)³=3k(k²+2) for k=4 gives 12×18=216=6³; k=4 unique in [1,10000]; QA connections: 6=b×e×d×a=1×1×2×3 (fundamental QN product); 216=9×24=mod-9×mod-24 (product of both QA orbit moduli); 4 non-cube witnesses (3,2),(4,1),(4,3),(5,2) confirm uniqueness in QA direction space; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS; self-test ok"""
+    """QA Cube Sum Cert family [143] — certifies F³+C³+G³=216=6³ for fundamental QA direction (d,e)=(2,1) with (F,C,G)=(3,4,5): the unique 3D extension of 3²+4²=5² (Pythagorean); (k-1)³+k³+(k+1)³=3k(k²+2) for k=4 gives 12×18=216=6³; k=4 unique in [1,10000]; QA connections: 6=b×e×d×a=1×1×2×3 (fundamental QN product); 216=9×24=mod-9×mod-24 (product of both QA orbit moduli); 4 non-cube witnesses (3,2),(4,1),(4,3),(5,2) confirm uniqueness in QA direction space; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean, no bugs -- CS_UNIQ genuinely brute-forces uniqueness_check(up_to), not fixture-trusted; independently reconfirmed k=4 unique to 10000 and every witness's cube_sum by hand (including a near-miss at (4,3): 29792 vs 31³=29791). Added first FAIL fixture to close a real coverage gap, same as sibling cert [142]."""
     import subprocess
     cs_dir    = os.path.join(base_dir, "qa_cube_sum_cert_v1")
     validator = os.path.join(cs_dir, "qa_cube_sum_cert_validate.py")
@@ -14187,7 +14187,7 @@ FAMILY_SWEEPS = [
      "qa_male_female_octave_cert_v1", True),
     (143, "QA Cube Sum Cert family",
      _validate_cube_sum_cert_family,
-     "F³+C³+G³=216=6³ for fundamental (F,C,G)=(3,4,5); k=4 unique in [1,10000] for (k-1)³+k³+(k+1)³ perfect cube; 216=9×24; 6=b×e×d×a; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS; self-test ok",
+     "F³+C³+G³=216=6³ for fundamental (F,C,G)=(3,4,5); k=4 unique in [1,10000] for (k-1)³+k³+(k+1)³ perfect cube; 216=9×24; 6=b×e×d×a; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed clean; added first FAIL fixture to close a real coverage gap.",
      "143_qa_cube_sum_cert",
      "qa_cube_sum_cert_v1", True),
     (142, "QA Klein 4 Harmonics Cert family",

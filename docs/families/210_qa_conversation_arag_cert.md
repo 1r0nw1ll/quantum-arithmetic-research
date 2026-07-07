@@ -172,3 +172,27 @@ Then `(a_label − d_label) mod 9 ≡ e (mod 9)` identically over the 81-state s
 - **ChatGPT content-type rule** currently promotes `reasoning_recap` and `thoughts` to `thought`. Other reasoning content types may emerge in future exports; the map is a single constant table that can be extended.
 - **Temporal queries** are not yet a first-class view. `create_time_utc` is stored; a `temporal_view` could be added as a fourth A-RAG view in v2.
 - **CRT-join across moduli** (mod-9 ↔ mod-24) is a v2 feature. v1 is mod-9 only.
+
+## Verification Note (2026-07-07)
+
+Independently re-derived and confirmed every empirical number in this doc
+against the live `_forensics/qa_retrieval.sqlite` datastore (559,611,904
+bytes, real production data, not a fixture):
+
+- `SELECT COUNT(*) FROM messages WHERE source IN ('claude','gemini')` = **5361** ✓ exact match
+- Distinct `(role, d_label, a_label)` sector combos for claude+gemini = **27** ✓ exact match
+- A1 violations (`b`/`e` outside `{1..9}`) = **0** ✓ exact match
+- Claude thought-promotion: 91 thought / 200 native-assistant = 45.5% ✓ matches declared "~46% (91/200)"
+- Gemini thought-promotion: 874 thought / 3013 native-model = 29.0% ✓ matches declared "~29% (874/3013)"
+
+Also independently brute-forced the Role-Diagonal Theorem over the full
+81-state space `{1..9}²`: `(a_label − d_label) mod 9 ≡ e mod 9` holds
+**81/81**, confirming the proof. Ran `--self-test`: both fixtures pass
+(`n_pass=2, n_fail=0`).
+
+The validator (`qa_conversation_arag_cert_validate.py`) already genuinely
+recomputes `b = dr(char_ord_sum)`, `e = role_rank[role]`, and both sector
+labels per witness — no fixture-trusting gap. This is one of the strongest
+certs audited this cycle: every headline number is independently
+reproducible against real production data, not just internally
+self-consistent.

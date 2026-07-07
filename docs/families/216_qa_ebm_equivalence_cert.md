@@ -106,3 +106,34 @@ python qa_ebm_equivalence_cert_validate.py --self-test                  # JSON, 
 ## Source
 
 Will Dale + Claude (Opus 4.6), 2026-04-12. Grounded in LeCun et al. 2006 EBM framework; builds on cert [154] empirical QCI validation and cert [215] temperature-modulus duality.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. The validator (`qa_ebm_equivalence_cert_validate.py`)
+genuinely recomputes E1/E2/E3/E5 live from primitives on every run — no
+fixture-trusting gap:
+- `EBM_NONNEG`: exhaustive over all of S_9² × {1..9} (729 triples)
+- `EBM_ZERO`: a real 80-step deterministic T-trajectory, not a declared value
+- `EBM_MONOTONE`: a real 400-step trajectory with real injected mismatches
+- `EBM_SCORE`: exhaustive 81/81 argmax-of-Boltzmann-vs-T-operator check
+
+Independently reproduced the doc's E3 table exactly: injecting mismatch
+fractions (0.0, 0.1, 0.3, 0.5, 0.8) at `seed=0` gives E =
+(0.000, 0.190, 0.464, 0.657, 0.825) — matches the doc's rounded
+(0.0, 0.19, 0.46, 0.66, 0.83) precisely.
+
+`EBM_BOLTZMANN` is honestly a **weak** check (the validator's own comment
+says so): it only verifies the occupancy distribution is well-formed
+(sums to 1, no zero entries), not that `T = 2π/m` is actually the correct
+temperature — that stronger claim is explicitly deferred to cert [215]
+as a corollary, not tested here. This is disclosed in the code, not a
+hidden gap.
+
+Ran `--self-test`: PASS fixture passes all 9 checks, FAIL fixture
+correctly fails.
+
+Did not independently re-verify the doc's "Empirical scope" NAB/ODDS/
+MIT-BIH benchmark numbers (AUROC 0.787/0.858/0.635/0.320, etc.) this
+pass — those are inherited from cert [154]'s separate empirical
+validation pipeline, not new claims specific to this cert's own
+fixture/validator.

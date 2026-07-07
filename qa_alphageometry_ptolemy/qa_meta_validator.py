@@ -1546,6 +1546,18 @@ def _validate_graph_structure_bundle_if_present(base_dir: str) -> Optional[str]:
     """
     Run graph-structure bundle validator if the bundle file exists.
 
+    Hardened 2026-07-06 (same fix as cert [27]/[19]): previously only
+    checked file-hash integrity, never invoked the real
+    qa_graph_structure_validator_v1.py Level 1-3 validator on certificate
+    content. Now also runs it against the reference success/failure
+    certs. Note (see docs/families/28_graph_structure.md Verification
+    Note): an independent reproduction of the declared karate-club
+    Louvain metrics did not exactly match (node/edge counts and
+    community count matched real Zachary karate club data, but computed
+    modularity/ARI differed from the declared baseline/qa values) --
+    flagged as an open question pending pinning down the exact Louvain
+    implementation/version used, not confirmed as fabricated or fixed.
+
     Returns:
         None on success,
         skip reason string if bundle is missing.
@@ -1559,6 +1571,29 @@ def _validate_graph_structure_bundle_if_present(base_dir: str) -> Optional[str]:
         errors = result.get("errors", [])
         head = "; ".join(errors[:3]) if errors else "unknown graph structure bundle validation error"
         raise RuntimeError(head)
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_graph_structure_validator_v1 import GraphStructureValidator, ValidationLevel
+
+    for rel_path in (
+        "certs/QA_GRAPH_STRUCTURE_CERT.v1.json",
+        "examples/graph_structure/graph_structure_parity_failure.json",
+    ):
+        abs_path = os.path.join(base_dir, rel_path)
+        with open(abs_path) as f:
+            cert = json.load(f)
+        report = GraphStructureValidator(strict=True).validate(
+            cert, level=ValidationLevel.RECOMPUTE
+        )
+        if not report.all_passed:
+            failures = [
+                f"{r.check_name}: {r.message}"
+                for r in report.results
+                if r.status.value == "failed"
+            ]
+            raise RuntimeError(f"{rel_path}: {'; '.join(failures[:5])}")
+
     return None
 
 
@@ -13701,7 +13736,11 @@ FAMILY_SWEEPS = [
      "27_elliptic_correspondence", ".", False),
     (28, "QA Graph Structure bundle",
      _validate_graph_structure_bundle_if_present,
-     "bundle manifest verified", "28_graph_structure", ".", False),
+     "bundle manifest verified + genuine Level 1-3 validator recompute (hardened 2026-07-06, "
+     "same class of fix as [27]/[19]); independent Louvain reproduction on karate-club data "
+     "matched node/edge/community counts but not modularity/ARI exactly -- open question, see "
+     "docs/families/28_graph_structure.md",
+     "28_graph_structure", ".", False),
     (29, "QA Agent Trace family",
      _validate_agent_trace_family_if_present,
      "schema + validator + fixtures (1 valid, 2 negative)", "29_agent_traces", ".", False),

@@ -42,6 +42,9 @@ KTS_8   24*L = 2*C*F
 KTS_9   2*C*F ≡ 0 (mod 24)
 KTS_W   ≥3 witness entries
 KTS_F   fundamental (d,e)=(2,1) present with 2CF=24
+
+Primary source: QA L-element and Koenig I-H descent chain (Iverson,
+1991); twisted-squares identity per Wildberger (2005).
 """
 
 from __future__ import annotations
@@ -159,7 +162,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-direction fixture (fundamental) ---
@@ -236,6 +244,7 @@ def _self_test():
     expected_pass = [
         "kts_pass_fundamental.json",
         "kts_pass_witnesses.json",
+        "kts_fail_bad_h.json",
     ]
     results = []
     all_ok = True

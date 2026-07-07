@@ -33,6 +33,9 @@ C4864_POLY  Equilateral (4,4,4): PR+RT+PT=48, PRT=64
 C4864_ORB   48=2×24, 64=8² stated in cert
 C4864_W     ≥3 algebraic witnesses
 C4864_F     Fundamental (d,e)=(2,1) present with 48L=48
+
+Primary source: Wildberger chromogeometry quadrance identity F²+C²=G²
+(Wildberger, 2005); QA orbit periods per Iverson (1991).
 """
 
 from __future__ import annotations
@@ -142,7 +145,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-direction fixture (fundamental) ---
@@ -218,6 +226,7 @@ def _self_test():
     expected_pass = [
         "c4864_pass_fundamental.json",
         "c4864_pass_witnesses.json",
+        "c4864_fail_bad_alg.json",
     ]
     results = []
     all_ok = True

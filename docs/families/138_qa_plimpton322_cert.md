@@ -83,6 +83,7 @@ This cert connects QA to Mansfield & Wildberger's peer-reviewed 2017 paper — t
 
 - `fixtures/p322_pass_fundamental.json` — Row 1: (12,5), triple (119,120,169), G/C=1;24,30
 - `fixtures/p322_pass_witnesses.json` — 5 rows (Rows 1,5,6,9,11) + non-row counterexample (7,3)
+- `fixtures/p322_fail_bad_triple.json` — falsifier: wrong G value breaking F²+C²=G² (added 2026-07-06)
 
 ## Verification Note (2026-07-04)
 
@@ -110,3 +111,12 @@ chain" table dated the Banks→Plimpton sale to "1900 CE," but the
 documented date (Robson 2002; multiple independent secondary sources) is
 **1922** — Banks sold the tablet to Plimpton for $10, who bequeathed his
 collection to Columbia University in 1936. Corrected.
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/p322_fail_bad_triple.json` to close the gap and exercise the
+fix.

@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_EGYPTIAN_FRACTION_CERT.v1",
+  "certificate_id": "qa.cert.egyptian_fraction.fail.bad_expansion.v1",
+  "cert_type": "qa_egyptian_fraction_cert",
+  "title": "Egyptian Fraction FAIL: demonstrates a wrong denominator sequence",
+
+  "sources": [
+    "The Pythagorean Tree: A New Species (Price, 2008)",
+    "QA Koenig series and Egyptian fractions, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants a deterministically detectable violation: direction (d,e)=(3,2) (HAT1=2/3) declares denominators=[2,6] instead of the correct greedy expansion [2,6] should actually be checked -- using denominators=[2,7] which does not sum to 2/3 (1/2+1/7=9/14 != 2/3).",
+
+  "direction": {"d": 3, "e": 2},
+  "expansion": {
+    "denominators": [2, 7],
+    "check": "deliberately wrong: 1/2+1/7=9/14, not 2/3; correct greedy expansion of 2/3 is [2,6] (1/2+1/6=2/3)"
+  },
+
+  "fail_ledger": [
+    {"check_id": "EF_4", "message": "declared denominators=[2,7] sum to 9/14, expected e/d=2/3"}
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": "QA_EISENSTEIN_CERT.v1",
+  "certificate_id": "qa.cert.eisenstein.fail.bad_z.v1",
+  "cert_type": "qa_eisenstein_cert",
+  "title": "Eisenstein FAIL: demonstrates a wrong Z value breaking F²-FW+W²=Z²",
+
+  "sources": [
+    "Eisenstein integer norm form x²-xy+y² (Eisenstein, 1844)",
+    "QA tuple elements, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants a deterministically detectable violation: fundamental (b,e,d,a)=(1,1,2,3) declares Z=8 instead of the correct Z=e*e+a*d=1+6=7, breaking F²-FW+W²=Z².",
+
+  "tuple": {"b": 1, "e": 1, "d": 2, "a": 3},
+  "elements": {"F": 3, "W": 8, "Z": 8, "Y": 5},
+
+  "fail_ledger": [
+    {"check_id": "EIS_4", "message": "declared Z=8, expected e*e+a*d=1+6=7"}
+  ],
+  "result": "FAIL"
+}

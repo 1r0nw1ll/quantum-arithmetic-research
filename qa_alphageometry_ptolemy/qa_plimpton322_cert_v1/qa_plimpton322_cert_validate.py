@@ -36,6 +36,9 @@ P322_BASE60 G/C terminates in base-60 (denominator is 5-smooth)
 P322_NOZERO F,C,G > 0 (SPVN no-zero = QA A1)
 P322_W      ≥3 witness rows
 P322_F      fundamental (d,e)=(2,1) present
+
+Primary source: Plimpton 322 as exact rational trigonometry table
+(Mansfield, 2017); QA chromogeometry per Iverson (1991).
 """
 
 from __future__ import annotations
@@ -163,7 +166,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-row fixture (fundamental) ---
@@ -221,6 +229,7 @@ def _self_test():
     expected_pass = [
         "p322_pass_fundamental.json",
         "p322_pass_witnesses.json",
+        "p322_fail_bad_triple.json",
     ]
     results = []
     all_ok = True

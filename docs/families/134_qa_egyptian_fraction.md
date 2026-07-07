@@ -85,6 +85,7 @@ This is where QA meets **3600 years of prior art**:
 |---------|------|----------|
 | `ef_pass_fundamental.json` | Anchor — (d,e)=(2,1), expansion=[2], length=1 | PASS |
 | `ef_pass_witnesses.json` | 6 witnesses covering lengths 1,2,3 + general theorem | PASS |
+| `ef_fail_bad_expansion.json` | Falsifier: wrong denominator expansion not summing to e/d (added 2026-07-06) | FAIL |
 
 ## Connection to Prior Art Convergence Stack
 
@@ -121,3 +122,12 @@ not a scaled copy of anything. No integer k satisfies
 `(3k,4k,5k)=(437,84,445)`. This footnote wasn't checked by any
 validator (pure prose), so it had no certification impact — fixed the
 doc to state the correct, independently-verified triple.
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/ef_fail_bad_expansion.json` to close the gap and exercise
+the fix.

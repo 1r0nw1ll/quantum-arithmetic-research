@@ -1,0 +1,28 @@
+{
+  "schema_version": "QA_CYCLIC_QUAD_CERT.v1",
+  "certificate_id": "qa.cert.cyclic_quad.fail.bad_bf.v1",
+  "cert_type": "qa_cyclic_quad_cert",
+  "title": "Cyclic Quad FAIL: demonstrates a wrong Brahmagupta-Fibonacci value",
+
+  "sources": [
+    "Ptolemy's theorem via Wildberger rational trigonometry (Wildberger, 2005)",
+    "QA chromogeometry quadrances, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants a deterministically detectable violation: pair (d1,e1)=(2,1),(d2,e2)=(3,2) declares G1*G2=99 instead of the correct 5*13=65.",
+
+  "pair1": {"d": 2, "e": 1, "F": 3, "C": 4, "G": 5},
+  "pair2": {"d": 3, "e": 2, "F": 5, "C": 12, "G": 13},
+
+  "bf_identity": {
+    "D": 4, "E": 7,
+    "G1_G2": 99,
+    "D_sq_plus_E_sq": 65,
+    "check": "deliberately wrong: G1*G2=5*13=65, not 99"
+  },
+
+  "fail_ledger": [
+    {"check_id": "CQ_BF", "message": "declared G1*G2=99, expected 65"}
+  ],
+  "result": "FAIL"
+}

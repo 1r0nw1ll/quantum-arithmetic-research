@@ -1,0 +1,23 @@
+{
+  "schema_version": "QA_PYTHAGOREAN_TREE_CERT.v1",
+  "certificate_id": "qa.cert.pythagorean_tree.fail.bad_child.v1",
+  "cert_type": "qa_pythagorean_tree_cert",
+  "title": "Pythagorean Tree FAIL: demonstrates a wrong M_A child",
+
+  "sources": [
+    "Barning-Hall/Berggren ternary tree of primitive Pythagorean triples (Barning, 1963)",
+    "QA Koenig series, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants a deterministically detectable violation: root (d,e)=(2,1) declares its M_A child as (d,e)=(4,2) instead of the correct M_A(2,1)=(2*2-1,2)=(3,2); (4,2) is also not primitive (gcd=2).",
+
+  "direction": {"d": 2, "e": 1},
+  "children": {
+    "M_A": {"d": 4, "e": 2, "k": 2}
+  },
+
+  "fail_ledger": [
+    {"check_id": "PT_A", "message": "declared M_A child (4,2), expected (2*2-1,2)=(3,2); also gcd(4,2)=2≠1"}
+  ],
+  "result": "FAIL"
+}

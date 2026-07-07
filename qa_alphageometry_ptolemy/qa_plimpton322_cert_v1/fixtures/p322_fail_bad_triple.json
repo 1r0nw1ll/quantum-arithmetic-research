@@ -1,0 +1,21 @@
+{
+  "schema_version": "QA_PLIMPTON322_CERT.v1",
+  "certificate_id": "qa.cert.plimpton322.fail.bad_triple.v1",
+  "cert_type": "qa_plimpton322_cert",
+  "title": "Plimpton 322 FAIL: demonstrates a wrong G value breaking F²+C²=G²",
+
+  "sources": [
+    "Plimpton 322 as exact rational trigonometry table (Mansfield, 2017)",
+    "QA chromogeometry, elements.txt (Iverson, 1991)"
+  ],
+
+  "_fixture_purpose": "Negative fixture (added 2026-07-06 to close a fixture-coverage gap -- this family previously had zero FAIL fixtures). Plants a deterministically detectable violation: fundamental (d,e)=(2,1) declares G=6 instead of the correct G=d*d+e*e=4+1=5, breaking F²+C²=G².",
+
+  "direction": {"d": 2, "e": 1},
+  "triple": {"F": 3, "C": 4, "G": 6},
+
+  "fail_ledger": [
+    {"check_id": "P322_3", "message": "declared G=6, F²+C²=9+16=25≠36=G²; expected G=5"}
+  ],
+  "result": "FAIL"
+}

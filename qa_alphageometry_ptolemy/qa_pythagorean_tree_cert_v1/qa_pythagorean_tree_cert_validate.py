@@ -36,6 +36,9 @@ PT_A    M_A child (2d-e,d): gcd=1, d'>e'>0, parity ok, k=2, parent recovers
 PT_B    M_B child (2d+e,d): gcd=1, d'>e'>0, parity ok, k=3, parent recovers
 PT_C    M_C child (d+2e,e): gcd=1, d'>e'>0, parity ok, k≥4, parent recovers
 PT_ROOT (d,e)=(2,1) — all three inverses yield invalid candidates
+
+Primary source: Barning-Hall/Berggren ternary tree of primitive
+Pythagorean triples (Barning, 1963); QA Koenig series per Iverson (1991).
 PT_W    ≥3 witnesses (witness fixture)
 PT_F    fundamental witness (d=2,e=1) present
 """
@@ -180,7 +183,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-direction fixture (fundamental) ---
@@ -225,6 +233,7 @@ def _self_test():
     expected_pass = [
         "pt_pass_fundamental.json",
         "pt_pass_witnesses.json",
+        "pt_fail_bad_child.json",
     ]
     results = []
     all_ok = True

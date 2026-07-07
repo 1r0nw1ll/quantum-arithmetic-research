@@ -104,6 +104,7 @@ Ptolemy's chord table formula chord(θ₁±θ₂) = f(chord(θ₁), chord(θ₂)
 
 - `fixtures/cq_pass_fundamental.json` — anchor: (2,1)×(3,2), G₃=65, two diagonals
 - `fixtures/cq_pass_witnesses.json` — 5 witness pairs + gcd edge case
+- `fixtures/cq_fail_bad_bf.json` — falsifier: wrong Brahmagupta-Fibonacci value (added 2026-07-06)
 
 ## Verification Note (2026-07-06)
 
@@ -127,3 +128,11 @@ alluded to "conjugate G." Added the missing formula; independently
 verified it holds for the fundamental example (D'=8, E'=1,
 8²+1²=65=G₁G₂). The validator was already correct; only the doc was
 incomplete.
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/cq_fail_bad_bf.json` to close the gap and exercise the fix.

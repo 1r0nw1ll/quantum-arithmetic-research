@@ -131,6 +131,7 @@ This generates all prime-producing triples. The chain structure means every trip
 
 - `fixtures/kts_pass_fundamental.json` — anchor: (2,1), 2CF=24, quadruple=(1,24,25,49)
 - `fixtures/kts_pass_witnesses.json` — 5 witnesses including both ellipse (I<0) and hyperbola (I>0) directions + Koenig chain example
+- `fixtures/kts_fail_bad_h.json` — falsifier: wrong H value breaking H²-G²=2CF (added 2026-07-06)
 
 ## Verification Note (2026-07-06)
 
@@ -156,3 +157,11 @@ an integer), only the specific "which element carries the 3" attribution
 in the proof sketch was incomplete. Fixed the doc to state the full
 3-case pigeonhole argument, cross-referencing the identical fix already
 made to [130].
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/kts_fail_bad_h.json` to close the gap and exercise the fix.

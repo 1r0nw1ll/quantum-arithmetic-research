@@ -72,6 +72,7 @@ Divisibility by 24: 2CF = 4de(d-e)(d+e). For primitive triples:
 |---------|------|----------|
 | `origin24_pass_3_4_5.json` | Anchor — (d,e)=(2,1), 3-4-5 triangle | PASS |
 | `origin24_pass_general.json` | General theorem — 6 witnesses d≤5 | PASS |
+| `origin24_fail_bad_hg.json` | Falsifier: wrong H²-G² value (added 2026-07-06) | FAIL |
 
 ## Running
 
@@ -114,3 +115,12 @@ proof text gave no argument that would explain why this witness's
 `2CF=240` is divisible by 24. The underlying theorem was never wrong
 (exhaustively reconfirmed above), only the written proof's case
 coverage was incomplete. Fixed the doc to state both cases.
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/origin24_fail_bad_hg.json` to close the gap and exercise the
+fix.

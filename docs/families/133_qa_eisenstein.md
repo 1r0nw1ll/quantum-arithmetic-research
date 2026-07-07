@@ -71,6 +71,7 @@ The classical **Eisenstein triple (3,5,7)** appears in the isosceles case b=e=1:
 |---------|------|----------|
 | `eisenstein_pass_fundamental.json` | Anchor — (1,1,2,3), F=3,W=8,Z=7,Y=5 | PASS |
 | `eisenstein_pass_witnesses.json` | 6 witnesses + general theorem + algebraic proof | PASS |
+| `eisenstein_fail_bad_z.json` | Falsifier: wrong Z value breaking F²-FW+W²=Z² (added 2026-07-06) | FAIL |
 
 ## Connection to Prior Art Convergence Stack
 
@@ -111,3 +112,12 @@ out. Completed it: with `u=b²+3be` (same substitution as Identity 1),
 pattern as Identity 1. This upgrades Identity 2 from "checked on a
 finite sample" to "proven for all integers b,e," a materially stronger
 claim than what was previously written.
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/eisenstein_fail_bad_z.json` to close the gap and exercise
+the fix.

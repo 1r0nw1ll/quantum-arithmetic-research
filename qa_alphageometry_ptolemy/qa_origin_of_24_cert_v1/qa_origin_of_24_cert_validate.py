@@ -23,6 +23,9 @@ O24_G  general_theorem.statement present (for general fixture)
 O24_W  ≥3 witnesses with correct H²-G² values
 O24_F  fundamental witness (d=2,e=1) has H²-G²=24
 O24_D  all witness H²-G² divisible by 24
+
+Primary source: QA H-G-I identity chain (Iverson, 1991); Pythagorean
+3-4-5 fundamental per Wildberger (2005).
 """
 
 QA_COMPLIANCE = "cert_validator — validates arithmetic claims in submitted JSON, no empirical QA state machine"
@@ -96,7 +99,12 @@ def validate(path):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
 
     if result == "FAIL":
-        print(f"  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # Per-fixture element checks (anchor fixture)
@@ -156,6 +164,7 @@ def _self_test() -> dict:
     expected_pass = [
         "origin24_pass_3_4_5.json",
         "origin24_pass_general.json",
+        "origin24_fail_bad_hg.json",
     ]
     results = []
     all_ok = True

@@ -37,6 +37,9 @@ EF_7  all intermediate pairs coprime
 EF_8  terminal condition: last step has e = 1
 EF_W  ≥3 witnesses present  (witness fixture)
 EF_F  fundamental witness (d=2,e=1) present with denominators=[2]
+
+Primary source: The Pythagorean Tree: A New Species (Price, 2008);
+QA Koenig series and Egyptian fractions per Iverson (1991).
 """
 
 from __future__ import annotations
@@ -137,7 +140,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-direction fixture ---
@@ -185,6 +193,7 @@ def _self_test():
     expected_pass = [
         "ef_pass_fundamental.json",
         "ef_pass_witnesses.json",
+        "ef_fail_bad_expansion.json",
     ]
     results = []
     all_ok = True

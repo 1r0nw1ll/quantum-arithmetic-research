@@ -32,6 +32,9 @@ EIS_6  F·F − F·W + W·W = Z·Z
 EIS_7  Y·Y − Y·W + W·W = Z·Z
 EIS_W  ≥3 witnesses present (witness fixture)
 EIS_U  fundamental witness (b,e,d,a)=(1,1,2,3) present
+
+Primary source: Eisenstein integer norm form x²-xy+y² (Eisenstein, 1844);
+QA tuple elements per Iverson (1991).
 """
 
 from __future__ import annotations
@@ -107,7 +110,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-tuple fixture (fundamental) ---
@@ -172,6 +180,7 @@ def _self_test():
     expected_pass = [
         "eisenstein_pass_fundamental.json",
         "eisenstein_pass_witnesses.json",
+        "eisenstein_fail_bad_z.json",
     ]
     results = []
     all_ok = True

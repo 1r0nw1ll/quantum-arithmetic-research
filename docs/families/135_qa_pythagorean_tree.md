@@ -75,6 +75,7 @@ From root (2,1) — the 3-4-5 direction:
 |---------|------|----------|
 | `pt_pass_fundamental.json` | Root (2,1) + its 3 children + root check | PASS |
 | `pt_pass_witnesses.json` | 5 witnesses at depths 2–3, all three move types | PASS |
+| `pt_fail_bad_child.json` | Falsifier: wrong M_A child, also non-primitive (added 2026-07-06) | FAIL |
 
 ## Connection to Prior Art Convergence Stack
 
@@ -113,3 +114,12 @@ opposite parity is preserved — **0 counterexamples** across the entire
 generated tree. The validator (`qa_pythagorean_tree_cert_validate.py`)
 already genuinely recomputes every move, k-value, and gcd/parity check
 live, no fixture-trusting gap.
+
+**Follow-up (2026-07-06)**: found this family had zero FAIL fixtures
+(part of a systemic gap found across 8 sibling families in the
+125-139 cluster) and the same latent print-corruption bug first
+discovered in cert [132]: a stray `print()` inside the
+`result=="FAIL"` short-circuit that corrupts `--self-test`'s stdout
+once a FAIL fixture exists to trigger it. Removed the print and added
+`fixtures/pt_fail_bad_child.json` to close the gap and exercise the
+fix.

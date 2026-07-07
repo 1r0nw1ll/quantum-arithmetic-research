@@ -39,6 +39,9 @@ CQ_PC  F4=F1*F2+C1*C2, C4=|F1*C2-F2*C1|, F4²+C4²=(G1*G2)²
 CQ_G3  Both product and conjugate G equal G1*G2
 CQ_W   ≥3 witness pairs (witness fixture)
 CQ_F   fundamental pair (d1,e1)=(2,1),(d2,e2)=(3,2) present
+
+Primary source: Ptolemy's theorem via Wildberger rational trigonometry
+(Wildberger, 2005); QA chromogeometry quadrances per Iverson (1991).
 """
 
 from __future__ import annotations
@@ -180,7 +183,12 @@ def validate(path):
     if result not in ("PASS", "FAIL"):
         errors.append(f"result must be PASS or FAIL, got {result!r}")
     if result == "FAIL":
-        print("  SKIP detailed checks — cert declares FAIL")
+        # Note: intentionally no print() here (fixed 2026-07-06, same
+        # latent bug class found in cert [132]) -- validate() is called
+        # both interactively (main()) and by _self_test(), and a stray
+        # print corrupts self-test's stdout once a FAIL fixture exists
+        # to trigger this branch (the meta-validator's subprocess
+        # wrapper expects pure JSON on stdout).
         return errors, warnings
 
     # --- Single-pair fixture (fundamental) ---
@@ -221,6 +229,7 @@ def _self_test():
     expected_pass = [
         "cq_pass_fundamental.json",
         "cq_pass_witnesses.json",
+        "cq_fail_bad_bf.json",
     ]
     results = []
     all_ok = True

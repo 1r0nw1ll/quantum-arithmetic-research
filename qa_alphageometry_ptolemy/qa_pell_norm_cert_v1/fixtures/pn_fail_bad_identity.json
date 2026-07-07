@@ -1,0 +1,55 @@
+{
+  "schema_version": "QA_PELL_NORM_CERT.v1",
+  "certificate_id": "qa.cert.pell_norm.fail.bad_identity.v1",
+  "cert_type": "qa_pell_norm_cert",
+  "title": "Pell Norm FAIL: falsifier with wrong I value and wrong declared chain-entry Pell norm",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), same Pell identity as the PASS fixtures grounded in Wildberger's Pell equation paper (Wildberger, 2010) and the Pythagorean tree (Barning, 1963).",
+
+  "_fixture_purpose": "Falsifier: declares chain[1]=(5,2) with wrong pell_norm/I/type (should be pell_norm=1,I=-1,type=E; declares -1,1,H instead), and witness (3,2) with I=999 (should be 7). Both trip PN_IDEN. NOTE: result is deliberately 'PASS' internally because this validator's validate() short-circuits to skip all checking when result=='FAIL' -- matches the pattern used in certs [214] and [144].",
+
+  "pell_chain": {
+    "chain": [
+      {"d": 2, "e": 1, "x": 1, "y": 1, "pell_norm": -1, "I": 1, "type": "H"},
+      {"d": 5, "e": 2, "x": 3, "y": 2, "pell_norm": -1, "I": 1, "type": "H"}
+    ]
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1, "x": 1, "y": 1,
+      "triple": {"F": 3, "C": 4, "G": 5},
+      "pell_norm": -1, "I": 1, "type": "H",
+      "check": "P(1,1)=1-2=-1; I=1 ✓ -- correct, kept valid"
+    },
+    {
+      "d": 3, "e": 2, "x": 1, "y": 2,
+      "triple": {"F": 5, "C": 12, "G": 13},
+      "pell_norm": -7, "I": 999, "type": "H",
+      "check": "FALSIFIER: I should be 7 (P(1,2)=1-8=-7, I=-(-7)=7), declared 999"
+    },
+    {
+      "d": 4, "e": 1, "x": 3, "y": 1,
+      "triple": {"F": 15, "C": 8, "G": 17},
+      "pell_norm": 7, "I": -7, "type": "E",
+      "check": "correct, kept valid"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "PN_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "PN_2",    "description": "F,C,G correct", "passed": true},
+    {"check_id": "PN_3",    "description": "F^2+C^2=G^2", "passed": true},
+    {"check_id": "PN_IDEN", "description": "FALSIFIER: chain[1]=(5,2) declared pell_norm=-1/I=1/type=H, computed pell_norm=1/I=-1/type=E; witness (3,2) declared I=999, computed 7", "passed": false},
+    {"check_id": "PN_MB",   "description": "(d,e) move itself is genuine M_B(2,1)=(5,2), unaffected by this fixture's defect", "passed": true},
+    {"check_id": "PN_W",    "description": "3 witnesses", "passed": true},
+    {"check_id": "PN_F",    "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [
+    "PN_IDEN: chain[1] (5,2) declared pell_norm=-1, computed 1",
+    "PN_IDEN: chain[1] (5,2) declared I=1, computed -1",
+    "PN_IDEN: witness (3,2) declared I=999, computed 7"
+  ],
+  "result": "PASS"
+}

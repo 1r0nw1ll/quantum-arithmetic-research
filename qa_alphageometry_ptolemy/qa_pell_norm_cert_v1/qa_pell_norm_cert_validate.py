@@ -38,6 +38,9 @@ CHECKS:
   PN_MB    M_B step flips Pell sign: consecutive chain entries have P₁=-P₀
   PN_W     ≥3 general witnesses
   PN_F     fundamental (2,1): P=-1, I=1
+
+Primary source: Wildberger, N.J. (2010), "Pell's equation and the Pell
+group," arXiv:0806.2490; Pythagorean tree M_B move (Barning, 1963).
 """
 
 from __future__ import annotations
@@ -175,13 +178,14 @@ def validate(path):
 
 def _self_test():
     fixtures_dir = Path(__file__).parent / "fixtures"
-    expected_pass = [
-        "pn_pass_fundamental.json",
-        "pn_pass_witnesses.json",
-    ]
+    expected = {
+        "pn_pass_fundamental.json": True,
+        "pn_pass_witnesses.json": True,
+        "pn_fail_bad_identity.json": False,
+    }
     results = []
     all_ok = True
-    for fname in expected_pass:
+    for fname, should_pass in expected.items():
         fpath = fixtures_dir / fname
         if not fpath.exists():
             results.append({"fixture": fname, "ok": False, "error": "file not found"})
@@ -194,9 +198,10 @@ def _self_test():
             results.append({"fixture": fname, "ok": False, "error": str(ex)})
             all_ok = False
             continue
-        if not passed:
+        ok = passed == should_pass
+        if not ok:
             all_ok = False
-        results.append({"fixture": fname, "ok": passed, "errors": errors})
+        results.append({"fixture": fname, "ok": ok, "errors": errors})
     return {"ok": all_ok, "results": results}
 
 

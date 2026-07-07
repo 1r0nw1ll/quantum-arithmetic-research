@@ -103,6 +103,7 @@ Wildberger arXiv:0806.2490 ("Pell's equation and the Pell group") establishes th
 
 - `fixtures/pn_pass_fundamental.json` — identity proof, M_B Pell chain 6 steps, algebraic proofs
 - `fixtures/pn_pass_witnesses.json` — 6 general witnesses at various Pell norm levels
+- `fixtures/pn_fail_bad_identity.json` — Falsifier: chain entry (5,2) with wrong declared pell_norm/I/type, and witness (3,2) with wrong I=999 (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -119,3 +120,13 @@ convention consistent with [140]/[207] (not [125]'s absolute-value
 exception — see that cross-cert audit earlier this cycle). The validator
 (`qa_pell_norm_cert_validate.py`) already genuinely recomputes x, y, P,
 I, and the M_B chain live, no fixture-trusting gap.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). This validator has a
+`result=="FAIL"` short-circuit branch, but no `print()` inside it — no
+print-corruption bug risk (though, like [144], it means the new
+falsifier must declare `"result":"PASS"` internally so the real checks
+actually execute). Added `fixtures/pn_fail_bad_identity.json` with two
+independent planted defects (a Pell-chain entry with wrong declared
+pell_norm/I/type; a witness with wrong I=999) and wired it into
+`_self_test()`; verified `PN_IDEN` genuinely catches both.

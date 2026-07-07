@@ -14197,7 +14197,7 @@ FAMILY_SWEEPS = [
      "qa_klein4_harmonics_cert_v1", True),
     (141, "QA Pell Norm Cert family",
      _validate_pell_norm_cert_family,
-     "I=C-F=-(x²-2y²) where x=d-e, y=e: discriminant = negated Pell norm P(x,y)=x²-2y²; Pell boundary P=±1→|I|=1 (minimum nonzero); M_B(d,e)=(2d+e,d) = Pell-sign-flip in (x,y) space; M_B chain from (2,1) generates full Pell solution sequence alternating H/E (RE-VERIFIED 2026-07-06, confirmed clean); checks PN_1-3+IDEN/MB/W/F; 2 PASS; self-test ok",
+     "I=C-F=-(x²-2y²) where x=d-e, y=e: discriminant = negated Pell norm P(x,y)=x²-2y²; Pell boundary P=±1→|I|=1 (minimum nonzero); M_B(d,e)=(2d+e,d) = Pell-sign-flip in (x,y) space; M_B chain from (2,1) generates full Pell solution sequence alternating H/E (RE-VERIFIED 2026-07-06, confirmed clean); checks PN_1-3+IDEN/MB/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added pn_fail_bad_identity.json (wrong declared pell_norm/I/type on a chain entry + wrong witness I=999); result=='PASS' internally by design since result=='FAIL' short-circuits checking in this validator.",
      "141_qa_pell_norm_cert",
      "qa_pell_norm_cert_v1", True),
     (140, "QA Conic Discriminant Cert family",

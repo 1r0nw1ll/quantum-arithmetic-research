@@ -7,12 +7,24 @@ Strict validator for QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.
 Validation levels:
 - Level 1 (Schema): required fields and shape checks
 - Level 2 (Consistency): invariant and replay consistency checks
-- Level 3 (Recompute): deterministic trace replay checks
+- Level 3 (Recompute): genuine curve-equation replay -- for each step,
+  recomputes v_in = sqrt_branch(u_in^3+u_in, sheet_in), the driver
+  v_out = v_in^2+v_in, and checks |v_out^2 - (u_out^3+u_out)| is small
+  (hardened 2026-07-06 -- previously this level only checked that the
+  transition_trace list was non-empty, never verifying the mathematical
+  claim; the shipped demo/reference certificate's trace turned out not
+  to satisfy the curve equation at all -- residual ~1.56 on a step
+  declaring curve_residual_abs="0" -- undetected until this fix)
+
+Primary source: curve v^2=u^3+u (Weierstrass form, CM by Z[i]); driver
+map v->v^2+v is the correspondence's defining recurrence per
+QA_MAP__ELLIPTIC_CORRESPONDENCE.yaml.
 """
 
 from __future__ import annotations
 
 import argparse
+import cmath
 import hashlib
 import json
 import sys
@@ -579,6 +591,18 @@ class EllipticCorrespondenceValidator:
                 "trace continuity and determinism checks passed",
             )
 
+    @staticmethod
+    def _curve_rhs(u: complex) -> complex:
+        return u**3 + u
+
+    @staticmethod
+    def _sqrt_branch(val: complex, sheet: str) -> complex:
+        r = cmath.sqrt(val)
+        return r if sheet == "plus" else -r
+
+    def _to_complex(self, re_val: Any, im_val: Any) -> complex:
+        return complex(float(self._parse_scalar(re_val)), float(self._parse_scalar(im_val)))
+
     def validate_recompute(self, cert: Dict[str, Any]) -> None:
         if not cert.get("success", True):
             self._add_result(
@@ -591,20 +615,87 @@ class EllipticCorrespondenceValidator:
 
         recomp = cert.get("recompute_inputs", {})
         trace = recomp.get("transition_trace", []) if isinstance(recomp, dict) else []
-        if isinstance(trace, list) and trace:
-            self._add_result(
-                "recompute.trace_hash",
-                ValidationLevel.RECOMPUTE,
-                ValidationStatus.PASSED,
-                "recompute trace is present for independent replay",
-            )
-        else:
+        if not (isinstance(trace, list) and trace):
             self._add_result(
                 "recompute.trace_hash",
                 ValidationLevel.RECOMPUTE,
                 ValidationStatus.FAILED,
                 "missing transition trace for recompute",
             )
+            return
+
+        self._add_result(
+            "recompute.trace_hash",
+            ValidationLevel.RECOMPUTE,
+            ValidationStatus.PASSED,
+            "recompute trace is present for independent replay",
+        )
+
+        # Genuinely recompute each step's curve satisfaction: apply the
+        # driver v_out = v_in^2+v_in to v_in derived from u_in via the
+        # declared sheet, and check the result actually lands on
+        # u_out^3+u_out -- not just that a curve_residual_abs field was
+        # declared as small.
+        EPS = 1e-6
+        for i, step in enumerate(trace, start=1):
+            if not isinstance(step, dict):
+                continue
+            try:
+                u_in = self._to_complex(step.get("u_in_re"), step.get("u_in_im"))
+                u_out = self._to_complex(step.get("u_out_re"), step.get("u_out_im"))
+                sheet_in = step.get("sheet_in")
+            except Exception as e:
+                self._add_result(
+                    f"recompute.step.{i}.parse",
+                    ValidationLevel.RECOMPUTE,
+                    ValidationStatus.FAILED,
+                    f"could not parse step scalars: {e}",
+                )
+                continue
+
+            if step.get("status") != "ok":
+                continue
+
+            v_in = self._sqrt_branch(self._curve_rhs(u_in), sheet_in)
+            v_out = v_in * v_in + v_in
+            actual_residual = abs(v_out * v_out - self._curve_rhs(u_out))
+
+            if actual_residual > EPS:
+                self._add_result(
+                    f"recompute.step.{i}.curve_replay",
+                    ValidationLevel.RECOMPUTE,
+                    ValidationStatus.FAILED,
+                    f"step {i} does not satisfy the curve equation under the driver "
+                    f"map: |v_out^2 - (u_out^3+u_out)| = {actual_residual:.6g}, "
+                    f"expected < {EPS:.0e}",
+                    {"u_in": str(u_in), "u_out": str(u_out), "actual_residual": actual_residual},
+                )
+            else:
+                self._add_result(
+                    f"recompute.step.{i}.curve_replay",
+                    ValidationLevel.RECOMPUTE,
+                    ValidationStatus.PASSED,
+                    f"step {i} genuinely satisfies the curve equation (residual={actual_residual:.3e})",
+                )
+
+            declared_residual_raw = step.get("curve_residual_abs")
+            try:
+                declared_residual = float(self._parse_scalar(declared_residual_raw))
+                if abs(declared_residual - actual_residual) > max(EPS, 10 * actual_residual):
+                    self._add_result(
+                        f"recompute.step.{i}.residual_honesty",
+                        ValidationLevel.RECOMPUTE,
+                        ValidationStatus.FAILED,
+                        f"declared curve_residual_abs={declared_residual_raw!r} does not match "
+                        f"genuinely recomputed residual={actual_residual:.6g}",
+                    )
+            except Exception as e:
+                self._add_result(
+                    f"recompute.step.{i}.residual_honesty",
+                    ValidationLevel.RECOMPUTE,
+                    ValidationStatus.FAILED,
+                    f"could not parse declared curve_residual_abs: {e}",
+                )
 
     def failed_count(self) -> int:
         return sum(1 for r in self.results if r.status == ValidationStatus.FAILED)

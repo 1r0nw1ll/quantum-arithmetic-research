@@ -1532,6 +1532,18 @@ def _validate_elliptic_bundle_if_present(base_dir: str) -> Optional[str]:
     """
     Run elliptic-correspondence bundle validator if the bundle file exists.
 
+    Hardened 2026-07-06: previously this only checked file-hash integrity
+    of the bundle manifest (that artifact files hadn't changed since the
+    bundle was last emitted) -- it never actually invoked
+    qa_elliptic_correspondence_validator_v3.py's schema/consistency/
+    recompute checks on the certificate content, so a mathematically
+    broken certificate (unchanged since last emit) would pass forever.
+    Confirmed this was live: the shipped demo certificate's transition
+    trace did not satisfy the curve equation at all (residual ~1.56 on a
+    step declaring curve_residual_abs="0"), fixed in the same commit.
+    Now also runs the real Level 1-3 validator against the reference
+    success and failure certificates.
+
     Returns:
         None on success,
         skip reason string if bundle is missing.
@@ -1545,6 +1557,32 @@ def _validate_elliptic_bundle_if_present(base_dir: str) -> Optional[str]:
         errors = result.get("errors", [])
         head = "; ".join(errors[:3]) if errors else "unknown elliptic correspondence bundle validation error"
         raise RuntimeError(head)
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_elliptic_correspondence_validator_v3 import (
+        EllipticCorrespondenceValidator,
+        ValidationLevel,
+    )
+
+    for rel_path in (
+        "certs/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.json",
+        "examples/elliptic_correspondence/elliptic_correspondence_ramification_failure.json",
+    ):
+        abs_path = os.path.join(base_dir, rel_path)
+        with open(abs_path) as f:
+            cert = json.load(f)
+        report = EllipticCorrespondenceValidator(strict=True).validate(
+            cert, level=ValidationLevel.RECOMPUTE
+        )
+        if not report.all_passed:
+            failures = [
+                f"{r.check_name}: {r.message}"
+                for r in report.results
+                if r.status.value == "failed"
+            ]
+            raise RuntimeError(f"{rel_path}: {'; '.join(failures[:5])}")
+
     return None
 
 
@@ -13619,7 +13657,11 @@ FAMILY_SWEEPS = [
      "bundle + metrics recompute + fixtures", "26_competency_detection", ".", False),
     (27, "QA Elliptic Correspondence bundle",
      _validate_elliptic_bundle_if_present,
-     "bundle manifest verified", "27_elliptic_correspondence", ".", False),
+     "bundle manifest verified + genuine Level 1-3 validator recompute (hardened 2026-07-06 -- "
+     "previously only file-hash integrity was checked; the shipped demo trace did not satisfy "
+     "v^2=u^3+u under the driver map at all, residual ~1.56 vs declared exact 0; fixed with a "
+     "genuinely computed 2-step trace and a real curve-replay check in validator_v3.py)",
+     "27_elliptic_correspondence", ".", False),
     (28, "QA Graph Structure bundle",
      _validate_graph_structure_bundle_if_present,
      "bundle manifest verified", "28_graph_structure", ".", False),

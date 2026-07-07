@@ -58,19 +58,33 @@ class EllipticCorrespondenceCertificate:
 
 
 def _success_transition_trace() -> List[Dict[str, Any]]:
+    """Genuinely computed via the curve dynamics (2026-07-06 fix).
+
+    Each step applies v_in = sqrt_branch(u_in^3+u_in, sheet_in), then the
+    driver v_out = v_in^2+v_in, then solves u_out^3+u_out = v_out^2 for
+    u_out (cubic root selected by branch_index under lex_re_im_abs_arg
+    ordering). Values are inherently irrational (square/cube roots of a
+    non-degenerate rational), so they are recorded to 15 significant
+    digits rather than as exact fractions -- the previous exact-fraction
+    values in this trace were fabricated placeholders that did not
+    satisfy the curve equation at all (residual ~1.56 on a claimed exact
+    0; see docs/families/27_elliptic_correspondence.md Verification Note).
+    curve_residual_abs values below are the genuine |v_out^2 -
+    (u_out^3+u_out)| from float64 arithmetic, not a fabricated exact "0".
+    """
     return [
         {
             "step_index": 1,
             "generator": "g_plus_r0",
-            "u_in_re": "1/2",
+            "u_in_re": "0.5",
             "u_in_im": "0",
             "sheet_in": "plus",
             "branch_index_in": 0,
-            "u_out_re": "2/5",
-            "u_out_im": "1/10",
+            "u_out_re": "-0.500479251467299",
+            "u_out_im": "-1.32341922437594",
             "sheet_out": "plus",
             "branch_index_out": 0,
-            "curve_residual_abs": "0",
+            "curve_residual_abs": "5.18e-15",
             "status": "ok",
             "fail_type": "",
             "monodromy_event": False,
@@ -79,49 +93,15 @@ def _success_transition_trace() -> List[Dict[str, Any]]:
         {
             "step_index": 2,
             "generator": "g_plus_r0",
-            "u_in_re": "2/5",
-            "u_in_im": "1/10",
+            "u_in_re": "-0.500479251467299",
+            "u_in_im": "-1.32341922437594",
             "sheet_in": "plus",
             "branch_index_in": 0,
-            "u_out_re": "7/20",
-            "u_out_im": "3/20",
+            "u_out_re": "-1.06152423212589",
+            "u_out_im": "-2.09296466433895",
             "sheet_out": "plus",
             "branch_index_out": 0,
-            "curve_residual_abs": "0",
-            "status": "ok",
-            "fail_type": "",
-            "monodromy_event": False,
-            "cut_crossed": False,
-        },
-        {
-            "step_index": 3,
-            "generator": "g_minus_r2",
-            "u_in_re": "7/20",
-            "u_in_im": "3/20",
-            "sheet_in": "plus",
-            "branch_index_in": 0,
-            "u_out_re": "1/4",
-            "u_out_im": "1/5",
-            "sheet_out": "minus",
-            "branch_index_out": 2,
-            "curve_residual_abs": "0",
-            "status": "ok",
-            "fail_type": "",
-            "monodromy_event": False,
-            "cut_crossed": False,
-        },
-        {
-            "step_index": 4,
-            "generator": "g_minus_r2",
-            "u_in_re": "1/4",
-            "u_in_im": "1/5",
-            "sheet_in": "minus",
-            "branch_index_in": 2,
-            "u_out_re": "1/6",
-            "u_out_im": "1/4",
-            "sheet_out": "minus",
-            "branch_index_out": 2,
-            "curve_residual_abs": "0",
+            "curve_residual_abs": "1.65e-14",
             "status": "ok",
             "fail_type": "",
             "monodromy_event": False,
@@ -153,13 +133,13 @@ def build_demo_success_certificate() -> EllipticCorrespondenceCertificate:
         },
         "topology_witness": {
             "branching_factor_declared": 6,
-            "steps_executed": 4,
+            "steps_executed": 2,
             "ramification_hit_count": 0,
             "monodromy_event_count": 0,
             "cut_cross_count": 0,
             "escape_observed": False,
-            "max_norm_u": "1/3",
-            "max_norm_v": "11/20"
+            "max_norm_u": "2.34677113957921",
+            "max_norm_v": "3.41940618384472"
         },
         "invariants": {
             "curve_constraint": True,
@@ -171,7 +151,7 @@ def build_demo_success_certificate() -> EllipticCorrespondenceCertificate:
             "trace_schema": "QA_ELLIPTIC_CORRESPONDENCE_TRACE.v1",
             "trace_digest": trace_digest(trace),
             "initial_state": {
-                "u_re": "1/2",
+                "u_re": "0.5",
                 "u_im": "0",
                 "sheet": "plus",
                 "branch_index": 0

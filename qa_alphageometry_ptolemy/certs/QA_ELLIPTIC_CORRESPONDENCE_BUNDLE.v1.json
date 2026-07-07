@@ -14,23 +14,23 @@
       "sha256": "45a5f12573aeaab1bdce20c5929dfc0223e27f99ddb25b166bfb9fa3fe3e8c35"
     },
     "elliptic_cert": {
-      "canonical_sha256": "93f3db3a7c21a7472986715defc9ec1247651ad36abfdd35f205908635cbd01d",
+      "canonical_sha256": "12c36f14aa338786f5e0f59d0c30401a23630ab48a520a9685434daede6d33f2",
       "file": "certs/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.json",
       "id": "elliptic_cert",
       "kind": "json_cert",
-      "sha256": "571b604a0cc3f29ec35aa09f68f3410a365b8c67eb1c9bf44fb56f69d5cbed08"
+      "sha256": "60adfdd648e6a9b701af6cf6a2b7d6688a5d22c79c04a15e99d5d06e4143e25c"
     },
     "elliptic_cert_sha256": {
       "file": "certs/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.sha256",
       "id": "elliptic_cert_sha256",
       "kind": "hash_sidecar",
-      "sha256": "75a876e657474d1f6b056350786132900f9f20d418a8050ac95d53ef6d6973a7"
+      "sha256": "ba99679e41e2cf6a6930c905bb966a62a00a81c58b035fb7cee8f83133f5c536"
     },
     "elliptic_certificate_module": {
       "file": "qa_elliptic_correspondence_certificate.py",
       "id": "elliptic_certificate_module",
       "kind": "source_py",
-      "sha256": "4cd99475b2dc33cf16858761dea9264979fec2e5bc36391a57909ee7f4f76726"
+      "sha256": "246c2e87c20e42b6fece80e7ee2c2614925e109a8fc50772f7c51d85f5045b62"
     },
     "elliptic_failure_example": {
       "canonical_sha256": "853573ddc581e01dc45a1110c379d10b4df9c0bbdb3c8a5147c4787a837a7291",
@@ -46,34 +46,34 @@
       "sha256": "a873875a94f23d42efe544638d4abaaadd469aa8263e75348600d28f1ce50d48"
     },
     "elliptic_schema": {
-      "canonical_sha256": "b3d4780fef8ec3338d2c2245942555a1240ab99be2cbd713501bcf8089771123",
+      "canonical_sha256": "bbffcfded69c4ca356a74af0d7a96278ab32f718da29a9aa0385ba3e414fbe94",
       "file": "schemas/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.schema.json",
       "id": "elliptic_schema",
       "kind": "json_schema",
-      "sha256": "6e3656857451034c9bbe2b442932e26f39c604dc7b4265c9daf51fa29bc984bf"
+      "sha256": "15497ad469feeee2b9d9d428da1062aaaea582061791c75022ebfe38b678bd9a"
     },
     "elliptic_success_example": {
-      "canonical_sha256": "93f3db3a7c21a7472986715defc9ec1247651ad36abfdd35f205908635cbd01d",
+      "canonical_sha256": "12c36f14aa338786f5e0f59d0c30401a23630ab48a520a9685434daede6d33f2",
       "file": "examples/elliptic_correspondence/elliptic_correspondence_success.json",
       "id": "elliptic_success_example",
       "kind": "json_example",
-      "sha256": "571b604a0cc3f29ec35aa09f68f3410a365b8c67eb1c9bf44fb56f69d5cbed08"
+      "sha256": "60adfdd648e6a9b701af6cf6a2b7d6688a5d22c79c04a15e99d5d06e4143e25c"
     },
     "elliptic_validator": {
       "file": "qa_elliptic_correspondence_validator_v3.py",
       "id": "elliptic_validator",
       "kind": "source_py",
-      "sha256": "ad6a80a99a1444d43966164bf866053f7fb92c65730e35fd6e150aab571878c1"
+      "sha256": "3708a2d865bec5bd12d2a5d9a6617559bdcd66c8300c7465b1d4913d05c43926"
     }
   },
   "bundle_id": "qa.bundle.elliptic_correspondence.v1",
   "emitted_cert": {
     "cert_id": "elliptic_correspondence_demo_001",
     "cert_path": "certs/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.json",
-    "cert_sha256": "571b604a0cc3f29ec35aa09f68f3410a365b8c67eb1c9bf44fb56f69d5cbed08",
+    "cert_sha256": "60adfdd648e6a9b701af6cf6a2b7d6688a5d22c79c04a15e99d5d06e4143e25c",
     "sha256_sidecar_path": "certs/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.sha256"
   },
-  "generated_utc": "2026-02-10T00:44:22Z",
+  "generated_utc": "2026-07-07T01:54:44Z",
   "hash_spec": {
     "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)",
     "canonical_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
@@ -84,7 +84,7 @@
   },
   "manifest": {
     "hash_alg": "sha256",
-    "manifest_sha256": "ece6c28006548dda8730b944bfcc3c0d530bd6b08d817d6bda9054bbe3d17ca3"
+    "manifest_sha256": "be1ca5b9fd77a9364f4eddd9bcd7add59ebbe8e264075b3a939fa224b922595d"
   },
   "schema_id": "QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1",
   "version": 1

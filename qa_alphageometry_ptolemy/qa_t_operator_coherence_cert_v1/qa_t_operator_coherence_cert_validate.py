@@ -131,6 +131,7 @@ def self_test():
     expected = {
         "tc_pass_finance_hardened.json": True,
         "tc_pass_cross_domain.json": True,
+        "tc_fail_hardened_no_caveats.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

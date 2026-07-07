@@ -73,6 +73,7 @@ Low QCI = system departing from QA-predicted dynamics = loss of structural coher
 
 - `fixtures/tc_pass_finance_hardened.json` — full finance Tier A result with OOS, partial corr, robustness, permutation
 - `fixtures/tc_pass_cross_domain.json` — three-domain evidence (finance + EEG + audio)
+- `fixtures/tc_fail_hardened_no_caveats.json` — Falsifier: a "Tier A hardened" finance witness with no `reproducibility_caveats` field, plus a non-significant partial correlation p=0.4 (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -140,3 +141,13 @@ files are PASS), unlike every other cert family in this project's
 `qa_alphageometry_ptolemy/` — not fixed in this pass, but worth adding a
 FAIL fixture (e.g. missing `reproducibility_caveats` on a hardened
 witness, which would now be caught by `TC_REPRO`) in a future visit.
+
+**Follow-up (2026-07-07)**: did exactly the follow-up flagged above.
+Added `fixtures/tc_fail_hardened_no_caveats.json` with two independent
+planted defects — a finance witness declaring `"status": "Tier A
+hardened"` with no `reproducibility_caveats` field (the exact stale-cert
+gap `TC_REPRO` exists to catch), plus a non-significant partial
+correlation (`p=0.4`) to independently trip `TC_PARTIAL` — and wired it
+into `self_test()`. Verified both checks genuinely catch their
+respective defects. No `result=="FAIL"` short-circuit exists in this
+validator (no print-corruption bug risk).

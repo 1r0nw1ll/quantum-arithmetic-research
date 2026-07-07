@@ -14132,7 +14132,7 @@ FAMILY_SWEEPS = [
      "qa_observer_core_cert_v1", True),
     (154, "QA T-Operator Coherence Cert family",
      _validate_t_operator_coherence_cert_family,
-     "QCI = rolling T-operator prediction accuracy; finance partial r=-0.22 beyond RV (Tier A hardened, RE-VERIFIED 2026-07-06: sign flips on independent public-data replication, superseded by [209] per most recent finance audit -- caveats now required via TC_REPRO); 84% robustness grid; cross-domain: EEG dR²=+0.21, audio r=+0.75; checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F/REPRO; 2 PASS; self-test ok",
+     "QCI = rolling T-operator prediction accuracy; finance partial r=-0.22 beyond RV (Tier A hardened, RE-VERIFIED 2026-07-06: sign flips on independent public-data replication, superseded by [209] per most recent finance audit -- caveats now required via TC_REPRO); 84% robustness grid; cross-domain: EEG dR²=+0.21, audio r=+0.75; checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F/REPRO; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added tc_fail_hardened_no_caveats.json (hardened witness missing reproducibility_caveats + non-significant partial p=0.4), confirmed no print-corruption bug present.",
      "154_qa_t_operator_coherence_cert",
      "qa_t_operator_coherence_cert_v1", True),
     (153, "QA Keely Triune Cert family",

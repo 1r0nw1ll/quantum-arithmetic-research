@@ -109,3 +109,14 @@ The threshold is at b/e = √2 ≈ 1.414. Since b and e are integers and b is od
 "Circle," "area," "orbit," "ellipse" in Iverson's text are observer projection labels (measurements in continuous space). The algebraic identities C1-C5 are consequences of discrete modular arithmetic on bead values, not geometric properties.
 
 **Depends on**: [360] Prime Triangle Structure (G is 5-par); [361] Primeness Parity Shape (H,I odd, no factor <7); [137] Koenig Twisted Squares (H²−G²=G²−I²=2CF); [338] Gnomon Square (F=d²−e²); [355] Formal Proofs (C divisible by 4)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims over
+369 primitive pairs: the three arithmetic-mean trios (2d=b+a, 2D=F+G,
+H²+I²=2G²); 2D+2E=A+B; pairwise coprimality of I, G, H (over 512
+pairs); J+K=C+2J=2D; and F-C=b²-2e² exactly, including the doc's own
+correction of Iverson's imprecise "b>e implies F>C" claim (independently
+confirmed the b=5,e=4 counterexample: b²=25<32=2e², so C>F despite b>e).
+The validator (`qa_pyth1_internal_relationships_cert_validate.py`) is
+genuinely computed, no fixture-trusting gap.

@@ -104,3 +104,16 @@ Verified for all 512 prime pairs (b,e)≤35.
 The continuous-coordinate ellipse picture (Fig.7, Fig.8) is an observer projection of the discrete quantum group (b,e,d,a) → (C,D,E,F,G,J,K). Theorem NT is satisfied: the bead arithmetic causes the ellipse structure, not the reverse.
 
 **Depends on**: [360] Prime Triangle Structure; [362] Internal Relationships (J+K=2D identity); [363] External Relationships (J,K,C,D relationships)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims over
+512 primitive pairs: 2D=J+K=F+G=C+2J; K-J=C and K+J=2D; the semiminor²=DF
+identity, including the exact "20 perfect-square-F cases up to
+(b,e)≤100" and all three worked examples (semiminor=15, 65, 175 for
+F=9,25,49); the exact-Fraction eccentricity 2D/C=d/e (always >1); and
+J·K=DF with K/J=a/b. The validator
+(`qa_pyth1_ellipse_archimedes_cert_validate.py`) correctly uses
+`fractions.Fraction` for the exact rational eccentricity (S2-compliant,
+no float state) and is genuinely computed throughout, no
+fixture-trusting gap.

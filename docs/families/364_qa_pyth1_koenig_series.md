@@ -117,3 +117,17 @@ This illustrates the QA refinement of primeness: the Koenig series encounters pr
 The "Tree of Life" metaphor (branching from the (1,1) root into b=1 and e=1 branches, then subdividing) describes structure in the table of prime pairs. The algebraic claims C1-C5 are the discrete, falsifiable content; the geometric imagery is interpretive.
 
 **Depends on**: [360] Prime Triangle Structure; [361] Primeness Parity Shape (H,I odd); [362] Internal Relationships (A+B=2G chain); [363] External Relationships (2-par exclusion)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims: A+B=2G
+exact; the b=1 Koenig branch I(1,e)=2e²-1 exact (sequence
+1,7,17,31,49,...); the e=1 branch I(b,1)=b²-2 exact (sequence
+1,7,23,47,79,119,...); the quadratic-residue prime-exclusion rule (no
+prime ≡3 or 5 mod 8 ever appears as an H/I value, verified for all
+primes <200 across pairs (b,e)≤50) — independently re-derived the
+underlying number theory fact (2 is a QR mod p iff p≡±1 mod 8, a
+standard consequence of the second supplement to quadratic
+reciprocity); and 49=7² as the first QA-functionally-prime composite in
+the b=1 branch. The validator (`qa_pyth1_koenig_series_cert_validate.py`)
+is genuinely computed, no fixture-trusting gap.

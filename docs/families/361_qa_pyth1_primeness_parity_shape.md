@@ -104,3 +104,15 @@ Distribution across 268 prime pairs with b,e≤25: 131 have F 5-par, 137 have F 
 
 **Depends on**: [360] Prime Triangle Structure (G is 5-par; a always odd); [355] Formal Proofs (C is 4-par; d,e opposite parity); [338] Gnomon Square (F=d²-e²); [359] Nightside Energy (3-par/5-par arithmetic)  
 **Key invariant**: the prime exclusions 2,3,5 from G and 2,3,5 from H,I are both driven by modular arithmetic — 2 is not a QR mod 3 or mod 5, which is a fundamental property of the quadratic residue structure of these primes
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims: C=2be+2e²
+and C²=4E²+4EF exact; F²=G²-C² and F=d²-e² exact; G's minimum prime
+factor is exactly 5 across 512 pairs (b,e≤35); H and I's minimum prime
+factor is exactly 7 across the same range; F's par-class split (131
+5-par / 137 3-par across 268 pairs) matches the doc precisely.
+Independently confirmed the underlying quadratic-residue fact (2 is not
+a QR mod 3 — QRs are {0,1} — nor mod 5 — QRs are {0,1,4}). The validator
+(`qa_pyth1_primeness_parity_shape_cert_validate.py`) is genuinely
+computed, no fixture-trusting gap.

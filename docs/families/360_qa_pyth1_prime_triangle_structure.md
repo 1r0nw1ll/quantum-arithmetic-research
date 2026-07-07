@@ -94,3 +94,13 @@ Note: bead numbers do NOT always divide L. For (b=1,e=1,d=2,a=3): L=1, a=3 → 3
 
 **Depends on**: [355] Formal Proofs (parity of d,e; C always 4-par); [337] J,K Parameters (J=bd, K=ad)  
 **Extends**: the 5-par class is the identity element of the {3-par, 5-par} multiplication group (from cert [359]); the fact that A, B, G are all 5-par means they are "identity-class" elements in this group structure
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims over 268
+primitive pairs: G≡1 mod 4 always; G+C=A, G-C=B, A+B=2G, A-B=2C exact
+(including the 3-4-5 spot check); a always odd; the common-factor
+structure (a|{A,F,K}, b|{B,F,J}, d|{C,D,J,K}, e|{C,E}); and the par-class
+summary (A,B,G always 5-par, C always 4-par, F varying). The validator
+(`qa_pyth1_prime_triangle_structure_cert_validate.py`) is genuinely
+computed, no fixture-trusting gap.

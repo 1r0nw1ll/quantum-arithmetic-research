@@ -108,3 +108,14 @@ Iverson's statement "b-blocks down each column" means: in Table 3, moving from r
 "Ellipse," "apogee," "perigee," "circumscribe," "orbit of electron" in Iverson's text are observer projections of the underlying discrete arithmetic. The algebraic identities C1-C5 are purely about bead arithmetic — integer differences, squares, and congruences — not geometric constructions.
 
 **Depends on**: [360] Prime Triangle Structure; [361] Primeness Parity Shape (C≡0 mod 4; H,I odd); [353] External Table Laws (G-F and G-C step patterns); [359] Nightside Energy (2-par/3-par/4-par/5-par classification)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims over
+369 primitive pairs: the column/row step formulas (F step=2b, C
+step=4e); G-F=2E and G-C=B as structural constants; the A-B and D-E
+"migration" identities; and the complete 2-par exclusion from
+{A,B,C,D,E,F,G,H,I} (verified over 512 pairs, with 2-par confirmed
+present in d/J/K/e as the doc claims). The validator
+(`qa_pyth1_external_relationships_cert_validate.py`) is genuinely
+computed, no fixture-trusting gap.

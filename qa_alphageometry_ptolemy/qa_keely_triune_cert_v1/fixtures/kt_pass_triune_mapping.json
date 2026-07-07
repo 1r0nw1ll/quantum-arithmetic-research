@@ -5,7 +5,9 @@
   "title": "Keely Triune PASS: SVP triune modes mapped to QA orbits with structural verification",
   "created_utc": "2026-03-31T00:00:00Z",
 
-  "_fixture_purpose": "Certifies the mapping between Keely's three vibratory modes (from svpwiki.com) and QA's three orbit types. DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded/material=8-cycle), HARMONIC=COSMOS (expansive/celestial=24-cycle). Verifies: three orbits partition mod-9 state space, periods 1/8/24, {0,3,6}=singularity residues, LCM(1,8,24)=24. Source: Keely via Dale Pond SVP; Iverson QA orbit theory.",
+  "_fixture_purpose": "Certifies the mapping between Keely's three vibratory modes (from svpwiki.com) and QA's three orbit types. DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded/material=8-cycle), HARMONIC=COSMOS (expansive/celestial=24-cycle). Verifies: three orbits partition mod-9 state space, periods 1/8/24, {3,6,9}=singularity residues (corrected 2026-07-06, A1 no-zero convention), LCM(1,8,24)=24. Source: Keely via Dale Pond SVP; Iverson QA orbit theory.",
+
+  "source_grounding": "Keely's Triune modes documented on svpwiki.com (Pond, 2004). QA mod-9 orbit partition per Iverson's arithmetic (Iverson, 1991).",
 
   "modulus": 9,
 
@@ -31,7 +33,7 @@
     "COSMOS": 24
   },
 
-  "singularity_residues_mod9": [0, 3, 6],
+  "singularity_residues_mod9": [3, 6, 9],
   "orbit_lcm": 24,
 
   "witnesses": [
@@ -68,7 +70,7 @@
     {"check_id": "KT_MAP",   "description": "triune→orbit mapping verified", "passed": true},
     {"check_id": "KT_PART",  "description": "1+8+72=81=9² partition verified", "passed": true},
     {"check_id": "KT_PERIOD","description": "periods 1,8,24 verified", "passed": true},
-    {"check_id": "KT_369",   "description": "{0,3,6}=singularity residues", "passed": true},
+    {"check_id": "KT_369",   "description": "{3,6,9}=singularity residues", "passed": true},
     {"check_id": "KT_LCM",   "description": "LCM(1,8,24)=24", "passed": true},
     {"check_id": "KT_W",     "description": "3 witnesses (one per triune mode)", "passed": true}
   ],

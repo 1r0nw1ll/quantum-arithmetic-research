@@ -36,7 +36,7 @@ Total: 1 + 8 + 72 = 81 = 9² (complete partition).
 
 - **Partition**: three orbits partition the full mod-9 state space (no overlap)
 - **LCM(1,8,24) = 24**: the cosmos period subsumes both smaller periods
-- **{0,3,6} mod 9 = singularity residues**: multiples of 3 = the DOMINANT triune numbers
+- **{3,6,9} mod 9 = singularity residues** (corrected 2026-07-06, A1 no-zero convention): multiples of 3 = the DOMINANT triune numbers
 - **Tesla 3-6-9**: "If you only knew the magnificence of 3, 6, and 9" — these ARE the singularity/dominant residues in QA mod-9
 
 ### Brinton's three Laws of Being
@@ -80,3 +80,35 @@ Professor Daniel Brinton derived three laws from Keely's Triune:
 
 - `fixtures/kt_pass_triune_mapping.json` — full mapping + partition + periods + {3,6,9} + Tesla note
 - `fixtures/kt_pass_brinton_laws.json` — Brinton's three Laws of Being mapped to orbit dynamics
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed the partition (1+8+72=81=9²), orbit periods
+(1,8,24), and LCM(1,8,24)=24 — all correct. The Keely-quote provenance
+(svpwiki.com sources, the "Vibes" AI-tool caveat) was already audited
+2026-07-04 (see the existing "Audit note" in Source grounding above);
+not re-litigated here.
+
+**Found and fixed the same A1 no-zero bug already found in [150]/[192]**:
+both fixtures declared `singularity_residues_mod9: [0,3,6]`, and the
+validator's own `SINGULARITY_RESIDUES` constant was `frozenset({0,3,6})`
+— even though the *same validator's own docstring* already correctly
+stated "{3,6,9} mod 9 = triune numbers," and one fixture's own
+`tesla_369_note` already correctly wrote "{3,6,9≡0}". Fixed the constant
+and both fixtures to `{3,6,9}`, matching this project's A1 no-zero
+convention (QA states are {1,...,9}, never {0,...,8}) and every other
+cert's singularity representation. Verified the hardened check rejects
+a reintroduced `[0,3,6]`.
+
+**Found and fixed a second, independent bug in `kt_pass_brinton_laws.json`**:
+a witness claimed "three primes {2,3,5} always present in QA QN products
+(all products divisible by 6=2×3)" — self-contradictory (6=2×3 has no
+factor of 5!) and factually wrong: exhaustively checked 156 primitive
+`(b,e)` pairs and found 58 with products *not* divisible by 5, including
+the fundamental `(1,1,2,3)` itself (product=6, not divisible by 5). Only
+2 and 3 are guaranteed factors (matching the correctly-established "QN
+products divisible by 6" fact from [137]/[147]/[148], not "by 30"). This
+claim wasn't checked by any validator field (free-text witness). Fixed
+to state the correct, narrower claim.
+
+`--self-test` passes on both fixtures after all fixes.

@@ -29,6 +29,11 @@ Checks: KT_1 (schema), KT_MAP (triune↔orbit mapping declared correctly),
 KT_PART (three orbits partition state space), KT_PERIOD (periods 1,8,24),
 KT_369 ({3,6,9}=singularity residues), KT_LCM (LCM(1,8,24)=24),
 KT_W (>=3 witnesses), KT_F (mod-9 fundamental present).
+
+Primary source: Dale Pond (svpwiki.com), "Triune" and "Triune States of
+Matter and Energy" -- Keely's Enharmonic/Dominant/Harmonic vibratory
+modes. QA orbit structure per Ben Iverson (mod-9 singularity/satellite/
+cosmos partition).
 """
 
 import json
@@ -47,7 +52,7 @@ CANONICAL_MAP = {
     "HARMONIC": "COSMOS",
 }
 ORBIT_PERIODS = {"SINGULARITY": 1, "SATELLITE": 8, "COSMOS": 24}
-SINGULARITY_RESIDUES = frozenset({0, 3, 6})  # mod 9
+SINGULARITY_RESIDUES = frozenset({3, 6, 9})  # A1 no-zero: mod-9 residue 0 is state 9
 
 
 def lcm(a, b):

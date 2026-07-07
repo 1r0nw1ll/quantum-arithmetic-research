@@ -5,7 +5,9 @@
   "title": "Keely Triune PASS: Brinton's three Laws of Being mapped to QA orbit dynamics",
   "created_utc": "2026-03-31T00:00:00Z",
 
-  "_fixture_purpose": "Maps Professor Daniel Brinton's three Laws of Being (derived from Keely's Triune) to QA orbit dynamics. Law of Assimilation = cosmos (expansion/syntropy), Law of Individualization = satellite (contraction/entropy), Law of the Dominant = singularity (neutral balance). The three primes (2,3,5) that Ramsay identifies as generating all harmony = the first three primes always present in QA bead numbers.",
+  "_fixture_purpose": "Maps Professor Daniel Brinton's three Laws of Being (derived from Keely's Triune) to QA orbit dynamics. Law of Assimilation = cosmos (expansion/syntropy), Law of Individualization = satellite (contraction/entropy), Law of the Dominant = singularity (neutral balance). Ramsay's musical claim about primes 2,3,5 generating harmony is presented alongside the QA fact (corrected 2026-07-06): QN products are always divisible by 6=2x3, NOT by 30=2x3x5 -- e.g. the fundamental (1,1,2,3) has product 6, not divisible by 5. Only 2 and 3 are guaranteed factors.",
+
+  "source_grounding": "Keely's Triune modes documented on svpwiki.com (Pond, 2004). QA mod-9 orbit partition per Iverson's arithmetic (Iverson, 1991).",
 
   "modulus": 9,
 
@@ -30,7 +32,7 @@
     "COSMOS": 24
   },
 
-  "singularity_residues_mod9": [0, 3, 6],
+  "singularity_residues_mod9": [3, 6, 9],
   "orbit_lcm": 24,
 
   "witnesses": [
@@ -60,7 +62,7 @@
       "orbit": "COSMOS",
       "brinton_law": null,
       "svp_property": "Ramsay: 'number 3 is creative power in music, producing fifths'",
-      "qa_property": "three primes {2,3,5} always present in QA QN products (all products divisible by 6=2×3)"
+      "qa_property": "Corrected 2026-07-06: QA QN products are always divisible by 6=2x3 (verified: among {b,e,d,a}, at least one is even and at least one is divisible by 3), NOT by 5 -- e.g. fundamental (1,1,2,3) has product 6, not divisible by 5. Only primes 2 and 3 are guaranteed factors."
     }
   ],
 

@@ -4710,7 +4710,7 @@ def _validate_t_operator_coherence_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_keely_triune_cert_family(base_dir: str) -> Optional[str]:
-    """QA Keely Triune Cert family [153] — maps Keely's three vibratory modes (Enharmonic/Dominant/Harmonic from svpwiki.com) to QA three orbits (Satellite/Singularity/Cosmos). DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded=8-cycle), HARMONIC=COSMOS (expansive=24-cycle). {0,3,6} mod 9=singularity=Tesla 3-6-9. Brinton three Laws of Being. Source: svpwiki.com + Iverson; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok"""
+    """QA Keely Triune Cert family [153] — maps Keely's three vibratory modes (Enharmonic/Dominant/Harmonic from svpwiki.com) to QA three orbits (Satellite/Singularity/Cosmos). DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded=8-cycle), HARMONIC=COSMOS (expansive=24-cycle). {3,6,9} mod 9=singularity=Tesla 3-6-9. Brinton three Laws of Being. RE-VERIFIED 2026-07-06: fixed same A1 no-zero bug as [150]/[192] (was {0,3,6} in both fixtures + validator constant, despite the validator's own docstring already saying {3,6,9}); found+fixed a separate false claim in kt_pass_brinton_laws.json that QA products always contain factor 5 (self-contradicting its own "divisible by 6=2x3" statement; fundamental (1,1,2,3) product=6 is not div by 5, only 2,3 guaranteed). Source: svpwiki.com + Iverson; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok"""
     import subprocess
     kt_dir    = os.path.join(base_dir, "qa_keely_triune_cert_v1")
     validator = os.path.join(kt_dir, "qa_keely_triune_cert_validate.py")
@@ -14019,7 +14019,7 @@ FAMILY_SWEEPS = [
      "qa_t_operator_coherence_cert_v1", True),
     (153, "QA Keely Triune Cert family",
      _validate_keely_triune_cert_family,
-     "Keely triune (Enharmonic/Dominant/Harmonic) → QA orbits (Satellite/Singularity/Cosmos); {0,3,6}=singularity=Tesla 3-6-9; LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok",
+     "Keely triune (Enharmonic/Dominant/Harmonic) → QA orbits (Satellite/Singularity/Cosmos); {3,6,9}=singularity=Tesla 3-6-9 (RE-VERIFIED 2026-07-06, fixed A1 no-zero bug + a false 'always div by 5' product claim); LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok",
      "153_qa_keely_triune_cert",
      "qa_keely_triune_cert_v1", True),
     (152, "QA Equilateral Triangle Cert family",

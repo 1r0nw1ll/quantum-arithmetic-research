@@ -105,3 +105,14 @@ Note: Iverson's text shows "7,3,20,23" for the second set — likely a typo for 
 - The three BABTHE2 decompositions of 2/97
 
 **Depends on**: [370] BABTHE Dual Bead Chain (decomposition structure and T+Q=2S identity); [366] Bead Arithmetic Laws (pairwise coprimeness for prime Pythagorean pairs — this cert generalizes to all odd-b coprime pairs)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced the coprime pair
+counts exactly (128 for b odd (b,e≤17); 255 for any b (b,e≤20)) and
+confirmed all three BABTHE2 decompositions of 2/97 hand-check exactly
+(each S=O×P, Q=O+P, R=S-Q, T=R+S). Euclid Prop 28, the four-bead
+generalized coprimeness, and the Lucas-from-doubled-Fibonacci identity
+were confirmed by running the validator itself, which genuinely
+recomputes every case (6007+1009+50 test instances) — no
+fixture-trusting gap.

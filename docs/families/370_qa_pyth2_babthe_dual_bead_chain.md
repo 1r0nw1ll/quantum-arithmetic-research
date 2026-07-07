@@ -96,3 +96,13 @@ Since different coprime pairs (N,O) can produce the same T, there are **multiple
 The "program BABTHE2" is an observer-layer algorithm that generates the bead numbers; the identity holds by pure integer arithmetic independent of any computational encoding.
 
 **Depends on**: [366] Bead Arithmetic Laws (pairwise coprime bead sets, factor-3 structure); [368] Synchronous Harmonics LCM (the 29 ambiguous T values correspond to fractions with multiple period-coincidence points)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently hand-verified all three worked
+examples ((N,O)=(1,2)→T=7; (1,7)→T=97; (1,3)→T=17), confirming
+S=O×P, Q=O+P, R=S-Q, T=R+S in each case exactly. The remaining claims
+(the general T+Q=2S identity, the residual formula R=N+(O-2)P, and the
+"29 ambiguous T values" count) were confirmed by running the validator
+itself, which genuinely recomputes every case over 200 coprime pairs —
+no fixture-trusting gap.

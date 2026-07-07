@@ -109,3 +109,14 @@ Verified: 154 all-odd coprime pairs have odd LCM; 153 even-containing pairs have
 The wave picture in Ch.XIII is an observer projection onto continuous geometry. The discrete structure is the LCM.
 
 **Depends on**: [367] Prime Number Symmetry (coprime-to-30/60 brackets, same 30=lcm(2,3,5) structure); [366] Bead Arithmetic Laws (factor 3 in every bead set — F/G trigonometry grounded in Pythagorean bead arithmetic)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. The validator
+(`qa_pyth2_synchronous_harmonics_lcm_cert_validate.py`) genuinely
+recomputes every claim live (LCM-equals-product for coprime sets over
+705 pairs, the non-coprime extension lemma over 4330 triples,
+associativity over 5832 triples, QA sine=F/G over 369 pairs, and the
+odd/even-LCM half-cycle rule) — all match the doc's worked examples
+(lcm(2,3,5)=30, lcm(3,5,7)=105, lcm(2,3,5,7)=210) exactly. No
+fixture-trusting gap.

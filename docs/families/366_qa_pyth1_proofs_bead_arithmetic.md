@@ -99,3 +99,13 @@ Verified for all 4047 prime pairs (b,e)≤100.
 The five claims in this cert are pure number-theoretic properties of the integer bead arithmetic (b,e,d,a) — parity, divisibility by 3, divisibility by 6, coprimality. They hold for all primitive pairs by algebraic necessity, not by any geometric construction. Chapter IX labels these as "proofs" in the context of Pythagorean triangles, but the claims are properties of the bead numbers themselves.
 
 **Depends on**: [359] Nightside Energy (par classification); [360] Prime Triangle Structure (a always odd, G always 5-par); [361] Primeness Parity Shape (C always 4-par)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims over
+4047 primitive pairs (b,e≤100): exactly one of {d,e} even; a always
+odd; factor 3 always present in {b,e,d,a} (exact mod-3 distribution
+248/255/267/259 for (b,e)≤50); area=CF/2 always divisible by 6; all 6
+pairwise gcds of {b,e,d,a} equal 1. The validator
+(`qa_pyth1_proofs_bead_arithmetic_cert_validate.py`) is genuinely
+computed, no fixture-trusting gap.

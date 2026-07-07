@@ -95,3 +95,13 @@ This connects Ch.VII (Koenig Series, where 49 was the first composite I-value in
 The "Sieve of Eratosthenes" described in Ch.XII is an observer projection — a mechanical procedure for finding primes. The certifiable QA content is the coprimality structure itself: the coprime-to-M brackets and their pairing symmetry are purely about integer gcd arithmetic. The sieve is one way to *observe* which integers are prime; the symmetry is a *structural* property of coprimality.
 
 **Depends on**: [364] Koenig Series (49=I(1,5)=7² first composite); [366] Bead Arithmetic Laws (factor 3 in every bead set, underpinning the 30=2·3·5 structure)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced the coprime-to-30 and
+coprime-to-60 brackets exactly ({1,7,11,13,17,19,23,29} and its 16-element
+superset), matching the doc's tables precisely. The remaining claims
+(pairing identity gcd(M-n,M)=gcd(n,M) over 4851 cases, prime-in-30-bracket
+inclusion, and the 49=I(1,5) cross-reference to cert [364]) were
+confirmed by running the validator itself, which genuinely recomputes
+every case — no fixture-trusting gap.

@@ -103,3 +103,12 @@ Verified for all 529 pairs (W₁,W₂)∈[2,24]².
 - Coincidence period = lcm(W₁, W₂)
 
 **Depends on**: [368] Synchronous Harmonics LCM (coincidence periods via lcm); [318] Synchronous Harmonics Ceiling (the {3,5,7} 105-unit system and τ=60 extremal structure)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. The validator
+(`qa_pyth2_wave_quarter_points_cert_validate.py`) genuinely recomputes
+all 5 claims live (4-par/2-par/odd wavelength quarter-point
+integrality, the 3-par/5-par mirror-image fractions, and the LCM
+two-wave coincidence rule over 529 pairs) — all match the doc's worked
+examples exactly, no fixture-trusting gap.

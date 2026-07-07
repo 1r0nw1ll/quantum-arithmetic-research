@@ -14202,7 +14202,7 @@ FAMILY_SWEEPS = [
      "qa_pell_norm_cert_v1", True),
     (140, "QA Conic Discriminant Cert family",
      _validate_conic_discriminant_cert_family,
-     "I=C-F=Qg-Qr as QA conic discriminant: I>0→hyperbola (d/e<1+√2), I=0→parabola (impossible: d/e=silver ratio=1+√2, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (d/e>1+√2); silver-ratio CF [2;2,2,2,...] convergents 2/1,5/2,12/5,29/12 alternate H/E with |I|=1; Plimpton Row 1 (12,5) I=1 barely hyperbolic (d/e=2.4 vs 2.414); chromogeometry: I=Qg-Qr=green minus red; checks CD_1-4+PARA/W/F; 2 PASS; self-test ok",
+     "I=C-F=Qg-Qr as QA conic discriminant: I>0→hyperbola (d/e<1+√2), I=0→parabola (impossible: d/e=silver ratio=1+√2, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (d/e>1+√2); silver-ratio CF [2;2,2,2,...] convergents 2/1,5/2,12/5,29/12 alternate H/E with |I|=1; Plimpton Row 1 (12,5) I=1 barely hyperbolic (d/e=2.4 vs 2.414); chromogeometry: I=Qg-Qr=green minus red; checks CD_1-4+PARA/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-07: independently recomputed F/C/G/I for all 9 witness/convergent directions, all exact. Follow-up: closed zero-FAIL-fixture gap (last of the 13-family cluster), added cd_fail_bad_conic_type.json (mislabeled hyperbola-as-ellipse + wrong convergent I); result=='PASS' internally by design since result=='FAIL' short-circuits checking in this validator.",
      "140_qa_conic_discriminant_cert",
      "qa_conic_discriminant_cert_v1", True),
     (139, "QA 48/64 Cert family",

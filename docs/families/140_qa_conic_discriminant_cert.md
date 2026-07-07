@@ -86,6 +86,7 @@ I = Qg − Qr
 
 - `fixtures/cd_pass_fundamental.json` — 4 directions straddling the silver ratio; parabola impossibility proof
 - `fixtures/cd_pass_witnesses.json` — 4 hyperbola + 4 ellipse witnesses + convergent sequence to silver ratio
+- `fixtures/cd_fail_bad_conic_type.json` — Falsifier: hyperbola witness (3,2) mislabeled "ellipse", and convergent (5,2) with wrong declared I=999 (added 2026-07-07)
 
 ## Note on I vs. Iverson's original definition (Will Dale, 2026-07-06)
 
@@ -106,3 +107,26 @@ conventions are internally consistent within their own cert, but a
 reader comparing a quoted "I" value across [125] and [140]/[207] should
 not assume the sign convention is universal — check which cert the
 value comes from.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently recomputed F, C, G, I for all 9
+distinct witness/convergent directions used across both fixtures
+((2,1), (3,2), (4,3), (12,5), (5,2), (4,1), (8,3), (29,12), (70,29)) —
+every value matches exactly, and `F²+C²=G²` holds exactly in every case.
+The convergent sequence alternates H/E/H/E/H with `|I|=1` at every step,
+confirming the silver-ratio-approach claim. The validator
+(`qa_conic_discriminant_cert_validate.py`) already genuinely recomputes
+F, C, G, I from `(d,e)` live for every direction — no fixture-trusting
+gap.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster, now closed). This validator has
+a `result=="FAIL"` short-circuit branch (like [144]/[141]) that skips
+all checking, so the new falsifier declares `"result":"PASS"` internally
+to let the real checks execute. Added
+`fixtures/cd_fail_bad_conic_type.json` with two independent planted
+defects (hyperbola witness (3,2) mislabeled "ellipse"; convergent (5,2)
+with wrong declared I=999) and wired it into `_self_test()`; verified
+CD_3 and the convergent-sequence check both genuinely catch their
+respective defects.

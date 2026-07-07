@@ -1,0 +1,70 @@
+{
+  "schema_version": "QA_CONIC_DISCRIMINANT_CERT.v1",
+  "certificate_id": "qa.cert.conic_discriminant.fail.bad_conic_type.v1",
+  "cert_type": "qa_conic_discriminant_cert",
+  "title": "Conic Discriminant FAIL: falsifier with mislabeled conic type and wrong convergent I",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), same discriminant theory as the PASS fixtures (Hardy, 2008) continued fractions and (Wildberger, 2005) chromogeometry.",
+
+  "_fixture_purpose": "Falsifier: declares hyperbola witness (3,2) with conic_type='ellipse' (should be hyperbola since I=7>0, trips CD_3 and the hyperbola-witness I>0 check), and a convergent (5,2) declared I=999 (should be -1, trips the convergent-sequence check). NOTE: result is deliberately 'PASS' internally because this validator's validate() short-circuits to skip all checking when result=='FAIL' -- matches the pattern used in certs [214]/[144]/[141].",
+
+  "general_theorem": {
+    "discriminant": "I = C-F = 2de-(d²-e²) = -(d²-2de-e²)",
+    "type_rule": "I>0 ↔ hyperbola; I=0 ↔ parabola (impossible for integers); I<0 ↔ ellipse",
+    "threshold": "d/e = 1+√2 (silver ratio) separates hyperbola from ellipse"
+  },
+
+  "hyperbola_witnesses": [
+    {
+      "d": 2, "e": 1, "F": 3,  "C": 4,   "G": 5,   "I": 1,  "conic_type": "hyperbola",
+      "check": "correct, kept valid"
+    },
+    {
+      "d": 3, "e": 2, "F": 5,  "C": 12,  "G": 13,  "I": 7,  "conic_type": "ellipse",
+      "check": "FALSIFIER: I=12-5=7>0 is hyperbola, declared ellipse"
+    },
+    {
+      "d": 4, "e": 3, "F": 7,  "C": 24,  "G": 25,  "I": 17, "conic_type": "hyperbola",
+      "check": "correct, kept valid"
+    }
+  ],
+
+  "ellipse_witnesses": [
+    {
+      "d": 5,  "e": 2, "F": 21, "C": 20,  "G": 29,  "I": -1, "conic_type": "ellipse",
+      "check": "correct, kept valid"
+    },
+    {
+      "d": 4,  "e": 1, "F": 15, "C": 8,   "G": 17,  "I": -7, "conic_type": "ellipse",
+      "check": "correct, kept valid"
+    },
+    {
+      "d": 8,  "e": 3, "F": 55, "C": 48,  "G": 73,  "I": -7, "conic_type": "ellipse",
+      "check": "correct, kept valid"
+    }
+  ],
+
+  "convergent_sequence": {
+    "convergents": [
+      {"d": 2,  "e": 1,  "I":  1, "type": "H"},
+      {"d": 5,  "e": 2,  "I": 999, "type": "E"},
+      {"d": 12, "e": 5,  "I":  1, "type": "H"}
+    ],
+    "limit": "1+√2 = 2.41421...",
+    "pattern": "FALSIFIER: convergent (5,2) declares I=999, should be -1 (I=20-21=-1)"
+  },
+
+  "validation_checks": [
+    {"check_id": "CD_1", "description": "schema_version correct", "passed": true},
+    {"check_id": "CD_3", "description": "FALSIFIER: (3,2) declared ellipse but I=7>0 is hyperbola", "passed": false},
+    {"check_id": "CD_W", "description": "3 hyperbola + 3 ellipse witnesses", "passed": true},
+    {"check_id": "CD_F", "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [
+    "CD_3: hyp (3,2): I=7 -> expected 'hyperbola', declared 'ellipse'",
+    "CD_3: hyperbola witness (3,2) has I=7 declared as ellipse (also caught by hyperbola-witness I>0 sanity check since ellipse-labeled but genuinely I>0)",
+    "convergent (5,2): declared I=999, computed -1"
+  ],
+  "result": "PASS"
+}

@@ -34,6 +34,11 @@ CD_4      F²+C²=G² for each triple
 CD_PARA   parabola_impossibility block present
 CD_W      ≥3 witnesses of each type (hyperbola and ellipse)
 CD_F      fundamental (d,e)=(2,1) present as hyperbola (I=1)
+
+Primary source: Hardy, G.H. and Wright, E.M. (2008), An Introduction to
+the Theory of Numbers, Oxford University Press (silver ratio continued
+fraction [2;2,2,...]); Wildberger, N.J. (2005), Divine Proportions,
+Wild Egg Books (chromogeometry F,C,G quadrances).
 """
 
 from __future__ import annotations
@@ -188,13 +193,14 @@ def validate(path):
 
 def _self_test():
     fixtures_dir = Path(__file__).parent / "fixtures"
-    expected_pass = [
-        "cd_pass_fundamental.json",
-        "cd_pass_witnesses.json",
-    ]
+    expected = {
+        "cd_pass_fundamental.json": True,
+        "cd_pass_witnesses.json": True,
+        "cd_fail_bad_conic_type.json": False,
+    }
     results = []
     all_ok = True
-    for fname in expected_pass:
+    for fname, should_pass in expected.items():
         fpath = fixtures_dir / fname
         if not fpath.exists():
             results.append({"fixture": fname, "ok": False, "error": "file not found"})
@@ -207,9 +213,10 @@ def _self_test():
             results.append({"fixture": fname, "ok": False, "error": str(ex)})
             all_ok = False
             continue
-        if not passed:
+        ok = passed == should_pass
+        if not ok:
             all_ok = False
-        results.append({"fixture": fname, "ok": passed, "errors": errors})
+        results.append({"fixture": fname, "ok": ok, "errors": errors})
     return {"ok": all_ok, "results": results}
 
 

@@ -14172,7 +14172,7 @@ FAMILY_SWEEPS = [
      "qa_synchronous_harmonics_cert_v1", True),
     (146, "QA Path Scale Cert family",
      _validate_path_scale_cert_family,
-     "G=d^2+e^2 growth profiles along Pythagorean-tree paths; UNIFORM_B exponential (ratio->3+2sqrt(2)=5.828), UNIFORM_A/C polynomial (ratio->1); all forward paths G monotone increasing; 8-step Pell convergence witness (RE-VERIFIED 2026-07-06, confirmed clean); checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok",
+     "G=d^2+e^2 growth profiles along Pythagorean-tree paths; UNIFORM_B exponential (ratio->3+2sqrt(2)=5.828), UNIFORM_A/C polynomial (ratio->1); all forward paths G monotone increasing; 8-step Pell convergence witness (RE-VERIFIED 2026-07-06, confirmed clean); checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added sc_fail_bad_g_sequence.json (wrong G_sequence value + mismatched ratios), confirmed no print-corruption bug present.",
      "146_qa_path_scale_cert",
      "qa_path_scale_cert_v1", True),
     (145, "QA Path Shape Cert family",

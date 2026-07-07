@@ -84,6 +84,7 @@ Therefore all forward paths have G strictly increasing.
 
 - `fixtures/sc_pass_scale_classes.json` — three 5-step paths (one per generator type) showing EXPONENTIAL vs POLYNOMIAL
 - `fixtures/sc_pass_pell_convergence.json` — 8-step Pell chain demonstrating rapid convergence to 3+2√2
+- `fixtures/sc_fail_bad_g_sequence.json` — Falsifier: wrong G_sequence value at step 3 of the UNIFORM_B path and mismatched declared ratios (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -104,3 +105,11 @@ the [130]/[137]/[148] mod-3 proof-completeness bugs found earlier this
 cycle, where specific cases were genuinely left unjustified). The
 validator (`qa_path_scale_cert_validate.py`) already genuinely
 recomputes every G value and ratio live, no fixture-trusting gap.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). No `result=="FAIL"`
+short-circuit exists (no print-corruption bug risk). Added
+`fixtures/sc_fail_bad_g_sequence.json` with a wrong `G_sequence` value at
+step 3 of the UNIFORM_B path (999 instead of 985) and mismatched declared
+ratios; wired into `self_test()`. Verified SC_2 and SC_RATIO both
+genuinely catch the planted defects.

@@ -20,6 +20,11 @@ SC_W (>=3 paths), SC_F (root (2,1) present).
 
 Source: Pell equation theory (silver ratio), certs [135] Pythagorean Tree,
 [141] Pell Norm, [145] Path Shape.
+
+Primary source: Barning, F.J.M. (1963), "On Pythagorean and
+quasi-Pythagorean triangles" (M_A/M_B/M_C generator matrices); Hardy,
+G.H. and Wright, E.M. (2008), An Introduction to the Theory of Numbers,
+Oxford (silver ratio continued fraction [2;2,2,...]).
 """
 
 import json
@@ -140,6 +145,7 @@ def self_test():
     expected = {
         "sc_pass_scale_classes.json": True,
         "sc_pass_pell_convergence.json": True,
+        "sc_fail_bad_g_sequence.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

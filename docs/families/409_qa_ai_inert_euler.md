@@ -87,3 +87,11 @@ GL₄ Ramanujan at inert primes: roots of 1+p²Y⁴=0 satisfy |Y|⁴=p^{−2}, s
 - Both branch from [403] (GL₂/F CM Ramanujan — proves |σᵢ(a_p)|<2√p at split primes)
 - The CM vanishing theorem (Step 1) is the inert analog of cert [403]'s Ramanujan equality
 - [409] completes the unramified prime classification; p=5 (ramified, level 125=5³) is separate
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the inert Euler
+polynomial [1,0,0,0,p²] for all 7 displayed primes {2,3,7,13,17,23,37}
+in a fresh script — exact match. This table is much simpler than its
+[404]-[408] siblings (no T,N-dependent coefficients to transcribe), and
+had no errors.

@@ -82,11 +82,27 @@ The self-symmetric middle term a₃ = −2p²(T²−N−2p) is divisible by 2p²
 | p | T | N | a₁ | a₂ | a₃ | a₆ |
 |---|---|---|---|---|---|---|
 | 11 | −1 | −31 | 9 | −110 | −2420 | 1771561 |
-| 31 | −11 | −1 | −63 | 28830 | −163548 | 852891481 |
-| 41 | 9 | −11 | −93 | 28700 | −355560 | 2825761 × 10⁶ |
-| 61 | −1 | −31 | 91 | −3660 | −2196360 | ... |
-| 71 | 19 | 59 | 201 | 91630 | −8459340 | ... |
-| ... | | | | | | |
+| 31 | −11 | −1 | −61 | 2790 | −115320 | 887503681 |
+| 41 | 9 | −11 | −71 | 1640 | −33620 | 4750104241 |
+| 61 | −1 | −31 | −91 | −3660 | 669780 | 51520374361 |
+| 71 | 19 | 59 | −201 | 20590 | −1613120 | 128100283921 |
+| 101 | 29 | 179 | −381 | 74740 | −9384920 | 1061520150601 |
+| 131 | −11 | −1 | −261 | −1310 | 4805080 | 5053913144281 |
+| 151 | 4 | −496 | 194 | −20385 | −9576420 | 11853911588401 |
+| 181 | −11 | −1 | −361 | −10860 | 15725280 | 35161828327081 |
+| 191 | −41 | 389 | −771 | 284590 | −66395420 | 48551226272641 |
+| 211 | −1 | −781 | 359 | −44310 | −32055120 | 88245939632761 |
+| 241 | −16 | −436 | −46 | 3615 | −24394020 | 195930594145441 |
+| 251 | 4 | −496 | −6 | −58985 | −1260020 | 250058907189001 |
+| 271 | −31 | 209 | −751 | 186990 | −30845220 | 396109944105121 |
+| 281 | −11 | −751 | 189 | −44960 | −48955820 | 492309163417681 |
+| 311 | 49 | 569 | −1191 | 649990 | −234064820 | 904820297013361 |
+| 331 | −61 | 899 | −1561 | 1122090 | −473303520 | 1315127813325481 |
+| 401 | 29 | 179 | −981 | 176440 | 45024280 | 4157825282402401 |
+| 421 | 19 | −691 | −151 | −25260 | −74441220 | 5567914722008521 |
+| 431 | −36 | −176 | −686 | 372815 | −226628420 | 6410082527866081 |
+| 461 | −1 | −781 | −141 | −212060 | 59505880 | 9598548249896761 |
+| 491 | 9 | −11 | −971 | −201310 | 429124180 | 14011639427134441 |
 
 ## Checks
 
@@ -101,3 +117,15 @@ The self-symmetric middle term a₃ = −2p²(T²−N−2p) is divisible by 2p²
 - Caps [404] (GL₄ induction P_p — the GL₄ form being exteriorly squared)
 - Together [403]→[404]→[405]→[406] forms the complete Langlands ladder for 2.2.5.1-125.1-a
 - Next: Sym²(AI(f)) → GL₁₀ or full ∧²(AI(f)) functional equation with conductor
+
+## Verification Note (2026-07-07)
+
+**Found and fixed a real documentation-table bug**, same class as [405]'s.
+The displayed sample table only showed 5 of 22 primes (with "..." for
+the rest) but 4 of those 5 rows (p=31,41,61,71) had wrong values — only
+p=11 was correct; p=61/71 even had the a₁ sign flipped. The validator
+itself was unaffected (it recomputes `gl6_exterior_square_poly` fresh
+from `(T,N)` at runtime, confirmed via `python3
+qa_gl6_exterior_square_cert_validate.py` returning `ok:true`).
+Independently regenerated the complete, correct 22-row table from the
+validator's own formula and replaced the old sparse/wrong sample above.

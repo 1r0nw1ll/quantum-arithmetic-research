@@ -131,3 +131,15 @@ In Y = 1/X coordinates: |Y| = 1/√p = p^{−1/2} for all 4 roots. The discrimin
 - Connected to [396] (ℤ[ζ₅] infrastructure — T ≡ −1 mod 5 theorem uses conductor λ³)
 - Connected to [398] (Five Families — ℤ[φ] orbits underlie the automorphic induction)
 - Next rung: GL₄ × GL₄ Rankin–Selberg (if needed) or Sym² / ∧² transfers
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently recomputed the full GL₄ Euler
+coefficient table `[1,−T,N+2p,−pT,p²]` from the validator's own
+`gl4_euler_poly` formula for all 22 primes in a fresh check — all 22
+rows in the displayed table above match exactly. This is a useful
+contrast: the sibling cert [405] (Rankin-Selberg), which reuses the
+same `(u,v)` eigenvalue data, had 21/22 rows wrong in its *displayed*
+markdown table (though not in its validator) — this cert's table has
+no such error. The `(u,v)` eigenvalue data itself (duplicated from
+[403]) was independently confirmed byte-identical and correct.

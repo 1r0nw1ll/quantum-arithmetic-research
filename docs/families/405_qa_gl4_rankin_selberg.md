@@ -76,27 +76,27 @@ The (1−pZ)² factor comes from the two GL₁ determinant pieces; R_p(Z) is the
 | p | T | N | −N | p(T²−2N−2p) | −p²N | p⁴ |
 |---|---|---|---|---|---|---|
 | 11 | −1 | −31 | 31 | 451 | 3751 | 14641 |
-| 31 | −11 | −1 | 1 | 3658 | 961 | 923521 |
-| 41 | 9 | −11 | 11 | 3936 | 18491 | 2825761 |
-| 61 | −1 | −31 | 31 | 14327 | 115327 | 13845841 |
-| 71 | 19 | 59 | −59 | 23654 | −297239 | 25411681 |
-| 101 | 29 | 179 | −179 | 66139 | −1824179 | 104060401 |
-| 131 | −11 | −1 | 1 | 25358 | 17161 | 294499921 |
-| 151 | 4 | −496 | 496 | −62074 | 11288776 | 521660401 |
-| 181 | −11 | −1 | 1 | 32358 | 32761 | 1073741824 |
-| 191 | −41 | 389 | −389 | 119254 | −14223319 | 1330863361 |
-| 211 | −1 | −781 | 781 | 109919 | 34791019 | 1986902711... |
-| 241 | −16 | −436 | 436 | 73012 | 25326916 | ... |
-| 251 | 4 | −496 | 496 | 13754 | 31254496 | ... |
-| 271 | −31 | 209 | −209 | 185591 | −15342209 | ... |
-| 281 | −11 | −751 | 751 | 141758 | 59330531 | ... |
-| 311 | 49 | 569 | −569 | 228194 | −55041929 | ... |
-| 331 | −61 | 899 | −899 | 293954 | −98485699 | ... |
-| 401 | 29 | 179 | −179 | 585619 | −28795379 | ... |
-| 421 | 19 | −691 | 691 | 337094 | 122453291 | ... |
-| 431 | −36 | −176 | 176 | 562174 | 32693776 | ... |
-| 461 | −1 | −781 | 781 | 1063679 | 166097141 | ... |
-| 491 | 9 | −11 | 11 | 1195894 | 2651771 | ... |
+| 31 | −11 | −1 | 1 | 1891 | 961 | 923521 |
+| 41 | 9 | −11 | 11 | 861 | 18491 | 2825761 |
+| 61 | −1 | −31 | 31 | −3599 | 115351 | 13845841 |
+| 71 | 19 | 59 | −59 | 7171 | −297419 | 25411681 |
+| 101 | 29 | 179 | −179 | 28381 | −1825979 | 104060401 |
+| 131 | −11 | −1 | 1 | −18209 | 17161 | 294499921 |
+| 151 | 4 | −496 | 496 | 106606 | 11309296 | 519885601 |
+| 181 | −11 | −1 | 1 | −43259 | 32761 | 1073283121 |
+| 191 | −41 | 389 | −389 | 99511 | −14191109 | 1330863361 |
+| 211 | −1 | −781 | 781 | 240751 | 34770901 | 1982119441 |
+| 241 | −16 | −436 | 436 | 155686 | 25323316 | 3373402561 |
+| 251 | 4 | −496 | 496 | 127006 | 31248496 | 3969126001 |
+| 271 | −31 | 209 | −209 | 271 | −15349169 | 5393580481 |
+| 281 | −11 | −751 | 751 | 298141 | 59299711 | 6234839521 |
+| 311 | 49 | 569 | −569 | 199351 | −55034249 | 9354951841 |
+| 331 | −61 | 899 | −899 | 417391 | −98495339 | 12003612721 |
+| 401 | 29 | 179 | −179 | −127919 | −28783379 | 25856961601 |
+| 421 | 19 | −691 | 691 | 379321 | 122473531 | 31414372081 |
+| 431 | −36 | −176 | 176 | 338766 | 32693936 | 34507149121 |
+| 461 | −1 | −781 | 781 | 295501 | 165978901 | 45165175441 |
+| 491 | 9 | −11 | 11 | −431589 | 2651891 | 58120048561 |
 
 ## Checks
 
@@ -110,3 +110,26 @@ The (1−pZ)² factor comes from the two GL₁ determinant pieces; R_p(Z) is the
 - Uses eigenvalue data from [403] (22 split primes p≤500 with Universal Pell check)
 - Together with (1−pZ)²: constitutes the full ∧²(AI(f)) GL₆ Euler factor
 - Next rung: full ∧² GL₆ L-function (degree-6 cert) or Sym²(f) over F = GL₃/F
+
+## Verification Note (2026-07-07)
+
+**Found and fixed a real documentation-table bug — 21 of 22 rows in the
+displayed coefficient table above were wrong**, though the validator
+itself was never affected. The `(u,v)` eigenvalue data duplicated from
+cert [403] is byte-identical and correct (no repeat of the [390]/[395]
+indexing bug). But independently recomputing R_p(Y)'s coefficients
+directly from the validator's own formula (`rankin_selberg_poly`, which
+the validator applies correctly at runtime) revealed the *displayed*
+markdown table had wrong values in the "p(T²−2N−2p)" column for 21/22
+rows (only p=11 was correct) and wrong values in the "−p²N" column for
+most rows past p=41, plus two outright wrong p⁴ values (p=151, and
+p=181 — the latter showing 1073741824 = 2³⁰, an apparent copy-paste
+artifact rather than 181⁴=1073283121). The automated C1-C3 checks all
+still passed because they compute R_p(Y) from `(T, N)` fresh at
+validator runtime rather than reading the markdown table — the doc
+table was purely decorative and never fed into the actual pass/fail
+determination. Regenerated the entire 22-row table from the validator's
+own formula and replaced it above. This is a genuine, if
+consequence-free, finding: a human reader trusting this doc's numbers
+before this fix would have gotten the wrong coefficients for nearly
+every prime beyond the first.

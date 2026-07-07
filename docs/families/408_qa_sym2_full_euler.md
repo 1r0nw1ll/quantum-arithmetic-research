@@ -64,7 +64,7 @@ In coordinates: a₆=p⁶, a₅=p⁴·a₁, a₄=p²·a₂, a₃ self-dual.
 | 11 | −1 | −31 | [1, −41, 840, −11220, 101640, −600281, 1771561] |
 | 31 | −11 | −1 | [1, −61, −960, 117180, −922560, −56334781, 887503681] |
 | 41 | 9 | −11 | [1, −21, −1560, 60680, −2622360, −59340981, 4750104241] |
-| 311 | 49 | 569 | [1, −681, 197688, −90427260, ...] |
+| 311 | 49 | 569 | [1, −641, 227040, −77383020, 21959535840, −5996524130081, 904820297013361] |
 
 ## Checks
 
@@ -79,3 +79,16 @@ In coordinates: a₆=p⁶, a₅=p⁴·a₁, a₄=p²·a₂, a₃ self-dual.
 - Parallel to [406] (∧² branch: W_p = (1−pY)²·R_p)
 - Together [406]+[408] certify both tensor branches of AI(f) at split primes
 - Full Sym²/Q L-function: L(s, Sym²f/Q) = ∏_p V_p(p⁻ˢ)⁻¹ (split p)
+
+## Verification Note (2026-07-07)
+
+Found and fixed one wrong row: p=311 showed `[1,−681,197688,−90427260,...]`
+in the doc but the validator's own `sym2_full_poly` formula gives
+`[1,−641,227040,−77383020,21959535840,−5996524130081,
+904820297013361]` — confirmed by fresh independent recomputation. This
+is the second doc in this sub-cluster (after [407]) where specifically
+the p=311 sample row was mistranscribed while the smaller-prime rows
+were correct — worth flagging as a recurring specific-value error when
+citing p=311 data from this branch of the ladder. The p=11/31/41 rows
+were already correct. Validator itself unaffected (`ok:true` confirmed,
+recomputes fresh at runtime).

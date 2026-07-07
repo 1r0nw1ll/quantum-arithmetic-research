@@ -96,7 +96,7 @@ Both quadratic factors have complex roots with |root| = p⁻¹ (Sym² Ramanujan 
 | 41 | 9 | −11 | −61 | −1601 | 1761 | [1,61,1761,102541,2825761] |
 | 61 | −1 | −31 | −181 | 8159 | 15601 | [1,181,15601,673501,...] |
 | 71 | 19 | 59 | −41 | −10861 | −779 | [1,41,−779,206681,...] |
-| 311 | 49 | 569 | −13 | 233059 | 426013 | [1,13,426013,...] |
+| 311 | 49 | 569 | 19 | −74941 | 118501 | [1,−19,118501,−1837699,9354951841] |
 
 ## Checks
 
@@ -111,3 +111,14 @@ Both quadratic factors have complex roots with |root| = p⁻¹ (Sym² Ramanujan 
 - Uses [403] (Ramanujan equality → C4 Sym² Ramanujan)
 - Next rung: [408] = full Sym²/Q factor (1−pY)²·Σ_p = GL₆ degree-6 polynomial
 - Compare: parallel branch [405] (tensor product R_p) → [406] (∧² W_p = (1−pY)²·R_p)
+
+## Verification Note (2026-07-07)
+
+Found and fixed one wrong row in the displayed sample table: p=311 had
+S=−13, Q=233059 in the doc but the validator's own `sym2_poly` formula
+gives S=19, Q=−74941 (Q+2p²=118501, coeffs=[1,−19,118501,−1837699,
+9354951841]) — confirmed by independent fresh recomputation. The other
+5 sample rows (p=11,31,41,61,71) were already correct. The validator
+itself was unaffected (recomputes fresh at runtime, `ok:true`
+confirmed). This is a much smaller-scope version of the same
+doc-table-transcription-error class found in [405]/[406].

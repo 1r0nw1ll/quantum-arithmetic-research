@@ -88,3 +88,13 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "6/6 pass
 - Serre, J.-P. (1979). *Local Fields*. [doi.org/10.1007/978-1-4757-5673-9](https://doi.org/10.1007/978-1-4757-5673-9) §II.4
 - Neukirch, J. (1999). *Algebraic Number Theory*. ISBN 978-3-540-65399-8 §II.3
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*. ISBN 978-0-387-97329-6 Ch.7
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-computed orbit periods at
+both level p and level p² from scratch (fresh script, direct
+enumeration of σ(a,b)=(a+b mod m, a) orbits on (ℤ/m)², not reusing the
+validator's ℤ[φ] representation) for all 8 primes {7,11,13,17,19,29,
+31,41} — every period set matches the doc's table exactly, including
+the 3-tier vs 5-tier split (inert/split-equal vs split-unequal). Genuine
+falsifiable arithmetic, not fixture-trusting.

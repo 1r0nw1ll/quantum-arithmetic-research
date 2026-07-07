@@ -76,3 +76,13 @@ Expected: `{"ok": true, "checks": {"POLY_CLASSIFY": true, "MOD5_CRITERION": true
 - Does not claim φ is primitive in GF(p²) for ALL inert primes (e.g. ord(φ)=16 in GF(49), not 48)
 - Does not claim the 3-orbit structure exists for split or ramified primes
 - Does not certify the geometry of ℤ[φ]/(p²) for p>3 (only the mod-p structure is certified)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in fresh, separate
+scripts: MOD5_CRITERION holds for every prime ≤200 (0 mismatches);
+ord(φ)=8 in GF(9) and ord(φ)=3 in GF(4); the p=11 split idempotents
+(2,8) and (10,3) both satisfy e²=e via brute-force search, unit group
+size=100=(p−1)²; the p=5 ramified nilpotent (φ−3)=(2,1) squares to
+(0,0), unit group size=20=p²−p. All exact matches, genuine falsifiable
+algebraic number theory. No fixture-trusting gap.

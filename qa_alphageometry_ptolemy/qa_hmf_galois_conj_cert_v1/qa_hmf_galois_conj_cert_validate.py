@@ -36,8 +36,18 @@ import os
 # ────────────────────────────────────────────────────────────────────────
 
 # Full eigenvalue lists (first 76 values retrieved, covering primes up to ~N=10609)
+# NOTE (fixed 2026-07-07): the raw LMFDB `hecke_eigenvalues` API array embeds the
+# level-prime-31 Atkin-Lehner pseudo-eigenvalue in natural norm-sorted position
+# (2 entries, since 31 is split). _build_prime_list() below assumes those 2 raw
+# entries were already stripped (per its "skipping level prime 31" comment), but
+# they were never actually removed from these arrays -- causing every index from
+# 9 onward to be misaligned by 2 slots relative to PRIME_LIST (e.g. index 11 was
+# read as p=7's eigenvalue but was really p=41's; index 9-10, the real p=41
+# data, was read as the level-31 AL values). Independently re-verified against a fresh
+# LMFDB fetch on 2026-07-07 and confirmed the 2 level-31 entries (-1, 8 / 8, -1)
+# need to be deleted at raw-array position 9-10 to restore correct alignment.
 EIGS_31_1 = [
-    -3, -2, 2, 4, -4, -4, 4, -2, -2, -1, 8, -6, -6, 2, 12, -4,
+    -3, -2, 2, 4, -4, -4, 4, -2, -2, -6, -6, 2, 12, -4,
     6, -2, 0, -8, 0, 16, -6, 10, 6, -10, 6, -10, -20, 4, 4, -20,
     6, -10, 8, 16, -6, 4, -12, -10, 22, 0, 16, 16, 24, -12, -4, 6,
     -26, -24, 0, -14, 26, 12, 12, -10, -18, 0, 0, -30, 18, -30, 8, 8,
@@ -45,7 +55,7 @@ EIGS_31_1 = [
 ]
 
 EIGS_31_2 = [
-    -3, -2, 2, -4, 4, 4, -4, -2, -2, 8, -1, -6, -6, 2, -4, 12,
+    -3, -2, 2, -4, 4, 4, -4, -2, -2, -6, -6, 2, -4, 12,
     -2, 6, -8, 0, 16, 0, 10, -6, -10, 6, -10, 6, 4, -20, -20, 4,
     -10, 6, 16, 8, -6, -12, 4, 22, -10, 16, 0, 24, 16, -4, -12, -26,
     6, 0, -24, 26, -14, 12, 12, -18, -10, 0, 0, 18, -30, -30, 8, 8,
@@ -267,12 +277,12 @@ FIXTURES = [
         ),
     },
     {
-        "name": "SPLIT_P41_SWAPPED",
-        "description": "Split p=41: 31.1-a has (-1,8), 31.2-a has (8,-1) (indices 9,10)",
+        "name": "SPLIT_P41_EQUAL",
+        "description": "Split p=41 (equal-eigenvalue case): both forms have (-6,-6) at indices 9,10",
         "expected": True,
         "fn": lambda: (
-            EIGS_31_1[9] == -1 and EIGS_31_1[10] == 8 and
-            EIGS_31_2[9] == 8 and EIGS_31_2[10] == -1
+            EIGS_31_1[9] == -6 and EIGS_31_1[10] == -6 and
+            EIGS_31_2[9] == -6 and EIGS_31_2[10] == -6
         ),
     },
     {

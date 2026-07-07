@@ -57,3 +57,16 @@ Expected output: `{"ok": true, "checks": {"IRREDUCIBLE_MOD3": true, "LOCAL_RING"
 - Does not claim the orbit-ring identification extends to mod-24 (mod-24 has split prime 2, giving ℤ[φ]/(24) = ℤ[φ]/(8) × ℤ[φ]/(3), which is not local)
 - Does not claim QA generates the full Serre C\*-algebra (only that the orbit periods satisfy Nikolaev's periodicity condition)
 - Does not certify any continuous-parameter model; all arithmetic is exact integer
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived every claim from
+scratch in a fresh, separate script (not reusing validator code):
+x²−x−1 has no roots mod 3 (irreducible); brute-force unit search over
+all 81 elements of ℤ[φ]/(9) gives exactly 72 units, complement is
+exactly the ideal (3) of size 9; Pisano periods π(3)=8, π(9)=24 both
+reproduced via a fresh Fibonacci-mod loop; the QA-step period histogram
+over all 81 (b,e) pairs gives {24:72, 8:8, 1:1} exactly matching
+Cosmos/Satellite/Singularity sizes. This is genuine, falsifiable
+algebraic number theory (not narrative numerology) — all claims could
+have failed and didn't. No fixture-trusting gap.

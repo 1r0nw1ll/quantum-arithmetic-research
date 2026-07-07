@@ -107,3 +107,15 @@ Every cert in the [385]–[390] chain is a consequence of this identity:
 - Ireland, K. & Rosen, M. (1990). *A Classical Introduction to Modern Number Theory*, 2nd ed. ISBN 978-0-387-97329-6. Ch. 13: norm forms, quadratic characters, discriminant 5.
 - Neukirch, J. (1999). *Algebraic Number Theory*. ISBN 978-3-540-65399-8. Ch. I §7: norm, trace, different, discriminant for ℤ[φ].
 - Wall, D.D. (1960). Fibonacci series modulo m. *American Mathematical Monthly* 67(6):525–532. doi:10.1080/00029890.1960.11989541. Fibonacci matrix and Pisano period.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified in a fresh, separate
+script: σ(a,b)=φ·(a·φ+b) holds exactly for 30 random pairs (using ring
+multiplication (a₁,b₁)(a₂,b₂)=(a₁a₂+a₁b₂+b₁a₂, a₁a₂+b₁b₂) derived from
+φ²=φ+1); N(φ)=N(ψ)=−1; σ negates the norm and σ² preserves it for
+random pairs; the Fibonacci orbit σᵏ(1,0)=(F_{k+1},F_k) holds for
+k=0..14; discriminant 1−4(−1)(1)=5. Genuine falsifiable algebra — my
+first attempt at independent verification actually used an incorrect
+multiplication formula and produced a false mismatch, corrected and
+re-confirmed. No fixture-trusting gap in the validator itself.

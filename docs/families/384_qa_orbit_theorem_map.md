@@ -85,3 +85,13 @@ This cert does not prove infinite-modulus generalization. It does not certify th
 python3 tools/qa_orbit_theorem_map_validate.py --self-test
 python3 tools/qa_orbit_theorem_map_validate.py results/qa_orbit_theorem_map_v1.json
 ```
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. `python3 tools/qa_orbit_theorem_map_validate.py
+--self-test` returns `{"ok": true, "errors": [], "pass_fixtures": 1,
+"fail_fixtures": 1}`. The validator genuinely recomputes orbit labels
+from integer `qa_step` dynamics and replays leaf paths against the
+declared theorem-map JSON rather than trusting it — consistent with
+the doc's stated non-claims (finite-grid only, no infinite-modulus
+generalization claimed).

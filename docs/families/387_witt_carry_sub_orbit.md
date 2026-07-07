@@ -97,3 +97,12 @@ Expected: `{"ok": true, "checks": {"THREE_SUB_ORBITS": true, "PHI_ORDER_24": tru
 - Does not claim W₂(GF(9)) ≅ ℤ/9 (these are different rings; ℤ[φ]/(9) is the unramified degree-2 case)
 - Does not claim the invariant J extends to the Satellite or Singularity orbits (those are in the ideal, not units)
 - Does not certify the Witt carry for mod-24 (split prime 2 changes the structure)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified ord(φ)=24 in
+ℤ[φ]/(9) via a fresh multiplication loop (not reusing validator code) —
+exact match to the doc's PHI_ORDER_24 claim. The T×U₁ decomposition,
+Witt carry invariant J, and Teichmüller-hit distribution were confirmed
+by running the validator itself, which genuinely recomputes the coset
+structure rather than hardcoding it. No fixture-trusting gap.

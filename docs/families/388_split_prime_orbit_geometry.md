@@ -78,3 +78,13 @@ Expected: `{"ok": true, "checks": {"SPLIT_THREE_PERIODS": true, "EIGENSPACE_IDEN
 - Does not certify the orbit structure of ℤ[φ]/(p²) for split p (only ℤ[φ]/(p) = F_p × F_p)
 - Does not prove the root-order rule (stated as an observed pattern; the algebraic proof is r₁r₂=−1 → r₂^(ord_r₁) = (−1)^(ord_r₁))
 - Does not certify the ramified case (p=5) orbit geometry
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the full root-order
+table in a fresh, separate script for p ∈ {11,19,29,31,41}: roots and
+their multiplicative orders match the doc exactly (e.g. p=11: roots
+{4,8}, orders {5,10}; p=41: roots {7,35}, both order 40 — the
+equal-order exception), and Pisano periods π(p) match the larger root
+order in each split case. Genuine falsifiable number theory, not
+fixture-trusting.

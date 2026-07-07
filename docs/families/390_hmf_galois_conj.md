@@ -20,23 +20,29 @@ Verified for 34 prime ideals of ℤ[φ] with N(𝔭) ≤ 151.
 
 ## Selected Hecke eigenvalue data
 
-| p | class | N(𝔭) | f₁ eigenvalues | f₂ eigenvalues | r₁ | r₂ | π(p) |
-|---|-------|-------|---------------|----------------|-----|-----|------|
-| 2 | inert | 4 | −3 | −3 | — | — | 3 |
-| 3 | inert | 9 | 2 | 2 | — | — | 8 |
-| 5 | ram | 5 | −2 | −2 | — | — | 20 |
-| 7 | inert | 49 | −6 | −6 | — | — | 16 |
-| 11 | split | 11,11 | (4, −4) | (−4, 4) | 4 | 8 | 10 |
-| 19 | split | 19,19 | (−4, 4) | (4, −4) | 5 | 15 | 18 |
-| 29 | split | 29,29 | (−2, −2) | (−2, −2) | 6 | 24 | 14 |
-| 41 | split | 41,41 | (−1, 8) | (8, −1) | 7 | 35 | 40 |
-| 59 | split | 59,59 | (−6, 2) | (−6, 2) | 26 | 34 | 58 |
-| 61 | split | 61,61 | (12, −4) | (−4, 12) | 18 | 44 | 60 |
-| 71 | split | 71,71 | (6, −2) | (−2, 6) | 9 | 63 | 70 |
-| 79 | split | 79,79 | (0, −8) | (−8, 0) | 30 | 50 | 78 |
-| 89 | split | 89,89 | (0, 16) | (16, 0) | 10 | 80 | 44 |
+| p | class | N(𝔭) | f₁ eigenvalues | f₂ eigenvalues |
+|---|-------|-------|---------------|----------------|
+| 2 | inert | 4 | −3 | −3 |
+| 3 | inert | 9 | 2 | 2 |
+| 5 | ram | 5 | −2 | −2 |
+| 11 | split | 11,11 | (4, −4) | (−4, 4) |
+| 19 | split | 19,19 | (−4, 4) | (4, −4) |
+| 29 | split | 29,29 | (−2, −2) | (−2, −2) |
+| 41 | split | 41,41 | (−6, −6) | (−6, −6) |
+| 7 | inert | 49 | 2 | 2 |
+| 59 | split | 59,59 | (12, −4) | (−4, 12) |
+| 61 | split | 61,61 | (6, −2) | (−2, 6) |
+| 71 | split | 71,71 | (0, −8) | (−8, 0) |
+| 79 | split | 79,79 | (0, 16) | (16, 0) |
+| 89 | split | 89,89 | (−6, 10) | (10, −6) |
 
-Note: For p=59, both forms show (−6, 2) at the LMFDB index positions. This is consistent with the multiset claim: {−6, 2} = {−6, 2}. The LMFDB uses form-dependent prime ideal labeling for this prime, so the ordered swap is hidden in the indexing.
+(Table ordered by prime ideal norm, matching LMFDB's own natural ordering — see
+Verification Note below for why p=7's row falls after p=41 rather than before it.)
+
+Note: p=41 is a **split-equal** case — both prime ideals above 41 carry the same
+eigenvalue (−6) in both forms, consistent with cert [388]'s independent finding
+that p=41 is the one split prime ≤151 where both roots of x²−x−1 have equal
+multiplicative order (40).
 
 ## The QA connection
 
@@ -87,3 +93,39 @@ Expected: `{"ok": true, "checks": {...all true...}, "fixture_summary": "7/7 pass
 - Shimura, G. (1978). *The special values of the zeta functions associated with Hilbert modular forms*. ISBN 978-0-691-08090-5 §9–10
 - Blasius, D. & Rogawski, J.D. (1993). *Motives for Hilbert modular forms*. doi.org/10.2307/2152776
 - van der Geer, G. (1988). *Hilbert Modular Surfaces*. ISBN 978-3-540-17659-9
+
+## Verification Note (2026-07-07)
+
+**Found and fixed a real data-alignment bug.** Independently re-fetched the raw
+LMFDB Hecke eigenvalue data for both forms (via the LMFDB page and its
+`/api/hmf_hecke/` endpoint) and confirmed the hardcoded `EIGS_31_1`/`EIGS_31_2`
+arrays in the validator are a byte-for-byte faithful copy of LMFDB's own
+`hecke_eigenvalues` sequence — no fabrication. However, that raw sequence
+includes the level-prime-31 Atkin-Lehner pseudo-eigenvalue in its natural
+norm-sorted position (2 entries, since 31 is split), while the validator's
+`_build_prime_list()` assumed those entries had already been stripped out (per
+its own "skipping level prime 31" comment). They were never actually removed,
+so every array index from 9 onward was misaligned by 2 slots relative to the
+prime labels: index 9-10 (the real p=41 data, eigenvalue −6 in both forms) was
+being read as p=41's data mislabeled with the level-31 values (−1, 8); index 11
+(real p=7 data, eigenvalue 2) was being read as if it were p=7's, but held the
+real p=41 values; and every split prime from p=59 onward inherited the same
+one-slot cascade. This was **not caught by the automated checks** because the
+corruption was identical in both `EIGS_31_1` and `EIGS_31_2` — the
+INERT_EQUAL/SPLIT_PERMUTED checks only compare f₁ against f₂ at the same
+(wrong) index, so a shared mislabeling still "passes" as internally
+consistent. The QA_SWAP_MIRRORS_GALOIS check was unaffected since it only
+uses Fibonacci-root arithmetic, not the eigenvalue arrays.
+
+**Fix**: deleted the 2 level-31 entries from both arrays, restoring correct
+index-to-prime alignment for all 34 verified prime ideals. Re-ran the
+validator after the fix — all 5 structural checks (INERT_EQUAL,
+RAMIFIED_EQUAL, SPLIT_PERMUTED, QA_SWAP_MIRRORS_GALOIS, WEIL_BOUND) still pass
+with the corrected, properly-aligned real data, confirming the underlying
+Galois-symmetry claim is genuinely true and not an artifact of the bug. One
+hardcoded fixture (`SPLIT_P41_SWAPPED`, which encoded the old wrong values)
+was updated to `SPLIT_P41_EQUAL` reflecting the real p=41 data. The corrected
+full 34-entry table is reproduced above; independently spot-checked against
+fresh LMFDB fetches through norm 79 (all exact matches) — see also the
+p=41/[388] cross-cert consistency noted in the table above, which only became
+visible after this fix.

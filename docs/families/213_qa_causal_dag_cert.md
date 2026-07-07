@@ -103,3 +103,31 @@ Slots 1-4 of the graph types initiative (Cayley / Hypergraph / KG / Causal DAG) 
 
 - `fixtures/cdg_pass_y_structure.json` — PASS: declares full Y-structure, both pair-bijectivity tables, Pearl collapse, 4 witnesses across pair classes; validator independently recomputes pair-bijectivity on both S_9 and S_24
 - `fixtures/cdg_fail_bad_structure.json` — FAIL: declares `a = b + 3e` (wrong) and empty exogenous list; validator must flag CDG_A2 and CDG_STRUCT
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. The validator (`qa_causal_dag_cert_validate.py`)
+already genuinely recomputes pair-bijectivity on both S_9 and S_24 live
+from `qa_tuple()` (no fixture-trusting gap) — `CDG_PAIRS` independently
+projects all 6 pairs and checks the exact `gcd(2,m)==1` gating condition
+plus the `fold==2` claim for `(b,a)` on S_24.
+
+Went further than the validator's own scope and exhaustively reconfirmed
+**Pair Invertibility Theorem 1 in general**, not just at m=9/24: brute-forced
+every modulus m=2..25 and confirmed the other 5 pairs are bijective and
+`(b,a)` is bijective iff `gcd(2,m)=1`, folding exactly 2-to-1 whenever m is
+even (since 2 is prime, `gcd(2,m)` can only ever be 1 or 2, so "g-to-1"
+always means 2-to-1 — the doc's general phrasing is correct but this is
+worth noting explicitly).
+
+Independently checked every numeric witness in `cdg_pass_y_structure.json`
+by hand: `(b,e,d,a)=(3,5,8,4)` witness for pairs `be`/`da`/`ba` all recompute
+correctly (e.g. `da` recovery `e=a-d=4-8=-4 mod 9=5` ✓, `b=2d-a=16-4=12 mod
+9=3` ✓); the S_24 2-to-1 witness `[1,2,3,5]` vs `[1,14,15,5]` both
+independently verified to produce `(b,a)=(1,5)` (e=2 and e=14 collide under
+`a=b+2e mod 24`, exactly demonstrating the fold); the Pearl-collapse
+witness `(b,e)=(1,1)` → `d=2,a=3` and the counterfactual `b_cf=2 → d_cf=3,
+a_cf=4` both check out. Cross-reference to [150] (`2` has order 6 in
+`(Z/9Z)*`) independently reconfirmed via direct computation. No data
+errors found — this cert's math, validator, and fixture data are all
+correct as originally authored.

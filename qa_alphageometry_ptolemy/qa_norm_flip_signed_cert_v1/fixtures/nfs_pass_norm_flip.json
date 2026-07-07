@@ -4,6 +4,7 @@
   "cert_type": "qa_norm_flip_signed_cert",
   "title": "QA Eisenstein norm flip under T — signed-temporal structure of T-orbits on S_9",
   "created_utc": "2026-04-11T00:00:00Z",
+  "_primary_source_note": "Primary source: (Eisenstein, 1844), 'Untersuchungen ueber die cubischen Formen mit zwei Variabeln', Journal fuer die reine und angewandte Mathematik 27. Orbit classification: (Dale, 2026).",
 
   "_fixture_purpose": "Certifies the integer identity f(e, b+e) = -f(b, e) where f(b,e) = b*b + b*e - e*e is the Eisenstein quadratic form. Corollary: T^2 preserves f mod m. On S_9 the five T-orbits decompose into 3 signed cosmos orbits (norm pairs {1,8}/{4,5}/{2,7}), 1 null satellite orbit, 1 null singularity. This is the signed-temporal view of the same T dynamic certified structurally by [211]-[213].",
 
@@ -95,10 +96,10 @@
     {
       "orbit": "cosmos_lucas",
       "source": [1, 3],
-      "integer_values": {"f_1_3": -5, "f_3_4": -7, "f_4_7": -37},
+      "integer_values": {"f_1_3": -5, "f_3_4": 5, "f_4_7": -5},
       "step_0_mod_9": 4,
       "step_1_mod_9": 5,
-      "note": "f(1,3)=1+3-9=-5 (-5 mod 9 = 4). After T: f(3,4)=9+12-16=5 wait this should be -5 mod 9 = 4, let me recompute: (3,4) is state after T(1,3), f(3,4)=9+12-16=5 mod 9 = 5. So the pair is {4, 5} confirmed."
+      "note": "f(1,3)=1+3-9=-5 (-5 mod 9 = 4). T(1,3)=(3,4): f(3,4)=9+12-16=5 (5 mod 9 = 5), confirming the pair {4,5}. T^2(1,3)=(4,7): f(4,7)=16+28-49=-5, matching f(1,3) exactly per the T^2-preservation corollary."
     },
     {
       "orbit": "cosmos_phibonacci",

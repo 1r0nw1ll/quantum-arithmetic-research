@@ -99,3 +99,32 @@ Each view exposes a different property of the same arithmetic object. Together t
 
 - `fixtures/nfs_pass_norm_flip.json` — PASS: declares the flip identity, T² preservation, full 5-orbit classification with norm pairs and classical names, temporal sign formula, and cross-refs to [133]/[155]/[191]/[211]/[212]/[213]; validator independently recomputes on S_9
 - `fixtures/nfs_fail_wrong_orbit.json` — FAIL: declares Lucas orbit with wrong norm pair {3, 6} and omits [155] cross-ref; validator must flag NFS_PAIRS and NFS_155
+
+## Verification Note (2026-07-07)
+
+Independently re-derived the entire theorem from scratch in a standalone
+script (not reusing the validator's own code): confirmed the polynomial
+identity `f(e, b+e) = -f(b, e)` by hand expansion, then brute-forced
+`flip_identity_s9` (81/81), `t2_preservation_s9` (81/81), and orbit
+enumeration on S_9 — exactly reproduced `(24,{4,5}), (24,{2,7}),
+(24,{1,8}), (8,{0}), (1,{0})`. The validator
+(`qa_norm_flip_signed_cert_validate.py`) already genuinely recomputes
+every check (NFS_FLIP/NFS_T2/NFS_PAIRS/etc.) from primitives — no
+fixture-trusting gap found. `nfs_fail_wrong_orbit.json` declaring
+`"result": "PASS"` internally is intentional, not a bug: that field only
+gates `validate()`'s early-return-on-declared-FAIL shortcut, and this
+fixture needs its detailed checks to actually run so NFS_PAIRS/NFS_155
+can catch the planted defects.
+
+**Found and fixed a real data error**: `nfs_pass_norm_flip.json`'s
+`cosmos_lucas` witness declared `"integer_values": {"f_1_3": -5,
+"f_3_4": -7, "f_4_7": -37}` — but `f_3_4` and `f_4_7` were never
+consistent with the witness's own prose, which computed `f(3,4)=5`
+(not -7) and never touched `f(4,7)` at all. Independently recomputed:
+`f(3,4) = 9+12-16 = 5` and `f(4,7) = 16+28-49 = -5`, not -37. The
+corrected value `f_4_7 = -5` also now correctly demonstrates the
+T²-preservation corollary in the fixture data itself (`f(T²(1,3)) =
+f(4,7) = -5 = f(1,3)`), which the stale `-37` value did not. Also
+cleaned up a messy embedded "wait this should be... let me recompute"
+scratch-thought artifact left in the same witness's `note` field
+(final stated values were correct, just unedited working-out prose).

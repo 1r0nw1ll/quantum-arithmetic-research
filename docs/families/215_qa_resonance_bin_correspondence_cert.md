@@ -89,3 +89,30 @@ python qa_resonance_bin_correspondence_cert_validate.py --self-test             
 ## Source
 
 Will Dale + Claude (Opus 4.6), 2026-04-12. Grounded in Arnold (1961) phase-locking theory and the Dale Pond + Vibes permissibility letter of 2026-04-05 (OB `a9307705`).
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. The validator (`qa_resonance_bin_correspondence_cert_validate.py`)
+does not trust any declared numeric table — `RBC_ARNOLD` and
+`RBC_BINWIDTH` both genuinely re-simulate the two-oscillator Arnold-tongue
+system live on every run (pure numpy, no fixture-trusting gap) and only
+assert monotonicity, not an exact number.
+
+Independently replicated the `critical_K` scan (deterministic, `seed=0`)
+outside the validator: reproduced K*(6)=0.060, K*(18)=0.080, K*(48)=0.100
+— an exact match to this doc's W1 table.
+
+For W2 (Hensel-lift family counts), independently confirmed via this
+session's own earlier cert [198] audit (2026-07-05): the referenced
+scripts (`qa_hensel_selforg_experiment.py` /
+`qa_hensel_orbit_cycling_experiment.py`) had a real shared `qa_step` bug
+that was found and fixed then, and the corrected closed form
+`total_families(3^k) = (3^k+1)/2` was verified exactly at k=1..4
+(2, 5, 14, 41) via independent simulation. This exactly matches [215]'s
+W2 claim ("mod-3 → 2 families, mod-9 → 5 families, mod-27 → further
+splitting" — 14 > 5, consistent). [215]'s external reference was
+correct at the time of writing only coincidentally alongside the
+pre-fix buggy script; it is now independently grounded post-fix.
+
+Ran `--self-test`: PASS fixture passes all 8 checks, FAIL fixture
+correctly fails (missing `hensel_reference`).

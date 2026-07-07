@@ -14162,7 +14162,7 @@ FAMILY_SWEEPS = [
      "qa_law_of_harmonics_cert_v1", True),
     (148, "QA Sixteen Identities Cert family",
      _validate_sixteen_identities_cert_family,
-     "16 named quantities (A-L,X,W,Y,Z) of prime Pythagorean direction + 9 algebraic relations: G+C=A, G-C=B, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par (RE-VERIFIED 2026-07-06, confirmed clean; softened an unconfirmed Arto Heino attribution); checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok",
+     "16 named quantities (A-L,X,W,Y,Z) of prime Pythagorean direction + 9 algebraic relations: G+C=A, G-C=B, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par (RE-VERIFIED 2026-07-06, confirmed clean; softened an unconfirmed Arto Heino attribution); checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added si_fail_bad_identity.json (wrong declared H + wrong declared C), confirmed no print-corruption bug present.",
      "148_qa_sixteen_identities_cert",
      "qa_sixteen_identities_cert_v1", True),
     (147, "QA Synchronous Harmonics Cert family",

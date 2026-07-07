@@ -30,6 +30,10 @@ Key algebraic relations certified:
 Checks: SI_1 (schema), SI_2 (direction valid), SI_IDEN (all 16 quantities
 recomputed), SI_REL (algebraic relations verified), SI_PAR (C=4-par, G=5-par),
 SI_L (L integer), SI_W (>=3 direction witnesses), SI_F (fundamental (2,1)).
+
+Primary source: Ben Iverson (1988), Pyth-1 Ch V, "Sixteen Identities of a
+Prime Pythagorean Triangle"; Wildberger, N.J. (2005), Divine Proportions,
+Wild Egg Books (chromogeometry F,C,G quadrances).
 """
 
 import json
@@ -176,6 +180,7 @@ def self_test():
     expected = {
         "si_pass_fundamental.json": True,
         "si_pass_witnesses.json": True,
+        "si_fail_bad_identity.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

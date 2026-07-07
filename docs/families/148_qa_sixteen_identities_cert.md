@@ -95,6 +95,7 @@ wrong.
 
 - `fixtures/si_pass_fundamental.json` — 4 directions: (2,1),(3,2),(4,1),(4,3) with all 16 quantities + 9 relations
 - `fixtures/si_pass_witnesses.json` — 6 directions spanning elliptic (I<0) and hyperbolic (I>0) regimes
+- `fixtures/si_fail_bad_identity.json` — Falsifier: direction (3,2) with wrong declared H=999 and direction (4,1) with wrong declared C=9 (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -144,3 +145,15 @@ Worth remembering: fixing one cert's proof gap doesn't guarantee a
 previously-"clean" sibling cert covering the same divisibility fact is
 actually clean — re-check adjacent proofs specifically for the same
 error pattern, not just the identities you originally set out to verify.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). No `result=="FAIL"`
+short-circuit exists (no print-corruption bug risk). Added
+`fixtures/si_fail_bad_identity.json` with two independent planted
+defects (direction (3,2) with wrong declared H=999; direction (4,1) with
+wrong declared C=9) and wired it into `self_test()`; verified `SI_IDEN`
+genuinely catches both — note `SI_REL`/`SI_PAR` operate on the
+internally-recomputed values, not the declared fields, so they correctly
+stay green even when a declared field is wrong; only the
+declared-vs-computed cross-check (`SI_IDEN`) is designed to catch this
+class of defect.

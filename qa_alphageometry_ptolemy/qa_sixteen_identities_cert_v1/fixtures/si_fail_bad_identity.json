@@ -1,0 +1,69 @@
+{
+  "schema_version": "QA_SIXTEEN_IDENTITIES_CERT.v1",
+  "certificate_id": "qa.cert.sixteen_identities.fail.bad_identity.v1",
+  "cert_type": "qa_sixteen_identities_cert",
+  "title": "Sixteen Identities FAIL: falsifier with wrong H value and wrong parity",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), same 16-identity system as the PASS fixtures (Iverson, 1988) Pyth-1 Ch V and (Wildberger, 2005) chromogeometry.",
+
+  "_fixture_purpose": "Falsifier: direction (3,2) declares H=999 (should be 17), and direction (4,1) declares C=9 instead of 8. Both trip SI_IDEN, which compares declared values against values genuinely recomputed from (d,e) -- SI_REL and SI_PAR use the recomputed values internally so they still pass on their own terms; only the declared-vs-computed cross-check (SI_IDEN) catches these two planted defects.",
+
+  "directions": [
+    {
+      "d": 2, "e": 1,
+      "identities": {
+        "A": 9, "B": 1, "C": 4, "D": 4, "E": 1, "F": 3, "G": 5,
+        "H": 7, "I": 1, "J": 2, "K": 6, "L": 1,
+        "X": 2, "W": 8, "Y": 5, "Z": 7
+      },
+      "note": "correct, kept valid so this fixture isolates the defects"
+    },
+    {
+      "d": 3, "e": 2,
+      "identities": {
+        "A": 25, "B": 1, "C": 12, "D": 9, "E": 4, "F": 5, "G": 13,
+        "H": 999, "I": 7, "J": 3, "K": 15, "L": 5,
+        "X": 6, "W": 21, "Y": 16, "Z": 19
+      },
+      "note": "FALSIFIER: H should be 17 (C+F=12+5=17), declared 999"
+    },
+    {
+      "d": 4, "e": 1,
+      "identities": {
+        "A": 25, "B": 9, "C": 9, "D": 16, "E": 1, "F": 15, "G": 17,
+        "H": 23, "I": -7, "J": 12, "K": 20, "L": 10,
+        "X": 4, "W": 24, "Y": 9, "Z": 21
+      },
+      "note": "FALSIFIER: C should be 8 (2*4*1=8), declared 9; breaks C=4-par rule (9 mod 4 = 1)"
+    }
+  ],
+
+  "algebraic_relations": [
+    "G + C = A = a²",
+    "G - C = B = b²",
+    "G = (A+B)/2",
+    "F² + C² = G² (Pythagorean / chromogeometry Thm 6)",
+    "H² + I² = 2G²",
+    "L = CF/12 (always integer for primitive directions)",
+    "C ≡ 0 (mod 4) — C is always 4-par",
+    "G ≡ 1 (mod 4) — G is always 5-par",
+    "W = X + K = d(e+a)"
+  ],
+
+  "validation_checks": [
+    {"check_id": "SI_1",   "description": "schema_version correct", "passed": true},
+    {"check_id": "SI_2",   "description": "all directions primitive, opposite parity", "passed": true},
+    {"check_id": "SI_IDEN","description": "FALSIFIER: direction[1] H declared 999, computed 17; direction[2] C declared 9, computed 8", "passed": false},
+    {"check_id": "SI_REL", "description": "relations hold on recomputed values regardless of declared-field defects", "passed": true},
+    {"check_id": "SI_PAR", "description": "parity holds on recomputed values regardless of declared-field defects", "passed": true},
+    {"check_id": "SI_L",   "description": "L=CF/12 positive integer for all", "passed": true},
+    {"check_id": "SI_W",   "description": "3 direction witnesses", "passed": true},
+    {"check_id": "SI_F",   "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [
+    "SI_IDEN: direction[1] (3,2) H declared 999, computed 17",
+    "SI_IDEN: direction[2] (4,1) C declared 9, computed 8"
+  ],
+  "result": "FAIL"
+}

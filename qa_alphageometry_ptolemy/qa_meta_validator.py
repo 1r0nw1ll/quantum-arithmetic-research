@@ -14182,7 +14182,7 @@ FAMILY_SWEEPS = [
      "qa_path_shape_cert_v1", True),
     (144, "QA Male/Female Octave Cert family",
      _validate_male_female_octave_cert_family,
-     "Male→Female transform (double e, swap b↔e) gives female=(2e,b,a,2d); female_product=4×male_product; 4×=2 octaves; fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; chains indefinitely (+2 octaves per step) (RE-VERIFIED 2026-07-06, confirmed clean); checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok",
+     "Male→Female transform (double e, swap b↔e) gives female=(2e,b,a,2d); female_product=4×male_product; 4×=2 octaves; fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; chains indefinitely (+2 octaves per step) (RE-VERIFIED 2026-07-06, confirmed clean); checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added mf_fail_bad_transform.json (wrong transform + 7x instead of 4x product ratio); result=='PASS' internally by design since result=='FAIL' short-circuits pair-checking in this validator.",
      "144_qa_male_female_octave_cert",
      "qa_male_female_octave_cert_v1", True),
     (143, "QA Cube Sum Cert family",

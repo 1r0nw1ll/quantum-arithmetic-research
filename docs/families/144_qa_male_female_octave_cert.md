@@ -105,6 +105,7 @@ Each application of the transform adds exactly 2 more octaves.
 
 - `fixtures/mf_pass_fundamental.json` — algebraic proof + 3 pairs (fundamental + 2 Fibonacci)
 - `fixtures/mf_pass_witnesses.json` — 5 pairs including chained transform demonstration
+- `fixtures/mf_fail_bad_transform.json` — Falsifier: second pair's declared female violates both the (2e,b,a,2d) transform and the 4x product ratio (declares a 7x ratio); also below the 3-pair minimum (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -122,3 +123,17 @@ gap. The Keely/Dale-Pond "2-octave separation" framing is attributed to
 this project's own internal source notes (`memory/qa_source_texts.md`),
 not an external primary source — treated as self-contained QA algebra
 per the same convention as [152]/[183], no external citation needed.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). Confirmed the validator does
+have a `result=="FAIL"` short-circuit branch, but no `print()` inside it
+— no print-corruption bug risk (the branch was already safe). Note:
+because that short-circuit skips all pair-checking when `result=="FAIL"`,
+the new FAIL fixture deliberately declares `"result": "PASS"` internally
+so the real `MF_TRANS`/`MF_PROD`/`MF_W` checks actually execute and catch
+the planted defects (mirrors the same pattern already used in cert
+[214]'s `nfs_fail_wrong_orbit.json`). Added
+`fixtures/mf_fail_bad_transform.json` and wired it into `_self_test()`;
+verified MF_TRANS, MF_PROD, and MF_W all genuinely catch the planted
+defect (a female QN with the wrong transform and a 7x instead of 4x
+product ratio).

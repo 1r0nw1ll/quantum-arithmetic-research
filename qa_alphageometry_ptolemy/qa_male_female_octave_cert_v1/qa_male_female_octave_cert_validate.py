@@ -37,6 +37,9 @@ QA CONNECTIONS:
   - a_f = 2d_male (female apogee = 2× male direction)
   - The male-female pair shares the Pythagorean triple structure through cert [130]
 
+Primary source: Ben Iverson QA framework (male/female QN taxonomy);
+Dale Pond SVP (Keely male/female vibration terminology, 2 octaves).
+
 CHECKS:
   MF_1    schema_version == 'QA_MALE_FEMALE_OCTAVE_CERT.v1'
   MF_2    d=b+e, a=b+2e for all declared QNs
@@ -173,13 +176,14 @@ def validate(path):
 
 def _self_test():
     fixtures_dir = Path(__file__).parent / "fixtures"
-    expected_pass = [
-        "mf_pass_fundamental.json",
-        "mf_pass_witnesses.json",
-    ]
+    expected = {
+        "mf_pass_fundamental.json": True,
+        "mf_pass_witnesses.json": True,
+        "mf_fail_bad_transform.json": False,
+    }
     results = []
     all_ok = True
-    for fname in expected_pass:
+    for fname, should_pass in expected.items():
         fpath = fixtures_dir / fname
         if not fpath.exists():
             results.append({"fixture": fname, "ok": False, "error": "file not found"})
@@ -192,9 +196,10 @@ def _self_test():
             results.append({"fixture": fname, "ok": False, "error": str(ex)})
             all_ok = False
             continue
-        if not passed:
+        ok = passed == should_pass
+        if not ok:
             all_ok = False
-        results.append({"fixture": fname, "ok": passed, "errors": errors})
+        results.append({"fixture": fname, "ok": ok, "errors": errors})
     return {"ok": all_ok, "results": results}
 
 

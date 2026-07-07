@@ -1,0 +1,55 @@
+{
+  "schema_version": "QA_MALE_FEMALE_OCTAVE_CERT.v1",
+  "certificate_id": "qa.cert.male_female_octave.fail.bad_transform.v1",
+  "cert_type": "qa_male_female_octave_cert",
+  "title": "Male/Female Octave FAIL: falsifier with wrong female transform and wrong product ratio",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), reusing the same algebraic identity as the PASS fixtures. Grounded per the same sources as the PASS fixtures: Ben Iverson QA framework (Iverson, 1991) male/female QN taxonomy; Dale Pond SVP (Pond, 2004) Keely male/female vibration terminology.",
+
+  "_fixture_purpose": "Falsifier: declares a female QN that does not follow the (2e,b,a,2d) transform and whose product is not 4x the male product. NOTE: 'result' is deliberately 'PASS' here (not 'FAIL') because this validator's validate() short-circuits to skip all pair-checking logic when result=='FAIL' -- setting 'PASS' lets MF_TRANS/MF_PROD actually run and catch the planted defects, matching the file's real intended validation OUTCOME (should FAIL under --self-test's expectation).",
+
+  "algebraic_proof": {
+    "claim": "female_product = 4 x male_product for any QN (b,e,d,a) with d=b+e, a=b+2e",
+    "transform": "female = (b_f, e_f, d_f, a_f) = (2e, b, a, 2d)",
+    "steps": [
+      "Same algebraic identity as the PASS fixtures; this fixture intentionally violates it to test detection."
+    ],
+    "musical": "4x = 2 octaves (1 octave = 2x frequency)"
+  },
+
+  "pairs": [
+    {
+      "male":   {"b": 1, "e": 1, "d": 2, "a": 3, "product": 6},
+      "female": {"b": 2, "e": 1, "d": 3, "a": 4, "product": 24},
+      "ratio": 4,
+      "check": "fundamental pair, correct -- kept valid so this fixture isolates the defect to the second pair"
+    },
+    {
+      "male":   {"b": 1, "e": 2, "d": 3, "a": 5, "product": 30},
+      "female": {"b": 5, "e": 1, "d": 6, "a": 7, "product": 210},
+      "ratio": 7,
+      "check": "FALSIFIER: correct female should be (b_f=2e=4, e_f=b=1, d_f=a=5, a_f=2d=6), product=4x30=120. Declared (5,1,6,7) product=210 violates both MF_TRANS and MF_PROD."
+    }
+  ],
+
+  "connections": {
+    "qa_source": "Same as PASS fixtures; this is an intentional falsifier for validator testing, not a new claim."
+  },
+
+  "validation_checks": [
+    {"check_id": "MF_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "MF_2",    "description": "d=b+e, a=b+2e for all QNs", "passed": true},
+    {"check_id": "MF_TRANS","description": "female=(2e,b,a,2d) -- FALSIFIER: second pair violates this", "passed": false},
+    {"check_id": "MF_PROD", "description": "female product=4xmale product -- FALSIFIER: second pair is 7x not 4x", "passed": false},
+    {"check_id": "MF_OCT",  "description": "4x=2 octaves (musical interpretation)", "passed": true},
+    {"check_id": "MF_F",    "description": "fundamental (1,1,2,3)->(2,1,3,4): 6->24=4x6", "passed": true},
+    {"check_id": "MF_W",    "description": "2 pairs (below the >=3 minimum, also caught by MF_W)", "passed": false}
+  ],
+
+  "fail_ledger": [
+    "MF_TRANS: male(1,2)->female expected (4,1,5,6), got (5,1,6,7)",
+    "MF_PROD: female_product=210 != 4xmale_product=120 for male(1,2)->female(5,1,6,7)",
+    "MF_W: need >=3 pairs, got 2"
+  ],
+  "result": "PASS"
+}

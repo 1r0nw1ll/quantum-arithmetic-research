@@ -114,3 +114,15 @@ This tuple is the female Fibonacci seed from cert [354] (Pyth-3 Ch.13-14):
 **Female extension**: female triangles not covered by Vol-I divisibility laws — they are a genuine extension requiring separate certification
 
 **Key identity chain**: H²-I²=48L = 2×(H²-G²=24L); confirms the 24L structure of cert [352]
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims over
+268 male pairs and 78 female pairs (b,e≤25): W=de+K, Y=C+E, W=F+Y exact
+for all male pairs; Z=G+de ordering Z<W, Z>F, Z>Y exact; H²-I²=48L
+exact; the male/female C-mod-4 discriminant (male always 0, female
+always 2); and the full female seed (2,1,3,4) numeric table (C=6, F=8,
+G=10, H=14, I=2, L=4, W=15, Y=7, Z=13, J=6, K=12) — every value matches
+the doc's table exactly. The validator
+(`qa_pyth3_twenty_identities_cert_validate.py`) is genuinely computed,
+no fixture-trusting gap.

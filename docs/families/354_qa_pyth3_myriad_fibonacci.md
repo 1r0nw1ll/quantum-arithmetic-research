@@ -107,3 +107,14 @@ Prime/prime-power status of each term ≥2:
 
 **Depends on**: [350] QN Definition and Law of Harmonics; [346] Fibonacci-Lucas Bridge; [349] Twin Prime Mod-6 Structure  
 **Key insight**: Male and female Fibonacci strings both terminate at the same structural boundary: first element that is neither prime nor a prime power — connecting Iverson's gender dichotomy to the prime-power classification of integers
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims: the
+8-tuple enumeration (re-verified with a much wider search bound, b,e up
+to 29, confirming no additional solutions are missed by the validator's
+1..7 loop range); 5040=7!, 5041=71², 71 prime; the (k,k,2k,3k) secondary
+groups and their mod-9 scalar cycle 3,6,9,...; both Fibonacci strings
+and their prime-power termination points (21=3×7, 18=2×3²). The
+validator (`qa_pyth3_myriad_fibonacci_cert_validate.py`) is a
+genuinely-computed assertion script — no fixture-trusting gap.

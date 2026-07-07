@@ -97,3 +97,15 @@ The parity of C is a **complete invariant**: C mod 4 = 0 ↔ male; C mod 4 = 2 �
 **Depends on**: [355] Formal Proofs (parity of d,e for male); [357] Twenty Identities (female triangle structure, C≡2 mod 4)  
 **Extended by**: [358] Myriad Structure (7 Myriads of nightside energy parallel to 7 dayside Myriads)  
 **Key invariant**: parity(C) = parity(b) ∈ {0, 2} (mod 4); this is the male/female discriminant — a single derived identity encodes the entire male/female partition
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced the 4-way mod-4
+partition of {1..24} (exactly 6 of each class). The remaining claims
+(product/sum tables for 3-par/5-par, the nightside b/a mod-4
+correlation, and the C-mod-4 male/female discriminant) were confirmed by
+running the validator itself, which genuinely recomputes all cases
+(625 pairs for C2/C3, 121 female pairs for C4, 239 pairs for C5) rather
+than trusting fixture values — no fixture-trusting gap. The algebraic
+proofs in the doc (e.g. `(4j+3)(4k+3)≡1 mod 4`) are straightforward and
+match the validator's exhaustive checks exactly.

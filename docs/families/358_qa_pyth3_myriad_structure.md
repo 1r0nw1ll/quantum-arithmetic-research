@@ -120,3 +120,14 @@ The doubled tuple has gcd(6,2)=2 — it is NOT primitive. Every primitive tuple'
 
 **Depends on**: [356] Pyth-1 Conclusions (quantum year 360=24×15); [355] Formal Proofs (divisibility structure); [357] Twenty Identities (bead-chain identities); [318] Synchronous Harmonics Ceiling (harmonic integer structure)  
 **Uniqueness claim**: the bugle 4-note just-intonation chain is the unique primitive arithmetic QA octave sequence — a structural singularity in the space of all such chains
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims: 10000
+mod 24=16, digital root=1; 360=2³×3²×5 has prime factors {2,3,5}, first
+prime not dividing it is 7; 49 mod 24=1, 49 mod 9=4; the bugle chain
+(3,1,4,5) with a+e=6=2b, 3²+4²=5², bead triple C=8/F=15/G=17 satisfying
+8²+15²=17²; and the doubling-scaling law (all quadratic identities ×4,
+`L` ×16) verified exactly for (3,1,4,5)→(6,2,8,10). The validator
+(`qa_pyth3_myriad_structure_cert_validate.py`) is genuinely computed, no
+fixture-trusting gap.

@@ -100,3 +100,16 @@ Since b is always odd, b² is always an odd perfect square. The difference G-C i
 
 **Depends on**: [342] Pythagorean Divisibility Laws; [351] G,H,I Exclusion Laws; [349] Twin Prime Mod-6 Structure  
 **Key insight**: Iverson's 13-proof chain formalizes why the bead identities C,F,G are divisible by 4,3×anything,1 respectively — establishing that the prime triangle area is always a multiple of 6, i.e., L is always a positive integer
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims in a
+standalone script over all 268 valid `(b,e)` pairs with b≤25, e≤25: d/e
+parity exactly one even (C1), factor 3 always present in `{b,e,d,a}`
+(C2), `C=2de` always divisible by 4 (C3), `CF/2` always divisible by 6
+(C4), `G-C=b²` exactly (C5) — 0 failures across all 268 pairs, matching
+the doc exactly. The validator
+(`qa_pythagorean_formal_proofs_cert_validate.py`) is genuinely computed
+— the `b` odd / `gcd(b,e)=1` enumeration correctly parametrizes primitive
+directions (equivalent to the standard `gcd(d,e)=1` condition since
+`gcd(b,e)=gcd(d-e,e)=gcd(d,e)`), no fixture-trusting gap.

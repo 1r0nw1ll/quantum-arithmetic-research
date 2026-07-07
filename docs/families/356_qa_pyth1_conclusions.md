@@ -96,3 +96,19 @@ L grows rapidly; sequence 1,5,14,30,55 matches OEIS A001700 (triangular numbers 
 Planetary units (miles), year length (365.25 days), musical frequency ratios, and aphelion/perihelion distances are **observer projections** — they measure QA structure but do not feed back as QA inputs. The bead arithmetic (b,e,d,a) is the causal layer.
 
 **Depends on**: [355] Formal Proofs (for C3, C4 divisibility proofs); [337] J,K Parameters (K-J=C identity)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently reproduced all 5 claims: the
+120-3599-3601 triangle from (b=59,e=1,d=60,a=61) with C²+F²=G² exact,
+J=3540/K=3660/K-J=120=C; 360 mod 24=0 and 365 mod 24=5; the 4^4=256 song
+structure arithmetic; all 268/161 valid pairs giving positive-integer
+identities with `L=abde/6` always integer, first-5 L values
+1,5,14,30,55 exact. Noted a harmless internal wording inconsistency
+(doc's claims table says "11 primary identities" excluding L, prose
+elsewhere says "12 primary identities" including L) — both the doc and
+the validator's own return message are consistently ambiguous about
+this, not a computational bug (L is separately and correctly proven
+integer in the same check). The validator
+(`qa_pyth1_conclusions_cert_validate.py`) is genuinely computed, no
+fixture-trusting gap.

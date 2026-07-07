@@ -63,3 +63,10 @@ The universal a₄=p² in the GL₄/ℚ AI Euler polynomial directly encodes ∏
 - Synthesizes [404] (split AI factor) + [409] (inert AI factor) into the unified ζ_F structure
 - χ₅ classification is the integer-arithmetic backbone underlying both cert families
 - p=5 (ramified, conductor 125=5³) — local factor at p=5 is a separate rung
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the split/inert
+classification via p mod 5 and the norm product identity ∏N(𝔭)=p² for
+all 44 primes in a fresh script — exact match. Genuine falsifiable
+integer arithmetic, no fixture-trusting gap.

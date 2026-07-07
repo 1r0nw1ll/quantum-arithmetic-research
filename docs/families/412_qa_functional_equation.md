@@ -97,3 +97,13 @@ Cert [412] closes the Langlands ladder for f = 2.2.5.1-125.1-a:
 | [410] | Dedekind ζ_{ℚ(√5)}=ζ·L(s,χ₅) | all unramified |
 | [411] | Ramified p=5: P_5^{ram}=1 | p=5 |
 | **[412]** | **Global functional equation skeleton** | **global** |
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified N=5⁸=390625, the
+Fraction-arithmetic analytic center 1/2, and the Gamma-shift
+complementarity {1/2,1/2,3/2,3/2} closed under μ↦2−μ in a fresh
+script — exact match. The doc is careful to correctly separate the
+integer/Fraction QA-layer skeleton from the genuinely continuous
+observer-projection quantities (ε, Γ evaluations, L(1/2)) — good
+Theorem NT discipline.

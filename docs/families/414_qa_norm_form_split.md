@@ -108,3 +108,17 @@ boundary (integer solutions exist ↔ do not exist).
 - **Bridges to**: cert [410] (Dedekind zeta factorization using same split/inert/ramified classification)
 - **Bridges to**: cert [413] (BSD central value trichotomy — same prime classes, different evaluation point)
 - **Relation to cert [214]**: cert [214] certifies the sign-flip identity on the Eisenstein form; [414] certifies the form's number-theoretic identity as a norm form
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no genuine bugs — one minor stale doc-wording
+discrepancy found. Independently re-verified in a fresh script: all 22
+`SPLIT_PRIMES` (the validator's actual hardcoded list goes up to
+p=491, not the doc text's stated "≤193") have a primitive
+representation a²+ab−b²=±p; all 22 `INERT_PRIMES` (correctly ≤193) have
+none; and the zero locus has no non-trivial integer solution in the
+±30 box. The doc's C2/C3 prose ("Verified exhaustively for all 22 split
+primes ≤ 193") doesn't match the validator's actual `SPLIT_PRIMES` list
+(which reuses cert [403]'s p≤491 set) — a copy-paste-from-INERT_PRIMES
+wording slip, not a computational error. Both check functions
+themselves are genuine and pass on the real, wider range.

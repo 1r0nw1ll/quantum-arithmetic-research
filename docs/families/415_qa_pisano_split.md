@@ -96,3 +96,12 @@ All three levels use only integer arithmetic. All three are independently falsif
 - **Inherits from**: cert [133] (QA T-step sign-flip), cert [414] (norm form bridge)
 - **Bridges to**: cert [410] (Dedekind zeta factorization uses same trichotomy)
 - **Parallel to**: cert [413] (BSD central value trichotomy — same three classes, different context)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the Pisano-period
+splitting criterion from scratch in a fresh script (own `pisano()`
+implementation, not reusing validator code): π(p)|p−1 holds for all 45
+split primes tested (p≤500), π(p)|2(p+1) and π(p)∤p−1 for all 25 inert
+primes tested (p≤200), and π(5)=20 exactly. Genuine falsifiable number
+theory, no fixture-trusting gap.

@@ -126,3 +126,13 @@ level 2. The QA T-step encodes ℚ(√5) splitting at every level of the chain.
 
 - **Inherits from**: cert [133] (QA T-step sign-flip), cert [414] (norm form bridge), cert [415] (Pisano two-condition criterion)
 - **Bridges to**: cert [410] (Dedekind zeta factorization — same trichotomy), cert [413] (BSD central value trichotomy)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the rank-of-apparition
+formula α(p) | p−(5/p) from scratch in a fresh script (own rank-of-
+apparition and Kronecker-symbol implementations) for all 45 split/inert
+primes tested plus p=5 — zero failures. Also independently confirmed
+π(p)/α(p) ∈ {1,2,4} for every one of those primes. Genuine falsifiable
+number theory (Lehmer 1930's entry-quotient theorem), no fixture-trusting
+gap.

@@ -77,3 +77,11 @@ local type and the high ramification of f at its conductor prime.
 - [410] (Dedekind ζ_{ℚ(√5)}=ζ·L(s,χ₅)) shows the same {split/inert/ramified} trichotomy
   at the level of ζ_F; [411] shows it at the GL₄/ℚ AI level
 - With [411], the Langlands ladder [403]→[404]→…→[411] has a complete Euler product description
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the partition
+{0}∪{1,4}∪{2,3}={0,...,4} is complete and disjoint, and the Artin
+conductor formula 2·3+2·1=8 in a fresh script — exact match. The
+supercuspidal classification (n≥2) and trivial-Euler-factor consequence
+are standard local Langlands facts correctly applied.

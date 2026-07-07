@@ -1,0 +1,65 @@
+{
+  "schema_version": "QA_SYNCHRONOUS_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.synchronous_harmonics.fail.bad_sync.v1",
+  "cert_type": "qa_synchronous_harmonics_cert",
+  "title": "Synchronous Harmonics FAIL: falsifier with wrong sync_time and wrong interference label",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), same theorems as the PASS fixtures: coprime sync and par interference (Iverson, 1988) Pyth-2 Ch XIII and (Iverson, 1990) QA-2 Ch 6.",
+
+  "_fixture_purpose": "Falsifier: sync_pair (3,5) declares sync_time=999 (should be 15, trips SH_SYNC), and par_pair (3,7) declares interference=OPPOSE (should be SUPPORT since both are 3-par, trips SH_PAR).",
+
+  "sync_pairs": [
+    {
+      "m": 3, "n": 5,
+      "coprime": true, "sync_time": 999,
+      "note": "FALSIFIER: sync_time should be 15 (3x5), declared 999"
+    },
+    {
+      "m": 6, "n": 9,
+      "coprime": false, "sync_time": 18,
+      "note": "correct, kept valid"
+    },
+    {
+      "m": 8, "n": 12,
+      "coprime": false, "sync_time": 24,
+      "note": "correct, kept valid"
+    }
+  ],
+
+  "par_pairs": [
+    {
+      "p1": 3, "p2": 7,
+      "par1": "3-par", "par2": "3-par",
+      "interference": "OPPOSE",
+      "note": "FALSIFIER: both 3-par so interference should be SUPPORT, declared OPPOSE"
+    },
+    {
+      "p1": 5, "p2": 13,
+      "par1": "5-par", "par2": "5-par",
+      "interference": "SUPPORT",
+      "note": "correct, kept valid"
+    },
+    {
+      "p1": 3, "p2": 5,
+      "par1": "3-par", "par2": "5-par",
+      "interference": "OPPOSE",
+      "note": "correct, kept valid"
+    }
+  ],
+
+  "qn_witnesses": [],
+
+  "validation_checks": [
+    {"check_id": "SH_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "SH_SYNC", "description": "FALSIFIER: sync_pair (3,5) declared sync_time=999, computed 15", "passed": false},
+    {"check_id": "SH_PAR",  "description": "FALSIFIER: par_pair (3,7) declared OPPOSE, computed SUPPORT", "passed": false},
+    {"check_id": "SH_W",    "description": "6 total witnesses", "passed": true},
+    {"check_id": "SH_F",    "description": "fundamental (3,5) present", "passed": true}
+  ],
+
+  "fail_ledger": [
+    "SH_SYNC: sync_pair[0] (3,5) declared sync_time=999, computed 15",
+    "SH_PAR: par_pair[0] (3,7) declared OPPOSE, computed SUPPORT"
+  ],
+  "result": "FAIL"
+}

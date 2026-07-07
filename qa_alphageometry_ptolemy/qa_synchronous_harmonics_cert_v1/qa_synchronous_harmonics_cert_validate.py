@@ -20,6 +20,9 @@ Checks: SH_1 (schema), SH_SYNC (coprime→product; non-coprime→LCM<product),
 SH_PAR (par classification correct; same-par support, cross-par oppose),
 SH_PROD6 (QN products divisible by 6), SH_W (>=5 pair witnesses),
 SH_F (fundamental: periods 3,5 synchronize at 15).
+
+Primary source: Ben Iverson (1988), Pyth-2 Ch XIII (par interference);
+Ben Iverson (1990), QA-2 Ch 6 (coprime synchronization).
 """
 
 import json
@@ -167,6 +170,7 @@ def self_test():
     expected = {
         "sh_pass_sync_and_par.json": True,
         "sh_pass_qn_products.json": True,
+        "sh_fail_bad_sync.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

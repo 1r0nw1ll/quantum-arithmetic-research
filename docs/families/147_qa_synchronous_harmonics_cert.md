@@ -72,6 +72,7 @@ Among {b, e, d}, at least one must be even (since d=b+e, if both b,e are odd the
 
 - `fixtures/sh_pass_sync_and_par.json` — 7 sync pairs (5 coprime, 2 non-coprime) + 7 par pairs (4 support, 3 oppose)
 - `fixtures/sh_pass_qn_products.json` — 8 QN product witnesses (all ÷6) + 3 sync + 3 par pairs
+- `fixtures/sh_fail_bad_sync.json` — Falsifier: sync_pair (3,5) with wrong sync_time=999, and par_pair (3,7) wrongly declared OPPOSE instead of SUPPORT (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -93,3 +94,11 @@ XIII" source citations closely enough to corroborate the attribution is
 real (not fabricated), though the specific page-level "3-par HIGH at
 3/4" wording wasn't independently confirmed via search snippet — would
 require access to the primary text itself.
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). No `result=="FAIL"`
+short-circuit exists (no print-corruption bug risk). Added
+`fixtures/sh_fail_bad_sync.json` with two independent planted defects
+(sync_pair (3,5) with wrong sync_time=999; par_pair (3,7) wrongly
+declared OPPOSE) and wired it into `self_test()`; verified SH_SYNC and
+SH_PAR both genuinely catch their respective defects.

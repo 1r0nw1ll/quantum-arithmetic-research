@@ -14167,7 +14167,7 @@ FAMILY_SWEEPS = [
      "qa_sixteen_identities_cert_v1", True),
     (147, "QA Synchronous Harmonics Cert family",
      _validate_synchronous_harmonics_cert_family,
-     "coprime periods sync at product; non-coprime at LCM<product; 3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6 (RE-VERIFIED 2026-07-06, confirmed clean); checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok",
+     "coprime periods sync at product; non-coprime at LCM<product; 3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6 (RE-VERIFIED 2026-07-06, confirmed clean); checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added sh_fail_bad_sync.json (wrong sync_time + wrong interference label), confirmed no print-corruption bug present.",
      "147_qa_synchronous_harmonics_cert",
      "qa_synchronous_harmonics_cert_v1", True),
     (146, "QA Path Scale Cert family",

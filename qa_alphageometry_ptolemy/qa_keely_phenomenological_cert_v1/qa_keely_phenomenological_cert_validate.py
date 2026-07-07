@@ -20,11 +20,30 @@ projections — they reveal but never causally feed back into QA logic.
 Checks:
   KPH_1       — schema_version matches
   KPH_LAWS    — all 17 law numbers present
-  KPH_NT      — Theorem NT compliance declared for all laws
+  KPH_NT      — Theorem NT compliance genuinely cross-checked: every
+                declared law's theorem_nt_role is recomputed against
+                the top-level all_laws_observer_projections claim, not
+                just a trusted pair of top-level booleans (hardened
+                2026-07-06 -- previously a law could secretly declare a
+                non-observer-projection role while the top-level flags
+                stayed true and the check would still pass)
   KPH_OBS     — each law identifies the continuous observable(s)
-  KPH_DISC    — each law identifies the discrete QA source
-  KPH_W       — at least 3 witnesses
+                (hardened 2026-07-06: promoted from warning to error --
+                a missing observable is a genuine gap in the Theorem NT
+                classification claim, not just informational)
+  KPH_DISC    — each law identifies the discrete QA source (hardened
+                2026-07-06: promoted from warning to error, same reason
+                as KPH_OBS)
+  KPH_W       — at least 3 witnesses, AND the union of all witnesses'
+                law_refs covers every required law number (hardened
+                2026-07-06 -- previously only checked witness count, so
+                3 witnesses that all repeated law 13 would still pass
+                without covering any of the other 16 laws)
   KPH_F       — fail_ledger well-formed
+
+Primary source: Pond, D. (svpwiki.com), Keely's 40 Laws of Vibratory
+Physics (Laws 13-15, 19-26, 30-32, 36, 38, 39). Theorem NT (Observer
+Projection Firewall) per docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md.
 """
 
 QA_COMPLIANCE = "cert_validator — validates Keely phenomenological law mappings; no float state"
@@ -70,32 +89,54 @@ def validate(path):
     if missing:
         errors.append(f"KPH_LAWS: missing law numbers: {sorted(missing)}")
 
-    # KPH_NT: Theorem NT compliance
+    # KPH_NT: Theorem NT compliance genuinely cross-checked against every
+    # declared law's theorem_nt_role, not just the top-level booleans.
     nt = cert.get("theorem_nt_compliance")
     if nt:
         if nt.get("all_laws_observer_projections") is not True:
             errors.append("KPH_NT: all_laws_observer_projections must be true")
         if nt.get("no_causal_feedback") is not True:
             errors.append("KPH_NT: no_causal_feedback must be true")
+        if isinstance(laws, dict):
+            non_observer = [
+                law_num for law_num, law_data in laws.items()
+                if isinstance(law_data, dict)
+                and law_data.get("theorem_nt_role") != "observer_projection"
+            ]
+            if non_observer:
+                errors.append(f"KPH_NT: laws {sorted(non_observer)} do not genuinely declare "
+                              f"theorem_nt_role='observer_projection', contradicting the "
+                              f"top-level all_laws_observer_projections=true claim")
     else:
         errors.append("KPH_NT: theorem_nt_compliance block required")
 
-    # KPH_OBS + KPH_DISC: each law should declare observable and discrete source
+    # KPH_OBS + KPH_DISC: each law must declare observable and discrete
+    # source -- promoted from warning to error since a missing field is a
+    # genuine gap in the Theorem NT classification claim.
     if isinstance(laws, dict):
         for law_num, law_data in laws.items():
             if not isinstance(law_data, dict):
                 continue
             obs = law_data.get("continuous_observable")
             disc = law_data.get("discrete_qa_source")
-            if obs is None:
-                warnings.append(f"KPH_OBS: law {law_num} missing continuous_observable")
-            if disc is None:
-                warnings.append(f"KPH_DISC: law {law_num} missing discrete_qa_source")
+            if not obs:
+                errors.append(f"KPH_OBS: law {law_num} missing continuous_observable")
+            if not disc:
+                errors.append(f"KPH_DISC: law {law_num} missing discrete_qa_source")
 
-    # KPH_W: witnesses
+    # KPH_W: witnesses, plus genuine coverage of every required law number
+    # via the union of witnesses' law_refs (previously only the witness
+    # count was checked, so 3 witnesses all repeating the same law would
+    # still pass without covering the other laws).
     witnesses = cert.get("witnesses", [])
     if len(witnesses) < 3:
         errors.append(f"KPH_W: need >= 3 witnesses, got {len(witnesses)}")
+    covered = set()
+    for w in witnesses:
+        covered.update(w.get("law_refs", []))
+    uncovered = REQUIRED_LAWS - covered
+    if uncovered:
+        errors.append(f"KPH_W: witnesses do not cover law numbers: {sorted(uncovered)}")
 
     return errors, warnings
 

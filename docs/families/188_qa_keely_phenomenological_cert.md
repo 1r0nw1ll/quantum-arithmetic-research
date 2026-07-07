@@ -47,10 +47,10 @@ These 17 laws confirm that Keely's experimental observations (sono-thermity, dis
 |----|-------------|
 | KPH_1 | schema_version == 'QA_KEELY_PHENOMENOLOGICAL_CERT.v1' |
 | KPH_LAWS | all 17 law numbers present: {13,14,15,19,20,21,22,23,24,25,26,30,31,32,36,38,39} |
-| KPH_NT | each law's observable is typed as continuous (Theorem NT compliant) |
-| KPH_OBS | observer projection direction verified: QA → continuous, never reverse |
-| KPH_DISC | underlying discrete QA state identified for each observable |
-| KPH_W | ≥3 witnesses (distinct law→observable→QA mappings) |
+| KPH_NT | each declared law's `theorem_nt_role` genuinely cross-checked against the top-level `all_laws_observer_projections` claim (hardened 2026-07-06 — previously only the two top-level booleans were trusted, so a law could secretly declare a non-observer-projection role without being caught) |
+| KPH_OBS | every law declares a non-empty continuous observable (hardened 2026-07-06: promoted from warning to error) |
+| KPH_DISC | every law declares a non-empty discrete QA source (hardened 2026-07-06: promoted from warning to error) |
+| KPH_W | ≥3 witnesses AND the union of witnesses' law_refs covers all 17 required laws (hardened 2026-07-06 — previously only witness count was checked, so 3 witnesses repeating one law would still pass) |
 | KPH_F | ≥1 falsifier (continuous→QA causal input rejected) |
 
 ## Source grounding
@@ -72,3 +72,38 @@ These 17 laws confirm that Keely's experimental observations (sono-thermity, dis
 
 - `fixtures/kph_pass_observer.json` — 17 laws with observable type and QA source mapping
 - `fixtures/kph_fail_no_nt.json` — falsifier with continuous value used as QA input (T2 violation)
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed all 17 required law numbers are declared with
+non-empty `continuous_observable`/`discrete_qa_source` fields, and that
+the 4 witness groups' `law_refs` union to exactly the 17-law set (13-15,
+19-26, 30-32, 36/38/39) with no gaps. This cert is inherently
+qualitative/classificatory (there is no (b,e) arithmetic to independently
+recompute, unlike sibling certs [184]-[187]), so the strongest available
+hardening is cross-checking declared per-law data against the top-level
+claims rather than recomputing numeric identities.
+
+**Found and hardened a real fixture-trusting gap of the same class as
+[184]-[187]**: `KPH_NT` only checked two top-level boolean flags
+(`all_laws_observer_projections`, `no_causal_feedback`) and never
+cross-checked them against the per-law `theorem_nt_role` field — a
+fixture could declare the top-level flags `true` while one or more laws
+secretly carried a non-`observer_projection` role, and the check would
+still pass. Hardened to iterate every declared law and require
+`theorem_nt_role == "observer_projection"`, matching the top-level
+claim. Also promoted `KPH_OBS`/`KPH_DISC` from warnings to hard errors
+(a law missing its observable or discrete-source mapping is a genuine
+gap in the classification claim, not merely informational), and
+hardened `KPH_W` to require the union of all witnesses' `law_refs` to
+cover every required law number, not just a bare count ≥3 (previously 3
+witnesses all repeating the same law would have passed). Verified all
+four hardened checks reject planted errors (sneaky non-observer role,
+missing observable, missing discrete source, non-covering witness set)
+while the real fixtures still pass.
+
+This closes the Keely 5-category cluster audit: [184] Structural Ratio,
+[185] Sympathetic Transfer, [186] Dominant Control, [187] Aggregation,
+[188] Phenomenological — all five now have validators that genuinely
+recompute or cross-check their certified claims rather than trusting
+declared strings/flags.

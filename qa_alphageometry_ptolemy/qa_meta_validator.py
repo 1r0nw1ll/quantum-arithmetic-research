@@ -6512,7 +6512,7 @@ def _validate_keely_aggregation_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_keely_phenomenological_cert_family(base_dir: str) -> Optional[str]:
-    """QA Keely Phenomenological Cert family [188] — certifies Keely's 17 phenomenological laws (Laws 13-15,19-26,30-32,36,38,39) as Theorem NT observer projections. Category 5 of Vibes framework. All 17 describe continuous measurements that reveal but never causally feed back into QA. Largest category (42.5%). Checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Keely Phenomenological Cert family [188] — certifies Keely's 17 phenomenological laws (Laws 13-15,19-26,30-32,36,38,39) as Theorem NT observer projections. Category 5 of Vibes framework. All 17 describe continuous measurements that reveal but never causally feed back into QA. Largest category (42.5%). Checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: hardened KPH_NT to genuinely cross-check every law's theorem_nt_role against the top-level claim (was two trusted booleans only); promoted KPH_OBS/KPH_DISC from warnings to errors; hardened KPH_W to require witness law_refs union covers all 17 laws (was a bare count check). Closes the Keely 5-category cluster audit ([184]-[188])."""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_keely_phenomenological_cert_v1")
     validator = os.path.join(fam_dir, "qa_keely_phenomenological_cert_validate.py")
@@ -14254,7 +14254,7 @@ FAMILY_SWEEPS = [
      "qa_keely_aggregation_cert_v1", True),
     (188, "QA Keely Phenomenological Cert family",
      _validate_keely_phenomenological_cert_family,
-     "Keely's 17 phenomenological laws (13-15,19-26,30-32,36,38,39) → Theorem NT observer projections; Category 5 Vibes framework; 42.5% of laws; continuous measurements reveal but never feed back into QA; checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Keely's 17 phenomenological laws (13-15,19-26,30-32,36,38,39) → Theorem NT observer projections; Category 5 Vibes framework; 42.5% of laws; continuous measurements reveal but never feed back into QA; checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: hardened KPH_NT (per-law theorem_nt_role cross-check vs. trusted top-level booleans), promoted KPH_OBS/KPH_DISC to hard errors, hardened KPH_W (witness law_refs must cover all 17 laws). Closes Keely 5-category cluster audit [184]-[188].",
      "188_qa_keely_phenomenological_cert",
      "qa_keely_phenomenological_cert_v1", True),
     (189, "QA Dale Circle Cert family",

@@ -95,3 +95,12 @@ p=29, p=101, p=181 (all split with the same maximum-rank structure)?
 - **Lucas doubling identity** F_{2n}=F_n×L_n (Lucas 1878) is the engine of C1
 - **Fibonacci odd identity** F_{2k−1}=F_k²+F_{k−1}² (Lucas 1878) is the engine of C2
 - **Open**: characterize non-Fibonacci δ=1 primes beyond maximum-rank condition
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the full δ(p)=1
+census up to 2000 in a fresh script (own rank-of-apparition and direct
+Fibonacci/Lucas implementations) — reproduced {2,3,5,13,41,89,193,233,
+1597,1621} exactly, and confirmed the maximum-rank condition
+2α(p)=p−(5/p) for the 3 non-Fibonacci members {41,193,1621}. Genuine
+falsifiable number theory, no fixture-trusting gap.

@@ -102,3 +102,11 @@ Falsifiable: one prime p ≡ 3 mod 4 with odd α(p) would refute.
 - **Inherits from**: cert [416] (rank of apparition), cert [417] (Wall-Sun-Sun lift)
 - **Connection**: Cassini identity (1680) + Euler's criterion (QR theory) meet QA T-orbit dynamics
 - **Open**: Characterize the "δ(p) = 1" primes (Fibonacci primes ∪ {41, 193, ...})
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived the Cassini gate
+identity F_{α−1}²≡(−1)^α mod p and the p≡3 mod 4 ⟹ α even consequence
+in a fresh script (own rank-of-apparition and Fibonacci implementations)
+for all 95 primes ≤500 — zero failures. Genuine falsifiable number
+theory, no fixture-trusting gap.

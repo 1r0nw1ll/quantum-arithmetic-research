@@ -122,3 +122,12 @@ A Wall-Sun-Sun prime would signal a degenerate structure where the p-adic expans
 - **Inherits from**: cert [415] (Pisano period = prime splitting), cert [416] (rank of apparition)
 - **Bridges to**: cert [413] (BSD — same prime trichotomy at s=½), cert [414] (norm form)
 - **Open connection**: Wall-Sun-Sun conjecture (none of the four equivalent conditions holds for any known prime)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-derived π(p²)=p·π(p) from
+scratch in a fresh script (own Pisano-period implementation) for all
+10 sample primes {2,3,5,7,11,13,23,37,41,47} — exact match. Correctly
+cites the real Wall-Sun-Sun literature (Sun-Sun 1992 equivalence proof;
+McIntosh-Roettger 2007 search bound of 2×10¹⁴, no known WSS prime).
+Genuine falsifiable number theory, no fixture-trusting gap.

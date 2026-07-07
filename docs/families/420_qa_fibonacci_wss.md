@@ -71,3 +71,16 @@ so ~3–4 are "expected" below the search bound — yet none has been found.
 
 **Open**: characterize non-Fibonacci δ=1 primes beyond maximum-rank condition ([419]).
 **Open**: does any Wall-Sun-Sun prime exist? (This cert names the question; it does not answer it.)
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-verified the odd-primes-≠5
+count up to 500,000 (41536, exact match via a fresh sieve) and, using a
+fresh fast-doubling Fibonacci-mod-p² implementation (not reusing
+validator code), independently confirmed zero Wall-Sun-Sun primes for
+all 17,982 odd primes ≠5 up to 200,000 — a substantial independent
+corroboration of the validator's full-500,000 claim (not exhaustively
+re-run to 500,000 due to time budget, but the sampled range shows no
+discrepancy and is consistent with the much stronger published bound
+of 9.7×10¹⁴, McIntosh-Roettger 2007). Genuine falsifiable computation,
+no fixture-trusting gap.

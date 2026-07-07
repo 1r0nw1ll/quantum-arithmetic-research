@@ -98,3 +98,17 @@ Expected ~1.3 WSS primes up to 10¹⁵ (Mertens). None found.
 
 **Open**: Full equidistribution of δ(p) over split AND inert primes jointly; connection
 to the automorphic L-function for ℚ(√5); moments of δ(p)/p as p → ∞.
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently recomputed the entire
+statistical suite from scratch (own fast-doubling Fibonacci
+implementation, not reusing validator code) over all 609 split primes
+in [7,10000]: split-prime count 609, mean 0.486920, sample variance
+0.077583 (matches only with n−1 denominator — population variance
+gives 0.077456, so the doc/validator correctly use sample variance),
+bucket counts [65,64,55,55,69,59,82,66,50,44] exact, χ²=17.0920 exact,
+KS Dₙ=0.057869 exact. Every reported statistic independently
+reproduced to full precision — this is a genuine, honestly-reported
+empirical result, not fabricated or cherry-picked. No fixture-trusting
+gap.

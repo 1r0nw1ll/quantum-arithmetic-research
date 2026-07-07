@@ -79,3 +79,15 @@ Cert [421] is the algebraic bridge that makes this connection precise.
 
 **Open (Langlands)**: The full equidistribution of δ(p) over all primes — split and inert —
 and its connection to the automorphic L-function for ℚ(√5).
+
+## Verification Note (2026-07-07)
+
+Confirmed clean, no bugs. Independently re-implemented the Hensel lift
+of √5 mod p² from scratch (Tonelli-Shanks + Newton step) for 20 split
+primes ≤200, confirming φ̃²≡φ̃+1, ψ̃²≡ψ̃+1, φ̃+ψ̃≡1, φ̃ψ̃≡−1 mod p² in all
+cases — first attempt had a self-authored bug (forgot to divide the
+Newton-step numerator by p before applying the modular inverse),
+corrected and reconfirmed. Also independently verified the Binet-vs-
+recurrence δ(p) equivalence for all 45 split primes ≤500 in a fresh
+script — exact match in every case. Genuine falsifiable algebra, no
+fixture-trusting gap.

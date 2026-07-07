@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_PAR_NUMBER_CERT.v1",
+  "certificate_id": "qa.cert.par_number.fail.bad_classification.v1",
+  "cert_type": "qa_par_number_cert",
+  "title": "Par Number FAIL: falsifier with wrong par classification, wrong QA direction parity, and wrong multiplication table entry",
+  "created_utc": "2026-07-07T00:00:00Z",
+  "_primary_source_note": "Intentional falsifier for validator testing (not a new claim), same par system as the PASS fixtures: Iverson QA-2 Ch 3 (Iverson, 1988); rank-of-apparition context (Wall, 1960).",
+
+  "_fixture_purpose": "Falsifier: declares n=7 as 2-par (should be 3-par, trips PN_CLASS), and a multiplication table entry 3-par x 3-par = 4-par instead of 5-par (trips PN_MULT).",
+
+  "par_witnesses": [
+    {"n": 2, "par": 2, "note": "2-par: 2≡2 mod 4"},
+    {"n": 6, "par": 2, "note": "2-par: 6≡2 mod 4"},
+    {"n": 7, "par": 2, "note": "FALSIFIER: 7≡3 mod 4 is 3-par, not 2-par"},
+    {"n": 4, "par": 4, "note": "4-par: 4≡0 mod 4"},
+    {"n": 8, "par": 4, "note": "4-par: 8≡0 mod 4"},
+    {"n": 5, "par": 5, "note": "5-par: 5≡1 mod 4"},
+    {"n": 9, "par": 5, "note": "5-par: 9≡1 mod 4"},
+    {"n": 13, "par": 5, "note": "5-par: 13≡1 mod 4"}
+  ],
+
+  "square_witnesses": [
+    {"n": 3, "square_par": 5, "note": "3²=9 → 5-par (male squared)"},
+    {"n": 5, "square_par": 5, "note": "5²=25 → 5-par (male squared)"},
+    {"n": 7, "square_par": 5, "note": "7²=49 → 5-par (male squared)"},
+    {"n": 9, "square_par": 5, "note": "9²=81 → 5-par (male squared)"}
+  ],
+
+  "direction_witnesses": [
+    {"d": 2, "e": 1, "C": 4, "G": 5, "note": "C=4 (4-par); G=5 (5-par) -- correct, kept valid"},
+    {"d": 3, "e": 2, "C": 12, "G": 13, "note": "C=12 (4-par); G=13 (5-par) -- correct, kept valid"}
+  ],
+
+  "fib_witnesses": [],
+
+  "par_multiplication_table": [
+    {"a_par": 2, "b_par": 2, "result_par": 4},
+    {"a_par": 3, "b_par": 3, "result_par": 4, "note": "FALSIFIER: 3-par x 3-par should be 5-par (male x male = male), declared 4-par"},
+    {"a_par": 5, "b_par": 5, "result_par": 5}
+  ],
+
+  "validation_checks": [
+    {"check_id": "PN_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "PN_CLASS","description": "FALSIFIER: n=7 declared 2-par, computed 3-par", "passed": false},
+    {"check_id": "PN_SQ",   "description": "4 male squares all 5-par", "passed": true},
+    {"check_id": "PN_QA",   "description": "2 directions: C=4-par, G=5-par", "passed": true},
+    {"check_id": "PN_MULT", "description": "FALSIFIER: 3-par x 3-par declared 4-par, computed 5-par", "passed": false},
+    {"check_id": "PN_W",    "description": "14 total witnesses", "passed": true},
+    {"check_id": "PN_F",    "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [
+    "PN_CLASS: n=7 declared 2-par, computed 3-par",
+    "PN_MULT: par(3-par x 3-par) declared 4-par, computed 5-par"
+  ],
+  "result": "FAIL"
+}

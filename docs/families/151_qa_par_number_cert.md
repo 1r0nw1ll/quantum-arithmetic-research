@@ -73,6 +73,7 @@ For primes p, the number of Fibonacci zeros mod p within one Pisano period relat
 
 - `fixtures/pn_pass_classification.json` — 8 par witnesses + 6 male squares + 6 directions + multiplication table
 - `fixtures/pn_pass_fib_hits.json` — 4 Fib_hits observations for par-classified integers
+- `fixtures/pn_fail_bad_classification.json` — Falsifier: n=7 wrongly declared 2-par (actually 3-par), and multiplication table entry 3-par×3-par wrongly declared 4-par (actually 5-par) (added 2026-07-07)
 
 ## Verification Note (2026-07-06)
 
@@ -107,3 +108,12 @@ symbol alone determines the count. The true determinant is the rank of
 apparition α(p) (smallest k with p | F_k) relative to π(p) — a
 finer-grained invariant this cert doesn't attempt to characterize, per
 Wall (1960).
+
+**Follow-up (2026-07-07)**: this family had zero FAIL fixtures (part of
+the 13-family zero-FAIL-fixture cluster). Confirmed no `result=="FAIL"`
+short-circuit branch exists (no print-corruption bug risk). Added
+`fixtures/pn_fail_bad_classification.json` with two independent planted
+defects (n=7 declared 2-par instead of 3-par; multiplication table entry
+3-par×3-par declared 4-par instead of 5-par) and wired it into
+`self_test()`; verified both PN_CLASS and PN_MULT genuinely catch their
+respective defects.

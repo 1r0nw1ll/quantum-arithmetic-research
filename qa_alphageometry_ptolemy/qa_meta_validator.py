@@ -14147,7 +14147,7 @@ FAMILY_SWEEPS = [
      "qa_equilateral_triangle_cert_v1", True),
     (151, "QA Par Number Cert family",
      _validate_par_number_cert_family,
-     "Iverson Double Parity: 2/3/4/5-par mod-4 classification; male²=5-par; C=4-par, G=5-par; multiplication table; Fib_hits observations (RE-VERIFIED 2026-07-06, fixed real Legendre-symbol sign error in fib_witness note); checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok",
+     "Iverson Double Parity: 2/3/4/5-par mod-4 classification; male²=5-par; C=4-par, G=5-par; multiplication table; Fib_hits observations (RE-VERIFIED 2026-07-06, fixed real Legendre-symbol sign error in fib_witness note); checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added pn_fail_bad_classification.json (wrong par(7) + wrong multiplication table entry), confirmed no print-corruption bug present.",
      "151_qa_par_number_cert",
      "qa_par_number_cert_v1", True),
     (150, "QA Septenary Cert family",

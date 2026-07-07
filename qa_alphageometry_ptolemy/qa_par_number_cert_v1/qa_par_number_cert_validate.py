@@ -21,6 +21,10 @@ Key certified properties:
 
 Source: Iverson QA-2 Ch 3; "par" from Hindi "char" (four), not English "parity".
 
+Primary source: Ben Iverson, QA-2 Ch 3 (par number system); Wall, D.D.
+(1960), "Fibonacci Series Modulo m," American Mathematical Monthly
+67(6):525-532 (rank of apparition / Pisano period theory).
+
 Checks: PN_1 (schema), PN_CLASS (par classification correct), PN_SQ (male
 squares → 5-par), PN_QA (C=4-par, G=5-par for directions), PN_FIB (Fib_hits
 matches par class), PN_MULT (par multiplication table), PN_W (>=8 witnesses),
@@ -177,6 +181,7 @@ def self_test():
     expected = {
         "pn_pass_classification.json": True,
         "pn_pass_fib_hits.json": True,
+        "pn_fail_bad_classification.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

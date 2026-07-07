@@ -6490,7 +6490,7 @@ def _validate_keely_dominant_control_cert_family(base_dir: str) -> Optional[str]
 
 
 def _validate_keely_aggregation_cert_family(base_dir: str) -> Optional[str]:
-    """QA Keely Aggregation Cert family [187] — certifies Keely's 5 aggregation/disintegration laws (Laws 3,12,28,34,35) as QA state composition/decomposition. Category 4 of Vibes framework. Coupling tension, orbit density, discord dissociation, deterministic synthesis. Checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Keely Aggregation Cert family [187] — certifies Keely's 5 aggregation/disintegration laws (Laws 3,12,28,34,35) as QA state composition/decomposition. Category 4 of Vibes framework. Coupling tension, orbit density, discord dissociation, deterministic synthesis. Checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed doc's law-name table (all 5 mismatched the certified fixture); implemented previously-missing KAG_COUPLE/KAG_DISSOC; hardened KAG_DENSITY (count/period ratio) and KAG_SYNTH (recompute d/a/f_value/orbit) to genuinely recompute from (b,e,modulus) instead of trusting declared strings/flags."""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_keely_aggregation_cert_v1")
     validator = os.path.join(fam_dir, "qa_keely_aggregation_cert_validate.py")
@@ -14249,7 +14249,7 @@ FAMILY_SWEEPS = [
      "qa_keely_dominant_control_cert_v1", True),
     (187, "QA Keely Aggregation Cert family",
      _validate_keely_aggregation_cert_family,
-     "Keely's 5 aggregation/disintegration laws (3,12,28,34,35) → QA state composition/decomposition; Category 4 Vibes framework; coupling tension, orbit density, discord dissociation, deterministic synthesis; checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Keely's 5 aggregation/disintegration laws (3,12,28,34,35) → QA state composition/decomposition; Category 4 Vibes framework; coupling tension, orbit density, discord dissociation, deterministic synthesis; checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed doc's law-name table (all 5 law names/mappings previously did not match the certified fixture at all); implemented KAG_COUPLE and KAG_DISSOC (both were listed in the docstring/checks-table but had zero code in validate()); hardened KAG_DENSITY to genuinely recompute count/period ratios (was a bare count>count inequality) and KAG_SYNTH to recompute d/a/f_value/orbit from (b,e) (was a bare trusted boolean flag).",
      "187_qa_keely_aggregation_cert",
      "qa_keely_aggregation_cert_v1", True),
     (188, "QA Keely Phenomenological Cert family",

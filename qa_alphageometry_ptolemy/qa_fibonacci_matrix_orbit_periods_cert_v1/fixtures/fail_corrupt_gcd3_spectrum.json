@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture for the GCD-3 satellite-collapse theorem. -->",
+  "description": "Corrupts the m=10 period spectrum (60:61 instead of 60:60), so the exact-spectrum check must reject the artifact.",
+  "kind": "gcd3_satellite_collapse",
+  "moduli": [7, 10],
+  "expected_spectrum": {
+    "7":  {"1": 1, "16": 48},
+    "10": {"1": 1, "3": 3, "4": 4, "12": 12, "20": 20, "60": 61}
+  },
+  "expected": "FAIL"
+}

@@ -64,6 +64,29 @@ The Satellite period 8 = π(3) (the prime factor). The Cosmos period 24 = π(9) 
 
 States with 3|b and 3|e form a subgroup of (Z/9Z)² isomorphic to (Z/3Z)². Under M mod 3 (restricting to this subgroup), M has order π(3) = 8. The Singularity {(0,0)} is the identity element; the remaining 8 form a single orbit of length 8.
 
+## GCD-3 Structural Requirement
+
+The Satellite characterization {3|b AND 3|e} is only a genuine **subgroup** of (Z/mZ)² when 3|m — adding m never changes a residue's value mod 3, so `b%3==0` is a well-defined quotient predicate. When gcd(m,3)=1, 3 is a unit mod m, and the literal condition on canonical representatives is **not** closed under addition (e.g. m=10: 9%3==0 and 3%3==0, but (9+3)%10=2, and 2%3≠0).
+
+**Claim (narrow, falsifiable, verified not proved-in-general)**: for the 8 tested moduli m ∈ {7,10,11,13,14,16,17,20} (all gcd(m,3)=1), the Satellite class is **empty** — no non-origin state has orbit period 8, and the predicate-tree's `period8_nontrivial` flag never fires. This is consistent with a general theorem but is not a full proof of one: M⁸−I mod 9 = [[12,21],[21,33]] = 3·[[4,7],[7,11]]; the factor of 3 is invertible whenever gcd(m,3)=1, so the `period8_fixed` system reduces to a determinant-(−5) system with only the trivial solution **when gcd(m,5)=1** (m=7,11,13,14,16,17 above). For m=10,20 (both divisible by 5), emptiness is confirmed by exhaustive enumeration only — the closed-form argument for the 5|m case is an open gap, not resolved here.
+
+Verified for all 8 moduli: the orbit-period spectrum is a richer, m-specific divisor lattice of π(m), with no period-8 class anywhere:
+
+| m | period spectrum |
+|---|---|
+| 7 | {1:1, 16:48} |
+| 10 | {1:1, 3:3, 4:4, 12:12, 20:20, 60:60} |
+| 11 | {1:1, 5:10, 10:110} |
+| 13 | {1:1, 28:168} |
+| 14 | {1:1, 3:3, 16:48, 48:144} |
+| 16 | {1:1, 3:3, 6:12, 12:48, 24:192} |
+| 17 | {1:1, 36:288} |
+| 20 | {1:1, 3:3, 4:4, 6:12, 12:60, 20:20, 60:300} |
+
+**Relation to cert [515]** (QA Orbit-Lattice Mod-3 Collapse): [515] independently proves, for its own `qa_step` NTRU-coefficient recursion (not the Fibonacci matrix used here), that reduction mod 3 is only a well-defined quotient map when 3|m, and that this creates extra low-period structure absent when gcd(m,3)=1. This cert's finding is **suggestive of, not proved identical to**, that mechanism — both share the same mod-3-invertibility root cause, but this cert does not establish that its Satellite subgroup literally *is* [515]'s NTRU weakness.
+
+New checks: `FMO_GCD3_SUBGROUP_CLOSURE`, `FMO_SATELLITE_EMPTY_OFF3`, `FMO_NONMULT3_SPECTRUM`.
+
 ## Five-Families Alignment
 
 | Family | Sequence pairs | Period | Orbit type |
@@ -89,8 +112,11 @@ Tribonacci pairs all lie in the {3|b, 3|e} subgroup because the tribonacci recur
 | FMO_EXACT_PERIOD_KERNELS | T^4-I and T^8-I equal the declared residual matrices |
 | FMO_CROSS_MODULUS_RULE | Exact residual-kernel predicate rule matches exhaustive orbit iteration for pressure-test moduli |
 | FMO_CROSS_MODULUS_COUNTS | Cross-modulus class counts match declared fixture counts |
+| FMO_GCD3_SUBGROUP_CLOSURE | {3\|b,3\|e} closed under mod-m addition iff 3\|m (true on cross-moduli, false on gcd(m,3)=1 moduli) |
+| FMO_SATELLITE_EMPTY_OFF3 | No period-8 states and no nontrivial `period8_fixed` flags for gcd(m,3)=1 moduli |
+| FMO_NONMULT3_SPECTRUM | Exact orbit-period distribution matches declared divisor-lattice spectrum for gcd(m,3)=1 moduli |
 
-**Fixtures**: 5 PASS + 3 FAIL
+**Fixtures**: 6 PASS + 4 FAIL
 **Self-test**: exhaustive orbit distribution, M^12=-I check, Fibonacci pairs period-24, satellite orbit completeness, cross-modulus exact predicate theorem
 
 ## Primary Sources
@@ -162,3 +188,4 @@ Report: `results/QA_HSI_HOUSTON_LIDAR_2026_06_09.md`
 - [289] QA Koenig Pell Ford Circle — SL(2,Z) generators are the two QA moves
 - [290] QA Classical Subfamily Ford Cusps — Fibonacci/Tribonacci/Ninbonacci as three cusp families
 - [281] QA Pisano-Orbit Correspondence — Pisano period = orbit period (related cert)
+- [515] QA Orbit-Lattice Mod-3 Collapse — shares this cert's mod-3-invertibility root cause (proved independently for [515]'s own `qa_step` recursion, not shown identical to the Fibonacci-matrix Satellite subgroup here)

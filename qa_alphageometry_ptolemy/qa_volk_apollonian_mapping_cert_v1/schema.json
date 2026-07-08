@@ -1,0 +1,51 @@
+{
+  "_primary_source": "Volk's toroidal-coordinate paper (Volk, 2010): Toroids, Vortices, Knots, Topology and Quanta, Part 2, Proceedings of the NPA (NPA-18); helicola R/r parameters build on (Ginzburg, 2006).",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_VOLK_APOLLONIAN_MAPPING_CERT.v1",
+  "description": "Fixture schema for QA Volk Apollonian Bipolar Mapping Cert [517].",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "b", "e", "expected_a_volk", "expected_R_volk", "expected_r_volk_squared"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {
+      "type": "string",
+      "const": "QA_VOLK_APOLLONIAN_MAPPING_CERT.v1"
+    },
+    "fixture_kind": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "primary_source": {
+      "type": "string",
+      "minLength": 10
+    },
+    "b": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "QA root b (first root)"
+    },
+    "e": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "QA root e (second root)"
+    },
+    "expected_a_volk": {
+      "type": "number",
+      "description": "claimed a_volk = e (bipolar pole half-distance)"
+    },
+    "expected_R_volk": {
+      "type": "number",
+      "description": "claimed R_volk = d = b+e (M-circle center)"
+    },
+    "expected_r_volk_squared": {
+      "type": "number",
+      "description": "claimed r_volk^2 = F = ab (kept squared to avoid float sqrt precision issues in fixtures)"
+    },
+    "expected_fail_type": {
+      "type": ["string", "null"],
+      "enum": ["MISSING_FIELD", "WRONG_APOLLONIAN", "WRONG_A_VOLK", null]
+    }
+  }
+}

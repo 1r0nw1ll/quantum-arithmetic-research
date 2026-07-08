@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture for the BEDA-Volk Apollonian identity; primary_source field cites source directly. -->",
+  "schema_version": "QA_VOLK_APOLLONIAN_MAPPING_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "Volk, G. (2010). Toroids, Vortices, Knots, Topology and Quanta, Part 2. Proceedings of the NPA.",
+  "b": 1,
+  "e": 2,
+  "expected_a_volk": 999,
+  "expected_R_volk": 3,
+  "expected_r_volk_squared": 5,
+  "expected_fail_type": "WRONG_A_VOLK"
+}

@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=fixture data derived from mapping_protocol_ref.json's primary source (Volk 2010) and validated exact-integer identity; primary_source field cites source directly. -->",
+  "schema_version": "QA_VOLK_APOLLONIAN_MAPPING_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "Volk, G. (2010). Toroids, Vortices, Knots, Topology and Quanta, Part 2. Proceedings of the NPA. General (b,e) instance, not the canonical tuple.",
+  "b": 3,
+  "e": 7,
+  "expected_a_volk": 7,
+  "expected_R_volk": 10,
+  "expected_r_volk_squared": 51
+}

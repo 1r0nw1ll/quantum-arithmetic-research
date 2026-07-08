@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; claims the wrong recalled pattern (pattern 1) for a probe of pattern 0, to exercise the WRONG_RECALL gate. -->",
+  "schema_version": "QA_PHASE_CONJUGATE_MEMORY_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Hopfield, 1982) DOI 10.1073/pnas.79.8.2554. Negative fixture: probe is corrupted pattern 0 but expected_recall wrongly claims pattern 1.",
+  "m": 24,
+  "patterns": [[1,5,9,13,17,21,2,6,10,14,18,22],[3,3,3,3,12,12,12,12,20,20,20,20],[24,1,24,1,24,1,24,1,24,1,24,1]],
+  "probe": [1,7,9,13,7,21,2,7,10,14,7,22],
+  "expected_recall": [3,3,3,3,12,12,12,12,20,20,20,20],
+  "expected_fail_type": "WRONG_RECALL"
+}

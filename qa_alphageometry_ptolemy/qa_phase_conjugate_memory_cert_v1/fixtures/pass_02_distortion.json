@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=distortion-tolerant recall witness — a global phase screen (phi=5) on the probe is undone by phase-locked recall (the [518] distortion-correction property). -->",
+  "schema_version": "QA_PHASE_CONJUGATE_MEMORY_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Owechko, 1987) IEEE JQE 25(3):619-634 (phase-conjugate resonator self-adjusting to the medium). Probe is corrupted pattern 0 through a global phase screen phi=5; phase-locked recall recovers pattern 0 shifted by phi.",
+  "m": 24,
+  "patterns": [[1,5,9,13,17,21,2,6,10,14,18,22],[3,3,3,3,12,12,12,12,20,20,20,20],[24,1,24,1,24,1,24,1,24,1,24,1]],
+  "probe": [6,12,14,18,12,2,7,12,15,19,12,3],
+  "global_phi": 5,
+  "expected_recall": [6,10,14,18,22,2,7,11,15,19,23,3]
+}

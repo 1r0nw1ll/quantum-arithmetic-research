@@ -1,0 +1,22 @@
+{
+  "_primary_source": "Primary source: (Soffer, 1986) DOI 10.1364/OL.11.000118; (Owechko, 1987) IEEE JQE 25(3):619-634; (Hopfield, 1982) DOI 10.1073/pnas.79.8.2554. Phase-conjugate holographic associative memory (resonator with phase-conjugate mirrors).",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_PHASE_CONJUGATE_MEMORY_CERT.v1",
+  "description": "Fixture schema for QA Phase-Conjugate Holographic Associative Memory Cert [519]: content-addressable recall built on the exact FWM conjugator of cert [518].",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "m", "patterns", "probe", "expected_recall"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_PHASE_CONJUGATE_MEMORY_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "m": {"type": "integer", "minimum": 2},
+    "patterns": {"type": "array", "items": {"type": "array", "items": {"type": "integer", "minimum": 1}}, "description": "stored patterns, each a phase vector in {1,...,m}"},
+    "probe": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "corrupted / possibly phase-shifted probe"},
+    "global_phi": {"type": ["integer", "null"], "description": "if set, probe carries a global phase screen; recall must be phase-locked"},
+    "expected_recall": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "claimed recalled pattern (in the probe's frame)"},
+    "expected_fail_type": {"type": ["string", "null"], "enum": ["MISSING_FIELD", "WRONG_RECALL", "OUT_OF_RANGE", null]}
+  }
+}

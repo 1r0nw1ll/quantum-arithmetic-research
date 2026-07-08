@@ -64,3 +64,23 @@ access that directory. The cert's own "SCAFFOLD — content needs Will
 review" status is accurate and should remain until Will independently
 re-derives or re-confirms those specific numbers from the frozen
 scripts.
+
+## Relationship to cert [518] (2026-07-08)
+
+This cert certifies the *structural parallel* between Bearden's pumped
+phase-conjugate mirror and the QCI opposite-sign ("global tightens / local
+scatters") gap — i.e. a phase-conjugate signature *emerging* from QA's
+self-organizing dynamics. A 2026-07-08 investigation established that this
+emergent signature is **real but weak** and fails the strong, discriminating
+tests: the QCI-gap domains here are WEAK-to-NULL (domain 2 partial_r ≈ −0.13;
+domain 3 NULL with a sign flip), and an independent same-medium-specificity
+test on the driven `QASystem` came back null (the coupling does generic
+medium-agnostic denoising, not phase-conjugate distortion correction).
+
+Cert **[518] (QA FWM Phase Conjugate)** supplies the *explicit*
+conjugate-generating four-wave-mixing operator that these emergent dynamics do
+not implement, and reproduces the distortion-correction theorem exactly
+(same-medium recovery fidelity 1.000 vs 1/m chance). The takeaway: phase
+conjugation belongs in QA as a **constructed primitive [518]**, of which the
+weak emergent QCI signature certified here is only a shadow. Full record:
+`docs/theory/QA_SYNTROPY_PHASE_CONJUGATE_INVESTIGATION.md`.

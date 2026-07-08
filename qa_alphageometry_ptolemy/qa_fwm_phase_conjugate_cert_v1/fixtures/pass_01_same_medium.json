@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=fixture is an exact-integer witness of the distortion-correction theorem (Hellwarth 1977 / Yariv 1978 / Zel'dovich 1985) realized in the QA additive group; primary_source field cites the sources. -->",
+  "schema_version": "QA_FWM_PHASE_CONJUGATE_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Hellwarth, 1977) DOI 10.1364/JOSA.67.000001; (Yariv, 1978) DOI 10.1109/JQE.1978.1069870. Same-medium recovery: return screen equals forward screen -> exact phase conjugate qa_neg(s).",
+  "m": 24,
+  "signal_state": 5,
+  "phase_screen": 8,
+  "pump_forward": 7,
+  "return_screen": 8,
+  "expected_recovered": 19
+}

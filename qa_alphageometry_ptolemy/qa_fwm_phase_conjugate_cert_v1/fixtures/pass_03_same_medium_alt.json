@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=second exact-integer same-medium witness with a different signal/screen/pump, showing recovery is pump-independent. -->",
+  "schema_version": "QA_FWM_PHASE_CONJUGATE_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Hellwarth, 1977) DOI 10.1364/JOSA.67.000001; (Yariv, 1978) DOI 10.1109/JQE.1978.1069870. Same-medium recovery, distinct pump (p_f=13) -> qa_neg(20)=4, confirming pump-independence.",
+  "m": 24,
+  "signal_state": 20,
+  "phase_screen": 3,
+  "pump_forward": 13,
+  "return_screen": 3,
+  "expected_recovered": 4
+}

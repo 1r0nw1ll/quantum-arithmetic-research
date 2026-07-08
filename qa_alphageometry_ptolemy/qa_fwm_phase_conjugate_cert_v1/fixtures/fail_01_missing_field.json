@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; drops a required field to exercise the MISSING_FIELD gate. -->",
+  "schema_version": "QA_FWM_PHASE_CONJUGATE_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Hellwarth, 1977) DOI 10.1364/JOSA.67.000001. Negative fixture: expected_recovered omitted.",
+  "m": 24,
+  "signal_state": 5,
+  "phase_screen": 8,
+  "pump_forward": 7,
+  "return_screen": 8,
+  "expected_fail_type": "MISSING_FIELD"
+}

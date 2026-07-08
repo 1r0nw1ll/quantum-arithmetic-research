@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=exact-integer witness of same-medium specificity (distortion-correction theorem); return through a DIFFERENT screen leaves the residual qa_mod(-s+phi'-phi). -->",
+  "schema_version": "QA_FWM_PHASE_CONJUGATE_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Agarwal & Friberg) scattering theory of distortion correction by phase conjugation; (Zel'dovich, 1985) ISBN 978-3-540-13458-4. Different-medium return (phi'=12 != phi=8) leaves residual, NOT the clean conjugate.",
+  "m": 24,
+  "signal_state": 5,
+  "phase_screen": 8,
+  "pump_forward": 7,
+  "return_screen": 12,
+  "expected_recovered": 23
+}

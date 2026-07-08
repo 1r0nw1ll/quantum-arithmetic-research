@@ -1,0 +1,23 @@
+{
+  "_primary_source": "Primary source: (Hellwarth, 1977) DOI 10.1364/JOSA.67.000001; (Yariv, 1978) DOI 10.1109/JQE.1978.1069870; (Zel'dovich, 1985) ISBN 978-3-540-13458-4; (Agarwal & Friberg) scattering theory of distortion correction by phase conjugation. Four-wave-mixing phase conjugation and the distortion-correction theorem.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_FWM_PHASE_CONJUGATE_CERT.v1",
+  "description": "Fixture schema for QA Four-Wave-Mixing Phase Conjugate Cert [518]: exact realization of the FWM phase-sum relation and distortion-correction theorem in the QA additive group on {1,...,m}.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "m", "signal_state", "phase_screen", "pump_forward", "return_screen", "expected_recovered"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_FWM_PHASE_CONJUGATE_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "m": {"type": "integer", "minimum": 2, "description": "QA modulus; alphabet is {1,...,m}"},
+    "signal_state": {"type": "integer", "minimum": 1, "description": "clean signal phase state s in {1,...,m}"},
+    "phase_screen": {"type": "integer", "minimum": 1, "description": "forward distorting medium phi (per-site modular shift)"},
+    "pump_forward": {"type": "integer", "minimum": 1, "description": "forward pump p_f; backward pump is qa_neg(p_f)"},
+    "return_screen": {"type": "integer", "minimum": 1, "description": "return medium phi'; equals phase_screen for same-medium recovery"},
+    "expected_recovered": {"type": "integer", "minimum": 1, "description": "claimed recovered state = qa_mod(-s + return_screen - phase_screen)"},
+    "expected_fail_type": {"type": ["string", "null"], "enum": ["MISSING_FIELD", "WRONG_RECOVERY", "OUT_OF_RANGE", null]}
+  }
+}

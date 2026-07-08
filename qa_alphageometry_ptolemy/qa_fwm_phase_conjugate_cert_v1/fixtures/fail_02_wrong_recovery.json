@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; claims a wrong recovered value to exercise the WRONG_RECOVERY gate (true same-medium answer is qa_neg(5)=19, not 10). -->",
+  "schema_version": "QA_FWM_PHASE_CONJUGATE_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Yariv, 1978) DOI 10.1109/JQE.1978.1069870. Negative fixture: expected_recovered=10 is wrong; the theorem gives qa_neg(5)=19.",
+  "m": 24,
+  "signal_state": 5,
+  "phase_screen": 8,
+  "pump_forward": 7,
+  "return_screen": 8,
+  "expected_recovered": 10,
+  "expected_fail_type": "WRONG_RECOVERY"
+}

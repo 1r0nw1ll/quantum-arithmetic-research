@@ -11311,6 +11311,54 @@ def _validate_qa_maxwell_derivation_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_fwm_phase_conjugate_cert_family(base_dir):
+    """QA FWM Phase Conjugate Cert family [518]. Primary sources: Hellwarth (1977) J. Opt. Soc. Am. 67(1):1-3 DOI 10.1364/JOSA.67.000001 (backward degenerate four-wave mixing); Yariv (1978) IEEE J. Quantum Electron. 14(9):650-660 DOI 10.1109/JQE.1978.1069870; Zel'dovich, Pilipetsky, Shkunov (1985) Principles of Phase Conjugation, Springer ISBN 978-3-540-13458-4; Agarwal & Friberg, scattering theory of distortion correction by phase conjugation, J. Opt. Soc. Am. CLAIM (exact, falsifiable): the degenerate four-wave-mixing phase-sum relation theta_c=theta_f+theta_b-theta_s is realized EXACTLY in the QA additive group on the A1 alphabet {1,...,m} by fwm(pf,pb,s)=qa_mod(pf+pb-s), with qa_add(a,b)=qa_mod(a+b) (identity=m, the No-Zero rep of 0) and qa_neg(a)=qa_mod(-a) (involution, exactly 2 fixed points m and m/2). Conjugate pumps pb=qa_neg(pf) give fwm=qa_neg(s) exactly (C1, exhaustive m x m). Distortion-correction theorem EXACT: aberrate by phase screen phi, conjugate, return through SAME phi -> qa_neg(s) exactly for all s,phi (C2 DC_SAME_MEDIUM); different phi' leaves residual qa_mod(-s+phi'-phi), exact recovery ONLY when phi'=phi (C3 DC_DIFF_RESID = same-medium specificity). C4 GROUP_IDENTITY: m is the unique additive identity, never 0. C5 CONJ_INVOLUTION: qa_neg involution, exactly 2 fixed points. C6 CONTROL_NONCONJ: a non-conjugate second pump does not reconstruct (conjugation load-bearing). C7 A1_RANGE: all outputs in {1,...,m}. Supplies the EXPLICIT conjugate-generating operator that emergent QA dynamics do NOT implement: companion investigation (2026-07-08) found the self-organizing QASystem coupling does only generic medium-agnostic denoising (same-medium test null; adaptation degrades recovery) and the rolling QCI 'Bearden' opposite-sign signature of cert [155] is weak (domain2 WEAK r=-0.13, domain3 NULL sign-flip); this explicit four-wave mixer instead reproduces the theorem exactly (fidelity 1.000 same medium vs 1/m chance wrong medium; 72x72 image-recovery demo). Reference impl: qa_fwm_conjugator.py (repo root, axiom-linter clean). Checks FWM_CONJUGATE/DC_SAME_MEDIUM/DC_DIFF_RESID/GROUP_IDENTITY/CONJ_INVOLUTION/CONTROL_NONCONJ/A1_RANGE/SRC/F; 3 PASS + 2 FAIL fixtures; self-test ok. Companion: cert [155] (weak emergent signature superseded), certs [510]-[514] (QA Maxwell/scalar-EM cluster). Author: Will Dale + Claude 2026-07-08."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fwm_phase_conjugate_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fwm_phase_conjugate_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_volk_apollonian_mapping_cert_family(base_dir):
+    """QA Volk Apollonian Bipolar Mapping Cert family [517]. Primary source: Volk, G. (2010). "Toroids, Vortices, Knots, Topology and Quanta, Part 2." Proceedings of the NPA (NPA-18); original .doc recovered and its 233 embedded MathType equation objects decoded via a from-scratch MTEF v5 binary parser after the OCR text extraction had lost every equation body; decoded equation object confirms Volk's toroidal vector form sinh(eta)cos(theta), sinh(eta)sin(theta), sin(phi) over cosh(eta)-cos(phi), and the hyperbolic<->circular identity chain tanh(eta)=sin(psi) etc. Ginzburg, V. (2006) Prime Elements of Ordinary Matter, Dark Matter & Dark Energy, Helicola Press (R/r helicola naming). CLAIM (narrow, falsifiable): the general QA identity d^2-e^2=(d-e)(d+e)=b*(b+2e)=b*a=F (d-e=b, d+e=a are QA's own A2 definitions, not approximations; verified over 2,500 (b,e) pairs, zero exceptions) is exactly Volk's own Apollonian orthogonality relation R^2=a_volk^2+r_volk^2 under a_volk=e, R_volk=d, r_volk=sqrt(F)=sqrt(ab), eta=arccoth(d/e)=0.5*ln(a/b). Independently corroborated by a user-built GeoGebra construction (geogebra.org/calculator/nwkeyb7j, "grant,volk-toroid1235") built directly from BEDA=(1,2,3,5) against Volk's Figure 2 over a year before this derivation: point A=(e,0)=(2,0), point R=(d,0)=(3,0), circle at R radius sqrt(5)=sqrt(F) -- exact match. Implementation: qa_lab/qa_volk_coordinates.py function beda_to_volk. Limitation: a single BEDA tuple fixes the M-circle family (a_volk,eta) but not a point on it (rho); which rho a QA orbit should trace remains open. Checks VAM_IDENTITY/VAM_A_VOLK/VAM_R_VOLK/VAM_R2_VOLK/VAM_APOLLONIAN/VAM_ETA; 3 PASS + 3 FAIL fixtures; self-test ok. Mechanism chain: cert [291] (QA Fibonacci Matrix Orbit Periods); cert [292]/[293] (Koenig Spread Optimality/Shell Structure). Derived 2026-07-07."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_volk_apollonian_mapping_cert_v1")
+    validator = os.path.join(fam_dir, "qa_volk_apollonian_mapping_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_volk_apollonian_mapping_cert_v1/qa_volk_apollonian_mapping_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_volk_apollonian_mapping_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_volk_apollonian_mapping_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_volk_apollonian_mapping_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_witt_tower_ar1_baseline_reranking_cert_family(base_dir):
     """Cert [516]: QA Witt Tower AR(1)-Baseline Reranking -- the discrimination ladder documented across certs [490]-[495] (rivers, precipitation, temperature, ocean SST, EEG interictal, 1-min FX) ranks domains by raw n_signal_ratio, conflating (1) how strongly the domain is already autocorrelated at lag 1 with (2) how much the QA rank-bin operator reveals beyond what that known autocorrelation alone predicts. Re-ranking by (2) instead of raw ratio nearly inverts the published ladder: SST (rho=0.942, observed 4.432) and temperature (rho=0.728, observed 3.400), presented as STRONGEST PERSISTENCE, show excess_ratio 1.05 and 1.01 -- a plain AR(1) Gaussian process at the same reported autocorrelation already predicts 4.23x and 3.36x, essentially the whole result. EEG interictal (excess 1.64), precipitation (1.60), rivers (1.43, rho live-fetched from USGS NWIS since [490] does not store autocorr), and FX (1.42) show substantial genuine excess beyond plain correlation. Does not retract [490]-[495]'s underlying data or n_signal_ratio computations, independently re-verified here as correct; corrects the interpretive framing that equated highest raw ratio with most novel finding. Checks ARB_SIM_NULL/SST_NEAR_NULL/TEMP_NEAR_NULL/EEG_EXCESS/PRECIP_EXCESS/RIVERS_EXCESS/FX_EXCESS/RERANK_INVERTS/WITNESS; 9 PASS + 2 FAIL fixtures; self-test ok. Primary: Rayner et al. (2003) DOI:10.1029/2002JD002670; Namias (1952). Derived 2026-07-04."""
     import subprocess
@@ -13690,6 +13738,16 @@ def _validate_qa_orbit_prime_ideal_filtration_cert_family(base_dir):
 # - New families should set must_have_dedicated_root=True and use a dedicated directory root
 #   (i.e., do not use family_root_rel="." for new families).
 FAMILY_SWEEPS = [
+    (518, "QA FWM Phase Conjugate Cert family",
+     _validate_qa_fwm_phase_conjugate_cert_family,
+     "QA FWM Phase Conjugate Cert [518]. CLAIM (exact, falsifiable): the degenerate four-wave-mixing phase-sum relation theta_c=theta_f+theta_b-theta_s is realized EXACTLY in the QA additive group on the A1 alphabet {1,...,m} by fwm(pf,pb,s)=qa_mod(pf+pb-s), with qa_add(a,b)=qa_mod(a+b) (additive identity=m, the No-Zero representative of 0, never 0) and qa_neg(a)=qa_mod(-a) (an involution with exactly two fixed points m and m/2). Conjugate pumps pb=qa_neg(pf) yield fwm=qa_neg(s) exactly for ALL pf,s (exhaustive m x m). The distortion-correction theorem (Yariv 1978; Zel'dovich et al 1985; Agarwal-Friberg scattering proof) holds EXACTLY: a signal aberrated by a phase screen phi, phase-conjugated, and returned through the SAME phi recovers qa_neg(s) exactly for all s,phi; a DIFFERENT screen phi' leaves exactly the residual qa_mod(-s+phi'-phi), so exact recovery occurs only where phi'=phi (same-medium specificity). Supplies the EXPLICIT conjugate-generating operator that emergent QA dynamics do not implement: a companion empirical investigation (2026-07-08) showed the self-organizing QASystem coupling performs only generic medium-agnostic denoising (same-medium test null; adaptation degrades reconstruction) and the rolling QCI opposite-sign 'Bearden' signature of cert [155] is weak (domain2 WEAK partial_r=-0.13, domain3 NULL with sign-flip); the explicit four-wave mixer here reproduces the theorem exactly (recovery fidelity 1.000 same medium vs 1/m chance wrong medium; verified on a 72x72 image-recovery demo, qa_fwm_conjugator_demo.png). Reference implementation qa_fwm_conjugator.py (repo root, axiom-linter clean; medium-mismatch sweep, robustness, controls, image demo). Checks FWM_CONJUGATE/DC_SAME_MEDIUM/DC_DIFF_RESID/GROUP_IDENTITY/CONJ_INVOLUTION/CONTROL_NONCONJ/A1_RANGE/SRC/F; 3 PASS + 2 FAIL fixtures; self-test ok. Primary: Hellwarth (1977) DOI:10.1364/JOSA.67.000001; Yariv (1978) DOI:10.1109/JQE.1978.1069870; Zel'dovich Pilipetsky Shkunov (1985) ISBN:978-3-540-13458-4. Companion: cert [155] (weak emergent signature superseded), certs [510]-[514]. Author: Will Dale + Claude 2026-07-08.",
+     "518_qa_fwm_phase_conjugate",
+     "qa_fwm_phase_conjugate_cert_v1", True),
+    (517, "QA Volk Apollonian Bipolar Mapping Cert family",
+     _validate_qa_volk_apollonian_mapping_cert_family,
+     "QA Volk Apollonian Bipolar Mapping Cert [517]. Primary source: Volk, G. (2010). 'Toroids, Vortices, Knots, Topology and Quanta, Part 2.' Proceedings of the NPA (NPA-18); original .doc recovered and its 233 embedded MathType equation objects decoded via a from-scratch MTEF v5 binary parser after the OCR text extraction had lost every equation body. Ginzburg, V. (2006) Prime Elements of Ordinary Matter, Dark Matter & Dark Energy, Helicola Press. CLAIM (narrow, falsifiable): the general QA identity d^2-e^2=(d-e)(d+e)=b*(b+2e)=b*a=F (verified over 2,500 (b,e) pairs, zero exceptions) is exactly Volk's own Apollonian orthogonality relation R^2=a_volk^2+r_volk^2 under a_volk=e, R_volk=d, r_volk=sqrt(F)=sqrt(ab), eta=arccoth(d/e)=0.5*ln(a/b). Independently corroborated by a user-built GeoGebra construction (geogebra.org/calculator/nwkeyb7j, 'grant,volk-toroid1235') built directly from BEDA=(1,2,3,5) against Volk's Figure 2 over a year before this derivation: point A=(e,0)=(2,0), point R=(d,0)=(3,0), circle at R radius sqrt(5)=sqrt(F) -- exact match. Implementation: qa_lab/qa_volk_coordinates.py function beda_to_volk. Checks VAM_IDENTITY/VAM_A_VOLK/VAM_R_VOLK/VAM_R2_VOLK/VAM_APOLLONIAN/VAM_ETA; 3 PASS + 3 FAIL fixtures; self-test ok. Companion: certs [291],[292],[293]. Derived 2026-07-07.",
+     "517_qa_volk_apollonian_mapping",
+     "qa_volk_apollonian_mapping_cert_v1", True),
     (516, "QA Witt Tower AR(1)-Baseline Reranking Cert family",
      _validate_qa_witt_tower_ar1_baseline_reranking_cert_family,
      "QA Witt Tower AR(1)-Baseline Reranking Cert [516]. CLAIM (narrow, falsifiable): the discrimination ladder documented across certs [490]-[495] ranks domains by raw n_signal_ratio, conflating (1) how strongly the domain is already autocorrelated at lag 1 with (2) how much the QA rank-bin operator reveals beyond what that known autocorrelation alone predicts. Re-ranking by (2) instead of raw ratio nearly inverts the published ladder: SST (rho=0.942, observed 4.432) and temperature (rho=0.728, observed 3.400), presented as STRONGEST PERSISTENCE, show excess_ratio 1.05 and 1.01 -- a plain AR(1) Gaussian process at the same reported autocorrelation already predicts 4.23x and 3.36x, essentially the whole result. EEG interictal (excess 1.64), precipitation (1.60), rivers (1.43, rho live-fetched from USGS NWIS since [490] does not store autocorr), and FX (1.42) show substantial genuine excess beyond plain correlation. Does not retract [490]-[495]'s underlying data or n_signal_ratio computations, independently re-verified here as correct; corrects the interpretive framing that equated highest raw ratio with most novel finding. Checks ARB_SIM_NULL/SST_NEAR_NULL/TEMP_NEAR_NULL/EEG_EXCESS/PRECIP_EXCESS/RIVERS_EXCESS/FX_EXCESS/RERANK_INVERTS/WITNESS; 9 PASS + 2 FAIL fixtures; self-test ok. Primary: Rayner et al. (2003) DOI:10.1029/2002JD002670; Namias (1952). Companion: certs [490]-[495]. Derived 2026-07-04.",

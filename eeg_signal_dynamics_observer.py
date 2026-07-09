@@ -9,13 +9,14 @@ Consecutive samples (b_t, b_{t+1}) define a QA transition. The generator
 e_t is INFERRED from the actual signal evolution:
 
     b_{t+1} = ((b_t + e_t - 1) % 9) + 1
-    => e_t = ((b_{t+1} - b_t) % 9) + 1
+    => e_t = ((b_{t+1} - b_t - 1) % 9) + 1   (A1-compliant inversion)
 
 This gives a generator time series per channel. The DISTRIBUTION of
 inferred generators characterizes the signal's QA dynamics:
 
-  - Constant signal: e_t = 1 always (singularity generator)
-  - Slowly varying: e_t clusters near 1 or 9
+  - Constant signal (b_{t+1}=b_t): e_t = 9 = m always (the QA additive
+    identity / no-change generator)
+  - Slowly varying: e_t clusters near 9 (small |Δb|) or 1
   - Rapidly varying: e_t distributed across {1,...,9}
 
 Cross-channel generator synchrony captures spatial coordination:
@@ -170,8 +171,11 @@ def extract_channel_dynamics(quantized: list[int], m: int = MOD) -> dict:
         if p > 0:
             gen_entropy -= p * np.log2(p)
 
-    # Singularity generator fraction: e=1 means no change
-    sing_gen_frac = gen_counts[0] / len(generators)  # e=1
+    # No-change (identity) generator fraction: b_{t+1}=b_t inverts to e=m (the QA
+    # additive identity), NOT e=1. e=1 is the +1-step generator. This is a
+    # reported diagnostic only (not a regression feature; the model uses
+    # singularity_frac / synchrony / entropy / mean_f).
+    sing_gen_frac = gen_counts[m - 1] / len(generators)  # e=m (no change)
 
     # Orbit fractions
     n_orb = len(orbits)

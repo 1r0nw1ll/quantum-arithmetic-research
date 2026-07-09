@@ -77,11 +77,30 @@ deterministic, integer-only, pure stdlib.
 - Soffer, B.H. et al. (1986). *Opt. Lett.* 11(2):118-120. DOI 10.1364/OL.11.000118
 - Owechko, Y. (1987). *IEEE J. Quantum Electron.* 25(3):619-634.
 
+## Extension — richer per-band features (2026-07-09)
+
+The cert uses a single broadband log-power per channel. Extending the topographic
+phase vector to **per-band power (delta/theta/alpha/gamma per channel)** — 92-dim
+vs 23-dim — materially improves recall and robustness (`qa_eeg_multiband_recall.py`,
+chb10/chb23):
+
+| feature | clean | 80% dropout | φ=6 phase-lock |
+|---|---|---|---|
+| broadband (23-d) | 0.92 / 1.00 | 0.70 / 0.92 | 0.81 / 0.71 |
+| **multiband (92-d)** | **1.00 / 1.00** | **0.92 / 0.92** | **0.94 / 0.90** |
+
+The 4× dimension gives more redundancy where broadband had headroom (extreme
+dropout, systemic artifact). Naive classification stays fooled under the artifact
+regardless of features (≈0.36–0.38) — phase-lock provides the robustness,
+consistent with the certified mechanism. Preliminary (2 patients); the mechanism
+and cert claim are unchanged.
+
 ## Companion
 
 - Cert **[519]** (the phase-conjugate associative memory) and **[518]** (the exact
   operator + distortion-correction theorem) this application composes.
-- Reference impl: `qa_eeg_phase_conjugate_recall.py`. Loader fix in
+- Reference impl: `qa_eeg_phase_conjugate_recall.py` (broadband),
+  `qa_eeg_multiband_recall.py` (per-band extension). Loader fix in
   `eeg_orbit_observer_comparison.py`.
 
-**Author**: Will Dale + Claude, 2026-07-08.
+**Author**: Will Dale + Claude, 2026-07-08 (multiband extension 2026-07-09).

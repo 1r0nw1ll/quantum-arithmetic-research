@@ -119,6 +119,28 @@ def verify():
     chk("mult-by-3 = scalar 3Z^2 has index 9=3^2 (central line of the 3-neighbor tree)",
         nrd(3 * I) == 9)
 
+    # Fractional (b,e): does it change the quaternion assessment? Two levels.
+    # (a) ALGEBRA level - reduced trace/norm/char-poly hold for ANY rational (b,e):
+    #     the element b*I+e*M satisfies X^2 - (2b+e)X + (b^2+be-e^2)I = 0 unchanged.
+    from fractions import Fraction as Fr
+    def alg_ok(b, e):
+        A = np.array([[b, e], [e, b + e]], dtype=object)   # b*I + e*M
+        Trd, Nrd = 2 * b + e, qa_norm(b, e)
+        cay = A @ A - Trd * A + Nrd * np.array([[1, 0], [0, 1]], dtype=object)
+        return (A[0, 0] + A[1, 1] == Trd and
+                A[0, 0] * A[1, 1] - A[0, 1] * A[1, 0] == Nrd and
+                np.array_equal(cay, np.zeros((2, 2), dtype=object)))
+    chk("algebra level: trd/nrd/char-poly hold for Fraction (b,e) too (datatype irrelevant)",
+        all(alg_ok(b, e) for (b, e) in
+            [(Fr(1, 3), Fr(2, 5)), (Fr(-7, 4), Fr(9, 8)), (Fr(3), Fr(7))]))
+    # (b) ARITHMETIC level - the ORDER O=Z[phi] is EXACTLY integer (b,e); non-integer
+    #     (b,e) has nrd not in Z, leaving O for the field Q(sqrt5) (no units/orbit/Brandt).
+    def in_order(b, e):
+        return (2 * b + e).denominator == 1 and qa_norm(b, e).denominator == 1
+    chk("arithmetic level: integer (b,e) in the order O; genuine fractions leave it",
+        in_order(Fr(3), Fr(7)) and in_order(Fr(0), Fr(1)) and
+        not in_order(Fr(1, 2), Fr(0)) and not in_order(Fr(1, 3), Fr(2, 5)))
+
     return checks
 
 

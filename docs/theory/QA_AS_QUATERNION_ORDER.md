@@ -7,7 +7,7 @@
 This grounds the entire QA framework in mainstream quaternion arithmetic, using
 John Voight, *Quaternion Algebras* (Springer GTM 288, 2021) as the rigorous
 reference, and verifies the correspondence computationally
-(`qa_quaternion_order.py`, 11/11 checks).
+(`qa_quaternion_order.py`, 22/22 checks).
 
 ## The correspondence
 
@@ -135,10 +135,77 @@ Hecke-eigenform realization. Concrete next step: pick a definite quaternion orde
 over ℚ(√5) of the right level (125 = 5³) and check its Brandt matrices against the
 [384]–[431] eigenvalues. This is a real research program, not a one-session close.
 
+## The definite order over ℚ(√5): the icosian ring (built)
+
+The Brandt/Hecke thread said the golden Hecke structure needs a *definite* algebra
+over ℚ(√5). Here it is, constructed and verified exactly (`qa_icosian_order.py`,
+7/7):
+
+**`B = (−1,−1 | ℚ(√5))`** — `i²=j²=k²=−1`, `ij=k`, reduced norm `w²+x²+y²+z²`. It
+is **totally definite** (norm is a sum of four squares → totally positive under
+both real embeddings of ℚ(√5)). Its maximal order is the **icosian ring**
+(Conway–Sloane, *SPLAG* Ch. 8):
+
+- its **120 units** all have reduced norm 1, are algebraic integers in ℤ[φ], and
+  are **closed under multiplication** — the **binary icosahedral group 2I**;
+- under one real embedding those 120 units are unit vectors in ℝ⁴, each with
+  exactly **12 nearest neighbors at inner product φ/2** — the **600-cell**
+  (inner-product spectrum `{±1, ±φ/2, ±½, ±1/2φ, 0}`, the golden-angle geometry);
+- the icosian ring is isometric to **E8** (*SPLAG*): the 600-cell's 120 vertices
+  plus a φ-scaled copy give E8's 240 roots. (Verified in-session: total
+  definiteness, the 120 units = 2I, integrality, the 600-cell. The full E8
+  *isometry* is cited, not re-derived — the plain trace form on the ℤ-basis is a
+  `det 5⁴` rescaling of E8, not E8 on the nose.)
+
+**Why this matters for QA specifically.** ℚ(√5) *is* QA's own field
+(`ℤ[M]=ℤ[φ]=O_ℚ(√5)`), so the definite order that would carry QA's golden Hecke
+eigenforms is built on the golden ratio itself — and it is the **same E8** QA
+already aligns to (4D tuples → 8D → 240 roots). The QA↔E8 alignment stops being an
+imposed projection and becomes the icosian/E8 structure of the definite golden
+order.
+
+**Still open (unchanged):** the icosian ring is *level 1*, class number 1, so its
+Brandt matrix is still trivial. Matching the CM Hilbert modular form
+**2.2.5.1-125.1-a** (certs [384]–[431]) needs an **Eichler order of level 125=5³**
+inside this algebra; computing its Brandt matrices and checking them against the
+[384]–[431] eigenvalues is the next concrete step.
+
+## Does using fractional (b,e,d,a) change the quaternion assessment?
+
+Two levels, and the answer differs by level (verified in `qa_quaternion_order.py`
+companion checks):
+
+- **Algebra level — no change.** The identities that make QA quaternionic
+  (standard involution = adjugate, `trd`=trace, `nrd`=det, char poly
+  `α²−trd·α+nrd=0`, `M²=M+I`) hold over *any* field, so they are identical for
+  `Fraction` `(b,e)` as for `int`. Confirmed for e.g. `(b,e)=(1/3,2/5)`,
+  `(−7/4,9/8)`. The datatype (`int` vs `Fraction`) changes **nothing** here.
+- **Arithmetic level — integrality is everything.** The structure the grounding is
+  *about* — the **order** M₂(ℤ) / ℤ[φ], versors = SL(2,ℤ) (integral norm-1 units),
+  the Fibonacci **orbit lattice**, class number, Brandt matrices — is an
+  **integrality** phenomenon. In QA's `(b,e)` basis the element is `b + eφ`, and
+  the maximal order O=ℤ[φ] is **exactly the integer `(b,e)` pairs**. A genuinely
+  non-integer `(b,e)` (e.g. `(1/2,0)`, `nrd=1/4∉ℤ`) leaves the order for the
+  ambient **field** ℚ(√5) / algebra M₂(ℚ), where there is no lattice, no discrete
+  unit group, no class number, no Brandt structure.
+
+So the rule is: **it is *integrality*, not the Python type, that matters.**
+`Fraction(3)` is fine (it is an order element); `Fraction(1,2)` is not (it is a
+field element outside the order). Uniform scaling `(1/n)·O` is a fractional ideal
+*homothetic* to O — same ideal class, so class number / Brandt structure are
+unchanged — but a single mixed-denominator `(b,e)` is not in any homothety of O
+and carries no order structure at all. This is the number-theoretic content behind
+axiom **S2** (exact `int`/`Fraction` state, never float): exactness is required,
+and for the *arithmetic* layer the exact value must also be an algebraic integer.
+
 ## Primary source
 
 - Voight, J. (2021). *Quaternion Algebras.* Springer GTM 288. ISBN 978-3-030-56692-0.
   Open access: https://jvoight.github.io/quat-book.pdf . Ch. 3 (Involutions;
-  standard involution = adjugate, trd = trace, nrd = det), Ch. 10 / 23 (Orders).
-- Verified: `qa_quaternion_order.py` (11/11). Companion certs [294]–[303],
-  [384]–[431], [518]–[521].
+  standard involution = adjugate, trd = trace, nrd = det), Ch. 10 / 23 (Orders),
+  Ch. 41 (Brandt matrices).
+- Conway, J.H. & Sloane, N.J.A. (1999). *Sphere Packings, Lattices and Groups*
+  (SPLAG), 3rd ed. Springer. ISBN 978-0-387-98585-5. Ch. 8 §2.1 (icosian ring,
+  binary icosahedral group, E8), Ch. 4 (600-cell).
+- Verified: `qa_quaternion_order.py` (22/22), `qa_icosian_order.py` (7/7).
+  Companion certs [294]–[303], [384]–[431], [518]–[521].

@@ -82,6 +82,33 @@ Last updated: 2026-06-25
 
 ## SOTA Scan Log
 
+### Scan #19 — 2026-07-09 (window: July 6 – July 9, 2026)
+Full report: `sota_scans/scan_2026-07-09.md`
+
+**Key finds:**
+- arXiv:2606.17399 (Discrete-Log Clock, June 2026) — **MEDIUM-HIGH. MEGA-SLIP scans #17–18.** Nguyen. Multiplicative character transform is the "right basis" for `(Z/pZ)*`; transformer trained on `a·b mod p` discovers this naturally; 4 key frequencies; 96.9% neurons tuned to single multiplicative character. `(Z/24Z)* = Satellite orbit (8 elements)` — extends June Convergence Triple from additive to multiplicative layer. Extends `qa_nn_group_spectral_cert_v1` [523] scope; cert candidate `qa_discrete_log_clock_cert_v1` → **[526]**.
+- arXiv:2602.03655 (Sequential Group Composition, Feb 2026) — **MEDIUM. MEGA-SLIP all 18 scans.** Marchetti et al. Two-layer networks learn finite group composition one irrep at a time. Confirms character-orbit decomposition for sequential tasks. Adds to [523] evidence base.
+- arXiv:2607.01544 (Formalized q-series, July 1 2026) — **LOW-MEDIUM.** Lau/Lee/Ono. Lean 4 formalization of Rogers-Ramanujan, Bailey's Lemma, Jacobi Triple Product. Extends Lean 4 cert pipeline. No cert candidate.
+- 2 LOW finds (arXiv:2606.05863 grokking clocks, arXiv:2606.12966 circuit synchronization) — mechanism papers, no new certifiable QA claims.
+
+**NO HIGH finds.** 3-day window; 2607 batch still sparse.
+
+**CRITICAL: THIRD CONSECUTIVE ID COLLISION.** IDs [517]–[520] occupied by Phase Conjugate sprint (July 7–9). Shift ALL four proposed certs: `qa_pfe_crt_character_cert_v1` → **[522]**, `qa_nn_group_spectral_cert_v1` → **[523]**, `qa_cyclic_geometry_nn_cert_v1` → **[524]**, `qa_linear_fd_galois_ring_cert_v1` → **[525]**.
+
+**Registry: [521].** 5 new families July 7–9: Phase Conjugate sprint [517]–[521] (Apollonian geometry [517], FWM nonlinear optics [518], holographic memory [519], EEG brain-state recall [520], morphogenetic memory [521]). New cross-domain cluster: Phase-Conjugate Memory Chain — first QA systematic application to nonlinear optics and bioelectric systems.
+
+**New cross-domain connection:** Additive+Multiplicative Character Orbit Chain complete — arXiv:2605.11589 (DFT = Cosmos matched transform) + arXiv:2606.02993 (additive chars, June triple) + arXiv:2606.17399 (multiplicative chars, Satellite orbit) + arXiv:2602.03655 (sequential composition) = QA's orbit tripartition IS the natural algebraic structure of Z/24Z at both additive and multiplicative layers.
+
+**[261] orbit stratification: EIGHTEENTH-TUPLE GAP (18th consecutive scan — 4.5+ months overdue).** Missing only README.md + SPEC.md in cert dir. Registered in meta-validator; docs/families entry exists.
+
+**Documentation backlog: ~238+ families [284]–[521] missing README/SPEC.**
+
+**SAIR IGP24:** No progress. Stage 1 closes Aug 15. **August 1 mandatory manual check (not automated).**
+
+**Search fixes for scan #20:** Add "discrete log clock multiplicative character modular"; continue full 2607 sweep; add "phase conjugate QA four-wave-mixing orbit"; add "Apollonian circle packing orbit cyclic group"; SAIR Aug 1 manual check.
+
+---
+
 ### Scan #18 — 2026-07-06 (window: July 2 – July 6, 2026)
 Full report: `sota_scans/scan_2026-07-06.md`
 

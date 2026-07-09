@@ -70,7 +70,12 @@ def _read_edf_all_channels(edf_path: Path) -> tuple[np.ndarray, int, list[str]]:
         n_records       = int(header[236:244].decode("ascii").strip())
         sample_rate     = int(n_samp[0] / record_duration)
 
-        gains   = [(phys_maxs[i] - phys_mins[i]) / (dig_maxs[i] - dig_mins[i])
+        # Guard degenerate channels (dig_max == dig_min, e.g. flat / annotation /
+        # dummy channels present in some CHB-MIT files) — an unguarded division
+        # here silently [SKIP]s the whole file. A zero-range channel carries no
+        # signal, so gain 0 makes it constant; working files are unaffected.
+        gains   = [((phys_maxs[i] - phys_mins[i]) / (dig_maxs[i] - dig_mins[i]))
+                   if (dig_maxs[i] - dig_mins[i]) != 0 else 0.0
                    for i in range(ns)]
         offsets = [phys_maxs[i] - gains[i] * dig_maxs[i] for i in range(ns)]
 

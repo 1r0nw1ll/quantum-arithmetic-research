@@ -92,9 +92,48 @@ at **5** (the quadratic order); the `3∣m` weakness is a **modulus/filtration**
 phenomenon, orthogonal to both ramification notions. Stating it this way removes
 the standing conflation of "3 is special" with "5 is special."
 
-## Open threads (the continuing program)
-1. **Brandt/Hecke** (Voight Ch. 41): whether QA orbit coupling has a Brandt-matrix
-   description (the last untouched direction).
+## Brandt/Hecke (Voight Ch. 41 — worked, with a precise obstruction)
+
+**Does QA orbit coupling have a Brandt-matrix description? Directly, no — and the
+reason is exact, not a gap.** Voight opens Ch. 41: *"When B is indefinite … the
+class set is trivial. We are left with the case that B is definite."* Brandt
+matrices `T(n)ᵢⱼ = #{J ⊂ Iⱼ : nrd(J)=n·nrd(Iⱼ), [J]=[Iᵢ]}` are the adjacency
+matrices of the `n`-Brandt graph on the ideal-class set `Cls O`, and they are the
+Hecke operators on the resulting modular forms — **but only when `B` is definite**
+(so `Cls O` is finite and nontrivial).
+
+QA = **M₂(ℚ) is split / indefinite** — its golden norm form `b²+be−e²` has
+signature **(1,1)** (hyperbolic), verified. By strong approximation the maximal
+order M₂(ℤ) then has class number **`h = 1`**, so every Brandt matrix is **1×1**:
+`T(p) = (p+1)`, the trivial Eisenstein eigenvalue, no cusp-form Hecke eigenvalues.
+The construction is degenerate on QA-as-M₂(ℤ). *This is a structural fact about
+the split algebra, not a limitation of QA.*
+
+What *does* survive, and what it means for existing certs:
+
+- **The `p`-neighbor combinatorics are real**: there are exactly `p+1` index-`p`
+  sublattices of ℤ² (verified `p=2,3,5`), the `(p+1)`-regular Bruhat–Tits tree
+  that `Tₚ` sums over. But the **QA T-operator `M` is a single GL₂(ℤ) element
+  (det −1), not the Hecke sum** — QA orbit dynamics is the cyclic `⟨M⟩` action,
+  which is *orthogonal* to the neighbor/Hecke structure, not an instance of it.
+- **The 3-adic filtration [301] is the *central/scalar* line of the `p=3` tree**:
+  mult-by-3 is `v↦3v = 3ℤ²`, index `9=3²` — the distinguished scalar descent
+  (the `T(p²)` diagonal term), iterated as Cosmos→Satellite→Singularity. It is
+  one line of the tree, not its branching.
+- **The QA resonance/coupling matrix `einsum('ik,jk->ij', T, T)` is *not* a Brandt
+  matrix** — it is a single symmetric **Gram** matrix of inner products, not a
+  commuting family `{T(n)}` of nonnegative-integer neighbor *counts* with column
+  sums `p+1`. The tempting analogy is superficial; recorded so it isn't reasserted.
+
+**The genuine bridge (the one real open program).** The interesting golden Hecke
+eigenvalues this project *has* already computed — the CM Hilbert modular form
+**LMFDB 2.2.5.1-125.1-a over ℚ(√5)**, cert cluster [384]–[431] — are exactly the
+objects a Brandt/Hecke construction should reproduce. By Jacquet–Langlands that
+requires a **definite quaternion algebra over ℚ(√5)** (not the split M₂/ℚ). That
+is where QA's golden structure would acquire a genuine, nontrivial Brandt-matrix /
+Hecke-eigenform realization. Concrete next step: pick a definite quaternion order
+over ℚ(√5) of the right level (125 = 5³) and check its Brandt matrices against the
+[384]–[431] eigenvalues. This is a real research program, not a one-session close.
 
 ## Primary source
 

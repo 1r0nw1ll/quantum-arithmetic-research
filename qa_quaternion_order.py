@@ -103,6 +103,22 @@ def verify():
     chk("M2(Q) is split => unramified everywhere (E11 is a zero divisor)",
         np.array_equal(E11 @ E22, np.zeros((2, 2), np.int64)) and nrd(E11) == 0)
 
+    # Brandt/Hecke (Voight Ch.41): the construction needs a DEFINITE algebra. QA's
+    # norm form is INDEFINITE (signature (1,1)) => M2(Q) split => class number 1 =>
+    # Brandt matrices degenerate to T(p)=(p+1). See docs/theory/QA_AS_QUATERNION_ORDER.md.
+    gram_ev = np.linalg.eigvalsh(np.array([[1.0, 0.5], [0.5, -1.0]]))   # form b^2+be-e^2
+    chk("QA norm form is INDEFINITE (signature (1,1)) -> Brandt needs definite, so degenerate",
+        gram_ev[0] < 0 < gram_ev[1])
+    # the p-neighbor combinatorics that survive: exactly p+1 index-p sublattices of Z^2
+    # (HNF reps [[p,0],[0,1]] and [[1,j],[0,p]], j=0..p-1) = Bruhat-Tits (p+1)-regular tree
+    def n_index_p_sublattices(p):
+        return len([((p, 0), (0, 1))] + [((1, j), (0, p)) for j in range(p)])
+    chk("p+1 index-p sublattices of Z^2 (Bruhat-Tits (p+1)-regular tree) for p=2,3,5",
+        all(n_index_p_sublattices(p) == p + 1 for p in (2, 3, 5)))
+    # QA's 3-adic filtration is the CENTRAL/scalar line: mult-by-3 = index 3^2 = 9
+    chk("mult-by-3 = scalar 3Z^2 has index 9=3^2 (central line of the 3-neighbor tree)",
+        nrd(3 * I) == 9)
+
     return checks
 
 

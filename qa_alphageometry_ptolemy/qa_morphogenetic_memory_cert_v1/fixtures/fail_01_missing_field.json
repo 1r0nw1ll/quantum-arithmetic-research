@@ -1,0 +1,14 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; omits expected_regen_plan to exercise MISSING_FIELD. -->",
+  "schema_version": "QA_MORPHOGENETIC_MEMORY_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Levin, 2021) DOI 10.3389/fnsys.2021.768201. Negative fixture: expected_regen_plan omitted.",
+  "kind": "mechanism",
+  "m": 24,
+  "body_plans": [[2, 2, 2, 2, 20, 20, 20, 20], [20, 20, 20, 20, 2, 2, 2, 2]],
+  "plan_labels": [0, 1],
+  "damaged_probe": [8, 8, 8, 13, 13, 2, 2, 2],
+  "true_plan": 0,
+  "global_phi": 6,
+  "expected_fail_type": "MISSING_FIELD"
+}

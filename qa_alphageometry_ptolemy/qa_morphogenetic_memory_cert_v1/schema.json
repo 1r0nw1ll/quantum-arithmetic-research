@@ -1,0 +1,30 @@
+{
+  "_primary_source": "Primary source: (Levin, 2021) DOI 10.3389/fnsys.2021.768201 (bioelectric target-morphology attractor); (Pezzulo & Levin, 2015) DOI 10.1039/c5ib00221d; (Hopfield, 1982) DOI 10.1073/pnas.79.8.2554. Target morphology as an attractor reached from damaged states.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_MORPHOGENETIC_MEMORY_CERT.v1",
+  "description": "Fixture schema for QA Phase-Conjugate Morphogenetic Memory Cert [521]. 'mechanism' fixtures certify regeneration / no-chimera / systemic phase-lock on synthetic body plans; 'empirical' fixtures record the reference-impl results.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "kind"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_MORPHOGENETIC_MEMORY_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "kind": {"type": "string", "enum": ["mechanism", "empirical"]},
+    "m": {"type": "integer", "minimum": 2},
+    "body_plans": {"type": "array", "items": {"type": "array", "items": {"type": "integer", "minimum": 1}}, "description": "mechanism: stored body-plan phase fields"},
+    "plan_labels": {"type": "array", "items": {"type": "integer"}},
+    "damaged_probe": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "mechanism: amputated body plan"},
+    "true_plan": {"type": ["integer", "null"], "description": "mechanism: index of the true stored plan"},
+    "global_phi": {"type": ["integer", "null"], "description": "mechanism: systemic bioelectric shift on the probe"},
+    "expected_naive_plan": {"type": ["integer", "null"], "description": "mechanism: plan naive regeneration returns (fooled under a systemic shift when != true_plan)"},
+    "expected_regen_plan": {"type": ["integer", "null"], "description": "mechanism: plan index phase-locked recall regenerates (must == true_plan)"},
+    "regen_fidelity": {"type": ["number", "null"], "description": "empirical: regeneration fidelity"},
+    "no_chimera_rate": {"type": ["number", "null"]},
+    "phase_locked_systemic": {"type": ["number", "null"]},
+    "naive_systemic": {"type": ["number", "null"]},
+    "expected_fail_type": {"type": ["string", "null"], "enum": ["MISSING_FIELD", "WRONG_MECHANISM", "WRONG_EMPIRICAL", "OUT_OF_RANGE", null]}
+  }
+}

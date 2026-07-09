@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=reference-impl witness (qa_morphogenetic_memory.py) recording regeneration + systemic robustness; primary_source cites Levin 2021 / Pezzulo-Levin 2015. -->",
+  "schema_version": "QA_MORPHOGENETIC_MEMORY_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Levin, 2021) DOI 10.3389/fnsys.2021.768201; (Pezzulo & Levin, 2015) DOI 10.1039/c5ib00221d. Reference impl: regeneration + no-chimera; phase-locked regeneration beats naive under a systemic bioelectric shift.",
+  "kind": "empirical",
+  "regen_fidelity": 1.0,
+  "no_chimera_rate": 1.0,
+  "phase_locked_systemic": 1.0,
+  "naive_systemic": 0.0
+}

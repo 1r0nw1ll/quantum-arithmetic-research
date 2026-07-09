@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; claims phase_locked <= naive under systemic shift, violating the certified robustness property. -->",
+  "schema_version": "QA_MORPHOGENETIC_MEMORY_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Pezzulo & Levin, 2015) DOI 10.1039/c5ib00221d. Negative fixture: phase_locked_systemic (0.20) <= naive_systemic (0.50) contradicts systemic robustness.",
+  "kind": "empirical",
+  "regen_fidelity": 1.0,
+  "no_chimera_rate": 1.0,
+  "phase_locked_systemic": 0.20,
+  "naive_systemic": 0.50,
+  "expected_fail_type": "WRONG_EMPIRICAL"
+}

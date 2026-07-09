@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=synthetic mechanism witness for phase-lock-regeneration under a systemic shift; primary_source cites Levin 2021 + phase-conjugate memory (Soffer 1986). -->",
+  "schema_version": "QA_MORPHOGENETIC_MEMORY_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Levin, 2021) DOI 10.3389/fnsys.2021.768201; (Soffer, 1986) DOI 10.1364/OL.11.000118. Amputated body plan A under a systemic shift phi=6 fools naive regeneration (-> plan 1) but phase-locked recall regenerates the true plan 0.",
+  "kind": "mechanism",
+  "m": 24,
+  "body_plans": [[2, 2, 2, 2, 20, 20, 20, 20], [20, 20, 20, 20, 2, 2, 2, 2]],
+  "plan_labels": [0, 1],
+  "damaged_probe": [8, 8, 8, 13, 13, 2, 2, 2],
+  "true_plan": 0,
+  "global_phi": 6,
+  "expected_naive_plan": 1,
+  "expected_regen_plan": 0
+}

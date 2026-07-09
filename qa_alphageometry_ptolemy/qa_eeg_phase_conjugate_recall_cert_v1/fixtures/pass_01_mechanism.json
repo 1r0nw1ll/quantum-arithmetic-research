@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=synthetic mechanism witness certifying phase-lock-vs-naive under a global artifact; primary_source cites CHB-MIT (Shoeb 2009) + phase-conjugate memory (Soffer 1986). -->",
+  "schema_version": "QA_EEG_PHASE_CONJUGATE_RECALL_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Shoeb, 2009) CHB-MIT; (Soffer, 1986) DOI 10.1364/OL.11.000118. Two spatially-different topographies; a global artifact phi=6 fools naive classification (-> class 1) but phase-locked recall recovers the true class 0.",
+  "kind": "mechanism",
+  "m": 24,
+  "class_prototypes": [[2, 2, 2, 2, 20, 20, 20, 20], [20, 20, 20, 20, 2, 2, 2, 2]],
+  "prototype_labels": [0, 1],
+  "probe": [8, 8, 8, 9, 2, 2, 1, 2],
+  "probe_label": 0,
+  "global_phi": 6,
+  "expected_naive_class": 1,
+  "expected_phase_locked_class": 0
+}

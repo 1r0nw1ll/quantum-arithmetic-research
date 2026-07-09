@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=real-data witness (CHB-MIT chb10) recording the artifact-robustness result; reproduced by qa_eeg_phase_conjugate_recall.py; primary_source cites Shoeb 2009 / Goldberger 2000. -->",
+  "schema_version": "QA_EEG_PHASE_CONJUGATE_RECALL_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Shoeb, 2009) MIT CHB-MIT Scalp EEG Database; (Goldberger, 2000) DOI 10.1161/01.CIR.101.23.e215 PhysioNet. Real chb10 result: seizure/baseline recall well above chance, and phase-locked recall beats naive under a global reference-shift artifact.",
+  "kind": "empirical",
+  "patient": "chb10",
+  "recall_clean": 0.915,
+  "chance": 0.559,
+  "phase_locked_phi6": 0.723,
+  "naive_phi6": 0.383
+}

@@ -1,0 +1,31 @@
+{
+  "_primary_source": "Primary source: (Shoeb, 2009) MIT PhD thesis, CHB-MIT Scalp EEG Database; (Goldberger, 2000) DOI 10.1161/01.CIR.101.23.e215 PhysioNet; (Soffer, 1986) DOI 10.1364/OL.11.000118 phase-conjugate associative memory.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_EEG_PHASE_CONJUGATE_RECALL_CERT.v1",
+  "description": "Fixture schema for QA Phase-Conjugate EEG Brain-State Recall Cert [520]. 'mechanism' fixtures certify the phase-lock-vs-naive mechanism on synthetic data; 'empirical' fixtures record real-CHB-MIT per-patient results with provenance.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "kind"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_EEG_PHASE_CONJUGATE_RECALL_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "kind": {"type": "string", "enum": ["mechanism", "empirical"]},
+    "m": {"type": "integer", "minimum": 2},
+    "class_prototypes": {"type": "array", "items": {"type": "array", "items": {"type": "integer", "minimum": 1}}, "description": "mechanism: labeled synthetic brain-state prototypes"},
+    "prototype_labels": {"type": "array", "items": {"type": "integer"}},
+    "probe_label": {"type": ["integer", "null"], "description": "mechanism: true class of the probe"},
+    "probe": {"type": "array", "items": {"type": "integer", "minimum": 1}},
+    "global_phi": {"type": ["integer", "null"], "description": "mechanism: global artifact shift on the probe"},
+    "expected_naive_class": {"type": ["integer", "null"], "description": "mechanism: class naive classification returns (may be wrong under phi)"},
+    "expected_phase_locked_class": {"type": ["integer", "null"], "description": "mechanism: class phase-locked classification returns (must equal probe_label)"},
+    "patient": {"type": ["string", "null"], "description": "empirical: CHB-MIT patient id"},
+    "recall_clean": {"type": ["number", "null"], "description": "empirical: seizure/baseline recall at 0 corruption"},
+    "chance": {"type": ["number", "null"]},
+    "phase_locked_phi6": {"type": ["number", "null"]},
+    "naive_phi6": {"type": ["number", "null"]},
+    "expected_fail_type": {"type": ["string", "null"], "enum": ["MISSING_FIELD", "WRONG_MECHANISM", "WRONG_EMPIRICAL", "OUT_OF_RANGE", null]}
+  }
+}

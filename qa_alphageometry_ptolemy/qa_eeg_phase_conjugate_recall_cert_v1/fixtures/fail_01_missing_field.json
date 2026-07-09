@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; omits expected_phase_locked_class to exercise the MISSING_FIELD gate. -->",
+  "schema_version": "QA_EEG_PHASE_CONJUGATE_RECALL_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Shoeb, 2009) CHB-MIT. Negative fixture: expected_phase_locked_class omitted.",
+  "kind": "mechanism",
+  "m": 24,
+  "class_prototypes": [[2, 2, 2, 2, 20, 20, 20, 20], [20, 20, 20, 20, 2, 2, 2, 2]],
+  "prototype_labels": [0, 1],
+  "probe": [8, 8, 8, 9, 2, 2, 1, 2],
+  "probe_label": 0,
+  "global_phi": 6,
+  "expected_naive_class": 1,
+  "expected_fail_type": "MISSING_FIELD"
+}

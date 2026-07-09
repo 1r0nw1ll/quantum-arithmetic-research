@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; claims phase_locked <= naive under artifact, violating the certified robustness property. -->",
+  "schema_version": "QA_EEG_PHASE_CONJUGATE_RECALL_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Goldberger, 2000) DOI 10.1161/01.CIR.101.23.e215. Negative fixture: phase_locked_phi6 (0.30) <= naive_phi6 (0.50) contradicts the artifact-robustness claim.",
+  "kind": "empirical",
+  "patient": "chbXX",
+  "recall_clean": 0.90,
+  "chance": 0.55,
+  "phase_locked_phi6": 0.30,
+  "naive_phi6": 0.50,
+  "expected_fail_type": "WRONG_EMPIRICAL"
+}

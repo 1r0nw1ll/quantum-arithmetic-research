@@ -81,12 +81,35 @@ def run():
         acc = np.mean([direct(drop_channels(X[i], k, rng)) == y[i] for i in te])
         print(f"{k:8d} {acc:9.3f}")
 
-    print("\n[2] Systemic index shift (global bioelectric-analog offset phi):")
+    print("\n[2] Systemic index shift (global offset phi) — 5 equal channels:")
     print(f"{'phi':>5s} {'naive':>8s} {'phase-lock':>11s}")
-    for phi in (0, 3, 6, 12):
+    for phi in (0, 6, 12):
         dn = np.mean([direct(qa_add(drop_channels(X[i], 1, rng), phi)) == y[i] for i in te])
         plk = np.mean([pl(qa_add(drop_channels(X[i], 1, rng), phi)) == y[i] for i in te])
         print(f"{phi:5d} {dn:8.3f} {plk:11.3f}")
+
+    # [3] Diagnosis confirmation: ENSO is DEFINED by ONI; the other 4 channels are
+    # label-irrelevant. A LABEL-ALIGNED representation (weight ONI heavily) should
+    # recover both recall and the phase-lock advantage. Repeat ONI w times.
+    print("\n[3] Label-aligned representation — weight ONI x w (rest = 4 channels):")
+    print(f"{'oni_w':>6s} {'clean':>7s} {'phi6 naive':>11s} {'phi6 phase-lock':>16s}")
+    for w in (1, 3, 8, 20):
+        Fw = np.column_stack([np.repeat(F[:, 0:1], w, axis=1), F[:, 1:]])
+        Xw = to_phase(Fw)
+        memw = QAPhaseConjugateMemory(Xw[tr], sharpen=6.0)
+
+        def d_w(probe): return ys[int(np.argmax(memw.overlap(probe)))]
+
+        def pl_w(probe):
+            bk, best = 0, -1
+            for psi in range(1, M + 1):
+                C = memw.overlap(qa_add(probe, psi)); k = int(np.argmax(C))
+                if C[k] > best: best, bk = C[k], k
+            return ys[bk]
+        clean = np.mean([d_w(Xw[i]) == y[i] for i in te])
+        dn = np.mean([d_w(qa_add(drop_channels(Xw[i], 1, rng), 6)) == y[i] for i in te])
+        plk = np.mean([pl_w(qa_add(drop_channels(Xw[i], 1, rng), 6)) == y[i] for i in te])
+        print(f"{w:6d} {clean:7.3f} {dn:11.3f} {plk:16.3f}")
     print(f"\n(chance/majority = {chance:.3f})")
 
 

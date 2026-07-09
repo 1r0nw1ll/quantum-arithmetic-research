@@ -190,6 +190,33 @@ def build_topographic_features(multi_ch_signal: np.ndarray, fs: int,
     return np.array(features) if features else np.empty((0, multi_ch_signal.shape[0]))
 
 
+def _topographic_powers(multi_ch_signal: np.ndarray, fs: int,
+                        window_sec: float = WINDOW_SECONDS,
+                        start_s: float = 0.0,
+                        end_s: float = None) -> np.ndarray:
+    """
+    Un-normalized total spatial RMS power per window (observer layer), aligned
+    row-for-row with build_topographic_features (same windowing). This is the
+    magnitude that _topographic_feature_vector divides out — needed to rank
+    clusters by ACTUAL activity, since the k-means features are L2-normalized
+    (direction-only) and a centroid's norm therefore measures directional
+    concentration, not power.
+    """
+    n_win = int(window_sec * fs)
+    step  = max(1, n_win // 2)
+    total = multi_ch_signal.shape[1]
+    start_samp = int(start_s * fs)
+    end_samp   = int(end_s * fs) if end_s is not None else total
+
+    powers = []
+    for s in range(start_samp, end_samp - n_win + 1, step):
+        window = multi_ch_signal[:, s: s + n_win]
+        rms = np.sqrt(np.mean(window ** 2, axis=1))
+        powers.append(float(np.linalg.norm(rms)))
+
+    return np.array(powers) if powers else np.empty((0,))
+
+
 # ── Fit topographic k-means on ALL data (train on unlabeled pool) ─────────────
 
 def fit_topographic_kmeans(data_dir: Path, n_clusters: int = 4,
@@ -200,6 +227,7 @@ def fit_topographic_kmeans(data_dir: Path, n_clusters: int = 4,
     """
     print("  Fitting topographic k-means (all channels, no labels)...")
     all_features = []
+    all_powers = []
     for ann in CHBMIT_ANNOTATIONS:
         edf_path = data_dir / ann["file"]
         if not edf_path.exists():
@@ -214,6 +242,7 @@ def fit_topographic_kmeans(data_dir: Path, n_clusters: int = 4,
         feats = build_topographic_features(sig, fs, end_s=sample_end)
         if len(feats) > 0:
             all_features.append(feats)
+            all_powers.append(_topographic_powers(sig, fs, end_s=sample_end))
         print(f"    {ann['file']}: {len(feats)} windows")
 
     if not all_features:
@@ -223,6 +252,16 @@ def fit_topographic_kmeans(data_dir: Path, n_clusters: int = 4,
     print(f"  Total feature matrix: {X.shape}")
     km = KMeans(n_clusters=n_clusters, random_state=seed, n_init=10)
     km.fit(X)
+    # Attach real per-cluster mean power (mean un-normalized RMS magnitude of the
+    # windows assigned to each cluster). This is the correct quantity for ranking
+    # clusters by activity; norm(cluster_centers_) is NOT (features are
+    # L2-normalized, so it measures directional concentration). Non-breaking:
+    # existing callers ignore the extra attribute.
+    P = np.concatenate(all_powers)
+    km.cluster_power_ = np.array([
+        float(P[km.labels_ == i].mean()) if np.any(km.labels_ == i) else 0.0
+        for i in range(n_clusters)
+    ])
     return km
 
 
@@ -458,9 +497,15 @@ def main():
     # Fit k-means
     km = fit_topographic_kmeans(DEFAULT_DATA_DIR, n_clusters=4)
 
-    # Assign cluster IDs to QA states (by cluster centroid RMS — higher power = more active state)
-    centroid_rms = np.linalg.norm(km.cluster_centers_, axis=1)
-    rank_order = np.argsort(centroid_rms)  # 0=lowest, 3=highest RMS
+    # Assign cluster IDs to QA states by ACTUAL mean spatial power of each
+    # cluster's member windows (higher power = more active state). NOTE: the
+    # previous code ranked by np.linalg.norm(km.cluster_centers_), which -- because
+    # the k-means features are L2-normalized unit vectors -- measures a cluster's
+    # DIRECTIONAL CONCENTRATION, not its power, and could mislabel the
+    # cluster->state mapping (and hence singularity_frac). km.cluster_power_ is the
+    # true per-cluster power computed at fit time.
+    cluster_power = km.cluster_power_
+    rank_order = np.argsort(cluster_power)  # 0=lowest, 3=highest power
     # Map: highest RMS cluster → A_frontal (most active), descending
     state_order = ["D_baseline", "C_right", "B_occipital", "A_frontal"]
     cluster_to_state = {int(rank_order[i]): state_order[i] for i in range(4)}

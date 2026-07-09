@@ -213,13 +213,16 @@ def fit_patient_kmeans(dataset: list[dict], n_clusters: int = 4,
     modal_ch = ch_counts.most_common(1)[0][0]
 
     all_feats = []
+    all_powers = []
     for seg in dataset:
         mc = seg["multi_ch"]
         if mc.shape[0] != modal_ch:
             continue  # skip segments with non-standard montage
         for s in range(0, mc.shape[1] - n_win + 1, step):
-            fv = _topographic_feature_vector(mc[:, s: s + n_win])
-            all_feats.append(fv)
+            win = mc[:, s: s + n_win]
+            all_feats.append(_topographic_feature_vector(win))
+            # un-normalized spatial RMS magnitude (the power the feature divides out)
+            all_powers.append(float(np.linalg.norm(np.sqrt(np.mean(win ** 2, axis=1)))))
             if len(all_feats) >= max_windows:
                 break
         if len(all_feats) >= max_windows:
@@ -232,9 +235,19 @@ def fit_patient_kmeans(dataset: list[dict], n_clusters: int = 4,
     km = KMeans(n_clusters=n_clusters, random_state=seed, n_init=10)
     km.fit(X)
 
-    # Map cluster → state by centroid RMS (higher = more active)
-    centroid_rms = np.linalg.norm(km.cluster_centers_, axis=1)
-    rank_order = np.argsort(centroid_rms)
+    # Map cluster → state by ACTUAL mean spatial power of each cluster's member
+    # windows (higher power = more active state). NOTE: the previous code ranked by
+    # np.linalg.norm(km.cluster_centers_), which -- because the features are
+    # L2-normalized unit vectors -- measures directional concentration, not power,
+    # and could mislabel the cluster->state mapping. (Effect on delta-R^2 is
+    # negligible because the swap only affects A_frontal/B_occipital, not the
+    # D_baseline->singularity feature; see eeg_orbit_observer_comparison.py fix.)
+    P = np.asarray(all_powers)
+    cluster_power = np.array([
+        float(P[km.labels_ == i].mean()) if np.any(km.labels_ == i) else 0.0
+        for i in range(n_clusters)
+    ])
+    rank_order = np.argsort(cluster_power)
     state_order = ["D_baseline", "C_right", "B_occipital", "A_frontal"]
     cluster_to_state = {int(rank_order[i]): state_order[i] for i in range(n_clusters)}
     return km, cluster_to_state

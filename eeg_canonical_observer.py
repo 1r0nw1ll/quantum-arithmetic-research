@@ -331,9 +331,9 @@ def main():
     print(f"  LR stat:                             {lr_stat:.3f}")
     print(f"  p(QA adds):                          {p_val:.6f} {sig(p_val)}")
 
-    print(f"\n  COMPARISON:")
-    print(f"  Observer 3 (topographic k-means):     ΔR² = +0.252  (chb01)")
-    print(f"  RNS eigenspectrum:                    ΔR² = +0.138  (chb01)")
+    print(f"\n  COMPARISON (static reference figures, not recomputed here):")
+    print(f"  Observer 3 (topographic k-means):     ΔR² = +0.252  (chb01; static ref. cluster ranking corrected 2026-07-08 — effect negligible, see eeg_orbit_observer_comparison.py)")
+    print(f"  RNS eigenspectrum:                    ΔR² = +0.138  (chb01; static ref)")
     print(f"  Canonical (b=amplitude, e=propagation): ΔR² = {delta_r2:+.4f}  (chb01)")
 
     # Save

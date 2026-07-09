@@ -310,9 +310,9 @@ def main():
     print(f"  LR stat:                         {lr_stat:.3f}")
     print(f"  p(QA adds):                      {p_val:.6f} {sig(p_val)}")
 
-    print(f"\n  COMPARISON (all on chb01):")
-    print(f"  Observer 3 (topographic k-means):     DR2 = +0.252")
-    print(f"  RNS eigenspectrum:                    DR2 = +0.138")
+    print(f"\n  COMPARISON (all on chb01; static reference figures, not recomputed here):")
+    print(f"  Observer 3 (topographic k-means):     DR2 = +0.252  (static ref; cluster ranking corrected 2026-07-08, effect negligible)")
+    print(f"  RNS eigenspectrum:                    DR2 = +0.138  (static ref)")
     print(f"  Canonical (amplitude x propagation):  DR2 = +0.094")
     print(f"  QA Graph (degree x core_number):      DR2 = {delta_r2:+.4f}")
 

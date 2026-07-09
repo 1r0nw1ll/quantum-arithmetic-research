@@ -90,6 +90,19 @@ def verify():
         np.array_equal(E11, [[1, 0], [0, 0]]) and np.array_equal(E22, [[0, 0], [0, 1]]) and
         np.array_equal(E12, [[0, 1], [0, 0]]) and np.array_equal(E21, [[0, 0], [1, 0]]))
 
+    # The three "special primes", de-conflated (see docs/theory/QA_AS_QUATERNION_ORDER.md):
+    #   5 = ramified prime of Z[phi] (disc=5); 3 = INERT in Z[phi] (not ramified);
+    #   M2(Q) split => algebra unramified everywhere (E11 is a zero divisor).
+    roots = lambda p: [t for t in range(p) if (t * t - t - 1) % p == 0]
+    chk("disc(Z[phi]) = 5 (5 is THE ramified prime of the quadratic order)",
+        (-1) * (-1) - 4 * 1 * (-1) == 5)
+    chk("3 is INERT in Z[phi] (x^2-x-1 irreducible mod 3 -> F_9), NOT ramified",
+        roots(3) == [])
+    chk("5 ramifies in Z[phi] (x^2-x-1 has a double root mod 5, at t=3)",
+        roots(5) == [3])
+    chk("M2(Q) is split => unramified everywhere (E11 is a zero divisor)",
+        np.array_equal(E11 @ E22, np.zeros((2, 2), np.int64)) and nrd(E11) == 0)
+
     return checks
 
 

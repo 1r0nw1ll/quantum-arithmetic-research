@@ -69,14 +69,32 @@ Auditing [294]–[303] against Voight resolves two points:
   det=+1"). Rule of thumb: **#M-factors even ⇔ nrd=+1 ⇔ in B¹ (rotor).** No cert
   mislabels a norm(−1) element as a norm-1 unit.
 
+## The three "special primes", de-conflated (direction 3 — done)
+
+The project has repeatedly blurred three *different* notions of a prime being
+"special" for QA. Voight's language separates them cleanly, and each is
+machine-verified (`qa_quaternion_order.py` companion snippet):
+
+| prime | role | fact | so it governs… |
+|---|---|---|---|
+| **5** | **ramified prime of the quadratic order ℤ[φ]** | `disc(x²−x−1)=5`; double root mod 5 | the √5 arithmetic: Pisano `π(5)=20`, Wall-Sun-Sun, the orbit certs [384]–[431] |
+| **3** | **inert** in ℤ[φ] (NOT ramified) | `x²−x−1` irreducible mod 3 → `ℤ[φ]/3 = 𝔽₉` (a field); `M mod 3` has order `π(3)=8` | the 3-adic *filtration* [301] and the `3∣m` collapse [515] |
+| every place | **the algebra M₂(ℚ) is split** | it has zero-divisors (e.g. `E₁₁`) → `disc(B)=1` → **unramified everywhere** | nothing "breaks" at the *algebra* level, ever |
+
+The upshot for the recurring **`3∣m` question** (cert [515]: QA-orbit NTRU keys
+break whenever `3∣m`): **this is not ramification of anything.** The algebra
+M₂(ℚ) is split/unramified at 3, and 3 is *inert* (not ramified) in ℤ[φ]. The
+collapse is a property of **reducing the modulus** `ℤ → ℤ/m`: when `3∣m`,
+multiplication-by-3 is the filtration `Cosmos --×3--> Satellite --×3-->
+Singularity` (cert [301]), i.e. the reduction `M₂(ℤ) → M₂(𝔽₃)` produces the
+proper `3`-power sublattice structure that LLL/BKZ exploits. Ramification lives
+at **5** (the quadratic order); the `3∣m` weakness is a **modulus/filtration**
+phenomenon, orthogonal to both ramification notions. Stating it this way removes
+the standing conflation of "3 is special" with "5 is special."
+
 ## Open threads (the continuing program)
-1. **The `3∣m` question** ([515]): the split algebra M₂ is unramified everywhere,
-   so the mod-3 collapse is *not* algebra ramification; it is the reduction
-   `M₂(ℤ) → M₂(𝔽₃)` and the Fibonacci/Pisano behaviour of `x²−x−1 mod 3`
-   (cert [301], 3-adic filtration). Worth stating precisely in Voight's language
-   (splitting of `x²−x−1` mod p; 5 is the ramified/discriminant prime of ℤ[φ]).
-2. **Brandt/Hecke** (Voight Ch. 41): whether QA orbit coupling has a Brandt-matrix
-   description.
+1. **Brandt/Hecke** (Voight Ch. 41): whether QA orbit coupling has a Brandt-matrix
+   description (the last untouched direction).
 
 ## Primary source
 

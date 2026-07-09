@@ -80,6 +80,15 @@ def verify():
     L = np.array([[1, 0], [1, 1]]); Rm = np.array([[1, 1], [0, 1]])
     chk("L,R are norm-1 units (SL(2,Z))", nrd(L) == 1 and nrd(Rm) == 1)
     chk("M^2 = L R (two T-steps = one rotor)", np.array_equal(M @ M, L @ Rm))
+    # M is nrd=-1 (odd-grade versor / reflection): NOT in B^1=SL(2,Z)
+    chk("M is an odd-grade versor: nrd(M)=-1, M not in B^1", nrd(M) == -1)
+
+    # The order Z<L,R,M> is the MAXIMAL order M2(Z), not a suborder/Eichler order:
+    # it contains all four matrix units (E21=L-I, E12=R-I, E11=E12 E21, E22=E21 E12).
+    E21 = L - I; E12 = Rm - I; E11 = E12 @ E21; E22 = E21 @ E12
+    chk("Z<L,R,M> = maximal order M2(Z) (contains all 4 matrix units)",
+        np.array_equal(E11, [[1, 0], [0, 0]]) and np.array_equal(E22, [[0, 0], [0, 1]]) and
+        np.array_equal(E12, [[0, 1], [0, 0]]) and np.array_equal(E21, [[0, 0], [1, 0]]))
 
     return checks
 

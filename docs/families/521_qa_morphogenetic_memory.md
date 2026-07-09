@@ -78,10 +78,23 @@ deterministic, integer-only, pure stdlib.
 - Hopfield, J.J. (1982). *PNAS* 79(8):2554-2558. DOI 10.1073/pnas.79.8.2554
 - Soffer, B.H. et al. (1986). *Opt. Lett.* 11(2):118-120. DOI 10.1364/OL.11.000118
 
+## Why this application works (applicability boundary)
+
+Per `docs/theory/QA_PHASE_CONJUGATE_APPLICABILITY.md`, the phase-conjugate memory
+and its phase-lock distortion-tolerance require two conditions, **both satisfied
+here**: (1) the class label aligns with the pattern metric — a body plan *is* its
+2D phase field, so the pattern fully determines the target morphology; and (2) the
+classes are **discrete attractors** — distinct body plans, not thresholds on a
+continuum — which is precisely what lets phase-lock regenerate the correct
+morphology under a systemic bioelectric shift. A domain violating either condition
+(climate ENSO: a continuum-threshold label on one of five channels) is where
+phase-lock provably fails; morphogenesis satisfies both, so it works.
+
 ## Companion
 
 - Certs **[518]** (exact conjugator), **[519]** (associative memory), **[520]**
   (EEG brain-state recall) — the phase-conjugation cluster.
+- Applicability boundary: `docs/theory/QA_PHASE_CONJUGATE_APPLICABILITY.md`.
 - Reference impl: `qa_morphogenetic_memory.py`.
 
 **Author**: Will Dale + Claude, 2026-07-09.

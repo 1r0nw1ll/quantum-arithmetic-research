@@ -95,10 +95,23 @@ regardless of features (≈0.36–0.38) — phase-lock provides the robustness,
 consistent with the certified mechanism. Preliminary (2 patients); the mechanism
 and cert claim are unchanged.
 
+## Why this application works (applicability boundary)
+
+Per `docs/theory/QA_PHASE_CONJUGATE_APPLICABILITY.md`, the phase-conjugate memory
+and its phase-lock distortion-tolerance require two conditions, **both satisfied
+here**: (1) the class label aligns with the pattern metric — the topographic
+QA phase vector directly discriminates seizure vs baseline (recall 0.83–1.00);
+and (2) the classes are **discrete attractors** — distinct brain-states, not
+thresholds on a continuum — which is exactly what lets phase-lock recover the
+correct state under a systemic reference-shift artifact. A domain violating either
+condition (climate ENSO: a continuum-threshold label on one of five channels) is
+where phase-lock provably fails; EEG satisfies both, so it works.
+
 ## Companion
 
 - Cert **[519]** (the phase-conjugate associative memory) and **[518]** (the exact
   operator + distortion-correction theorem) this application composes.
+- Applicability boundary: `docs/theory/QA_PHASE_CONJUGATE_APPLICABILITY.md`.
 - Reference impl: `qa_eeg_phase_conjugate_recall.py` (broadband),
   `qa_eeg_multiband_recall.py` (per-band extension). Loader fix in
   `eeg_orbit_observer_comparison.py`.

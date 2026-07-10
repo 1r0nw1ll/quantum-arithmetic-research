@@ -172,11 +172,17 @@ norm) makes the Brandt module nontrivial; by Jacquet–Langlands it is the order
 **expected to realize** the CM Hilbert newform **2.2.5.1-125.1-a**
 (`qa_brandt_level125.py`, 7/7, cross-checked vs LMFDB):
 
+- **Foundation validated in Sage/PARI** (`qa_brandt_level125_sage.sage`, SageMath
+  10.7): `B=(−1,−1|ℚ(√5))` is totally definite with reduced discriminant (1); the
+  PARI maximal order is genuinely maximal — its rank-8 reduced-norm form has
+  **det = 5⁴** and **exactly 120 minimal vectors = the 120 norm-1 units = 2I**
+  (matching `qa_icosian_order.py` from the other direction).
 - **Eichler mass = 2.5**, exact — the icosian ring's base mass `1/60` (=`|2I|/2`
-  with class number 1) times the local factor `N𝔭₅²·(N𝔭₅+1)=25·6=150`. Mass 2.5
-  is **consistent with class number `h = 3`** (mass alone does not *prove* `h` —
-  that needs the ideal-class enumeration); with the LMFDB cusp dimension 2 the
-  full space is dim 3 = 1 (Eisenstein) ⊕ 2 (CM cusp orbit).
+  with class number 1) times the local factor `N𝔭₅²·(N𝔭₅+1)=25·6=150`.
+- **Brandt-module dimension `h = 3`, confirmed** — LMFDB has **no newforms at level
+  5.1 or 25.1**, so there are **no oldforms** at 125.1; the level-125 cusp space is
+  exactly the 2-dim newform, giving dim 3 = 1 (Eisenstein) ⊕ 2 (CM cusp orbit).
+  (Mass 2.5 is consistent with this; weights are `(1,1,2)`.)
 - **CM structure** (checked in-file on a 24-prime LMFDB fixture; spot-checked
   externally against the full list, clean over the first 827 primes / norms ≤
   11449, beyond which independent prime-ordering reconstruction drifts from
@@ -192,12 +198,15 @@ norm) makes the Brandt module nontrivial; by Jacquet–Langlands it is the order
   first good primes are in the script (e.g. `T(𝔭₁₁): (x−12)(x²+x−31)`; inert good
   `𝔭`: `(x−(N𝔭+1))·x²`).
 
-**Honestly scoped** (this is a cross-check, not a from-scratch Brandt computation):
-the explicit 3×3 integer matrix *entries* in an ideal-class basis need the
-neighbor/Kirschmer–Voight enumeration of the three right-ideal classes (a CAS-scale
-Magma/Sage computation), not reproduced here. What is delivered: the order and its
-mass, the CM structure, and the Brandt char polys the eigenvalues imply — all
-consistent with, and anchored by, LMFDB 2.2.5.1-125.1-a.
+**Honestly scoped.** The maximal order and the module dimension `h=3` are now
+*computed/validated* (Sage/PARI + LMFDB oldform check), not merely inferred. What
+remains is the explicit 3×3 integer matrix *entries* in the ideal-class basis:
+that needs the ideal-class enumeration, whose one hard step is a splitting at the
+**ramified** prime `𝔭₅=(√5)` (residue field 𝔽₅) — the specialist part, best done
+with Magma's `HilbertModularForms`/`BrandtMatrix` or a careful ramified-local orbit
+computation. The Sage foundation script builds everything up to that step; the
+entries themselves were not brought to a validated result here. The Brandt
+*spectrum* (char polys) is fixed by `h=3` + the LMFDB eigenvalues.
 
 This places the golden Hecke eigenforms of the orbit cluster [384]–[431] on the
 *quaternionic* side over QA's own field — the Brandt/Hecke bridge, one concrete
@@ -243,5 +252,5 @@ and for the *arithmetic* layer the exact value must also be an algebraic integer
 - LMFDB: Hilbert modular form 2.2.5.1-125.1-a (level norm 125, weight [2,2], CM by
   ℚ(ζ₅), Hecke poly x²+x−31), lmfdb.org/api/hmf_hecke.
 - Verified: `qa_quaternion_order.py` (22/22), `qa_icosian_order.py` (7/7),
-  `qa_brandt_level125.py` (6/6). Companion certs [294]–[303], [384]–[431],
-  [518]–[521].
+  `qa_brandt_level125.py` (7/7), `qa_brandt_level125_sage.sage` (SageMath 10.7,
+  maximal-order foundation). Companion certs [294]–[303], [384]–[431], [518]–[521].

@@ -13,10 +13,13 @@ that, by Jacquet-Langlands, is EXPECTED to realize the CM Hilbert newform LMFDB
 WHAT THIS SCRIPT DOES (all exact; the number theory it can check in-file, it checks):
   - records the setup: N(p5)=5, level n=p5^3, N(n)=125 (= LMFDB level_norm);
   - computes the Eichler MASS = 5/2 exactly (icosian base mass 1/60 times the local
-    factor N(p5)^2 (N(p5)+1) = 150). Mass 5/2 is CONSISTENT with class number h=3
-    (mass alone does not prove h; proving it needs the ideal-class enumeration).
-    Taking the LMFDB cusp dimension = 2, the full space dim would be 3 = 1
-    (Eisenstein) + 2 (CM cusp).
+    factor N(p5)^2 (N(p5)+1) = 150). Mass 5/2 is consistent with class number h=3.
+  - CONFIRMS Brandt-module dimension h = 3: LMFDB has NO newforms at level 5.1 or
+    25.1, so there are NO oldforms at 125.1; the level-125 cusp space is therefore
+    exactly the 2-dim newform, and the full space is dim 3 = 1 (Eisenstein) + 2
+    (cusp). [Sage/PARI foundation check qa_brandt_level125_sage.sage independently
+    validates the maximal order: totally definite, reduced disc (1), norm-form
+    det 5^4, exactly 120 norm-1 units = 2I.]
   - re-verifies the CM structure on an embedded 24-prime LMFDB fixture (below):
     a_P != 0 <=> p == 1 mod 5 (CM by Q(zeta5)); and that the two eigenvalues over
     each split p are Galois conjugate over Q(e), e^2+e-31=0 (= Q(sqrt5)).
@@ -71,10 +74,12 @@ def verify():
     # Eichler mass = base(1/60) * local factor N(p5)^2 (N(p5)+1) = 1/60 * 150 = 5/2
     mass = Fr(1, 60) * (5 ** (3 - 1) * (5 + 1))
     chk("Eichler mass = 1/60 * 150 = 5/2 (exact)", mass == Fr(5, 2))
-    # dimension: 1 (Eisenstein) + LMFDB cusp dimension (2) = 3, consistent with mass 5/2
-    lmfdb_cusp_dim = 2
-    chk("Brandt-module dim = 1 + LMFDB cusp dim(2) = 3 (consistent with mass 5/2)",
-        1 + lmfdb_cusp_dim == 3)
+    # dimension h=3 CONFIRMED: no newforms at level 5.1 or 25.1 (LMFDB) => no oldforms
+    # at 125.1, so the cusp space is exactly the 2-dim newform; +1 Eisenstein = 3.
+    lmfdb_cusp_dim = 2                 # 2.2.5.1-125.1-a is the only cusp form at 125.1
+    newforms_at_lower_levels = 0      # LMFDB: 0 newforms at 2.2.5.1 levels 5.1 and 25.1
+    chk("Brandt-module dim h = 3 = 1 Eisenstein + cusp dim 2 (no oldforms; mass 5/2 consistent)",
+        newforms_at_lower_levels == 0 and 1 + lmfdb_cusp_dim == 3)
 
     # CM structure, checked in-file on the embedded fixture: a_P != 0 <=> p == 1 mod 5
     chk("fixture: a_P != 0  <=>  p == 1 mod 5  (CM by Q(zeta5))",

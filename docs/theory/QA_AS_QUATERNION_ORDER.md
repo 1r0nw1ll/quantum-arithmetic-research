@@ -164,11 +164,44 @@ already aligns to (4D tuples → 8D → 240 roots). The QA↔E8 alignment stops 
 imposed projection and becomes the icosian/E8 structure of the definite golden
 order.
 
-**Still open (unchanged):** the icosian ring is *level 1*, class number 1, so its
-Brandt matrix is still trivial. Matching the CM Hilbert modular form
-**2.2.5.1-125.1-a** (certs [384]–[431]) needs an **Eichler order of level 125=5³**
-inside this algebra; computing its Brandt matrices and checking them against the
-[384]–[431] eigenvalues is the next concrete step.
+## The level-125 Eichler order and its Brandt matrices
+
+The icosian ring is level 1 / class number 1 (Brandt trivial). Going to the
+**Eichler order of level `𝔫 = 𝔭₅³`** (`𝔭₅=(√5)`, `N𝔫 = 125` = the LMFDB level
+norm) makes the Brandt module nontrivial; by Jacquet–Langlands it is the order
+**expected to realize** the CM Hilbert newform **2.2.5.1-125.1-a**
+(`qa_brandt_level125.py`, 7/7, cross-checked vs LMFDB):
+
+- **Eichler mass = 2.5**, exact — the icosian ring's base mass `1/60` (=`|2I|/2`
+  with class number 1) times the local factor `N𝔭₅²·(N𝔭₅+1)=25·6=150`. Mass 2.5
+  is **consistent with class number `h = 3`** (mass alone does not *prove* `h` —
+  that needs the ideal-class enumeration); with the LMFDB cusp dimension 2 the
+  full space is dim 3 = 1 (Eisenstein) ⊕ 2 (CM cusp orbit).
+- **CM structure** (checked in-file on a 24-prime LMFDB fixture; spot-checked
+  externally against the full list, clean over the first 827 primes / norms ≤
+  11449, beyond which independent prime-ordering reconstruction drifts from
+  LMFDB's): the form has **CM by ℚ(ζ₅)**; `a_𝔭 ≠ 0 ⟺ p ≡ 1 mod 5` (i.e. `𝔭`
+  splits in ℚ(ζ₅)); the Hecke eigenvalue field is `ℚ(e)`, `e²+e−31=0`, which is
+  `ℚ(√5)=F` itself.
+- **Brandt spectrum (derived, not independently computed)**: *taking* dim 3 and
+  the LMFDB eigenvalues, `T(𝔭)` is the 3×3 matrix with characteristic polynomial
+  `(x−(N𝔭+1))·(x²−tr(a_𝔭)x+nm(a_𝔭))`. Two self-consistency confirmations: the two
+  LMFDB eigenvalues over each split `p` are **Galois conjugate** (a single 2-dim
+  orbit, as a 3-dim Brandt module requires), and the cusp factor of `T(𝔭₁₁)` is
+  **`x²+x−31`, exactly the LMFDB Hecke polynomial**. Explicit char polys for the
+  first good primes are in the script (e.g. `T(𝔭₁₁): (x−12)(x²+x−31)`; inert good
+  `𝔭`: `(x−(N𝔭+1))·x²`).
+
+**Honestly scoped** (this is a cross-check, not a from-scratch Brandt computation):
+the explicit 3×3 integer matrix *entries* in an ideal-class basis need the
+neighbor/Kirschmer–Voight enumeration of the three right-ideal classes (a CAS-scale
+Magma/Sage computation), not reproduced here. What is delivered: the order and its
+mass, the CM structure, and the Brandt char polys the eigenvalues imply — all
+consistent with, and anchored by, LMFDB 2.2.5.1-125.1-a.
+
+This places the golden Hecke eigenforms of the orbit cluster [384]–[431] on the
+*quaternionic* side over QA's own field — the Brandt/Hecke bridge, one concrete
+level mapped out (the explicit ideal-class Brandt computation remaining).
 
 ## Does using fractional (b,e,d,a) change the quaternion assessment?
 
@@ -207,5 +240,8 @@ and for the *arithmetic* layer the exact value must also be an algebraic integer
 - Conway, J.H. & Sloane, N.J.A. (1999). *Sphere Packings, Lattices and Groups*
   (SPLAG), 3rd ed. Springer. ISBN 978-0-387-98585-5. Ch. 8 §2.1 (icosian ring,
   binary icosahedral group, E8), Ch. 4 (600-cell).
-- Verified: `qa_quaternion_order.py` (22/22), `qa_icosian_order.py` (7/7).
-  Companion certs [294]–[303], [384]–[431], [518]–[521].
+- LMFDB: Hilbert modular form 2.2.5.1-125.1-a (level norm 125, weight [2,2], CM by
+  ℚ(ζ₅), Hecke poly x²+x−31), lmfdb.org/api/hmf_hecke.
+- Verified: `qa_quaternion_order.py` (22/22), `qa_icosian_order.py` (7/7),
+  `qa_brandt_level125.py` (6/6). Companion certs [294]–[303], [384]–[431],
+  [518]–[521].

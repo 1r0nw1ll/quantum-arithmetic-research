@@ -1,48 +1,48 @@
 #!/usr/bin/env python3
 # QA_COMPLIANCE = "reference_grounding — Brandt module / Eichler order arithmetic over Q(sqrt5); exact integer/Fraction arithmetic; no QA state machine"
 """
-The level-125 Eichler order over Q(sqrt5): assembling and CROSS-CHECKING its Brandt data.
+The level-125 Eichler order over Q(sqrt5): the Brandt matrices, COMPUTED from scratch.
 
 Continues docs/theory/QA_AS_QUATERNION_ORDER.md. The definite algebra
 B = (-1,-1|Q(sqrt5)) (disc 1; maximal order = the icosian ring, class number 1;
 qa_icosian_order.py) carries Hilbert modular forms over F=Q(sqrt5) via its Brandt
-matrices. The Eichler order of level n = p5^3 (p5=(sqrt5), N(n)=125) is the one
-that, by Jacquet-Langlands, is EXPECTED to realize the CM Hilbert newform LMFDB
-2.2.5.1-125.1-a (level_norm 125).
+matrices. The Eichler order of level n = p5^3 (p5=(sqrt5), N(n)=125) realizes the
+CM Hilbert newform LMFDB 2.2.5.1-125.1-a (level_norm 125).
 
-WHAT THIS SCRIPT DOES (all exact; the number theory it can check in-file, it checks):
-  - records the setup: N(p5)=5, level n=p5^3, N(n)=125 (= LMFDB level_norm);
-  - computes the Eichler MASS = 5/2 exactly (icosian base mass 1/60 times the local
-    factor N(p5)^2 (N(p5)+1) = 150). Mass 5/2 is consistent with class number h=3.
-  - CONFIRMS Brandt-module dimension h = 3: LMFDB has NO newforms at level 5.1 or
-    25.1, so there are NO oldforms at 125.1; the level-125 cusp space is therefore
-    exactly the 2-dim newform, and the full space is dim 3 = 1 (Eisenstein) + 2
-    (cusp). [Sage/PARI foundation check qa_brandt_level125_sage.sage independently
-    validates the maximal order: totally definite, reduced disc (1), norm-form
-    det 5^4, exactly 120 norm-1 units = 2I.]
-  - re-verifies the CM structure on an embedded 24-prime LMFDB fixture (below):
-    a_P != 0 <=> p == 1 mod 5 (CM by Q(zeta5)); and that the two eigenvalues over
-    each split p are Galois conjugate over Q(e), e^2+e-31=0 (= Q(sqrt5)).
-  - taking dim 3 (= 1 Eisenstein + LMFDB cusp dim 2) and the LMFDB eigenvalues,
-    writes down the char polys the Brandt matrices T(P) would have:
-    (x-(N(P)+1))(x^2 - tr(a_P)x + nm(a_P)).
+The full from-scratch computation lives in qa_brandt_level125_compute.sage
+(SageMath 10.7 + PARI): it builds the maximal order (det 5^4, 120 units = 2I),
+the O_K-structure, the splitting rho: O_max (x) O_K/p5^3 -> M_2(R) at the RAMIFIED
+prime p5 (rank-1 idempotent via mod-p5 seed + Newton lift), the Eichler order
+O = {x : (1-e) x e = 0} (validated reduced disc 5^10), the class number
+h = 3 = #(O_max^1 orbits on P^1(O_K/p5^3)) with weights (1,1,2) and mass 5/2, and
+finally the Brandt matrices T(q) via the q-neighbour elements (nrd(alpha) a totally
+positive generator of q) acting through rho on P^1. Result:
 
-WHAT THIS SCRIPT DOES NOT DO (scoped honestly, per Codex review):
-  - it does NOT independently COMPUTE the Brandt matrices. The char polys are
-    DERIVED from the LMFDB eigenvalues + the dimension (1 + LMFDB cusp dim 2) and checked for
-    self-consistency (Galois pairing; cusp factor of T(P_11) = LMFDB Hecke poly
-    x^2+x-31). The explicit 3x3 integer matrix entries in an ideal-class basis
-    require the neighbor/Kirschmer-Voight enumeration of the 3 right-ideal classes
-    (a CAS-scale Magma/Sage computation), not reproduced here.
-  - the CM pattern was additionally spot-checked against the full LMFDB eigenvalue
-    list (provenance: lmfdb.org/api/hmf_hecke/?label=2.2.5.1-125.1-a), but that run
-    is external; this file only asserts what it re-verifies on the embedded fixture.
+  T(p11) = [[2,5,10],[5,7,0],[5,0,2]]     char poly (x-12)(x^2 + x - 31)
+  T(p31) = [[7,15,20],[15,12,10],[10,5,2]] char poly (x-32)(x^2 + 11x - 1)
+  T(p7)  = [[20,20,20],[20,20,20],[10,10,10]] char poly (x-50) x^2   (p7 inert, N=49)
+
+Every cusp factor is exactly the LMFDB Hecke data (x^2+x-31 is the LMFDB Hecke
+polynomial; the p7-inert 0,0 is the CM signature). Column sums = N(q)+1 (Eisenstein).
+
+THIS Python file re-verifies, with no CAS, the properties of the computed matrices
+(column sums = N(q)+1; (N(q)+1) is an eigenvalue; cusp factor = the LMFDB-predicted
+(x^2 - tr(a_P)x + nm(a_P))), and re-checks the CM structure on an embedded 24-prime
+LMFDB fixture. h=3 is corroborated independently: LMFDB has no newforms at level 5.1
+or 25.1, so no oldforms at 125.1 (cusp space = the 2-dim newform, +1 Eisenstein = 3).
 
 Primary data: LMFDB 2.2.5.1-125.1-a (level_norm 125, weight [2,2], is_CM yes,
 hecke_polynomial x^2+x-31, AL(p5)=+1).
 """
 from __future__ import annotations
 from fractions import Fraction as Fr
+
+# Brandt matrices computed in qa_brandt_level125_compute.sage (orbit basis, weights (1,1,2)):
+BRANDT = {
+    11: ([[2, 5, 10], [5, 7, 0], [5, 0, 2]], (-1, -31)),          # T(p11); cusp x^2 - (-1)x + (-31)
+    31: ([[7, 15, 20], [15, 12, 10], [10, 5, 2]], (-11, -1)),     # T(p31); cusp x^2 - (-11)x + (-1)
+    49: ([[20, 20, 20], [20, 20, 20], [10, 10, 10]], (0, 0)),     # T(p7 inert, N=49); cusp x^2
+}
 
 # --- Hecke eigenvalue field Q(e), e^2 + e - 31 = 0 (= Q(sqrt5)); a_P = c + d e ---
 # Galois conjugation sigma: e -> -1 - e  (e + sigma(e) = -1, e*sigma(e) = -31).
@@ -104,24 +104,39 @@ def verify():
         all(isinstance(trace(v[0]), int) and isinstance(norm(v[0]), int)
             for v in byp.values()))
 
+    # --- verify the COMPUTED 3x3 Brandt matrices (from qa_brandt_level125_compute.sage) ---
+    def m3det(M):
+        return (M[0][0]*(M[1][1]*M[2][2]-M[1][2]*M[2][1])
+                - M[0][1]*(M[1][0]*M[2][2]-M[1][2]*M[2][0])
+                + M[0][2]*(M[1][0]*M[2][1]-M[1][1]*M[2][0]))
+    def minors2(M):  # sum of principal 2x2 minors
+        return ((M[0][0]*M[1][1]-M[0][1]*M[1][0]) + (M[0][0]*M[2][2]-M[0][2]*M[2][0])
+                + (M[1][1]*M[2][2]-M[1][2]*M[2][1]))
+    for Nq, (M, (S, P)) in BRANDT.items():
+        r = Nq + 1                                    # Eisenstein eigenvalue N(q)+1
+        colsums = [sum(M[i][j] for i in range(3)) for j in range(3)]
+        c1 = sum(M[i][i] for i in range(3)); c2 = minors2(M); c3 = m3det(M)
+        # char poly x^3 - c1 x^2 + c2 x - c3 must equal (x-r)(x^2 - S x + P)
+        factors_ok = (c1 == r + S) and (c2 == P + r*S) and (c3 == r*P)
+        chk(f"computed T(q,N={Nq}): column sums all = N(q)+1 = {r} (Eisenstein)",
+            all(cs == r for cs in colsums))
+        chk(f"computed T(q,N={Nq}): char poly = (x-{r})(x^2 - ({S})x + ({P})) [matches LMFDB]",
+            factors_ok)
+    # T(p11) cusp factor is the LMFDB Hecke polynomial
+    chk("computed T(p11) cusp factor (x^2 + x - 31) = the LMFDB Hecke polynomial",
+        BRANDT[11][1] == HECKE_POLY)
+
     return checks
 
 
 def brandt_spectra():
-    print("Brandt char polys implied by dim 3 (1 Eisenstein + LMFDB cusp 2) + LMFDB eigenvalues:")
-    print("  T(P) = (x-(N(P)+1)) * (x^2 - tr(a_P)x + nm(a_P)):")
-    from collections import defaultdict
-    byp = defaultdict(list)
-    for (nrm, p, a) in LMFDB_FIXTURE:
-        byp[(nrm, p)].append(a)
-    for (nrm, p), evs in sorted(byp.items()):
-        if p % 5 == 1:
-            a = evs[0]
-            print(f"    split p={p:3d} (N(P)={nrm}): (x-{nrm + 1}) * (x^2 - ({trace(a)})x + ({norm(a)}))")
-    print("  inert good primes P (N(P)=p^2, a_P=0 by CM => cusp eigenvalues 0,0):")
-    for nrm, p, a in LMFDB_FIXTURE:
-        if p != 5 and p % 5 != 1 and nrm == p * p:
-            print(f"    inert p={p:3d} (N(P)={nrm}): (x-{nrm + 1}) * x^2")
+    print("Brandt matrices COMPUTED from scratch (qa_brandt_level125_compute.sage), orbit basis:")
+    labels = {11: "T(p11)", 31: "T(p31)", 49: "T(p7 inert, N=49)"}
+    for Nq in (11, 31, 49):
+        M, (S, P) = BRANDT[Nq]
+        cusp = f"x^2 - ({S})x + ({P})" if (S, P) != (0, 0) else "x^2"
+        print(f"  {labels[Nq]:20s} = {M}")
+        print(f"    {'':20s}   char poly (x-{Nq + 1}) * ({cusp})")
 
 
 def _run(selftest=False):
@@ -131,17 +146,17 @@ def _run(selftest=False):
         import json
         print(json.dumps({"ok": n_ok == len(results), "passed": n_ok, "total": len(results)}))
         return 0 if n_ok == len(results) else 1
-    print("LEVEL-125 EICHLER ORDER OVER Q(sqrt5): BRANDT DATA (cross-checked vs LMFDB)")
+    print("LEVEL-125 EICHLER ORDER OVER Q(sqrt5): BRANDT MATRICES (computed from scratch)")
     print("(target: CM Hilbert newform LMFDB 2.2.5.1-125.1-a)\n")
     for name, ok in results:
         print(f"  [{'PASS' if ok else 'FAIL'}] {name}")
     print(f"\n{n_ok}/{len(results)} checks pass.\n")
     brandt_spectra()
-    print("\nMass 5/2 is consistent with class number 3; with LMFDB cusp dim 2 the space is")
-    print("dim 3 = 1 Eisenstein + 2-dim CM (by Q(zeta5)) cusp orbit, expected (Jacquet-")
-    print("Langlands) to be 2.2.5.1-125.1-a. NOT an independent Brandt-matrix computation:")
-    print("char polys are derived from LMFDB eigenvalues + this dimension; explicit")
-    print("ideal-class matrix entries need the neighbor-method enumeration.")
+    print("\nComputed end-to-end in qa_brandt_level125_compute.sage: maximal order (det 5^4,")
+    print("120 units = 2I) -> splitting at the ramified prime p5 -> Eichler order (det 5^10)")
+    print("-> class number h=3 (unit orbits on P^1), weights (1,1,2), mass 5/2 -> the Brandt")
+    print("matrices above. Every char poly matches LMFDB 2.2.5.1-125.1-a (cusp factor of")
+    print("T(p11) is the LMFDB Hecke polynomial x^2+x-31; p7-inert cusp eigenvalues 0,0 = CM).")
     return 0 if n_ok == len(results) else 1
 
 

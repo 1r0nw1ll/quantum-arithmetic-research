@@ -189,28 +189,35 @@ norm) makes the Brandt module nontrivial; by Jacquet–Langlands it is the order
   LMFDB's): the form has **CM by ℚ(ζ₅)**; `a_𝔭 ≠ 0 ⟺ p ≡ 1 mod 5` (i.e. `𝔭`
   splits in ℚ(ζ₅)); the Hecke eigenvalue field is `ℚ(e)`, `e²+e−31=0`, which is
   `ℚ(√5)=F` itself.
-- **Brandt spectrum (derived, not independently computed)**: *taking* dim 3 and
-  the LMFDB eigenvalues, `T(𝔭)` is the 3×3 matrix with characteristic polynomial
-  `(x−(N𝔭+1))·(x²−tr(a_𝔭)x+nm(a_𝔭))`. Two self-consistency confirmations: the two
-  LMFDB eigenvalues over each split `p` are **Galois conjugate** (a single 2-dim
-  orbit, as a 3-dim Brandt module requires), and the cusp factor of `T(𝔭₁₁)` is
-  **`x²+x−31`, exactly the LMFDB Hecke polynomial**. Explicit char polys for the
-  first good primes are in the script (e.g. `T(𝔭₁₁): (x−12)(x²+x−31)`; inert good
-  `𝔭`: `(x−(N𝔭+1))·x²`).
+- **The explicit 3×3 Brandt matrices, computed from scratch**
+  (`qa_brandt_level125_compute.sage`, SageMath 10.7 + PARI, end-to-end with all
+  stages validated):
 
-**Honestly scoped.** The maximal order and the module dimension `h=3` are now
-*computed/validated* (Sage/PARI + LMFDB oldform check), not merely inferred. What
-remains is the explicit 3×3 integer matrix *entries* in the ideal-class basis:
-that needs the ideal-class enumeration, whose one hard step is a splitting at the
-**ramified** prime `𝔭₅=(√5)` (residue field 𝔽₅) — the specialist part, best done
-with Magma's `HilbertModularForms`/`BrandtMatrix` or a careful ramified-local orbit
-computation. The Sage foundation script builds everything up to that step; the
-entries themselves were not brought to a validated result here. The Brandt
-*spectrum* (char polys) is fixed by `h=3` + the LMFDB eigenvalues.
+  | prime | `T(𝔭)` (orbit basis) | char poly |
+  |---|---|---|
+  | `𝔭₁₁` | `[[2,5,10],[5,7,0],[5,0,2]]` | `(x−12)(x²+x−31)` |
+  | `𝔭₃₁` | `[[7,15,20],[15,12,10],[10,5,2]]` | `(x−32)(x²+11x−1)` |
+  | `𝔭₇` (inert, `N=49`) | `[[20,20,20],[20,20,20],[10,10,10]]` | `(x−50)·x²` |
+
+  Column sums are `N𝔭+1` (the Eisenstein eigenvalue); the weighted symmetry
+  `wᵢTᵢⱼ=wⱼTⱼᵢ` holds with `(w)=(1,1,2)`; and **every cusp factor is exactly the
+  LMFDB data** — the cusp factor of `T(𝔭₁₁)` is `x²+x−31`, the LMFDB Hecke
+  polynomial, and the `𝔭₇`-inert cusp eigenvalues `0,0` are the CM signature.
+
+**How the entries were obtained** (the hard step is the **ramified** prime
+`𝔭₅=(√5)`): build `O_max` via PARI `alginit`; get an `O_K`-basis and structure
+constants; construct `R=O_K/𝔭₅³` (`|R|=125`) and the splitting
+`ρ: O_max⊗R ≅ M₂(R)` from a rank-1 idempotent (mod-`𝔭₅` seed + Newton lift); the
+Eichler order is `O={x:(1−e)xe=0}` (validated reduced disc `5¹⁰`); the class number
+is `h=3 = #(O_max¹-orbits on P¹(R))` (orbit sizes `30,60,60` → weights `1,1,2` →
+mass `5/2`); and `T(𝔭)` comes from the `N𝔭+1` `𝔭`-neighbour elements `α`
+(`nrd(α)` a totally-positive generator of `𝔭`) acting via `ρ(α)` on `P¹` and
+reading off the landing orbit. The companion `qa_brandt_level125.py` re-verifies
+the computed matrices (column sums, char-poly factorisations) with no CAS.
 
 This places the golden Hecke eigenforms of the orbit cluster [384]–[431] on the
-*quaternionic* side over QA's own field — the Brandt/Hecke bridge, one concrete
-level mapped out (the explicit ideal-class Brandt computation remaining).
+*quaternionic* side over QA's own field, with the **Brandt matrices computed from
+scratch** — the Brandt/Hecke bridge, one concrete level fully realized.
 
 ## Does using fractional (b,e,d,a) change the quaternion assessment?
 
@@ -252,5 +259,7 @@ and for the *arithmetic* layer the exact value must also be an algebraic integer
 - LMFDB: Hilbert modular form 2.2.5.1-125.1-a (level norm 125, weight [2,2], CM by
   ℚ(ζ₅), Hecke poly x²+x−31), lmfdb.org/api/hmf_hecke.
 - Verified: `qa_quaternion_order.py` (22/22), `qa_icosian_order.py` (7/7),
-  `qa_brandt_level125.py` (7/7), `qa_brandt_level125_sage.sage` (SageMath 10.7,
-  maximal-order foundation). Companion certs [294]–[303], [384]–[431], [518]–[521].
+  `qa_brandt_level125.py` (14/14), `qa_brandt_level125_sage.sage` (SageMath 10.7,
+  maximal-order foundation), `qa_brandt_level125_compute.sage` (SageMath 10.7 +
+  PARI, the full from-scratch Brandt-matrix computation). Companion certs
+  [294]–[303], [384]–[431], [518]–[521].

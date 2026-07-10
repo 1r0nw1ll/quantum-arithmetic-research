@@ -247,6 +247,31 @@ This places the golden Hecke eigenforms of cert cluster [384]–[431] on the
 *quaternionic* side over QA's own field ℚ(√5), with the **Brandt matrices computed
 from scratch**. The Brandt/Hecke bridge is realized concretely at level 125.
 
+### 6.4 The non-CM check — the machinery is not special to the CM case
+
+CM eigenvalues are the "easy" case (structured, with a congruence-driven
+zero-pattern). The real test is a **non-CM** form, whose Hecke eigenvalues are
+genuinely irregular. Target: the non-CM Hilbert newform system **2.2.5.1-31.x-a**
+(level norm 31, weight [2,2], non-CM, rational eigenvalues). Its level is a prime
+`𝔭₃₁` over 31, which is **split unramified** — so `O_K/𝔭₃₁ = 𝔽₃₁` is a *field* and
+the splitting is direct (no Newton lift; the whole computation is *simpler* than
+the ramified CM case). `qa_brandt_level31_compute.sage` (Sage/PARI, all stages
+asserted, Codex-approved):
+
+- Eichler order level `𝔭₃₁`: index 31, reduced-norm form det `5⁴·31²`; class number
+  **`h = 2`** via unit-orbits on `P¹(𝔽₃₁)` (orbit sizes `12,20` → weights `(3,5)` →
+  mass `8/15`); space = 1 Eisenstein ⊕ 1 non-CM cusp.
+- The `2×2` Brandt matrices' cusp eigenvalues reproduce the non-CM Hecke system for
+  **every good prime to norm 49**: `a₂=−3, a₃=2, a₅=−2, a₇=2, a₁₁=4, a₁₉=−4,
+  a₂₉=−2, a₄₁=−6` — the genuinely irregular non-CM eigenvalues, from scratch, with
+  the Eisenstein eigenvalue `N𝔭+1` verified as a real eigenvalue in each case.
+  (Distinguishing the ideal labels 31.1 vs 31.2 — which share this eigenvalue
+  system — would need ordered prime→eigenvalue tracking, not done here.)
+
+So the quaternionic realization reproduces **both** a CM form (level 125) and a
+non-CM form (level 31) over ℚ(√5). The Brandt/Hecke bridge is not an artefact of
+the CM structure; it is the general correspondence, computed.
+
 ---
 
 ## 7. What is verified
@@ -259,6 +284,9 @@ from scratch**. The Brandt/Hecke bridge is realized concretely at level 125.
   system of the CM form 2.2.5.1-125.1-a over ℚ(√5). — `qa_brandt_level125_compute.sage`
   (SageMath 10.7 + PARI), re-checked by `qa_brandt_level125.py` (16/16) and
   `qa_brandt_level125_sage.sage` (foundation).
+- **Level-31 Eichler order + its Brandt matrices**, reproducing the NON-CM Hecke
+  system of 2.2.5.1-31.x-a over ℚ(√5) (`h=2`, good primes to norm 49). —
+  `qa_brandt_level31_compute.sage` (SageMath 10.7 + PARI, all stages asserted).
 
 ## Primary sources
 

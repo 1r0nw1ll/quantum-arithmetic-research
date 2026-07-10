@@ -1,0 +1,28 @@
+{
+  "_primary_source": "Primary source: (Fink, 1992) DOI 10.1109/58.156174 (time reversal of ultrasonic fields; time-reversal mirror refocusing through inhomogeneous media); (Yariv, 1978) DOI 10.1109/JQE.1978.1069870 (phase conjugation). Time reversal refocuses on the source through the scattering medium.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_TIME_REVERSAL_FOCUS_CERT.v1",
+  "description": "Fixture schema for QA Time-Reversal Focusing Cert [522]. 'mechanism' fixtures certify focus/medium-cancellation/off-source-scatter/same-medium-specificity on explicit small arrays; 'empirical' fixtures record the reference-impl results.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "kind"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_TIME_REVERSAL_FOCUS_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "kind": {"type": "string", "enum": ["mechanism", "empirical"]},
+    "m": {"type": "integer", "minimum": 2},
+    "source_phase": {"type": "integer", "minimum": 1, "description": "mechanism: source emission phase s"},
+    "prop_to_source": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "mechanism: per-element propagation phase to the source location"},
+    "prop_to_off": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "mechanism: per-element propagation phase to a distinct off-source location"},
+    "medium": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "mechanism: per-element scattering-medium phase H"},
+    "medium_alt": {"type": "array", "items": {"type": "integer", "minimum": 1}, "description": "mechanism: a distinct medium H' (re-emitting through it must break the focus)"},
+    "peak_focus": {"type": ["number", "null"], "description": "empirical: peak coherent-sum focus magnitude (~1 at the source)"},
+    "focal_gain": {"type": ["number", "null"], "description": "empirical: peak / background (>1 = focused)"},
+    "specificity_gap": {"type": ["number", "null"], "description": "empirical: matched-peak minus mismatched-peak focus"},
+    "source_recovered": {"type": ["boolean", "null"], "description": "empirical: focus peak lands at the source location"},
+    "expected_fail_type": {"type": ["string", "null"], "enum": ["MISSING_FIELD", "WRONG_MECHANISM", "WRONG_EMPIRICAL", "OUT_OF_RANGE", null]}
+  }
+}

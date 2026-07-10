@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=reference-impl witness (qa_time_reversal_focus.py) recording refocus + same-medium specificity; primary_source cites Fink 1992. -->",
+  "schema_version": "QA_TIME_REVERSAL_FOCUS_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Fink, 1992) DOI 10.1109/58.156174. Reference impl (m=24, 64-element array): time reversal refocuses exactly at the source through a random phase screen; the focus survives only through the matched medium.",
+  "kind": "empirical",
+  "peak_focus": 1.0,
+  "focal_gain": 2.037,
+  "specificity_gap": 0.756,
+  "source_recovered": true
+}

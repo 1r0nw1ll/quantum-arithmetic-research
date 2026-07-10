@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; specificity_gap below threshold must fail. -->",
+  "schema_version": "QA_TIME_REVERSAL_FOCUS_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Fink, 1992) DOI 10.1109/58.156174. Negative fixture: focus claimed but specificity_gap ~0 (no same-medium specificity).",
+  "kind": "empirical",
+  "peak_focus": 1.0,
+  "focal_gain": 2.0,
+  "specificity_gap": 0.05,
+  "source_recovered": true,
+  "expected_fail_type": "WRONG_EMPIRICAL"
+}

@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture; omits medium_alt to exercise MISSING_FIELD. -->",
+  "schema_version": "QA_TIME_REVERSAL_FOCUS_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Fink, 1992) DOI 10.1109/58.156174. Negative fixture: medium_alt omitted.",
+  "kind": "mechanism",
+  "m": 24,
+  "source_phase": 5,
+  "prop_to_source": [3, 5, 8, 12, 15, 19, 22, 24],
+  "prop_to_off": [7, 8, 8, 13, 11, 2, 20, 6],
+  "medium": [11, 4, 23, 6, 17, 2, 9, 14],
+  "expected_fail_type": "MISSING_FIELD"
+}

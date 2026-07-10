@@ -24,6 +24,10 @@ positive generator of q) acting through rho on P^1. Result:
 
 Every cusp factor is exactly the LMFDB Hecke data (x^2+x-31 is the LMFDB Hecke
 polynomial; the p7-inert 0,0 is the CM signature). Column sums = N(q)+1 (Eisenstein).
+The Sage script's stage [7] extends this to a FULL Hecke-system check: all 13 good
+primes up to norm 100 reproduce the LMFDB cusp factors (S,P) exactly -- i.e. the
+whole L-function of 2.2.5.1-125.1-a (to that bound) comes out of the Brandt matrices,
+not just three sample primes.
 
 THIS Python file re-verifies, with no CAS, the properties of the computed matrices
 (column sums = N(q)+1; (N(q)+1) is an eigenvalue; cusp factor = the LMFDB-predicted
@@ -125,6 +129,16 @@ def verify():
     # T(p11) cusp factor is the LMFDB Hecke polynomial
     chk("computed T(p11) cusp factor (x^2 + x - 31) = the LMFDB Hecke polynomial",
         BRANDT[11][1] == HECKE_POLY)
+
+    # full Hecke system to norm 100 (verified in qa_brandt_level125_compute.sage stage [7]):
+    # LMFDB cusp factors (S,P) for every good prime; here re-check the CM rule they satisfy
+    # (S,P) != (0,0)  <=>  p == 1 mod 5 (split in Q(zeta5)); else CM-inert -> cusp x^2.
+    CUSP = {2:(0,0),3:(0,0),7:(0,0),11:(-1,-31),19:(0,0),29:(0,0),31:(-11,-1),
+            41:(9,-11),59:(0,0),61:(-1,-31),71:(19,59),79:(0,0),89:(0,0)}
+    chk("full-Hecke-system targets (13 good primes to norm 100) obey CM rule: (S,P)!=0 <=> p==1 mod5",
+        all(((S, P) != (0, 0)) == (p % 5 == 1) for p, (S, P) in CUSP.items()))
+    chk("the 3 computed Brandt matrices' cusp factors match the full-system targets",
+        all(BRANDT[Nq][1] == CUSP[p] for Nq, p in ((11, 11), (31, 31), (49, 7))))
 
     return checks
 

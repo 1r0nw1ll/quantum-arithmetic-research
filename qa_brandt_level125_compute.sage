@@ -181,4 +181,46 @@ def brandt(beta, label, expect):
 brandt(3+w,   "p11", "(x - 12) * (x^2 + x - 31)")
 brandt(5+2*w, "p31", "(x - 32) * (x^2 + 11*x - 1)")
 brandt(7*K(1),"p7-inert(N=49)", "(x - 50) * x^2")
-print("\nALL BRANDT MATRICES COMPUTED FROM SCRATCH AND MATCH LMFDB 2.2.5.1-125.1-a.")
+
+# --- 7. full Hecke-system check: every good prime up to norm 100 vs LMFDB ---
+# LMFDB 2.2.5.1-125.1-a cusp-factor targets (S,P) with cusp factor x^2 - S x + P:
+TARGETS = {2:(0,0), 3:(0,0), 11:(-1,-31), 19:(0,0), 29:(0,0), 31:(-11,-1),
+           41:(9,-11), 7:(0,0), 59:(0,0), 61:(-1,-31), 71:(19,59), 79:(0,0), 89:(0,0)}
+def totpos_gen(p):
+    if p % 5 in (2,3): return p*K(1)                     # inert: nrd = p, N(q)=p^2
+    for a in range(-15,16):
+        for b in range(-15,16):
+            g = a+b*w
+            if g.norm()==p and g>0 and (QQ(a)+QQ(b)*((1-sqrt(5))/2))>0: return g
+    for a in range(-15,16):
+        for b in range(-15,16):
+            g = a+b*w
+            if abs(g.norm())==p:
+                for u in [1,w,w^2,-w,-w^2,w^3,w^4]:
+                    h = g*u
+                    if h.norm()==p and h>0 and (QQ(h[0])+QQ(h[1])*((1-sqrt(5))/2))>0: return h
+    return None
+def cusp_of(T, Nq): return (ZZ(T.trace()-(Nq+1)), ZZ(T.det()/(Nq+1)))
+print("\n[7] full Hecke system: Brandt cusp factor vs LMFDB, every good prime to norm 100")
+allok = True
+for p in sorted(TARGETS):
+    beta = totpos_gen(p); Nq = ZZ(beta.norm().abs())
+    V = pari(G).qfminim(2*beta.trace(), 200000, flag=2)[2]
+    elts = []
+    for c in range(V.ncols()):
+        v = [ZZ(V[r,c]) for r in range(8)]
+        if nrdK(v) == beta: elts += [tuple(v), tuple(-x for x in v)]
+    used = set(); ra = []
+    for al in elts:
+        if al in used: continue
+        ra.append(al)
+        for u in units: used.add(qmulZ(u, al))
+    T = matrix(ZZ, 3, 3)
+    for ii in range(3):
+        for al in ra:
+            T[orbids.index(orbit_of[act(rho(list(al)), repline[ii])]), ii] += 1
+    comp = cusp_of(T, Nq); tgt = TARGETS[p]; ok = (comp == tgt and len(ra) == Nq+1)
+    allok = allok and ok
+    print(f"    p={p:3d}  N(q)={Nq:4d}  cusp (S,P) computed {str(comp):>12s}  LMFDB {str(tgt):>12s}  {'OK' if ok else 'MISMATCH'}")
+assert allok
+print("\nALL 13 GOOD PRIMES TO NORM 100 REPRODUCE LMFDB 2.2.5.1-125.1-a (full Hecke system).")

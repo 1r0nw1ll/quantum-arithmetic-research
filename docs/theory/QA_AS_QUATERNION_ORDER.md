@@ -203,6 +203,12 @@ norm) makes the Brandt module nontrivial; by Jacquet–Langlands it is the order
   `wᵢTᵢⱼ=wⱼTⱼᵢ` holds with `(w)=(1,1,2)`; and **every cusp factor is exactly the
   LMFDB data** — the cusp factor of `T(𝔭₁₁)` is `x²+x−31`, the LMFDB Hecke
   polynomial, and the `𝔭₇`-inert cusp eigenvalues `0,0` are the CM signature.
+- **Full Hecke system, not just samples**: stage [7] of the script sweeps **every
+  good prime up to norm 100 (all 13 of them)** and the computed Brandt cusp factor
+  `(S,P)` matches the LMFDB eigenvalue system in every case — i.e. the whole
+  L-function of 2.2.5.1-125.1-a (to that bound) is reproduced from the quaternion
+  side. (Split `p≡1 mod 5` give the nonzero Galois-conjugate pairs; every other
+  good prime is CM-inert with cusp factor `x²`, matching `a_𝔭=0`.)
 
 **How the entries were obtained** (the hard step is the **ramified** prime
 `𝔭₅=(√5)`): build `O_max` via PARI `alginit`; get an `O_K`-basis and structure

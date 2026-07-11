@@ -48,7 +48,7 @@ from .logger import (
     utc_timestamp,
     write_json,
 )
-from .metrics import e8_alignment, harmonic_index, harmonic_loss, qa_tuples
+from .metrics import e8_alignment, harmonic_coherence, harmonic_index, harmonic_loss, qa_tuples
 from .orbit import complete_graph_adjacency, neighbor_pull, resonance_matrix, weighted_adjacency
 
 __all__ = [
@@ -62,6 +62,7 @@ __all__ = [
     "e8_alignment",
     "ensure_run_dir",
     "final_metrics",
+    "harmonic_coherence",
     "harmonic_index",
     "harmonic_loss",
     "neighbor_pull",

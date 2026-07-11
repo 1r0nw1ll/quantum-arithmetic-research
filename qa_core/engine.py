@@ -26,7 +26,7 @@ import numpy as np
 from tqdm import tqdm
 
 from .logger import new_history, record_history
-from .metrics import e8_alignment, harmonic_index, harmonic_loss, qa_tuples
+from .metrics import e8_alignment, harmonic_coherence, harmonic_index, harmonic_loss, qa_tuples
 from .orbit import complete_graph_adjacency, neighbor_pull, resonance_matrix, weighted_adjacency
 
 
@@ -149,6 +149,9 @@ class QASystem:
     def _calculate_e8_alignment(self, tuples: np.ndarray) -> float:
         return e8_alignment(tuples)
 
+    def _calculate_coherence(self, tuples: np.ndarray) -> float:
+        return harmonic_coherence(tuples, self.modulus)
+
     def _noise(self, t: int) -> np.ndarray:
         noise_mag = self.noise_base * (self.noise_annealing ** t)
         return (np.random.rand(2, self.num_nodes) - 0.5) * noise_mag
@@ -225,8 +228,9 @@ class QASystem:
             current_tuples = self._get_qa_tuples()
             loss = self._calculate_loss(current_tuples)
             e8_align = self._calculate_e8_alignment(current_tuples)
-            hi = harmonic_index(loss, e8_align)
-            record_history(self.history, loss, e8_align, hi)
+            coherence = self._calculate_coherence(current_tuples)
+            hi = harmonic_index(loss, coherence)          # HI now driven by golden-orbit coherence
+            record_history(self.history, loss, e8_align, hi, coherence)
 
 
 __all__ = ["QAEngine", "QA_Engine", "QASystem"]

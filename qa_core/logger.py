@@ -12,14 +12,20 @@ from typing import Any, Sequence
 def new_history() -> dict[str, list[float]]:
     """Return the canonical in-memory metric history structure."""
 
-    return {"loss": [], "e8_alignment": [], "hi": []}
+    return {"loss": [], "e8_alignment": [], "coherence": [], "hi": []}
 
 
-def record_history(history: dict[str, list[float]], loss: float, e8_alignment: float, hi: float) -> None:
-    """Append one metric step to a history mapping in-place."""
+def record_history(history: dict[str, list[float]], loss: float, e8_alignment: float,
+                   hi: float, coherence: float = 0.0) -> None:
+    """Append one metric step to a history mapping in-place.
+
+    `coherence` is the redesigned golden-orbit coherence that now drives HI;
+    `e8_alignment` (the icosian geometric readout) is retained for reference.
+    Defaulted so older callers keep working."""
 
     history["loss"].append(float(loss))
     history["e8_alignment"].append(float(e8_alignment))
+    history.setdefault("coherence", []).append(float(coherence))
     history["hi"].append(float(hi))
 
 

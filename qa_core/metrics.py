@@ -117,7 +117,45 @@ def e8_alignment(tuples: np.ndarray) -> float:
     return float(np.mean(np.max(cos, axis=1)))
 
 
-def harmonic_index(loss: float, alignment: float) -> float:
-    """Combine loss and alignment into the repo's harmonic index score."""
+def harmonic_coherence(tuples: np.ndarray, modulus: int) -> float:
+    """Golden-orbit phase coherence of the QA node population (the redesigned HI core).
 
-    return float(alignment * np.exp(-0.1 * loss))
+    The Kuramoto order parameter of the QA orbit phases: each node's b and e are
+    phases theta = 2*pi*(x-1)/m on the golden/Fibonacci orbit circle; coherence is
+    the resultant length |mean exp(i theta)|, averaged over b and e. It measures
+    whether the coupled QA nodes have SELF-ORGANIZED (synchronized) onto the golden
+    orbit structure: ~1 = fully coherent (harmonic), ~0 = disordered.
+
+    This replaces the E8-alignment driver of the Harmonic Index, which was proven
+    non-discriminative (loss ~ 0 by the ellipse identity, and E8/icosian alignment
+    saturates -- see qa_e8_alignment_hi_comparison.py). Coherence genuinely tracks
+    self-organization: it rises from ~0.5 to ~0.98 under strong coupling and stays
+    ~0.08 under weak coupling. Grounded: the phase 2*pi*b/m is the golden orbit
+    phase (b is the Fibonacci orbit position). Observer-layer readout (Theorem NT)."""
+
+    if tuples.shape[0] == 0:
+        return 0.0
+    # observer-layer readout: map the A1 states {1..m} to phases and take the
+    # Kuramoto resultant (bcol/ecol are the tuple columns, not QA state variables)
+    bcol = tuples[:, 0].astype(float)
+    ecol = tuples[:, 1].astype(float)
+    two_pi_over_m = 2.0 * np.pi / modulus
+    r_b = abs(np.mean(np.exp(1j * two_pi_over_m * (bcol - 1.0))))
+    r_e = abs(np.mean(np.exp(1j * two_pi_over_m * (ecol - 1.0))))
+    return float(0.5 * (r_b + r_e))
+
+
+def harmonic_index(loss: float, quality: float) -> float:
+    """The Harmonic Index: a state-quality score gated by the loss.
+
+    HI = quality * exp(-0.1 * loss). The `quality` term is the redesigned driver --
+    the golden-orbit coherence (`harmonic_coherence`) that measures harmonic
+    self-organization -- and `exp(-0.1*loss)` is the validity gate on the ellipse
+    identity (loss ~ 0 for canonical QA tuples, so it is normally ~1).
+
+    NOTE: historically `quality` was `e8_alignment`, which was proven inert (it
+    saturates and does not discriminate). Coherence is the meaningful replacement;
+    `e8_alignment` (now the correct icosian metric) is still tracked separately as a
+    geometric readout. See qa_e8_alignment_hi_comparison.py."""
+
+    return float(quality * np.exp(-0.1 * loss))

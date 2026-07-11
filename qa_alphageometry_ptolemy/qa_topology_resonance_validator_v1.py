@@ -381,6 +381,7 @@ class TopologyResonanceValidator:
         # "nu" operation. Require an honest caveat declaring this, so the
         # cert cannot be mistaken for grounded the way [27] now is.
         grounding = cert.get("generator_grounding")
+        grounding_status = grounding.get("status") if isinstance(grounding, dict) else None
         if not isinstance(grounding, dict):
             self._add_result(
                 "consistency.generator_grounding",
@@ -390,7 +391,27 @@ class TopologyResonanceValidator:
                 "state-space implementation anywhere in the codebase, so this cert can only "
                 "certify internal trace self-consistency, not genuine generator semantics",
             )
-        elif grounding.get("status") == "abstract_symbolic" and not grounding.get("caveat"):
+        elif grounding_status not in ("abstract_symbolic", "concrete_implementation"):
+            # invalid/missing status must not fall through to PASSED (was a hole:
+            # 'bogus' or a missing status passed)
+            self._add_result(
+                "consistency.generator_grounding",
+                ValidationLevel.CONSISTENCY,
+                ValidationStatus.FAILED,
+                f"generator_grounding.status must be one of the schema enum "
+                f"{{abstract_symbolic, concrete_implementation}}; got {grounding_status!r}",
+            )
+        elif grounding_status == "concrete_implementation":
+            # unsupported claim: there is NO concrete state-space implementation of
+            # sigma/mu/lambda2/nu in the codebase, so only 'abstract_symbolic' is honest.
+            self._add_result(
+                "consistency.generator_grounding",
+                ValidationLevel.CONSISTENCY,
+                ValidationStatus.FAILED,
+                "generator_grounding.status='concrete_implementation' is unsupported: no "
+                "concrete implementation of sigma/mu/lambda2/nu exists in the codebase",
+            )
+        elif not grounding.get("caveat"):
             self._add_result(
                 "consistency.generator_grounding",
                 ValidationLevel.CONSISTENCY,
@@ -402,7 +423,7 @@ class TopologyResonanceValidator:
                 "consistency.generator_grounding",
                 ValidationLevel.CONSISTENCY,
                 ValidationStatus.PASSED,
-                f"generator_grounding declared: {grounding.get('status')}",
+                f"generator_grounding declared: {grounding_status}",
             )
 
         topo = cert.get("topology_witness", {})

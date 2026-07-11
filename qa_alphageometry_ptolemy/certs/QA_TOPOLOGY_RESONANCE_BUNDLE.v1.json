@@ -57,7 +57,7 @@
       "file": "qa_topology_resonance_validator_v1.py",
       "id": "topology_validator",
       "kind": "source_py",
-      "sha256": "b706a07a8a0c847e63927bc51f278f916dc0331fcebf6f0312535bd2197f7f68"
+      "sha256": "f846dc83263f37f964014e0fb475ffb74dc3874140ee433d982bd046a86591ce"
     }
   },
   "bundle_id": "qa.bundle.topology_resonance.v1",
@@ -78,7 +78,7 @@
   },
   "manifest": {
     "hash_alg": "sha256",
-    "manifest_sha256": "1cefbb717c853627a2f8147d29bf8e9a2fc7a53ced77ddd8127f9b95a191c1cf"
+    "manifest_sha256": "72234135f43faaec332567167cd4a0198bf5f76ae2e63525f00ea850126da083"
   },
   "schema_id": "QA_TOPOLOGY_RESONANCE_BUNDLE.v1",
   "version": 1

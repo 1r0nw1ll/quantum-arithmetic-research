@@ -1,0 +1,14 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture: claims a wrong self-pumped conjugate (20 instead of qa_neg(5)=19); validator must reject. -->",
+  "schema_version": "QA_SELF_PUMPED_CONJUGATE_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Feinberg, 1982) DOI 10.1364/OL.7.000486. Negative fixture: expected_conjugate=20 is wrong; the self-pumped output of s=5 is qa_neg(5)=19.",
+  "m": 24,
+  "signal_state": 5,
+  "self_pump": 7,
+  "phase_screen": 8,
+  "return_screen": 8,
+  "expected_conjugate": 20,
+  "expected_recovered": 19,
+  "expected_fail_type": "WRONG_CONJUGATE"
+}

@@ -1,0 +1,24 @@
+{
+  "_primary_source": "Primary source: (Feinberg, 1982) DOI 10.1364/OL.7.000486 (self-pumped phase conjugator using internal reflection); (Cronin-Golomb et al., 1984) DOI 10.1109/JQE.1984.1072018; (Zel'dovich, 1985) ISBN 978-3-540-13458-4. Self-pumped four-wave-mixing phase conjugation.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_SELF_PUMPED_CONJUGATE_CERT.v1",
+  "description": "Fixture schema for QA Self-Pumped Phase Conjugate Cert [523]: the internal-reflection ('cat') conjugator with no external pump, realized in the QA additive group on {1,...,m}.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "m", "signal_state", "self_pump", "phase_screen", "return_screen", "expected_conjugate", "expected_recovered"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "_exempt": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_SELF_PUMPED_CONJUGATE_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "m": {"type": "integer", "minimum": 2, "description": "QA modulus; alphabet is {1,...,m}"},
+    "signal_state": {"type": "integer", "minimum": 1, "description": "clean signal phase state s in {1,...,m}"},
+    "self_pump": {"type": "integer", "minimum": 1, "description": "internally self-generated loop pump p (output must be independent of it)"},
+    "phase_screen": {"type": "integer", "minimum": 1, "description": "forward distorting medium phi (per-site modular shift)"},
+    "return_screen": {"type": "integer", "minimum": 1, "description": "return medium phi'; equals phase_screen for same-medium recovery"},
+    "expected_conjugate": {"type": "integer", "minimum": 1, "description": "claimed self-pumped output = fwm(p, qa_neg(p), s) = qa_neg(s), pump-independent"},
+    "expected_recovered": {"type": "integer", "minimum": 1, "description": "claimed self-referenced distortion-correction output = qa_mod(-s + return_screen - phase_screen)"},
+    "expected_fail_type": {"type": ["string", "null"], "enum": ["MISSING_FIELD", "WRONG_CONJUGATE", "WRONG_RECOVERY", "OUT_OF_RANGE", null]}
+  }
+}

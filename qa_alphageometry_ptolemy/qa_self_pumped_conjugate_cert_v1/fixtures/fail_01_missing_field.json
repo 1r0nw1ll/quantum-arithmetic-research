@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture: omits the required self_pump field; validator must reject. -->",
+  "schema_version": "QA_SELF_PUMPED_CONJUGATE_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "(Feinberg, 1982) DOI 10.1364/OL.7.000486. Negative fixture: missing required field self_pump.",
+  "m": 24,
+  "signal_state": 5,
+  "phase_screen": 8,
+  "return_screen": 8,
+  "expected_conjugate": 19,
+  "expected_recovered": 19,
+  "expected_fail_type": "MISSING_FIELD"
+}

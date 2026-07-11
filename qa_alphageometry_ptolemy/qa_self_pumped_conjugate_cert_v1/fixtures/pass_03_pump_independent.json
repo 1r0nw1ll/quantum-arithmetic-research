@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=second exact-integer witness with a DIFFERENT self-pump and signal, showing the self-pumped output is pump-independent. -->",
+  "schema_version": "QA_SELF_PUMPED_CONJUGATE_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Feinberg, 1982) DOI 10.1364/OL.7.000486; (Cronin-Golomb et al., 1984) DOI 10.1109/JQE.1984.1072018. Distinct self-pump p=13, signal s=20 -> qa_neg(20)=4; same-medium recovery 4, confirming pump-independence.",
+  "m": 24,
+  "signal_state": 20,
+  "self_pump": 13,
+  "phase_screen": 3,
+  "return_screen": 3,
+  "expected_conjugate": 4,
+  "expected_recovered": 4
+}

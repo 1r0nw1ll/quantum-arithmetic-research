@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=exact-integer witness of same-medium specificity for the self-pumped conjugator; different return screen (phi'=12 != phi=8) leaves residual qa_mod(-s+phi'-phi). -->",
+  "schema_version": "QA_SELF_PUMPED_CONJUGATE_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Zel'dovich, 1985) ISBN 978-3-540-13458-4 (self-pumped geometries); (Feinberg, 1982) DOI 10.1364/OL.7.000486. Different-medium return (phi'=12 != phi=8) leaves residual 23, not the clean conjugate.",
+  "m": 24,
+  "signal_state": 5,
+  "self_pump": 7,
+  "phase_screen": 8,
+  "return_screen": 12,
+  "expected_conjugate": 19,
+  "expected_recovered": 23
+}

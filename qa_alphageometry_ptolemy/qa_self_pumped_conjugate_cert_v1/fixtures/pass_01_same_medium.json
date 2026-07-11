@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=exact-integer witness of the self-pumped conjugator (Feinberg 1982 / Cronin-Golomb 1984) in the QA additive group; same-medium recovery = qa_neg(s), pump-independent. -->",
+  "schema_version": "QA_SELF_PUMPED_CONJUGATE_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "(Feinberg, 1982) DOI 10.1364/OL.7.000486; (Cronin-Golomb et al., 1984) DOI 10.1109/JQE.1984.1072018. Self-pumped conjugate of s=5 (any self-pump) = qa_neg(5)=19; same-medium return recovers 19.",
+  "m": 24,
+  "signal_state": 5,
+  "self_pump": 7,
+  "phase_screen": 8,
+  "return_screen": 8,
+  "expected_conjugate": 19,
+  "expected_recovered": 19
+}

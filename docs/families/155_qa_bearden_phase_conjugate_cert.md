@@ -15,12 +15,14 @@ four-wave mixing to generate the phase-conjugate (time-reversed) wave (Yariv & P
 1985). This is exactly cert **[518]**'s FWM conjugator (`theta_c = theta_f + theta_b −
 theta_s`, two pumps + signal), which cites the same lineage.
 
-Thomas E. Bearden's specific contribution is only an **analogy**: he applies the (real)
-PPCM concept to stressed systems and to the atomic nucleus, positing that stress acts
-as a **pump beam** creating phase conjugation — order at one level producing the
-conjugate (reversed) response at another. This cert borrows *only that structural
-analogy*; the QCI empirical signal below stands on its own and does not depend on
-Bearden's (non-mainstream) physics.
+Two established ideas underlie the framing — the PPCM (above) and the treatment of
+the **atomic nucleus as a nonlinear medium / phase-conjugating element** (likewise
+*not* Bearden's invention) — and his own contribution is only the interpretive
+**analogy** layered on top: he applies phase-conjugation/PPCM language to stressed
+systems, positing that stress acts as a **pump beam** creating phase conjugation —
+order at one level producing the conjugate (reversed) response at another. This cert
+borrows *only that structural analogy*; the QCI empirical signal below stands on its
+own and does not depend on Bearden's (non-mainstream) synthesis.
 
 ### QA mapping
 

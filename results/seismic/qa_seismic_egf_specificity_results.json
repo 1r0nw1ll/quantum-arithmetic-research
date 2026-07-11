@@ -1,0 +1,82 @@
+{
+  "events": {
+    "T": {
+      "event_id": "quakeml:earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38457703&format=quakeml",
+      "origin_time": "2019-07-06T03:50:59.710000Z",
+      "latitude": 35.9035,
+      "longitude": -117.7001667,
+      "depth_km": 8.26,
+      "magnitude": 4.97
+    },
+    "E": {
+      "event_id": "quakeml:earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38457615&format=quakeml",
+      "origin_time": "2019-07-06T03:36:16.460000Z",
+      "latitude": 35.9028333,
+      "longitude": -117.7338333,
+      "depth_km": 7.27,
+      "magnitude": 4.35
+    },
+    "Ep": {
+      "event_id": "quakeml:earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38633112&format=quakeml",
+      "origin_time": "2019-06-10T02:41:11.070000Z",
+      "latitude": 35.4061667,
+      "longitude": -118.845,
+      "depth_km": 13.1,
+      "magnitude": 3.46
+    }
+  },
+  "hypo_km_E_to_T": 3.197245398286021,
+  "hypo_km_Ep_to_T": 117.53955943221133,
+  "n_stations": 13,
+  "stations": [
+    "CI.CWC",
+    "CI.EDW2",
+    "CI.FUR",
+    "CI.GSC",
+    "CI.ISA",
+    "CI.LRL",
+    "CI.MPM",
+    "CI.SLA",
+    "NN.GWY",
+    "PB.B916",
+    "PB.B917",
+    "PB.B918",
+    "PB.B921"
+  ],
+  "pre_registration": {
+    "primary": "C_matched > C_mismatched (co-located EGF focuses, distant EGF does not)",
+    "matched_significant_p": 0.01,
+    "mismatched_null_min_p": 0.05,
+    "band_hz": [
+      0.5,
+      2.0
+    ],
+    "win_s": 50.0,
+    "fs_hz": 20.0,
+    "modulus": 24,
+    "n_null": 5000,
+    "note": "criteria fixed in source before running; EGF = co-located companion event"
+  },
+  "matched": {
+    "coherence": 0.33127966401833275,
+    "coherence_full_precision": 0.3270710881320048,
+    "scramble_p": 0.247750449910018
+  },
+  "mismatched": {
+    "coherence": 0.06663115385508231,
+    "coherence_full_precision": 0.08974885210025157,
+    "scramble_p": 0.9496100779844031
+  },
+  "n_snr_dropped": 8,
+  "null": {
+    "mean": 0.24898260819948037,
+    "std": 0.1253001887026894,
+    "pct95": 0.47775292219299065
+  },
+  "decision": {
+    "specificity": true,
+    "matched_significant": false,
+    "mismatched_is_null": true,
+    "verdict": "NOT_SUPPORTED"
+  }
+}

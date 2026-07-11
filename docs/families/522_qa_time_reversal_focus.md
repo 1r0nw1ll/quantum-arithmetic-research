@@ -79,10 +79,32 @@ travel-time errors exceed a phase period and destroy the coherence the identity
 needs. Scope: this bounds QA *single-event absolute-phase mod-24 back-projection*;
 professional seismic back-projection succeeds using envelope/cross-correlation and
 3-D velocity models — which abandon the QA-phase structure. Result record:
-`results/seismic/qa_seismic_tr_real_results.json`. **Open direction: identify the
-medium empirically** (empirical Green's function from a co-located companion event)
-so the record/re-emit medium terms cancel on real data — the real-data form of the
-[518]/[522] same-medium specificity test.
+`results/seismic/qa_seismic_tr_real_results.json`.
+
+### EGF specificity follow-up (2026-07-11): identify the medium empirically
+
+The fix for the unknown medium is not to model it but to *measure* it: a **co-located
+companion event** records the true Green's function `G_i` from the target's source
+patch (empirical Green's function). The [522] cross-product `R_i^T · conj(R_i^EGF)`
+then cancels the shared medium (`|G_i|²` real) for a co-located EGF and decoheres for
+a distant one. Tested on real Ridgecrest data (`qa_seismic_egf_specificity.py`): target
+T (M4.97), matched EGF E (M4.35, 3.2 km), mismatched control Ep (M3.46, 117.5 km), 13
+SNR-passing common stations, QA mod-24 cross-spectral phase coherence, pre-registered.
+
+Result — the **specificity direction is clearly recovered**: matched (co-located)
+coherence **0.331** vs mismatched (distant) **0.067** (~5×), and the distant EGF
+decoheres to *below* the phase-scramble null (p = 0.95) exactly as medium-cancellation
+predicts. **mod-24 is vindicated as faithful**: full-precision matched coherence 0.327
+≈ the mod-24 value 0.331 — the quantization is not the limiter. But the matched
+coherence does **not** clear the pre-registered individual-significance bar vs the
+scramble null (p = 0.25 at 13 stations), because the co-located EGF still sits 3.2 km
+from T (residual station-dependent phase) and the closest events small enough to be
+truly co-located fall below SNR. **Pre-registered verdict: NOT_SUPPORTED** (strict) —
+but the qualitative [518]/[522] same-medium fingerprint IS present on real earthquakes,
+and the remaining gap is the target–EGF offset + station count, not the QA method.
+Result record: `results/seismic/qa_seismic_egf_specificity_results.json`. Open: a
+closer well-recorded EGF (or a stacked EGF from several nearby aftershocks) to shrink
+the offset and test individual significance.
 
 ## Primary sources
 

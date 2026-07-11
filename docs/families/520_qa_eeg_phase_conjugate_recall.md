@@ -40,6 +40,33 @@ and still separate the classes).
   to near or below chance while phase-locked recall stays robust** — the [518]
   distortion-correction property delivering artifact-robust brain-state recall.
 
+### Independent reproduction (2026-07-11)
+
+The recorded witness was **independently re-run on the on-disk CHB-MIT data** (all 7
+patients, `qa_eeg_phase_conjugate_recall.py <patient>`) — upgrading the
+`EMPIRICAL_WITNESS` check from "recorded numbers are internally consistent" to
+"reproduced from data". Phase-locked vs naive recall at the global-shift artifact
+`φ=6`:
+
+| patient | phase-lock | naive |
+|---|---|---|
+| chb10 | 0.723 | 0.383 |
+| chb12 | 0.880 | 0.459 |
+| chb15 | 0.878 | 0.574 |
+| chb16 | 0.828 | 0.517 (imbalanced, chance 0.83) |
+| chb17 | 0.731 | 0.308 |
+| chb21 | 0.875 | 0.333 |
+| chb23 | 0.771 | 0.208 |
+| **mean** | **0.81** | **0.40** |
+
+Matches the recorded 0.72–0.92 / ~0.40 range exactly; PC-memory also ≥ direct-NN at
+60% dropout (e.g. chb10 0.894 vs 0.809). Honest scope: the global-shift artifact is
+*exactly* an invertible modular shift `qa_add(probe, φ)`, so phase-lock's advantage
+*against that artifact* is partly by construction — the demonstration's force is that
+(a) the artifact defeats naive classification (a real failure mode) and (b) the [518]
+mirror self-locking recovers it. The **dropout** robustness is the more
+model-independent real-artifact result.
+
 ## Honest limits
 
 - Phase-lock costs a few % on clean signal (φ=0): the ψ-scan can occasionally

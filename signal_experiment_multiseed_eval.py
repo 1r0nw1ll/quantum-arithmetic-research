@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
+# RT1_OBSERVER_FILE: audio/signal generators (sin tones) are observer-layer input signals, not QA state.
 """Multiseed robustness check for a recovered QA signal configuration."""
+from __future__ import annotations
 
 QA_COMPLIANCE = "empirical_observer — audio/signal as observer input; QA coupling is discrete state"
-
-
-from __future__ import annotations
 
 import numpy as np
 

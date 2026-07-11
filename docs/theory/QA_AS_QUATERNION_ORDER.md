@@ -272,6 +272,37 @@ So the quaternionic realization reproduces **both** a CM form (level 125) and a
 non-CM form (level 31) over ℚ(√5). The Brandt/Hecke bridge is not an artefact of
 the CM structure; it is the general correspondence, computed.
 
+### 6.5 The tower: QA reaches ℚ(√5); the Hecke eigenvalues live at ℚ(ζ₅)
+
+§6.1 said QA's orbit generator `M` is *orthogonal* to the Hecke structure. This
+sharpens that into a precise statement about the cyclotomic tower
+`ℚ ⊂ ℚ(√5) ⊂ ℚ(ζ₅)` (`qa_fibonacci_hecke_compare.py`), answering the question the
+whole arc was really after: does QA's own Fibonacci–Frobenius dynamics *compute* the
+CM form's Hecke eigenvalues, or only share the field?
+
+QA's Fibonacci–Frobenius system (cert [423]) is the arithmetic of `φ`, the roots of
+`x²−x−1` mod `p` — the **ℚ(√5)** (degree-2) layer. Its Frobenius **trace `φ+ψ ≡ 1`
+for every split prime** (Vieta): a constant, the fixed golden recurrence, carrying
+**no varying GL₂ eigenvalue** — only the splitting and the GL₁ order datum
+`α(p)=ord(φ/ψ)`. The CM form's Hecke eigenvalue `a_𝔭 ∈ ℤ[φ]` (from the from-scratch
+Brandt cusp factors: `𝔭₁₁ → 5φ−3`, `𝔭₃₁ → 5φ−8`) is instead a **ℚ(ζ₅)** (degree-4)
+CM-character value, **nonzero iff `p ≡ 1 mod 5`** — splitting in `ℚ(ζ₅)/ℚ(√5)`, a
+*finer* condition than splitting in `ℚ(√5)` (`p ≡ ±1 mod 5`).
+
+The decisive datum: `p=11` (`≡1`) and `p=19` (`≡4`) **both split in ℚ(√5)** with the
+same Fibonacci "split" type (trace 1), yet `a₁₁ = 5φ−3 ≠ 0` while **`a₁₉ = 0`**. QA's
+`φ`-arithmetic cannot distinguish them; the CM form does. Therefore:
+
+> **QA's Fibonacci–Frobenius dynamics computes the eigenvalue *field* ℚ(√5) and the
+> splitting — not the Hecke eigenvalues, which are ℚ(ζ₅) CM data one cyclotomic layer
+> up.** The Brandt/Hecke bridge is field-level + Jacquet–Langlands (through the
+> definite icosian/E8 order), *not* QA-orbit-dynamical. That is the honest content of
+> "the golden order carries QA's field, the definite order carries the forms."
+
+This is a *boundary*, not a defeat: it says exactly where QA sits in the tower (the
+real quadratic floor) and why the modular eigenvalues require ascending to the
+cyclotomic layer the definite order supplies.
+
 ---
 
 ## 7. What is verified
@@ -287,6 +318,10 @@ the CM structure; it is the general correspondence, computed.
 - **Level-31 Eichler order + its Brandt matrices**, reproducing the NON-CM Hecke
   system of 2.2.5.1-31.x-a over ℚ(√5) (`h=2`, good primes to norm 49). —
   `qa_brandt_level31_compute.sage` (SageMath 10.7 + PARI, all stages asserted).
+- **Tower placement (§6.5):** QA's Fibonacci–Frobenius computes the eigenvalue field
+  ℚ(√5) + splitting (Frobenius trace ≡ 1; α(p)), **not** the Hecke eigenvalues
+  (ℚ(ζ₅) CM data — `a_𝔭≠0 ⟺ p≡1 mod 5`; `a₁₁=5φ−3` vs `a₁₉=0` though both split in
+  ℚ(√5)). — `qa_fibonacci_hecke_compare.py` (axiom-linter clean).
 
 ## Primary sources
 

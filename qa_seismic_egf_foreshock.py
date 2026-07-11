@@ -24,12 +24,15 @@ qa_neg (conjugation) = time reversal; mod-24 is the QA observer projection.
 """
 from __future__ import annotations
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
 from obspy import read, UTCDateTime
 
-DATA = Path("data/seismic_egf_t2")
+# data dir may be passed as argv[1] (e.g. a third target); default is target 2
+DATA = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/seismic_egf_t2")
+_SUFFIX = "" if len(sys.argv) <= 1 else f"_{DATA.name}"
 M = 24
 FS = 20.0
 WIN_S = 50.0
@@ -186,13 +189,13 @@ def main():
     print(f"  -> {verdict}")
 
     out = Path("results/seismic"); out.mkdir(parents=True, exist_ok=True)
-    (out / "qa_seismic_egf_foreshock_results.json").write_text(json.dumps({
+    (out / f"qa_seismic_egf_foreshock{_SUFFIX}_results.json").write_text(json.dumps({
         "target": man["T"], "n_foreshocks": len(fore), "n_aftershocks": len(after),
         "n_balanced_each": kbal, "n_mismatched": len(man["mismatched"]), "pre_registration": PREREG,
         "results": res, "decision": {"replication": replication, "time_symmetry": time_symmetry,
                                       "time_symmetry_balanced": time_symmetry_balanced,
                                       "verdict": verdict}}, indent=2))
-    print("\nsaved -> results/seismic/qa_seismic_egf_foreshock_results.json")
+    print(f"\nsaved -> results/seismic/qa_seismic_egf_foreshock{_SUFFIX}_results.json")
 
     try:
         import matplotlib; matplotlib.use("Agg")
@@ -206,8 +209,8 @@ def main():
             ax.axhline(res["combined"]["null_mean"], color="gray", ls="--", lw=1, label="scramble null mean")
         ax.set_ylabel("QA mod-24 phase coherence"); ax.set_ylim(0, 1)
         ax.set_title(f"[522] EGF replication + foreshock control (T2 M{man['T']['magnitude']}) -> {verdict}")
-        ax.legend(); fig.tight_layout(); fig.savefig("qa_seismic_egf_foreshock.png", dpi=110)
-        print("saved -> qa_seismic_egf_foreshock.png")
+        ax.legend(); fig.tight_layout(); fig.savefig(f"qa_seismic_egf_foreshock{_SUFFIX}.png", dpi=110)
+        print(f"saved -> qa_seismic_egf_foreshock{_SUFFIX}.png")
     except Exception as e:  # noqa: BLE001
         print(f"(figure skipped: {e})")
 

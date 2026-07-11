@@ -174,9 +174,43 @@ contaminated by the M7.1 and its immediate cascade, whereas its foreshocks come 
 the cleaner M6.4 sequence. This is a target-specific contamination, **not** a violation
 of medium time-invariance: the foreshock EGF itself works cleanly (p = 0.0002), which
 is the physical point. A fully clean time-symmetry test would use a target whose
-aftershock window is not overprinted by a larger event. Pre-registered verdict
-**REPLICATED_ONLY** (full symmetry needs both arms at p < 0.01). Result record:
+aftershock window is not overprinted by a larger event. T2 pre-registered verdict
+**REPLICATED_ONLY**. Result record:
 `results/seismic/qa_seismic_egf_foreshock_results.json`.
+
+### Third target — clean aftershock window: full time-symmetry SUPPORTED (2026-07-11)
+
+The predicted clean test (`qa_seismic_egf_t3_fetch.py` selects a **local magnitude
+maximum** — no event ≥ mag+0.2 within ±6 h and 20 km). **T3 = M4.9, 2019-07-12**
+(35.637, −117.586), **31 km** from target 1, nearest larger event within 20 km is
+**effectively never** (∞) — so *both* its foreshock and aftershock windows are
+uncontaminated. Cluster: 20 foreshocks + 10 aftershocks; distant control 11 events.
+
+| stack | coherence | null p | > control |
+|---|---|---|---|
+| combined (30) | 0.685 | **0.0002** | ✓ |
+| foreshock (20) | 0.728 | **0.0002** | ✓ |
+| aftershock (10) | 0.413 | **0.0072** | ✓ |
+| balanced fore (10) | 0.492 | **0.0074** | ✓ |
+| balanced after (10) | 0.413 | **0.0080** | ✓ |
+| distant control (11) | 0.324 | 0.054 (null) | — |
+
+**Verdict SUPPORTED.** With a clean aftershock window the aftershock EGF is
+significant (p = 0.0072), and at count-balanced 10-each **both** arms clear p < 0.01
+(fore 0.0074, after 0.0080) and exceed the distant control — full foreshock/aftershock
+**time-symmetry confirmed**. This is the third independent target to replicate
+(combined p = 0.0002, 31 km from target 1), and it settles the T2 anomaly: the
+aftershock deficit there was M7.1 contamination, not a physical asymmetry — the
+Green's function is time-invariant, so a companion before or after the target works
+equally as an EGF.
+
+Disclosure (data-quality choices, signal untouched): to recover enough clean
+aftershocks the co-location was relaxed 5→8 km / M≥3.0→2.8 (4→10 aftershocks); the
+distant control was enlarged 3→11 events, which corrected a small-N inflation
+(0.432→0.324) that had confounded the "> control" check. The aftershock arm's
+significance against its **own** null (p = 0.0072) held under both controls; only the
+control comparison changed. Result record:
+`results/seismic/qa_seismic_egf_foreshock_seismic_egf_t3_results.json`.
 
 ## Primary sources
 

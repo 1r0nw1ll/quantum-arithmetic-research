@@ -1,0 +1,117 @@
+{
+  "target": {
+    "event_id": "quakeml:earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38548295&format=quakeml",
+    "origin_time": "2019-07-12T13:11:37.990000Z",
+    "latitude": 35.6368333,
+    "longitude": -117.5861667,
+    "depth_km": 9.48,
+    "magnitude": 4.9,
+    "tag": "T_0",
+    "nearest_larger_event_h": Infinity,
+    "stations": [
+      "CI.ADO",
+      "CI.ARV",
+      "CI.CWC",
+      "CI.EDW2",
+      "CI.FUR",
+      "CI.GSC",
+      "CI.ISA",
+      "CI.LRL",
+      "CI.MPM",
+      "CI.Q0013",
+      "CI.Q0056",
+      "CI.Q0068",
+      "CI.Q0072",
+      "CI.RRX",
+      "CI.SHO",
+      "CI.SLA",
+      "CI.VTV",
+      "GS.CA01",
+      "GS.CA02",
+      "GS.CA03",
+      "GS.CA04",
+      "GS.CA05",
+      "GS.CA06",
+      "GS.CA07",
+      "GS.CA08",
+      "NN.FMT",
+      "NN.GWY",
+      "NN.MCA",
+      "NN.QSM",
+      "PB.B916",
+      "PB.B917",
+      "PB.B918",
+      "PB.B921"
+    ]
+  },
+  "n_foreshocks": 20,
+  "n_aftershocks": 10,
+  "n_balanced_each": 10,
+  "n_mismatched": 11,
+  "pre_registration": {
+    "replication": "combined co-located stack: coherence beats scramble null (p<0.01) AND >> distant control",
+    "time_symmetry": "foreshock-only AND aftershock-only stacks each beat null (p<0.01) and exceed the distant control",
+    "matched_significant_p": 0.01,
+    "band_hz": [
+      0.5,
+      2.0
+    ],
+    "win_s": 50.0,
+    "fs_hz": 20.0,
+    "modulus": 24,
+    "kmin_events": 3,
+    "snr_min": 2.0,
+    "n_null": 5000,
+    "note": "second target; fore/after split by origin time; criteria fixed before run"
+  },
+  "results": {
+    "combined": {
+      "n_stations": 29,
+      "coherence": 0.6854145156111445,
+      "coherence_full": 0.6812879151200437,
+      "scramble_p": 0.0001999600079984003,
+      "null_mean": 0.1644662666409585
+    },
+    "foreshock": {
+      "n_stations": 22,
+      "coherence": 0.727578849814374,
+      "coherence_full": 0.7370664131775768,
+      "scramble_p": 0.0001999600079984003,
+      "null_mean": 0.1905424563012834
+    },
+    "aftershock": {
+      "n_stations": 28,
+      "coherence": 0.41283585869836886,
+      "coherence_full": 0.41510226562074676,
+      "scramble_p": 0.007198560287942412,
+      "null_mean": 0.16813625525997852
+    },
+    "foreshock_balanced": {
+      "n_stations": 20,
+      "coherence": 0.4915374327593297,
+      "coherence_full": 0.49667162728037206,
+      "scramble_p": 0.007398520295940812,
+      "null_mean": 0.20233126768336715
+    },
+    "aftershock_balanced": {
+      "n_stations": 28,
+      "coherence": 0.41283585869836886,
+      "coherence_full": 0.41510226562074676,
+      "scramble_p": 0.007998400319936013,
+      "null_mean": 0.16702039765149085
+    },
+    "mismatched": {
+      "n_stations": 27,
+      "coherence": 0.3235253396907784,
+      "coherence_full": 0.3216545857417132,
+      "scramble_p": 0.05418916216756649,
+      "null_mean": 0.16927827046475685
+    }
+  },
+  "decision": {
+    "replication": true,
+    "time_symmetry": true,
+    "time_symmetry_balanced": true,
+    "verdict": "SUPPORTED"
+  }
+}

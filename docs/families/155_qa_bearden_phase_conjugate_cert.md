@@ -15,14 +15,18 @@ four-wave mixing to generate the phase-conjugate (time-reversed) wave (Yariv & P
 1985). This is exactly cert **[518]**'s FWM conjugator (`theta_c = theta_f + theta_b −
 theta_s`, two pumps + signal), which cites the same lineage.
 
-Two established ideas underlie the framing — the PPCM (above) and the treatment of
-the **atomic nucleus as a nonlinear medium / phase-conjugating element** (likewise
-*not* Bearden's invention) — and his own contribution is only the interpretive
-**analogy** layered on top: he applies phase-conjugation/PPCM language to stressed
-systems, positing that stress acts as a **pump beam** creating phase conjugation —
-order at one level producing the conjugate (reversed) response at another. This cert
-borrows *only that structural analogy*; the QCI empirical signal below stands on its
-own and does not depend on Bearden's (non-mainstream) synthesis.
+**Three** established ideas underlie the framing, *none* of them Bearden's invention:
+(i) the PPCM (above); (ii) the treatment of the **atomic nucleus as a nonlinear
+medium / phase-conjugating element**; and (iii) **stress/strain acting as a pump** on
+a nonlinear medium — which is exactly the mechanism of Zel'dovich's *original* 1972
+phase conjugation via **stimulated Brillouin scattering** (an acoustic/strain wave
+pumps and conjugates the optical field), and of the photoelastic / stress-optic and
+acousto-optic effects generally. Bearden's own contribution is only a particular
+(non-mainstream) **synthesis** — applying these established mechanisms to stressed
+*systems* at large, positing that stress acts as a pump beam creating phase
+conjugation, order at one level producing the conjugate (reversed) response at
+another. This cert borrows *only that structural analogy*; the QCI empirical signal
+below stands on its own and does not depend on Bearden's physics.
 
 ### QA mapping
 

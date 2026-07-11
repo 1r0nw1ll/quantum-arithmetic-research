@@ -8,6 +8,31 @@ Enhancements:
 2. LARGER DATASET (1000 timesteps)
 3. OPTIMAL TRANSPORT for exact D_QA
 4. PISANO PERIOD CLASSIFICATION for hypothesis complexity
+
+CAVEAT (2026-07-10): the harmonic classifier here — compute_classification_risk
+predicts "harmonic" iff Harmonic Index HI > 0.5 — rests on HI being a valid harmonic
+detector. It is NOT. The historical HI (e8_alignment * exp(-0.1*loss)) was
+non-discriminative: e8_alignment scored |cos| to a hardcoded Fibonacci vector (not
+E8) and loss ~ 0, so HI was near-constant across signals. Under the redesigned
+discriminative coherence-HI (qa_core/metrics.py::harmonic_coherence) HI tracks
+coupling-driven self-organization, NOT the harmonic content of the injected signal;
+tonal signals do not reliably score above white noise (qa_signal_experiment_hi_rerun.py:
+final config reverses n=25 t=-3.68 p=0.0012; multiseed null n=8 p=0.147). Therefore the
+empirical_risk and the PAC-Bayes generalization bounds computed FROM it bound the
+generalization of a classifier that does not actually discriminate tonal from noise.
+The PAC-Bayes / Pisano MACHINERY (D_QA divergence, the bound formula, optimal
+transport, Pisano-period complexity classification) is unaffected; what is NOT
+supported is the interpretation that these bounds certify a working harmonic classifier.
+
+SECOND, INDEPENDENT DEFECT (flagged in Codex review 2026-07-10): the audio inputs
+are ALIASED. generate_signal samples DURATION=2.0 s with TIMESTEPS=1000, i.e. a 500 Hz
+sample rate (Nyquist 250 Hz); BASE_FREQ=261.63 Hz and the chord partials exceed it, so
+the "pure tone / chord" inputs are aliases, not the intended frequencies. This is
+independent of the HI issue: even with a correct metric the experiment never tested
+261.63 Hz tones. It does not rescue the tonal-vs-noise claim (an aliased tone is still
+narrowband vs broadband noise, and HI still fails to separate them), but it is a
+further reason the setup is invalid as written. Fixing it is moot — tonal-vs-noise is
+retired under the discriminative HI.
 """
 
 import numpy as np
@@ -98,6 +123,15 @@ def compute_classification_risk(results, name):
     return 0.0 if (is_harmonic == true_harmonic) else 1.0
 
 if __name__ == "__main__":
+    import warnings
+    warnings.warn(
+        "RETIRED CLAIM: the harmonic-classification results below (empirical risk "
+        "and PAC bounds from 'HI > 0.5') are NOT valid. HI does not discriminate "
+        "tonal from noise, and the audio inputs are aliased. See the module "
+        "docstring. The PAC/Pisano/optimal-transport machinery is fine; the "
+        "harmonic-classifier interpretation is retired.", RuntimeWarning, stacklevel=2)
+    print("!! RETIRED harmonic-classification claim — see module docstring; "
+          "printed classification risk / PAC 'certification' is NOT valid.\n")
     print("="*80)
     print("SIGNAL CLASSIFICATION WITH PAC BOUNDS + PISANO ANALYSIS")
     print("="*80)

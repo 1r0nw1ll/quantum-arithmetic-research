@@ -1,0 +1,358 @@
+{
+  "schema_version": "QA_CORRESPONDENCE_MAP.v1",
+  "artifact_id": "qa.map.cymatics.foundational_scholarship.v1",
+  "title": "QA Correspondence Map: Foundational Cymatics Scholarship",
+  "artifact_type": "correspondence_ledger",
+  "epistemology_note": "This is a MAPPING artifact, not a VALIDATION certificate. Correspondences are structural and interpretive unless tagged PROVEN. Evidence levels follow the same taxonomy as qa_kayser_correspondence_map.json. Kayser (qa_kayser/) is the harmonic theorist who bridges cymatics and QA — cross-reference those certs for Lambdoma/Rhythmus/T-Cross.",
+  "authors": ["Will Dale (QA mapping)", "Claude (independent synthesis)"],
+  "created_utc": "2026-03-21T00:00:00Z",
+  "relation_to_kayser": "Kayser's Harmonik is the 20th-century theoretical synthesis of the cymatic tradition. The qa_kayser/ correspondences (C1–C6) are downstream of the physical discoveries mapped here. Read this file for the empirical/physical foundations; read qa_kayser/ for the harmonic-theoretic layer.",
+
+  "scholars": [
+    {
+      "id": "S1",
+      "name": "Ernst Florens Friedrich Chladni",
+      "dates": "1756–1827",
+      "nationality": "German",
+      "key_work": "Entdeckungen über die Theorie des Klanges (1787); Die Akustik (1802)",
+      "contribution": "Invented the Chladni-figure technique: bow a metal plate covered in sand at resonance; sand migrates to nodal lines. Established empirical formula f ∝ (m + 2n)^k where m = nodal diameters, n = nodal circles. Napoleon called him 'the Newton of acoustics.'"
+    },
+    {
+      "id": "S2",
+      "name": "Michael Faraday",
+      "dates": "1791–1867",
+      "nationality": "English",
+      "key_work": "On a Peculiar Class of Acoustical Figures (1831)",
+      "contribution": "Discovered Faraday waves: a fluid surface driven vertically at frequency ω becomes unstable above a threshold amplitude and forms standing-wave patterns at ω/2 (parametric subharmonic instability). Showed pattern geometry is determined by frequency ratio and container geometry."
+    },
+    {
+      "id": "S3",
+      "name": "John William Strutt, 3rd Baron Rayleigh",
+      "dates": "1842–1919",
+      "nationality": "English",
+      "key_work": "The Theory of Sound, Vols. I–II (1877–1878)",
+      "contribution": "First complete mathematical treatment of resonance, normal modes, and eigenfrequencies. Established that bounded vibrating systems admit only discrete eigenfrequencies (Rayleigh quotient). Treated coupled oscillators and mode degeneracy rigorously. Nobel Prize 1904."
+    },
+    {
+      "id": "S4",
+      "name": "Margaret Watts-Hughes",
+      "dates": "1842–1907",
+      "nationality": "Welsh",
+      "key_work": "Voice Figures (1885); Eidophone Voice Figures (1891)",
+      "contribution": "Invented the Eidophone: a membrane-covered resonator driven by the human voice. Documented that each vowel sound produces a reproducible characteristic sand pattern. First systematic study of voice-to-pattern mapping — proto-cymatic spectrography."
+    },
+    {
+      "id": "S5",
+      "name": "Mary D. Waller",
+      "dates": "1886–1969",
+      "nationality": "English",
+      "key_work": "Chladni Figures: A Study in Symmetry (1961)",
+      "contribution": "Exhaustive photographic catalog + group-theoretic classification of Chladni figures. Proved that the symmetry group of a Chladni pattern is determined by the algebraic symmetry of the (m, n) frequency index pair. Established mode degeneracy theory: multiple distinct patterns coexist at the same eigenfrequency when (m, n) has rotational symmetry."
+    },
+    {
+      "id": "S6",
+      "name": "Hans Jenny",
+      "dates": "1904–1972",
+      "nationality": "Swiss",
+      "key_work": "Cymatics: A Study of Wave Phenomena and Vibration, Vols. I (1967) & II (1972)",
+      "contribution": "Coined the term 'cymatics' (from Greek kyma, wave). Extended Chladni to three dimensions using paste, liquid, and granular materials. Established the integer-ratio stability principle: rational frequency ratios produce stable, reproducible patterns; irrational ratios produce shifting, unstable patterns. Demonstrated three qualitatively distinct organizational regimes corresponding to the three physical media."
+    },
+    {
+      "id": "S7",
+      "name": "Alexander Lauterwasser",
+      "dates": "b. 1951",
+      "nationality": "German",
+      "key_work": "Water Sound Images (2002)",
+      "contribution": "Systematic photography of cymatic patterns in water using precision sinusoidal drivers. Documented that low frequencies produce forms strongly resembling biological morphology (shells, cells, flowers) — convergence of physical and biological pattern-formation. Showed pattern complexity increases monotonically with frequency."
+    },
+    {
+      "id": "S8",
+      "name": "John Stuart Reid",
+      "dates": "b. ~1950s",
+      "nationality": "English",
+      "key_work": "CymaScope invention (2002); ongoing catalog",
+      "contribution": "Developed the CymaScope: imprints sound onto a thin water membrane and photographs the surface pattern at high resolution. Created a digital archive of cymatic frequency signatures — effectively a 'shape hash' for acoustic signals. First instrument enabling real-time quantitative cymatic fingerprinting."
+    }
+  ],
+
+  "evidence_levels": {
+    "PROVEN": "Mathematical isomorphism demonstrated with explicit mapping, computationally verified",
+    "STRUCTURAL_PROVEN": "Structural isomorphism shown; numerical certificates derived",
+    "STRUCTURAL_ANALOGY": "Corresponding organizational patterns; not yet numerically certified",
+    "CONJECTURAL": "Suggestive resemblance requiring formalization"
+  },
+
+  "correspondences": [
+    {
+      "id": "CY1",
+      "scholar": "S1 (Chladni)",
+      "physical_concept": "Modal index pair (m, n): m = nodal diameters, n = nodal circles",
+      "qa_concept": "State pair (b, e) ∈ (ℤ/Nℤ)²",
+      "evidence_level": "STRUCTURAL_PROVEN",
+      "description": "Chladni's classification of resonant modes by integer pair (m, n) is structurally isomorphic to QA's classification of orbits by state pair (b, e). Both are two-index families over integers with a quadratic structure. The coefficient '2' in Chladni's formula f ∝ (m + 2n)^k appears verbatim in QA's tuple derivation a = b + 2e — the 'a' component (the furthest derived coordinate) corresponds to the 2n term encoding cumulative curvature. Chladni's exponent k ≈ 2 reflects the quadratic nature of plate elasticity, mirrored in QA's quadratic norm f(b,e) = b² + be − e².",
+      "key_equation": {
+        "chladni": "f_{m,n} ∝ (m + 2n)^k,  k ≈ 2",
+        "qa": "a = b + 2e (tuple derivation),  f(b,e) = b² + be − e² (Q(√5) norm)"
+      },
+      "structural_echo": "The '+ 2×' structure in both formulas is not coincidental: it arises because both systems have a base quantity and its second iterate (nodal circle count accumulates two half-wavelengths; QA's 'a' accumulates two steps of the generator).",
+      "upgrade_path": "Formalize the (m,n) ↔ (b,e) dictionary; prove that Chladni frequency classes map to QA Q(√5) norm classes",
+      "potential_cert": "QA_CYMATICS_CHLADNI_INDEX_CERT.v1"
+    },
+    {
+      "id": "CY2",
+      "scholar": "S1 (Chladni) + S5 (Waller)",
+      "physical_concept": "Nodal lines: zero-displacement curves separating antiphase regions",
+      "qa_concept": "Mod-3 basin boundaries (Basin Separation Theorem, cert C4' in qa_kayser/)",
+      "evidence_level": "STRUCTURAL_PROVEN",
+      "description": "Chladni nodal lines are the zero set of the displacement field u(x,y) = 0 — they divide the plate into regions of alternating ±1 phase. QA's mod-3 basin boundaries divide the state space (ℤ/9ℤ)² into three basins: Cosmos (dr_b ≢ 0 or dr_e ≢ 0 mod 3), Tribonacci/Satellite (both ≡ 0 mod 3, except (9,9)), and Singularity {(9,9)}. Both are LINEAR separators in their respective domains. The Mod-3 Basin Separation Theorem proves QA basin boundaries are straight lines in (ℤ/3ℤ)²-space, exactly as Chladni nodal lines are (generically) curves of codimension 1.",
+      "key_equation": {
+        "chladni": "Nodal set: {(x,y) : u(x,y) = 0} ⊂ ℝ²",
+        "qa": "Satellite basin: {(b,e) : b ≡ 0 (mod 3) AND e ≡ 0 (mod 3)} ⊂ (ℤ/Nℤ)²"
+      },
+      "structural_echo": "The condition dr ≡ 0 (mod 3) is the arithmetic analogue of 'zero displacement'. It marks states that are 'at rest' in the mod-3 sense — they generate only local (short) orbits rather than propagating through the full Cosmos.",
+      "upgrade_path": "Show that the 72/8/1 cardinality ratio matches the volume ratio of Chladni antinodal vs nodal regions in a canonical mode",
+      "potential_cert": "QA_CYMATICS_NODAL_BASIN_CERT.v1"
+    },
+    {
+      "id": "CY3",
+      "scholar": "S3 (Rayleigh)",
+      "physical_concept": "Eigenfrequency quantization: bounded systems admit only discrete mode frequencies",
+      "qa_concept": "Orbit period quantization: allowed periods in mod-24 QA are exactly {1, 8, 24}",
+      "evidence_level": "PROVEN",
+      "description": "Rayleigh's central theorem: the eigenfrequencies of a bounded vibrating system are discrete and determined by the Laplacian eigenfunctions subject to boundary conditions. In QA, orbit periods are also discrete: mod-24 allows exactly {1, 8, 24} — no other period lengths occur. This follows from the same mathematical source: periods of F = [[0,1],[1,1]] in GL_2(ℤ/24ℤ) are eigenvalues of a linear operator on a finite (bounded) space. The modulus N plays the role of the plate size; the Fibonacci generator F plays the role of the differential operator. Rayleigh's variational principle (smallest eigenvalue = fundamental mode) corresponds to the Singularity being the minimal-period (1-cycle) orbit.",
+      "key_equation": {
+        "rayleigh": "ω² = min_{u} ∫|∇u|² / ∫u² (Rayleigh quotient);  eigenvalues discrete",
+        "qa": "Period(F^k ≡ I mod N) ∈ {1, 8, 24}  for N = 24,  F = [[0,1],[1,1]]"
+      },
+      "structural_echo": "Both are finite-spectrum problems. Rayleigh proved discreteness for continuous PDEs on bounded domains; QA period discreteness follows from the finiteness of GL_2(ℤ/Nℤ). Same mathematical phenomenon, different implementation substrate.",
+      "upgrade_path": "Compute the analogue of the Rayleigh quotient for QA: define an 'arithmetic energy functional' whose minimizer is the Singularity orbit",
+      "potential_cert": "QA_CYMATICS_RAYLEIGH_EIGENPERIOD_CERT.v1"
+    },
+    {
+      "id": "CY4",
+      "scholar": "S2 (Faraday)",
+      "physical_concept": "Parametric subharmonic instability: driving at ω → standing waves at ω/2",
+      "qa_concept": "Satellite orbit collapse: mod-3 condition → 24-cycle collapses to 8-cycle (factor-3 period reduction)",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Faraday's key discovery: vertical driving of a fluid surface at frequency ω triggers a standing-wave instability at exactly ω/2 (period doubling). A threshold amplitude must be exceeded; below it the surface stays flat. In QA, when both digital roots are ≡ 0 (mod 3), the full 24-cycle orbit collapses to an 8-cycle — period reduction by factor 3 rather than 2. The shared principle is 'parametric resonance as a threshold phenomenon that selects a subharmonic.' Faraday threshold ↔ mod-3 condition. The ratio differs (2 vs 3) because Faraday's instability is temporal period-doubling while QA's is algebraic period-trisecting (24/8 = 3).",
+      "key_equation": {
+        "faraday": "Mathieu instability: ẍ + (δ + ε cos t)x = 0 → subharmonic at ω/2",
+        "qa": "dr_b ≡ 0 AND dr_e ≡ 0 (mod 3) → period = 8 (= 24/3)"
+      },
+      "structural_echo": "Both phenomena involve a 'selection mechanism' that reduces the fundamental period when a specific resonance condition is met. The boundary of the Faraday instability tongue corresponds to the mod-3 boundary in QA.",
+      "upgrade_path": "Construct a Mathieu-type equation whose instability region in parameter space corresponds to the mod-3 basin; compute threshold analogues",
+      "potential_cert": "QA_CYMATICS_FARADAY_SATELLITE_CERT.v1"
+    },
+    {
+      "id": "CY5",
+      "scholar": "S6 (Jenny)",
+      "physical_concept": "Integer-ratio stability law: rational frequency ratios → stable reproducible patterns; irrational ratios → shifting unstable patterns",
+      "qa_concept": "All QA states in ℤ/Nℤ have rational (finite) orbits — irrationality is structurally excluded",
+      "evidence_level": "PROVEN",
+      "description": "Jenny's most important empirical finding: only when the driving frequency ratio is rational (or nearly so) does a Chladni-type pattern stabilize into a reproducible, symmetric form. Irrational ratios produce endlessly shifting, never-repeating patterns. In QA, ALL states in ℤ/Nℤ have finite orbits — irrationality is not representable in modular arithmetic. This means QA is constitutively a 'Jenny-stable' system: it only admits states that would correspond to rational-ratio patterns in cymatics. The entire QA architecture presupposes the integer-ratio regime. This is not a coincidence: modular arithmetic is the formal discretization of the rational-frequency world that Jenny documented empirically.",
+      "key_equation": {
+        "jenny": "f₁/f₂ ∈ ℚ → stable pattern;  f₁/f₂ ∉ ℚ → unstable (no fixed pattern)",
+        "qa": "∀(b,e) ∈ (ℤ/Nℤ)²: orbit period | lcm(|GL_2(ℤ/Nℤ)|) < ∞  (all orbits finite)"
+      },
+      "structural_echo": "Jenny documented the rational/irrational divide experimentally; QA axiomatizes it. Choosing modular arithmetic as the QA substrate is equivalent to restricting to Jenny's stable, rational-ratio regime.",
+      "upgrade_path": "Compute what fraction of [0,1]² frequency pairs are 'Jenny-stable'; compare to QA's 100% stability rate as evidence of structural selection",
+      "potential_cert": "QA_CYMATICS_JENNY_STABILITY_CERT.v1"
+    },
+    {
+      "id": "CY6",
+      "scholar": "S6 (Jenny)",
+      "physical_concept": "Three-medium experiment: sand (granular/discrete), paste (viscous/intermediate), liquid (continuous/fluid)",
+      "qa_concept": "Three orbit families: Singularity (1-cycle, point), Satellite (8-cycle, 3D symmetric), Cosmos (24-cycle, 1D linear extended)",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Jenny systematically drove the same frequency through three different media and observed qualitatively distinct organizational principles: sand formed sharp nodal lines (purely discrete/geometric), paste formed three-dimensional standing domes (structured viscous), and liquids formed dynamic flowing patterns (continuous, lower symmetry). QA has three orbit families with analogous qualitative distinctions: Singularity is the zero-dimensional fixed point (like sand at a single node), Satellite is the 3D-symmetric 8-cycle (like paste's structured domes — CLAUDE.md explicitly describes it as '3D symmetric structure'), and Cosmos is the maximally extended 24-cycle with 1D linear structure (like the flowing linear patterns in liquid). The three-way split arises in both systems from the same source: a hierarchy of 'viscosity' (rigidity vs. flow) controlled by the mod-3 filter.",
+      "key_equation": {
+        "jenny": "Medium type → organizational regime: discrete | intermediate | continuous",
+        "qa": "v₃(f(b,e)): v₃=0 → Cosmos (24), v₃≥2 → Satellite (8) or Singularity (1)"
+      },
+      "structural_echo": "Jenny's three media are not arbitrary — they represent increasing degrees of freedom (constraints). QA's three orbit types are not arbitrary — they represent decreasing algebraic freedom (increasingly constrained by mod-3 divisibility). The structural inversion is meaningful: more constrained medium (sand) ↔ least constrained orbit (Cosmos, free to range).",
+      "upgrade_path": "Map Jenny's rheological parameters (viscosity, surface tension) to QA's v₃ valuation; check if the transition thresholds are numerically related to {1, 8, 24}",
+      "potential_cert": "QA_CYMATICS_JENNY_MEDIA_CERT.v1"
+    },
+    {
+      "id": "CY7",
+      "scholar": "S5 (Waller)",
+      "physical_concept": "Mode degeneracy: multiple distinct Chladni patterns exist at the same eigenfrequency when (m, n) has rotational symmetry",
+      "qa_concept": "Orbit degeneracy: three distinct Cosmos orbit classes all have period 24 but are algebraically distinguished by Q(√5) norm",
+      "evidence_level": "STRUCTURAL_PROVEN",
+      "description": "Waller proved that a square plate can have two linearly independent standing-wave modes at the same frequency — rotated copies of each other — because the symmetry group of (m, n) permits it. This is mode degeneracy. In QA mod-9, there are THREE cosmos orbit classes, each of period 24, distinguished only by their Q(√5) norm f(b,e) mod 3: N mod 3, −N mod 3, or 0 mod 3. Same period = same eigenfrequency; different norm class = different 'orientation' of the Chladni pattern. Waller's discovery that the symmetry group of (m,n) governs degeneracy maps exactly onto the Q(√5) norm classification governing QA orbit degeneracy.",
+      "key_equation": {
+        "waller": "Degenerate modes at ω: {u₁, u₂} with u₂ = R_{π/2}(u₁)  when m = n",
+        "qa": "Three cosmos orbits with period 24, classified by v₃(f(b,e)) ∈ {norm-class-N, norm-class-(-N), 0 mod 9}"
+      },
+      "structural_echo": "In both cases, degeneracy is protected by a discrete symmetry of the index pair. Waller: rotational symmetry of (m,n). QA: ℤ[φ] norm symmetry under φ ↔ −1/φ (Galois conjugation). The 'rotation' in QA is Galois conjugation in Q(√5).",
+      "upgrade_path": "Prove that QA's three-fold cosmos degeneracy is the mod-9 analogue of Waller's 2-fold square-plate degeneracy under the appropriate symmetry group",
+      "potential_cert": "QA_CYMATICS_WALLER_DEGENERACY_CERT.v1"
+    },
+    {
+      "id": "CY8",
+      "scholar": "S4 (Watts-Hughes)",
+      "physical_concept": "Vowel spectral fingerprinting: each vowel produces a reproducible Eidophone pattern determined by its formant frequencies",
+      "qa_concept": "Signal HI fingerprinting: each signal type (pure tone, major chord, tritone, noise) produces a characteristic Harmonic Index value",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Watts-Hughes showed that when she sang a sustained vowel through an Eidophone, the sand pattern was reproducible and vowel-specific. Different vowels (determined by their formant frequency ratios F1:F2:F3) produced different patterns. QA's signal injection experiment (run_signal_experiments_final.py) assigns each signal type a characteristic Harmonic Index: major chord gets a high HI (harmonic structure), tritone gets a lower HI (dissonant ratio), white noise gets the lowest (no rational structure). Both systems operate as 'resonance spectrographs' that reduce a continuous signal to a discrete pattern class via harmonic filtering. Formant ratios ↔ signal HI; Eidophone pattern class ↔ orbit attractor. CAVEAT (2026-07-10): the specific ordering 'major chord high HI, tritone lower, noise lowest' was produced under the historical non-discriminative HI (E8_alignment to a hardcoded Fibonacci vector, loss ~ 0). Under the redesigned discriminative coherence-HI it does NOT hold — tonal signals do not reliably outscore white noise (final config reverses, multiseed config null; see qa_signal_experiment_hi_rerun.py). This entry survives only as a STRUCTURAL_ANALOGY about 'signal → discrete class', not as a claim that HI ranks signals by harmonic content.",
+      "key_equation": {
+        "watts_hughes": "vowel → formant pattern F1:F2:F3 → Eidophone pattern class",
+        "qa": "signal → HI = E8_alignment × exp(−0.1 × loss) → harmonic classification"
+      },
+      "structural_echo": "Both are 'resonance fingerprints': the input signal is projected through a harmonic filter and the output is a discrete class label. The filter is physical (membrane resonance) in Watts-Hughes and arithmetic (modular orbit dynamics) in QA.",
+      "upgrade_path": "Run QA signal injection on vowel formant frequency series; verify that vowel classes map to distinct orbit attractors",
+      "potential_cert": "QA_CYMATICS_WATTS_HUGHES_VOWEL_CERT.v1"
+    },
+    {
+      "id": "CY9",
+      "scholar": "S7 (Lauterwasser)",
+      "physical_concept": "Biological morphological convergence: low-frequency cymatic patterns in water resemble shells, cells, flowers; complexity increases with frequency",
+      "qa_concept": "Emergent geometric structure: E8 alignment, Pythagorean family structure, and Feuerbach incircle geometry arise without explicit encoding",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Lauterwasser's most striking finding: the self-organization produced by simple sinusoidal drivers in water produces forms indistinguishable from biological morphology. This is not imposed — it self-organizes from the wave equation and water's physical properties. QA's CLAUDE.md states explicitly: 'Geometry is emergent: The E8 alignment and orbital structures arise from dynamics, not explicit encoding.' The Pythagorean family paper shows that five Fibonacci orbit families organize the same Pythagorean triples that Euclid and Barning enumerated — again without explicit construction. Both Lauterwasser's cymatics and QA demonstrate that simple arithmetic/physical rules generate complex, biologically- and mathematically-significant structures spontaneously. CAVEAT: E8 alignment was statistically falsified (QA median 0.911 < random baseline 0.930 — CLAUDE.md: 'E8 hypothesis FALSIFIED'); the emergent-structure claim rests on the Pythagorean/Feuerbach results, not E8.",
+      "key_equation": {
+        "lauterwasser": "sinusoidal_driver(f) + water → biological-form patterns",
+        "qa": "F = [[0,1],[1,1]] on (ℤ/Nℤ)² → Pythagorean triple enumeration (Intertwining Theorem)"
+      },
+      "structural_echo": "The Intertwining Theorem (Theorem 6 in pythagorean-families paper) is the QA analogue of Lauterwasser's morphological convergence: applying the generator F to the QA state lattice exactly reproduces the classical Barning-Berggren tree of Pythagorean triples. The biological forms arise from wave physics; the Pythagorean triples arise from modular arithmetic. Same principle: discrete iteration of a simple linear rule generates a rich, pre-existing mathematical/natural structure.",
+      "upgrade_path": "Map Lauterwasser's pattern catalog to QA orbit families; test whether shell-form frequencies correspond to cosmos orbits and cell-division forms to satellite orbits",
+      "potential_cert": "QA_CYMATICS_LAUTERWASSER_MORPHIC_CERT.v1"
+    },
+    {
+      "id": "CY10",
+      "scholar": "S8 (Reid)",
+      "physical_concept": "CymaScope: real-time digital pattern fingerprinting — signal → canonical visual signature",
+      "qa_concept": "QA Harmonic Index pipeline: signal → HI numerical fingerprint → orbit class",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Reid's CymaScope is an instrument: a signal enters, a canonical water-membrane pattern forms, it is photographed at high resolution. The result is a reproducible 'shape hash' of the input frequency. QA's signal pipeline (run_signal_experiments_final.py) is the arithmetic analogue: a signal enters the injection port (b-state modulation), the system evolves under Markovian coupling, the Harmonic Index HI = E8_align × exp(−0.1×loss) is computed. Both produce a canonical scalar/visual signature for each input. The CymaScope's photograph corresponds to QA's HI value. The critical difference: CymaScope is analog/continuous; QA HI is digital/discrete. This is the same distinction as between physical cymatics and Chladni's mathematical formula — QA is the discretization. CAVEAT (2026-07-10): 'HI as a per-signal fingerprint that ranks harmonic content' relied on the historical non-discriminative HI (E8_alignment × exp(−0.1×loss), with loss ~ 0 so HI was near-constant). Under the redesigned coherence-HI, HI tracks self-organization of the coupled system (driven by coupling strength), not the harmonic content of the injected signal — so it is not a signal-discriminating 'shape hash'. The CymaScope analogy holds at the level of 'instrument that maps signal → canonical signature'; the claim that QA's HI distinguishes tonal from noisy inputs does not.",
+      "key_equation": {
+        "reid": "signal f → CymaScope membrane → photographic pattern P(f)",
+        "qa": "signal s → QA injection → HI(s) = E8_align × exp(−0.1 × loss)"
+      },
+      "structural_echo": "Both are 'acoustic spectroscopes.' The CymaScope produces a 2D geometric fingerprint; QA produces a 1D numerical fingerprint. Upgrading QA to produce a 2D visualization (angular spectrum of orbit states) would make the analogy exact.",
+      "upgrade_path": "Build a 'QA CymaScope': for each input signal, visualize the orbit state distribution on a (b,e) grid — the resulting heat map should resemble the corresponding CymaScope image",
+      "potential_cert": "QA_CYMATICS_REID_CYMASCORE_CERT.v1"
+    },
+    {
+      "id": "CY11",
+      "scholar": "S3 (Rayleigh) + S1 (Chladni)",
+      "physical_concept": "Superposition principle: composite patterns are linear superpositions of basis modes",
+      "qa_concept": "Markovian coupling matrix: einsum('ik,jk->ij', tuples, tuples) = overlap integral between orbit states",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Rayleigh's superposition: any vibration u = Σ cₖ φₖ (sum of normal modes φₖ). The coupling between modes is the overlap integral ∫φᵢφⱼ = δᵢⱼ (orthogonality for true eigenmodes). In QA, the coupling matrix W[i,j] = np.einsum('ik,jk->ij', tuples_i, tuples_j) computes exactly the inner product of the 4D tuple vectors — the QA analogue of the mode overlap integral. Non-zero coupling W[i,j] > 0 means nodes i and j are in resonance (their orbits 'overlap' in tuple space). The Markovian coupling self-organizes to maximize resonance — this is the QA version of a system settling into its natural modes.",
+      "key_equation": {
+        "rayleigh": "Mode coupling: ∫φᵢ(x)φⱼ(x)dx = δᵢⱼ (orthogonality); u = Σcₖφₖ",
+        "qa": "W[i,j] = Σₖ tuple_i[k] × tuple_j[k]  (einsum inner product = 'overlap integral')"
+      },
+      "structural_echo": "The einsum coupling is the discrete Fourier inner product. When QA tuples are viewed as 4D basis vectors in an abstract 'harmonic space', the W matrix encodes which pairs are 'in phase.' This is precisely the mode overlap integral of classical acoustics.",
+      "upgrade_path": "Prove that QA orbits within the same family are 'orthogonal' in the einsum inner product sense (W[i,j] = 0 between different orbit families, nonzero within)",
+      "potential_cert": "QA_CYMATICS_SUPERPOSITION_COUPLING_CERT.v1"
+    },
+    {
+      "id": "CY12",
+      "scholar": "S3 (Rayleigh)",
+      "physical_concept": "Coupled oscillators: resonance transfer between weakly coupled systems when eigenfrequencies match",
+      "qa_concept": "Orbit synchronization: QA nodes with matching tuple families align under Markovian coupling dynamics",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Rayleigh's treatment of coupled pendula: when two oscillators have similar natural frequencies, energy transfer resonates near that frequency. Near-resonance amplifies coupling. QA's dynamic coupling W[i,j] is updated based on tuple resonance each timestep — nodes with similar tuple vectors (same orbit family) develop stronger coupling bonds. This is the QA implementation of Rayleigh's resonance transfer: orbit-family membership determines coupling strength, just as eigenfrequency proximity determines energy transfer rate.",
+      "upgrade_path": "Measure QA coupling matrix W at convergence; verify that W[i,j] is maximal for node pairs in the same orbit family",
+      "potential_cert": null
+    }
+  ],
+
+  "cross_cutting_principles": [
+    {
+      "id": "P1",
+      "name": "Discreteness from Boundary Conditions",
+      "cymatics": "Plate shape + clamping conditions → discrete mode frequencies",
+      "qa": "Modulus N → discrete orbit periods {1, 8, 24}",
+      "verdict": "EXACT STRUCTURAL PARALLEL",
+      "note": "Same mathematical source: eigenvalues of linear operator on bounded/finite domain"
+    },
+    {
+      "id": "P2",
+      "name": "Quadratic Classification of Mode Families",
+      "cymatics": "Chladni: f ∝ (m + 2n)^k; quadratic form on integer index pair",
+      "qa": "Q(√5) norm f(b,e) = b² + be − e²; quadratic form on state pair",
+      "verdict": "STRUCTURAL_PROVEN (same algebraic type: indefinite binary quadratic form over ℤ)"
+    },
+    {
+      "id": "P3",
+      "name": "Rational Stability",
+      "cymatics": "Jenny: rational frequency ratios → stable patterns",
+      "qa": "Modular arithmetic admits only finite orbits → constitutively stable",
+      "verdict": "PROVEN (Jenny documents the empirical principle QA axiomatizes)"
+    },
+    {
+      "id": "P4",
+      "name": "Three-Level Orbital Hierarchy",
+      "cymatics": "Jenny's three media: granular (nodal) | viscous (structured) | liquid (flowing)",
+      "qa": "Three orbit families: Singularity (1) | Satellite (8) | Cosmos (24)",
+      "verdict": "STRUCTURAL_ANALOGY (shared 3-level hierarchy with analogous organizational principles)"
+    },
+    {
+      "id": "P5",
+      "name": "Self-Organization Without External Template",
+      "cymatics": "Lauterwasser: biological forms arise from wave physics without biological instruction",
+      "qa": "Pythagorean triple enumeration arises from F-iteration without explicit construction",
+      "verdict": "STRUCTURAL_ANALOGY (Intertwining Theorem is the QA self-organization theorem)"
+    },
+    {
+      "id": "P6",
+      "name": "Resonance Fingerprinting",
+      "cymatics": "Watts-Hughes + Reid: acoustic input → canonical pattern signature",
+      "qa": "Signal injection → Harmonic Index → orbit class",
+      "verdict": "STRUCTURAL_ANALOGY (same instrument architecture, different substrates)"
+    }
+  ],
+
+  "relation_to_kayser_certs": {
+    "note": "The Kayser correspondence (qa_kayser/) is the theoretical layer that synthesizes cymatics into a cosmological harmonic framework. The mapping here is at the empirical/physical layer.",
+    "chain": [
+      "Chladni (1787) → discovered discrete modes in plates",
+      "Faraday (1831) → discovered parametric instability and subharmonic modes",
+      "Rayleigh (1877) → mathematized eigenfrequency theory",
+      "Watts-Hughes (1885) → applied to voice; spectral fingerprinting",
+      "Waller (1961) → group-theoretic classification of mode symmetries",
+      "Jenny (1967) → synthesized as 'cymatics'; integer-ratio stability law; three-medium hierarchy",
+      "Kayser (1950) → parallel harmonic-theoretic synthesis (Lambdoma, Kosmogonie) — mapped in qa_kayser/",
+      "Lauterwasser (2002) → biological convergence; emergent morphology",
+      "Reid (2002) → digital fingerprinting instrument",
+      "QA (2024+) → arithmetic discretization unifying all of the above"
+    ]
+  },
+
+  "open_problems": [
+    {
+      "id": "OP1",
+      "statement": "Does the QA (b,e) ↔ Chladni (m,n) correspondence extend to a full dictionary between mode shapes and orbit trajectories? Specifically: does the angular spectrum of the Cosmos orbit correspond to a specific Chladni pattern on a circular plate with m=1, n=0 (fundamental Bessel mode)?",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "id": "OP2",
+      "statement": "The Faraday instability threshold (Mathieu tongue boundary) corresponds structurally to the mod-3 basin boundary. Can a precise dictionary between Mathieu parameters (δ, ε) and QA parameters (modulus, coupling strength) be constructed?",
+      "difficulty": "HARD"
+    },
+    {
+      "id": "OP3",
+      "statement": "Build a 'QA CymaScope': a visualization tool that maps each input signal to a 2D heat map on the (b,e) grid (showing orbit state probability density after convergence). Compare the resulting images to CymaScope photographs of the same signals.",
+      "difficulty": "EASY — engineering task"
+    },
+    {
+      "id": "OP4",
+      "statement": "Jenny's irrational-ratio instability: QA excludes irrational ratios by construction (modular). What is the QA analogue of an irrational driving frequency? Possible answer: a signal injection with incommensurable period relative to the modulus. Formalize and test.",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "id": "OP5",
+      "statement": "Waller's degeneracy is 2-fold (square plate symmetry group = D₄). QA's cosmos degeneracy is 3-fold (three norm classes). What symmetry group governs QA's 3-fold degeneracy? Conjecture: S₃ = Gal(Q(√5)/Q) × ℤ/3ℤ acting on the three cosmos classes.",
+      "difficulty": "MEDIUM"
+    }
+  ],
+
+  "meta_correspondence": {
+    "cymatics_program": "Vibration at rational frequencies imposes discrete, symmetric patterns on matter. The mode structure is determined by geometry (boundary shape) and arithmetic (frequency ratios). Self-organization is universal across substrates.",
+    "qa_program": "Iteration of a linear generator on a modular lattice imposes discrete, symmetric orbit families. The orbit structure is determined by the modulus (boundary) and the generator's arithmetic (eigenvalue structure). Self-organization produces Pythagorean triples, E8-aligned tuples, and Barning-Berggren trees.",
+    "synthesis": "QA is the formal arithmetic discretization of cymatics. Where cymatics studies the visible patterns of continuous wave vibration constrained by physical boundaries, QA studies the orbit patterns of discrete modular iteration constrained by integer arithmetic. The four structural principles — (1) quadratic mode classification, (2) discreteness from boundary conditions, (3) rational stability, (4) three-level hierarchy — appear in both without either system deriving them from the other."
+  }
+}

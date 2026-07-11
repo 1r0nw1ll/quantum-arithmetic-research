@@ -246,6 +246,13 @@ class TopologyResonanceValidator:
                 )
 
         success = cert.get("success", True)
+        if not isinstance(success, bool):   # schema requires boolean; "false"/0 must not branch on truthiness
+            self._add_result(
+                "schema.success.type",
+                ValidationLevel.SCHEMA,
+                ValidationStatus.FAILED,
+                f"'success' must be a boolean, got {type(success).__name__}",
+            )
         if success:
             self._validate_success_schema(cert)
         else:

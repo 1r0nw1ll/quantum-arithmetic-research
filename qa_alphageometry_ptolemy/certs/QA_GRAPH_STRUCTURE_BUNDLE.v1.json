@@ -57,7 +57,7 @@
       "file": "qa_graph_structure_validator_v1.py",
       "id": "graph_validator",
       "kind": "source_py",
-      "sha256": "dfcf84f1a5bfa818bba9a6da0fc398df0910e395a307b572941c0ed4cb8c28d7"
+      "sha256": "590ab07fdbac4267d2cd84cf331412b58c4249de4c7bd0a48fbf35ec69797870"
     }
   },
   "bundle_id": "qa.bundle.graph_structure.v1",
@@ -78,7 +78,7 @@
   },
   "manifest": {
     "hash_alg": "sha256",
-    "manifest_sha256": "f284a2f09653f44b96ba7b320b555b447c9a9a8103f78f43c7911d4a572b4c9c"
+    "manifest_sha256": "df058530f961737cb6071290aa5a3c22bfd15320bcff3a85c164c0069034e7fb"
   },
   "schema_id": "QA_GRAPH_STRUCTURE_BUNDLE.v1",
   "version": 1

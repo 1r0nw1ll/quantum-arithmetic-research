@@ -820,7 +820,9 @@ def validate_graph_structure(cert_dict: Dict[str, Any]) -> ValidationResult:
         p24_qa = int(phase.get("phase_24_qa"))
         p9_base = int(phase.get("phase_9_baseline"))
         p9_qa = int(phase.get("phase_9_qa"))
-        phase_preserved = bool(phase.get("phase_preserved"))
+        phase_preserved = phase.get("phase_preserved")
+        if not isinstance(phase_preserved, bool):   # not bool(...): "false"/1 must not coerce
+            raise TypeError("phase_preserved must be a boolean")
     except Exception:
         v.check(False, "phase_witness phase fields must be integers/boolean")
         return v

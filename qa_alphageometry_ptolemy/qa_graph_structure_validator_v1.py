@@ -443,7 +443,9 @@ class GraphStructureValidator:
             p24_qa = int(phase["phase_24_qa"])
             p9_baseline = int(phase["phase_9_baseline"])
             p9_qa = int(phase["phase_9_qa"])
-            phase_preserved = bool(phase["phase_preserved"])
+            phase_preserved = phase["phase_preserved"]
+            if not isinstance(phase_preserved, bool):   # not bool(...): "false"/1 must not coerce
+                raise TypeError("phase_preserved must be a boolean")
         except Exception as e:
             self._add_result(
                 "consistency.phase.parse",

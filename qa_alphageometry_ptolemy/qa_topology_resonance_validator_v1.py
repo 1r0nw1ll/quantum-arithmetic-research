@@ -406,7 +406,9 @@ class TopologyResonanceValidator:
             scc_before = int(topo["scc_count_before"])
             scc_after = int(topo["scc_count_after"])
             should_monotone = scc_after >= scc_before
-            claimed_monotone = bool(inv["scc_monotone_non_decreasing"])
+            claimed_monotone = inv["scc_monotone_non_decreasing"]
+            if not isinstance(claimed_monotone, bool):   # not bool(...): "false"/1 must not coerce
+                raise TypeError("scc_monotone_non_decreasing must be a boolean")
             if should_monotone == claimed_monotone:
                 self._add_result(
                     "consistency.scc.monotonicity",
@@ -491,8 +493,15 @@ class TopologyResonanceValidator:
                 )
 
             should_preserve = (p24_before == p24_after) and (p9_before == p9_after)
-            claimed_preserve = bool(phase["phase_preserved"])
-            if should_preserve == claimed_preserve:
+            claimed_preserve = phase["phase_preserved"]      # no bool() coercion
+            if not isinstance(claimed_preserve, bool):       # "false"/1 must not pass
+                self._add_result(
+                    "consistency.phase.preservation",
+                    ValidationLevel.CONSISTENCY,
+                    ValidationStatus.FAILED,
+                    "phase_preserved must be a boolean",
+                )
+            elif should_preserve == claimed_preserve:
                 self._add_result(
                     "consistency.phase.preservation",
                     ValidationLevel.CONSISTENCY,
@@ -518,7 +527,9 @@ class TopologyResonanceValidator:
             score = self._parse_scalar(topo["resonance_score"])
             threshold = self._parse_scalar(topo["resonance_threshold"])
             should_certify = score >= threshold
-            claimed_certify = bool(topo["resonance_certified"])
+            claimed_certify = topo["resonance_certified"]
+            if not isinstance(claimed_certify, bool):     # not bool(...): "false"/1 must not coerce
+                raise TypeError("resonance_certified must be a boolean")
             if should_certify == claimed_certify:
                 self._add_result(
                     "consistency.resonance.threshold",
@@ -541,7 +552,10 @@ class TopologyResonanceValidator:
                 f"Resonance check error: {e}",
             )
 
-        for k in ("packet_conservation", "no_reduction_axiom", "connected_component_first_class"):
+        # phase_lock is a hard invariant per the cert lattice_position
+        # (scc_monotone AND phase_lock AND resonance_certified) -- a success cert must
+        # declare it True, so require it here alongside the other invariants.
+        for k in ("packet_conservation", "no_reduction_axiom", "connected_component_first_class", "phase_lock"):
             if inv.get(k) is True:
                 self._add_result(
                     f"consistency.invariants.{k}",
@@ -808,20 +822,24 @@ class TopologyResonanceValidator:
                 f"Failed to parse certificate resonance score: {e}",
             )
 
-        claimed_monotone = bool(inv.get("scc_monotone_non_decreasing"))
+        claimed_monotone = inv.get("scc_monotone_non_decreasing")      # no bool() coercion
         self._add_result(
             "recompute.match.scc_monotone_invariant",
             ValidationLevel.RECOMPUTE,
-            ValidationStatus.PASSED if claimed_monotone == scc_monotone_trace else ValidationStatus.FAILED,
+            ValidationStatus.PASSED if (isinstance(claimed_monotone, bool)
+                                        and claimed_monotone == scc_monotone_trace)
+            else ValidationStatus.FAILED,
             f"Trace monotone={scc_monotone_trace}, claimed={claimed_monotone}",
         )
 
         trace_phase_preserved = (initial_p24 == final_p24) and (initial_p9 == final_p9)
-        claimed_phase_preserved = bool(phase.get("phase_preserved"))
+        claimed_phase_preserved = phase.get("phase_preserved")      # no bool() coercion
         self._add_result(
             "recompute.match.phase_preserved",
             ValidationLevel.RECOMPUTE,
-            ValidationStatus.PASSED if claimed_phase_preserved == trace_phase_preserved else ValidationStatus.FAILED,
+            ValidationStatus.PASSED if (isinstance(claimed_phase_preserved, bool)
+                                        and claimed_phase_preserved == trace_phase_preserved)
+            else ValidationStatus.FAILED,
             f"Trace phase_preserved={trace_phase_preserved}, claimed={claimed_phase_preserved}",
         )
 

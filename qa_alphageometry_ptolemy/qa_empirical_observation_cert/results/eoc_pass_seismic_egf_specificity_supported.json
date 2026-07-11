@@ -1,0 +1,113 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.seismic_egf_time_reversal_specificity.v1",
+  "title": "Cert [522] time-reversal same-medium specificity demonstrated on REAL seismic data via a stacked empirical Green's function: co-located aftershock cluster coheres (0.696, p=0.0002) while a distant cluster stays at null (0.095, p=0.87)",
+  "created_utc": "2026-07-11T15:30:12Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_seismic_egf_stack.py",
+    "script_sha256": "df35e6fc402724e595ab64b8f90f347ec45f78f10d82ecacd61ea2585851d88c",
+    "result_json": "results/seismic/qa_seismic_egf_stack_results.json",
+    "result_json_sha256": "71141924d007cbbf4c7fcfed4e5af232d6dee766da80d7f8f876c3f027f43aac",
+    "captured_utc": "2026-07-11T15:30:12Z",
+    "domain": "seismic",
+    "summary": "The cert [522] time-reversal/phase-conjugation operator (qa_neg = standard involution) is a KNOWN-medium identity: the scattering term cancels only when record and re-emit share the same Green's function. On real seismic data a constant-velocity QA mod-24 phase back-projection does NOT transfer (qa_seismic_tr_real.py: real focus indistinguishable from a phase-scramble null, p=0.11-0.86, never refocuses; genuine bound, self-test recovers a synthetic source exactly). Fix: identify the medium EMPIRICALLY. A co-located companion event records the true Green's function from the target's source patch (empirical Green's function, EGF); the QA mod-24 quantized cross-spectral phase R_T*conj(R_EGF) cancels the shared medium for a co-located EGF (coherent stack) and decoheres for a distant one (different path). Real M4.97 Ridgecrest 2019 target with a 30-event co-located aftershock stack (0.8-4.8 km) vs a distant control (M3.46, 117.5 km), 19 SNR-passing stations, pre-registered p<0.01. Verdict SUPPORTED: matched (co-located) coherence 0.696 at scramble-null p=0.0002, mismatched (distant) 0.095 at p=0.87 (~7x same-medium specificity). mod-24 confirmed faithful (full-precision 0.713 ~= mod-24 0.696 -- quantization is not the limiter). Real-effect signature: matched coherence rose monotonically with stack size at frozen parameters (single-EGF 0.331 p=0.25 -> 10-stack 0.502 p=0.012 -> 30-stack 0.696 p=0.0002), i.e. significance reached by adding data, not by tuning criteria.",
+    "key_numbers": {
+      "target_magnitude": 4.97,
+      "n_matched_events_stack": 30,
+      "matched_hypo_km_min": 0.8,
+      "matched_hypo_km_max": 4.8,
+      "n_mismatched_events": 1,
+      "mismatched_hypo_km": 117.5,
+      "n_stations_matched": 19,
+      "band_hz_low": 0.5,
+      "band_hz_high": 2.0,
+      "modulus": 24,
+      "matched_coherence": 0.696,
+      "matched_coherence_full_precision": 0.713,
+      "matched_scramble_p": 0.0002,
+      "mismatched_coherence": 0.095,
+      "mismatched_scramble_p": 0.87,
+      "null_mean": 0.204,
+      "specificity_ratio": 7.3,
+      "progression_single_egf_coherence": 0.331,
+      "progression_single_egf_p": 0.25,
+      "progression_10stack_coherence": 0.502,
+      "progression_10stack_p": 0.012,
+      "constant_velocity_verdict": "NOT_SUPPORTED"
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_TIME_REVERSAL_FOCUS_CERT.v1",
+    "certificate_id": "qa.cert.time_reversal_focus.v1",
+    "claim": "qa_neg (standard involution = phase conjugation = time reversal) re-emitted through the SAME medium focuses on a source; a mismatched medium destroys the focus (same-medium specificity)"
+  },
+  "verdict": "CONSISTENT",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Matched EGF (30-event co-located aftershock stack) QA mod-24 cross-spectral phase coherence vs phase-scramble null (19 stations, pre-registered p<0.01)",
+      "value": "C_matched = 0.696, scramble-null p = 0.0002 -> individually significant"
+    },
+    {
+      "type": "quantitative",
+      "description": "Mismatched EGF (distant M3.46, 117.5 km) coherence -- the same-medium negative control",
+      "value": "C_mismatched = 0.095, scramble-null p = 0.87 (at the null); ~7x specificity vs matched"
+    },
+    {
+      "type": "quantitative",
+      "description": "mod-24 quantization fidelity: full-precision vs QA-24 matched coherence",
+      "value": "full-precision 0.713 ~= mod-24 0.696 -- QA quantization is faithful, not the limiter"
+    },
+    {
+      "type": "quantitative",
+      "description": "Real-effect signature: matched coherence rises monotonically with stack size at frozen params",
+      "value": "single-EGF 0.331 (p=0.25) -> 10-stack 0.502 (p=0.012) -> 30-stack 0.696 (p=0.0002)"
+    },
+    {
+      "type": "qualitative",
+      "description": "Scope boundary this observation establishes for the [522] parent theorem on real data",
+      "value": "known-medium identity does NOT transfer under a guessed velocity (constant-v back-projection NOT_SUPPORTED); WITH the medium identified empirically via a stacked co-located EGF, the same-medium fingerprint holds on real earthquakes"
+    }
+  ],
+  "open_questions": [
+    "The distant control is a single event (the distant region was sparse) though it sits firmly at the null; a distant CLUSTER would make the two arms fully symmetric.",
+    "SNR (3->2) and KMIN (4->3) were relaxed once at the 10-event stage to admit enough stations, then frozen; the final significance came from adding events at frozen params.",
+    "Does the effect hold for a second independent target/sequence, and at higher frequency bands where the medium mismatch should decohere even faster?"
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' ∈ {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_TIME_REVERSAL_FOCUS_CERT.v1' (parent = family [522])"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT' (the real-data EGF observation supports the [522] same-medium specificity claim)"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger (not applicable here)",
+      "passed": true,
+      "details": "verdict='CONSISTENT'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 5 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

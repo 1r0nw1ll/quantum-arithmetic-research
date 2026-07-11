@@ -130,7 +130,10 @@ mod-24 quantization is confirmed faithful (never the limiter). Disclosure: SNR (
 and KMIN (4→3) were relaxed once at the 10-event stage to admit enough stations, then
 frozen; the distant control is a single event (the distant region was sparse) but
 sits firmly at the null. Result record:
-`results/seismic/qa_seismic_egf_stack_results.json`.
+`results/seismic/qa_seismic_egf_stack_results.json`. Certified as an empirical
+observation (parent [522]):
+`qa_empirical_observation_cert/results/eoc_pass_seismic_egf_specificity_supported.json`
+(`qa.cert.empirical.seismic_egf_time_reversal_specificity.v1`, verdict CONSISTENT).
 
 ## Primary sources
 

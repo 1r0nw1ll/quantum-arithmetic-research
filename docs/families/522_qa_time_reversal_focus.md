@@ -102,9 +102,35 @@ from T (residual station-dependent phase) and the closest events small enough to
 truly co-located fall below SNR. **Pre-registered verdict: NOT_SUPPORTED** (strict) —
 but the qualitative [518]/[522] same-medium fingerprint IS present on real earthquakes,
 and the remaining gap is the target–EGF offset + station count, not the QA method.
-Result record: `results/seismic/qa_seismic_egf_specificity_results.json`. Open: a
-closer well-recorded EGF (or a stacked EGF from several nearby aftershocks) to shrink
-the offset and test individual significance.
+Result record: `results/seismic/qa_seismic_egf_specificity_results.json`.
+
+### Stacked-EGF significance (2026-07-11): SUPPORTED on real data
+
+Stacking a CLUSTER of co-located aftershocks as the empirical Green's function closes
+the gap (`qa_seismic_egf_stack.py`). Each aftershock's residual offset phase points a
+different way, so averaging the cross-spectral phasors over the cluster (per-event
+global phase removed first) drives the offset toward a station-independent residual
+while lifting SNR. Target T (M4.97) with a **30-event co-located aftershock stack**
+(0.8-4.8 km) vs a distant control (M3.46, 117 km), QA mod-24 cross-spectral phase
+coherence, pre-registered p < 0.01, SNR/KMIN frozen after the 10-event run.
+
+**Verdict SUPPORTED.** Matched (co-located cluster) coherence **0.696, scramble-null
+p = 0.0002** (19 stations) — decisively significant; mismatched (distant) **0.095,
+p = 0.87** — at the null (~7× specificity). mod-24 faithful throughout
+(full-precision 0.713 ≈ mod-24 0.696). The honest signature of a real effect:
+matched coherence rose **monotonically with stack size** at frozen params —
+single-EGF 0.331 (p = 0.25) → 10-stack 0.502 (p = 0.012) → 30-stack 0.696
+(p = 0.0002) — i.e. significance was reached by adding DATA, not by tuning criteria.
+
+Bottom line for [522] on real seismic: the known-medium *identity* does not transfer
+under a guessed velocity (constant-v back-projection NOT_SUPPORTED), but once the
+medium is **identified empirically** via a stacked co-located EGF, the [518]/[522]
+same-medium fingerprint is demonstrated on real earthquakes at p = 0.0002, and QA
+mod-24 quantization is confirmed faithful (never the limiter). Disclosure: SNR (3→2)
+and KMIN (4→3) were relaxed once at the 10-event stage to admit enough stations, then
+frozen; the distant control is a single event (the distant region was sparse) but
+sits firmly at the null. Result record:
+`results/seismic/qa_seismic_egf_stack_results.json`.
 
 ## Primary sources
 

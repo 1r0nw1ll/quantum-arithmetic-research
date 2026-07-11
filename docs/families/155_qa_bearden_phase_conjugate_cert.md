@@ -2,13 +2,25 @@
 
 ## One-line summary
 
-Bearden's "stress is a pumper" (pumped phase conjugate mirror theory) maps structurally to the QCI opposite-sign discovery: global coherence rises while local coherence drops during stress.
+Bearden's "stress is a pumper" analogy — his (non-mainstream) *application* of the standard pumped phase conjugate mirror to stressed systems — maps structurally to the QCI opposite-sign discovery: global coherence rises while local coherence drops during stress. (The pumped phase conjugate mirror itself is established nonlinear optics, not Bearden's invention — see below.)
 
 ## Mathematical content
 
-### Bearden model
+### The pumped phase conjugate mirror (established physics) and Bearden's application
 
-Thomas E. Bearden's pumped phase conjugate mirror theory posits that stress in a system acts as a **pump beam** creating phase conjugation — order at one level produces the conjugate (reversed) response at another level.
+The **pumped phase conjugate mirror (PPCM)** is standard nonlinear optics, **not**
+Bearden's invention: two counter-propagating pump beams drive a nonlinear medium via
+four-wave mixing to generate the phase-conjugate (time-reversed) wave (Yariv & Pepper
+1977; Fisher, ed., *Optical Phase Conjugation*, 1983; Zel'dovich–Pilipetsky–Shkunov
+1985). This is exactly cert **[518]**'s FWM conjugator (`theta_c = theta_f + theta_b −
+theta_s`, two pumps + signal), which cites the same lineage.
+
+Thomas E. Bearden's specific contribution is only an **analogy**: he applies the (real)
+PPCM concept to stressed systems and to the atomic nucleus, positing that stress acts
+as a **pump beam** creating phase conjugation — order at one level producing the
+conjugate (reversed) response at another. This cert borrows *only that structural
+analogy*; the QCI empirical signal below stands on its own and does not depend on
+Bearden's (non-mainstream) physics.
 
 ### QA mapping
 

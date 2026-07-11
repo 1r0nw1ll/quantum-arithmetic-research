@@ -30,6 +30,29 @@ as exactly that: it borrows only the structural analogy and evaluates it *empiri
 against QCI data (where the signature is found weak — see cert [518]). Its status is a
 matter of evidence, not of social reception; "mainstream vs fringe" is not the axis.
 
+### Physical grounding: the vacuum-as-plenum
+
+The "stress pumps a nonlinear medium" generalization is not a departure from
+mainstream physics — it rests on the **established** result that the electromagnetic
+vacuum is a *medium with material properties*, not a void:
+
+- **Permittivity ε₀ and permeability μ₀** — the vacuum has electromagnetic constants;
+  `c = 1/√(ε₀μ₀)` derives the speed of light from them.
+- **Energy density** — zero-point energy, whose measured signature is the **Casimir
+  effect**; in general relativity the vacuum energy *gravitates* (the cosmological
+  constant).
+- **Inherent tension / stress** — the **Maxwell stress tensor**; Maxwell himself
+  modeled the field as *stresses in a medium*, and the QFT vacuum carries
+  stress-energy.
+
+Together these describe a **stressed plenum**, not "nothing." So "treat space as a
+stressed, pumpable nonlinear medium" is a generalization sitting directly on ε₀, μ₀,
+Casimir, and Maxwell stress — and it is continuous with the mainstream mechanism of
+phase conjugation itself: Zel'dovich's original 1972 conjugation via **stimulated
+Brillouin scattering** *is* strain/acoustic pumping of a medium. The generalization
+remains a testable conjecture (evaluated here vs QCI); this note only records that its
+*physical motivation* is established physics, not a fringe premise.
+
 ### QA mapping
 
 | Bearden concept | QA observable | Empirical sign |

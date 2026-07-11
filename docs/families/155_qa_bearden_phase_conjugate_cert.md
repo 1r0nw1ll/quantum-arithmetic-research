@@ -2,7 +2,7 @@
 
 ## One-line summary
 
-Bearden's "stress is a pumper" analogy — his (non-mainstream) *application* of the standard pumped phase conjugate mirror to stressed systems — maps structurally to the QCI opposite-sign discovery: global coherence rises while local coherence drops during stress. (The pumped phase conjugate mirror itself is established nonlinear optics, not Bearden's invention — see below.)
+Bearden's "stress is a pumper" analogy — his *generalization* of the standard pumped phase conjugate mirror to stressed systems at large — maps structurally to the QCI opposite-sign discovery: global coherence rises while local coherence drops during stress. (The pumped phase conjugate mirror itself is established nonlinear optics, not Bearden's invention — see below.)
 
 ## Mathematical content
 
@@ -21,12 +21,14 @@ medium / phase-conjugating element**; and (iii) **stress/strain acting as a pump
 a nonlinear medium — which is exactly the mechanism of Zel'dovich's *original* 1972
 phase conjugation via **stimulated Brillouin scattering** (an acoustic/strain wave
 pumps and conjugates the optical field), and of the photoelastic / stress-optic and
-acousto-optic effects generally. Bearden's own contribution is only a particular
-(non-mainstream) **synthesis** — applying these established mechanisms to stressed
-*systems* at large, positing that stress acts as a pump beam creating phase
-conjugation, order at one level producing the conjugate (reversed) response at
-another. This cert borrows *only that structural analogy*; the QCI empirical signal
-below stands on its own and does not depend on Bearden's physics.
+acousto-optic effects generally. Bearden's own contribution is a particular
+**generalization** — extending these established mechanisms to stressed *systems* at
+large, positing that stress acts as a pump beam creating phase conjugation, order at
+one level producing the conjugate (reversed) response at another. That generalization
+is a **testable conjecture**, not itself established physics — and this cert treats it
+as exactly that: it borrows only the structural analogy and evaluates it *empirically*
+against QCI data (where the signature is found weak — see cert [518]). Its status is a
+matter of evidence, not of social reception; "mainstream vs fringe" is not the axis.
 
 ### QA mapping
 

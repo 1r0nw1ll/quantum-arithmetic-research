@@ -1,0 +1,62 @@
+{
+  "protocol_version": "QA_EXPERIMENT_PROTOCOL.v1",
+  "experiment_id": "qa_signal_experiment_hi_rerun_v1",
+  "hypothesis": "The flagship signal-coherence experiment's claim -- tonal/harmonic signals (pure tone, major/minor chord, tritone) injected into the coupled QA system produce a MORE harmonic (higher Harmonic Index) state than white noise -- holds under the REDESIGNED, discriminative HI (golden-orbit coherence).",
+  "null_model": {
+    "description": "White noise is the null signal; under the null, tonal signals produce no higher HI than white noise. Robustness assessed across 25 seeds, not the single seed 42 the original flagship reported.",
+    "generating_process": "For each seed, run QASystem (num_nodes=16, m=24, coupling=0.2, noise_base=0.2, annealing=0.995, injection=0.2, signal_mode='final', 150 steps) on each signal; record final HI (coherence-driven) and the old HI proxy (e8_alignment_legacy).",
+    "held_fixed": [
+      "observer projection",
+      "state alphabet {1..24}",
+      "QASystem config",
+      "signal generators (reused from run_signal_experiments_final.py)"
+    ],
+    "permuted": [
+      "random seed",
+      "signal type (tonal vs white noise)"
+    ],
+    "independence_argument": "UNCHANGED replication of the flagship setup: white noise is the flagship's own null signal. It is NOT amplitude-matched to the tonal signals (the reused generators differ in RMS), so signal type and amplitude are confounded -- the same confound the original flagship had. This tests replication under the redesigned metric, not a clean harmonic-structure-only isolation.",
+    "surrogate_types": [
+      "white_noise_null_signal",
+      "multi_seed_resampling"
+    ]
+  },
+  "pre_registration": {
+    "seed": 42,
+    "date_utc": "2026-07-10T00:00:00Z",
+    "n_trials": 25
+  },
+  "decision_rules": {
+    "accept_criterion": "Across seeds, tonal HI significantly exceeds white-noise HI (paired t-test t>0, p<0.05) AND the flagship PASS verdict replicates in a majority of seeds.",
+    "reject_criterion": "Tonal HI not significantly above white-noise HI (p>=0.05 or t<=0), or the PASS verdict fails to replicate across seeds.",
+    "on_unsupportive": "investigate_implementation"
+  },
+  "observer_projection": {
+    "description": "Injected signal (continuous) enters only via the QASystem b-state (boundary crossed once, in); HI/coherence/alignment are observer-layer readouts of the integer QA state (crossed once, out).",
+    "state_alphabet": "(b,e) in {1..24}^2",
+    "source_domain": "synthetic_audio_signal"
+  },
+  "real_data_status": "synthetic_only",
+  "reproduces": "run_signal_experiments_final.py (flagship signal-coherence experiment), re-run across seeds with the redesigned HI",
+  "primary_sources": [],
+  "source_mapping": {
+    "theory_doc": "run_signal_experiments_final.py",
+    "primary_source": "run_signal_experiments_final.py",
+    "mapping_rationale": "This re-run's source is the flagship signal-coherence experiment script itself; the protocol gates the re-run design (white-noise null, 25-seed robustness, paired t-test under the redesigned coherence-HI) before code, so the conclusion about whether the flagship result survives a discriminative metric is not invented inside the script."
+  },
+  "ablation": {
+    "callable": "old_vs_new_HI",
+    "destroyed_structure": "the inert (non-discriminative) E8-alignment metric the original flagship HI used; replaced by the discriminative golden-orbit coherence",
+    "expected_direction": "if the flagship claim reflected real signal-coherence structure, tonal>noise would replicate under the discriminative metric; observed: it does NOT (white noise coherence is significantly higher)"
+  },
+  "reproducibility": {
+    "seed": 42,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "numpy": "declared_at_runtime",
+      "scipy": "declared_at_runtime"
+    },
+    "results_ledger": "results/qa_experiment_runs.jsonl"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "event": {
+    "event_id": "quakeml:earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38457687&format=quakeml",
+    "origin_time": "2019-07-06T03:47:53.420000Z",
+    "latitude": 35.9011667,
+    "longitude": -117.7495,
+    "depth_km": 5.04,
+    "magnitude": 5.5
+  },
+  "n_stations": 23,
+  "stations": [
+    "CI.ARV",
+    "CI.CWC",
+    "CI.EDW2",
+    "CI.FUR",
+    "CI.GRA",
+    "CI.GSC",
+    "CI.ISA",
+    "CI.LRL",
+    "CI.Q0056",
+    "CI.Q0072",
+    "CI.RRX",
+    "CI.SHO",
+    "CI.SLA",
+    "CI.VES",
+    "NN.FMT",
+    "NN.GVN",
+    "NN.GWY",
+    "NN.MCA",
+    "NN.QSM",
+    "PB.B916",
+    "PB.B917",
+    "PB.B918",
+    "PB.B921"
+  ],
+  "pre_registration": {
+    "refocus_max_km": 25.0,
+    "specificity_max_p": 0.01,
+    "specificity_closer_than_median": true,
+    "velocity_search_km_s": [
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0
+    ],
+    "band_hz": [
+      0.1,
+      0.5
+    ],
+    "modulus": 24,
+    "n_scramble": 200,
+    "note": "fair-shot retry after a first NOT_SUPPORTED at band 0.5-2Hz/v=6: long-period band + apparent-velocity search applied IDENTICALLY to real and every null draw. criteria fixed in source before this run; honest either way"
+  },
+  "real": {
+    "peak_coherence": 0.6352291548025293,
+    "peak_km_from_epicenter": 48.761162453848215,
+    "peak_latlon": [
+      36.021166699999995,
+      -118.2695
+    ],
+    "best_velocity_km_s": 2.5
+  },
+  "phase_offset_null": {
+    "n": 200,
+    "peak_mean": 0.641482972445281,
+    "peak_std": 0.03860923844760931,
+    "peak_max": 0.799649522276293,
+    "empirical_p": 0.4925373134328358,
+    "dist_median_km": 52.11033843165727
+  },
+  "noise_control": {
+    "peak_coherence": 0.6469195610460534,
+    "peak_km_from_epicenter": 25.458927961462248
+  },
+  "decision": {
+    "refocus": false,
+    "specificity": false,
+    "verdict": "NOT_SUPPORTED"
+  }
+}

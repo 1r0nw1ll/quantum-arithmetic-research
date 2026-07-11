@@ -59,6 +59,31 @@ focus magnitude is an observer-layer readout (Theorem NT), never QA state. This
 cert is the *reverse deployment* of cert [518] (correction at a receiver) — the
 same operator `qa_neg`, aimed to focus instead of correct.
 
+### Real-data bound (2026-07-11): known-medium identity — does NOT transfer to unknown-medium seismic
+
+The certified refocus/specificity above hold because the medium is **known**: the
+scattering term appears identically on record and re-emit, so it cancels
+analytically. Taken to **real** seismic data (M5.5 Ridgecrest 2019 aftershock, 23
+regional stations, `qa_seismic_tr_real.py`) as a QA mod-24 phase-coherence
+back-projection with a pre-registered decision, a phase-scramble null, and a
+noise-window control, the operator **does not transfer**: the real recorded phases
+focus no better than randomised phases (empirical p = 0.86 / 0.11 / 0.49 across a
+short-period constant-v and two long-period velocity-search regimes — never < 0.01),
+and never refocus within 25 km of the catalog epicenter. Verdict **NOT_SUPPORTED**.
+
+This is a genuine physics bound, not a method bug: the identical estimator recovers
+a **known synthetic source exactly** (coherence 1.000 at 0.0 km,
+`qa_seismic_tr_selftest.py`). The cause is that a real 3-D Earth is an **unknown**
+medium, so at mod-24 phase resolution (15° steps) constant/searched-velocity
+travel-time errors exceed a phase period and destroy the coherence the identity
+needs. Scope: this bounds QA *single-event absolute-phase mod-24 back-projection*;
+professional seismic back-projection succeeds using envelope/cross-correlation and
+3-D velocity models — which abandon the QA-phase structure. Result record:
+`results/seismic/qa_seismic_tr_real_results.json`. **Open direction: identify the
+medium empirically** (empirical Green's function from a co-located companion event)
+so the record/re-emit medium terms cancel on real data — the real-data form of the
+[518]/[522] same-medium specificity test.
+
 ## Primary sources
 
 - Fink, M. (1992). "Time reversal of ultrasonic fields." *IEEE Trans. UFFC*

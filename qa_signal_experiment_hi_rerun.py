@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # QA_COMPLIANCE = "observer=diagnostic_rerun; HI/coherence are observer-layer readouts (Theorem NT); reuses run_signal_experiments_final generators unchanged"
+# RT1_OBSERVER_FILE: signal generators (sin tones) are observer-layer input signals, not QA state.
 """
 Re-run the flagship SIGNAL-COHERENCE experiment (run_signal_experiments_final.py)
 with the REDESIGNED Harmonic Index, and test whether its headline conclusion
@@ -23,18 +24,27 @@ the independent unit) finds white noise produces significantly HIGHER coherence 
 tonal signals (t ~ -3.7, p ~ 0.001) -- the reverse of the hypothesis.
 
 INTERPRETATION (not established by this experiment alone): the old flagship PASS
-looks like an artifact of the inert metric plus a lucky seed -- a common scalar drive
-(the injected signal, entered as float(mean(signal))) plausibly synchronizes the
-coupled QA nodes regardless of whether it is tonal or noise. Note this is an
+looks like an artifact of the inert metric plus a lucky seed -- the injected signal
+enters as a common per-timestep drive on the b-state, which plausibly synchronizes
+the coupled QA nodes regardless of whether it is tonal or noise. Note this is an
 UNCHANGED replication of the flagship setup, NOT a clean harmonic-structure-only
 ablation: the reused generators are not amplitude-matched (white noise has higher RMS
 than the chords), so signal type and amplitude are confounded -- same as the original.
 
+FAMILY: this checks the signal-coherence flagship family. The 'final' config
+(coupling 0.2, unnormalized generators) REVERSES (white noise significantly higher);
+the multiseed-eval config (coupling 0.12, amplitude-normalized generators) is NULL
+(no significant difference). The pisano / pac / tight_bounds variants share the same
+tonal-vs-noise QASystem base, so they inherit the RISK to that shared HI-based claim
+(not every result in those scripts -- they run longer and add PAC/Pisano analyses).
+The seismic classifier (seismic_classifier_enhanced.py) uses HI only as a +/-0.5
+tiebreaker AFTER P/S-wave-timing/amplitude rules, so the redesign is expected not to
+materially change its verdict except possibly for borderline/tie cases.
+
 Honest consequence of the HI redesign: a flagship claim that rested on a
-non-discriminative metric does not replicate under a discriminative one. SCOPE: this
-concerns the signal-coherence classification experiment specifically; results that do
-not use HI/QASystem -- e.g. Fibonacci-resonance, EEG topographic, climate -- are not
-touched by this.
+non-discriminative metric does not replicate under a discriminative one. SCOPE:
+only HI/QASystem-dependent claims; results that do not use HI -- e.g.
+Fibonacci-resonance, EEG topographic, climate -- are not touched by this.
 """
 from __future__ import annotations
 
@@ -53,6 +63,19 @@ TONAL = ["Pure Tone", "Major Chord", "Minor Chord", "Tritone"]
 CFG = dict(num_nodes=16, modulus=24, coupling=0.2, noise_base=0.2,
            noise_annealing=0.995, signal_injection_strength=0.2, signal_mode="final")
 
+# the multiseed-eval variant of the same flagship family (signal_experiment_multiseed_eval.py):
+# weaker coupling + amplitude-normalized generators (chords /3, tritone /2).
+MULTISEED_CFG = dict(num_nodes=16, modulus=24, coupling=0.12, noise_base=0.1,
+                     noise_annealing=0.995, signal_injection_strength=0.2, signal_mode="final")
+
+
+def _norm_gens(n):
+    t = np.linspace(0, 1.0, n, endpoint=False); f = 5.0
+    s = lambda r: np.sin(2 * np.pi * f * r * t)
+    return {"Pure Tone": s(1), "Major Chord": (s(1) + s(1.25) + s(1.5)) / 3,
+            "Minor Chord": (s(1) + s(1.2) + s(1.5)) / 3, "Tritone": (s(1) + s(np.sqrt(2))) / 2,
+            "White Noise": np.random.uniform(-1, 1, n)}
+
 
 def _one_seed(seed):
     """Return {signal: (old_HI_proxy, new_HI)} for one seeded run of all signals."""
@@ -64,6 +87,24 @@ def _one_seed(seed):
         tup = qa_tuples(np.asarray(s.b), np.asarray(s.e), 24)
         out[name] = (float(e8_alignment_legacy(tup)), float(s.history["hi"][-1]))
     return out
+
+
+def _multiseed_family_check(seeds=range(8)):
+    """Same claim under the amplitude-normalized multiseed-eval variant (weaker
+    coupling). Returns the seed-level paired t-test of tonal vs white-noise new-HI."""
+    seeds = list(seeds)
+    tonal_means, wn = [], []
+    for seed in seeds:
+        vals = {}
+        for i, name in enumerate(SIGS):
+            np.random.seed(1000 * seed + i)
+            g = _norm_gens(150)[name]
+            s = QASystem(**MULTISEED_CFG)
+            s.run_simulation(150, g, progress=False)
+            vals[name] = float(s.history["hi"][-1])
+        tonal_means.append(np.mean([vals[t] for t in TONAL])); wn.append(vals["White Noise"])
+    t, p = stats.ttest_rel(tonal_means, wn)
+    return t, p
 
 
 def _verdict(res, idx):
@@ -107,11 +148,22 @@ def old_vs_new_HI(seeds=range(25)):
         print("  -> tonal coherence significantly higher (hypothesis holds)")
     else:
         print("  -> no significant difference (hypothesis not supported)")
-    print("\nCONCLUSION: the flagship 'tonal signals -> more harmonic QA state' verdict does NOT")
-    print("replicate under the redesigned, discriminative HI (3/25 seeds; reversed and")
-    print("significant). Interpretation (not proven here): the old single-seed PASS looks like an")
-    print("artifact of the inert metric; a common scalar drive plausibly synchronizes the nodes")
-    print("regardless of signal type. Unchanged replication (amplitude not matched); reported as-is.")
+    # the same claim under the other config in the family (multiseed-eval variant)
+    tm, pm = _multiseed_family_check()
+    print(f"\n[5] FAMILY check -- multiseed-eval variant (coupling 0.12, amplitude-normalized "
+          f"generators):\n      seed-level paired t (n=8) tonal vs white-noise new-HI: "
+          f"t={tm:.2f}, p={pm:.3g} -> {'no significant difference' if pm>=0.05 else ('WN higher' if tm<0 else 'tonal higher')}")
+    print("\nCONCLUSION: across the signal-coherence flagship FAMILY, 'tonal signals -> more")
+    print("harmonic QA state' does NOT hold under the redesigned, discriminative HI: the final")
+    print("config REVERSES (white noise significantly higher), the multiseed/normalized config")
+    print("is NULL (no significant difference). The pisano/pac/tight_bounds variants share this")
+    print("tonal-vs-noise base, so they inherit the RISK to that shared HI-BASED claim only (not")
+    print("every result -- they run longer + add PAC/Pisano). Seismic (seismic_classifier_enhanced")
+    print(".py) uses HI only as a +/-0.5 tiebreaker AFTER P/S-timing + amplitude rules -- redesign")
+    print("expected not to change its verdict except borderline/tie cases. Interpretation (unproven):")
+    print("the old single-")
+    print("seed PASS was an inert-metric artifact. SCOPE: only HI/QASystem-dependent claims;")
+    print("Fibonacci-resonance/EEG/climate do not use HI and are untouched. Reported as-is.")
     return {
         "n_seeds": len(seeds), "old_pass": int(old_pass), "new_pass": int(new_pass),
         "new_margin_mean": float(margins.mean()), "new_margin_std": float(margins.std()),

@@ -1,0 +1,91 @@
+{
+  "target": {
+    "event_id": "quakeml:earthquake.usgs.gov/fdsnws/event/1/query?eventid=ci38457487&format=quakeml",
+    "origin_time": "2019-07-06T03:16:32.480000Z",
+    "latitude": 35.7253333,
+    "longitude": -117.5535,
+    "depth_km": 0.88,
+    "magnitude": 4.97,
+    "tag": "T_0",
+    "stations": [
+      "CI.ADO",
+      "CI.CWC",
+      "CI.EDW2",
+      "CI.FUR",
+      "CI.GSC",
+      "CI.ISA",
+      "CI.LRL",
+      "CI.MPM",
+      "CI.Q0056",
+      "CI.Q0061",
+      "CI.Q0068",
+      "CI.Q0072",
+      "CI.RRX",
+      "CI.SHO",
+      "CI.SLA",
+      "CI.VTV",
+      "NN.FMT",
+      "NN.GWY",
+      "NN.MCA",
+      "NN.QSM",
+      "PB.B916",
+      "PB.B917",
+      "PB.B918",
+      "PB.B921"
+    ]
+  },
+  "n_foreshocks": 17,
+  "n_aftershocks": 13,
+  "n_mismatched": 3,
+  "pre_registration": {
+    "replication": "combined co-located stack: coherence beats scramble null (p<0.01) AND >> distant control",
+    "time_symmetry": "foreshock-only AND aftershock-only stacks each beat null (p<0.01) and exceed the distant control",
+    "matched_significant_p": 0.01,
+    "band_hz": [
+      0.5,
+      2.0
+    ],
+    "win_s": 50.0,
+    "fs_hz": 20.0,
+    "modulus": 24,
+    "kmin_events": 3,
+    "snr_min": 2.0,
+    "n_null": 5000,
+    "note": "second target; fore/after split by origin time; criteria fixed before run"
+  },
+  "results": {
+    "combined": {
+      "n_stations": 20,
+      "coherence": 0.7579316630603682,
+      "coherence_full": 0.7668703061666138,
+      "scramble_p": 0.0001999600079984003,
+      "null_mean": 0.1981329530930558
+    },
+    "foreshock": {
+      "n_stations": 20,
+      "coherence": 0.6616765864087407,
+      "coherence_full": 0.6748751192804543,
+      "scramble_p": 0.0003999200159968006,
+      "null_mean": 0.19761780259966655
+    },
+    "aftershock": {
+      "n_stations": 19,
+      "coherence": 0.4474215775147171,
+      "coherence_full": 0.4490174762599937,
+      "scramble_p": 0.020195960807838434,
+      "null_mean": 0.20498999546072164
+    },
+    "mismatched": {
+      "n_stations": 17,
+      "coherence": 0.2862897773489924,
+      "coherence_full": 0.31063324987543117,
+      "scramble_p": 0.2429514097180564,
+      "null_mean": 0.21495034086448567
+    }
+  },
+  "decision": {
+    "replication": true,
+    "time_symmetry": false,
+    "verdict": "REPLICATED_ONLY"
+  }
+}

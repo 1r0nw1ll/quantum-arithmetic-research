@@ -150,6 +150,8 @@ is literally the "past side" of the time-reversal mirror.
 | combined (30) | **0.758** | **0.0002** | 20 |
 | foreshock (17) | **0.662** | **0.0004** | 20 |
 | aftershock (13) | 0.447 | 0.0202 | 19 |
+| foreshock, count-balanced (13) | **0.592** | **0.0002** | 20 |
+| aftershock, count-balanced (13) | 0.447 | 0.0194 | 19 |
 | distant control | 0.286 | 0.24 (null) | 17 |
 
 **(R) Replication — CONFIRMED.** The second, independent target reproduces the
@@ -160,13 +162,21 @@ stacked-EGF specificity is not event-specific.
 target) is strongly significant (0.662, p = 0.0004), demonstrating medium
 time-invariance on the past side — the physically important new result.
 
-**(T) Full time-symmetry — PARTIAL.** The aftershock-only arm is positive and beats
-the control but misses the strict p < 0.01 bar (0.447, p = 0.0202). This tracks event
-count, not a real time-asymmetry: p falls monotonically with stack size
-(13 → 0.020, 17 → 0.0004, 30 → 0.0002), and T2 sits early in the sequence so its
-"foreshock" pool (the rich M6.4 aftershock cloud) outnumbers its "aftershock" pool.
-Pre-registered verdict **REPLICATED_ONLY** (both arms would need p < 0.01 for full
-symmetry). Result record: `results/seismic/qa_seismic_egf_foreshock_results.json`.
+**(T) Full time-symmetry — PARTIAL, and a count-balanced check corrects the first
+reading.** The aftershock-only arm beats the control but misses the strict p < 0.01
+bar (0.447, p = 0.020). A count-balanced follow-up (13 events each, matched magnitude
+ranges M3.2–4.6 vs M3.0–4.5) shows this is **not** merely a count effect: the balanced
+foreshock arm still clears cleanly (0.592, p = 0.0002) while the balanced aftershock
+arm stays sub-threshold (0.447, p = 0.019). So there is a mild *real* difference for
+this target — most plausibly a **data artifact of T2's placement**: T2 (03:16:32) sits
+**3 minutes before the M7.1 mainshock** (03:19:53), so its aftershock windows are
+contaminated by the M7.1 and its immediate cascade, whereas its foreshocks come from
+the cleaner M6.4 sequence. This is a target-specific contamination, **not** a violation
+of medium time-invariance: the foreshock EGF itself works cleanly (p = 0.0002), which
+is the physical point. A fully clean time-symmetry test would use a target whose
+aftershock window is not overprinted by a larger event. Pre-registered verdict
+**REPLICATED_ONLY** (full symmetry needs both arms at p < 0.01). Result record:
+`results/seismic/qa_seismic_egf_foreshock_results.json`.
 
 ## Primary sources
 

@@ -131,18 +131,33 @@ def main():
 
     fore = [e for e in man["matched"] if UTCDateTime(e["origin_time"]) < oT]
     after = [e for e in man["matched"] if UTCDateTime(e["origin_time"]) > oT]
+    # count-balanced arms: equal event counts, largest-magnitude of each (matched data
+    # quality) -> separates a pure count effect from a real time-asymmetry.
+    kbal = min(len(fore), len(after))
+    fore_bal = sorted(fore, key=lambda e: -e["magnitude"])[:kbal]
+    after_bal = sorted(after, key=lambda e: -e["magnitude"])[:kbal]
+
+    def mag_range(evs):
+        ms = [e["magnitude"] for e in evs]
+        return f"M{min(ms):.1f}-{max(ms):.1f}" if ms else "-"
+
     print(f"T2 = M{man['T']['magnitude']} at ({man['T']['latitude']:.3f},{man['T']['longitude']:.3f}); "
           f"matched {len(man['matched'])} = {len(fore)} foreshocks + {len(after)} aftershocks; "
           f"distant control {len(man['mismatched'])} events")
+    print(f"count-balanced arms: {kbal} each -- foreshock {mag_range(fore_bal)}, "
+          f"aftershock {mag_range(after_bal)}")
     print(f"PRE-REGISTERED: {json.dumps(PREREG)}\n")
 
     res = {
         "combined": evaluate(man["matched"], KMIN),
         "foreshock": evaluate(fore, KMIN),
         "aftershock": evaluate(after, KMIN),
+        "foreshock_balanced": evaluate(fore_bal, KMIN),
+        "aftershock_balanced": evaluate(after_bal, KMIN),
         "mismatched": evaluate(man["mismatched"], 1),
     }
-    for name in ("combined", "foreshock", "aftershock", "mismatched"):
+    for name in ("combined", "foreshock", "aftershock", "foreshock_balanced",
+                 "aftershock_balanced", "mismatched"):
         r = res[name]
         if r.get("insufficient"):
             print(f"[{name:>10}] insufficient stations ({r['n_stations']})")
@@ -157,9 +172,14 @@ def main():
 
     replication = ok(res["combined"])
     time_symmetry = ok(res["foreshock"]) and ok(res["aftershock"])
+    time_symmetry_balanced = ok(res["foreshock_balanced"]) and ok(res["aftershock_balanced"])
     print(f"\nDECISION (pre-registered):")
     print(f"  (R) REPLICATION on second target (combined beats null & > control): {replication}")
-    print(f"  (T) TIME-SYMMETRY (foreshock AND aftershock each beat null & > control): {time_symmetry}")
+    print(f"  (T) TIME-SYMMETRY, all events (fore & after each beat null & > control): {time_symmetry}")
+    print(f"  (T-bal) DIAGNOSTIC (not part of the verdict), count-balanced {kbal} each "
+          f"(isolates count vs real asymmetry): {time_symmetry_balanced}")
+    # verdict follows the PRE-REGISTERED time_symmetry (all events); the balanced arm is
+    # a post-hoc diagnostic reported alongside, never a verdict input.
     verdict = ("SUPPORTED" if (replication and time_symmetry) else
                "REPLICATED_ONLY" if replication else
                "PARTIAL" if (ok(res["foreshock"]) or ok(res["aftershock"])) else "NOT_SUPPORTED")
@@ -168,8 +188,9 @@ def main():
     out = Path("results/seismic"); out.mkdir(parents=True, exist_ok=True)
     (out / "qa_seismic_egf_foreshock_results.json").write_text(json.dumps({
         "target": man["T"], "n_foreshocks": len(fore), "n_aftershocks": len(after),
-        "n_mismatched": len(man["mismatched"]), "pre_registration": PREREG,
+        "n_balanced_each": kbal, "n_mismatched": len(man["mismatched"]), "pre_registration": PREREG,
         "results": res, "decision": {"replication": replication, "time_symmetry": time_symmetry,
+                                      "time_symmetry_balanced": time_symmetry_balanced,
                                       "verdict": verdict}}, indent=2))
     print("\nsaved -> results/seismic/qa_seismic_egf_foreshock_results.json")
 

@@ -36,6 +36,7 @@
   },
   "n_foreshocks": 17,
   "n_aftershocks": 13,
+  "n_balanced_each": 13,
   "n_mismatched": 3,
   "pre_registration": {
     "replication": "combined co-located stack: coherence beats scramble null (p<0.01) AND >> distant control",
@@ -75,17 +76,32 @@
       "scramble_p": 0.020195960807838434,
       "null_mean": 0.20498999546072164
     },
+    "foreshock_balanced": {
+      "n_stations": 20,
+      "coherence": 0.5919042921140935,
+      "coherence_full": 0.6099827542773768,
+      "scramble_p": 0.0001999600079984003,
+      "null_mean": 0.1975157116707167
+    },
+    "aftershock_balanced": {
+      "n_stations": 19,
+      "coherence": 0.4474215775147171,
+      "coherence_full": 0.4490174762599937,
+      "scramble_p": 0.019396120775844832,
+      "null_mean": 0.20713965116047311
+    },
     "mismatched": {
       "n_stations": 17,
       "coherence": 0.2862897773489924,
       "coherence_full": 0.31063324987543117,
-      "scramble_p": 0.2429514097180564,
-      "null_mean": 0.21495034086448567
+      "scramble_p": 0.254749050189962,
+      "null_mean": 0.21584093473329302
     }
   },
   "decision": {
     "replication": true,
     "time_symmetry": false,
+    "time_symmetry_balanced": false,
     "verdict": "REPLICATED_ONLY"
   }
 }

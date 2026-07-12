@@ -1,53 +1,64 @@
-# RETRACTION — the "golden structure of QA" arc (2026-07-11/12)
+# ERRATA & CORRECTION — the "golden structure of QA" arc
 
-Commits `ce1c1a21`..`cf574718`. Files: `qa_golden_determinism.py`, `qa_golden_zpf_*.py`,
-`qa_holographic_*.py`, `qa_energy_scaling.py`, `qa_magnetic_pinch.py`, `qa_coherence_energy.py`,
-`qa_golden_broken_symmetry.py`, `qa_phyllotaxis_diffraction.py`, `qa_icosahedral_quasicrystal.py`,
-`qa_cut_and_project.py`, `qa_padic_window.py`, `qa_adelic_balance.py`, `qa_nt_violations.py`,
-`qa_firewall_polarity.py`, `qa_two_archetypes.py`.
+Two errors, in opposite directions. This document records both and the corrected position.
+Commits `ce1c1a21`..`0fcf00c8`, corrected by `qa_golden_exact.py`.
 
-## The error
+## Correction 2 (2026-07-12) — the retraction itself over-reached
 
-Audit (2026-07-12): of the 20 arc files, **15 are centrally continuous real-number
-mathematics** (φ = (1+√5)/2, √5, real embeddings, diffraction, cut-and-project). φ is
-**irrational — it cannot exist in any A1 state {1..m}**. Individual files invoke `PHI` 63, 68,
-88 times: the irrational object is not a readout, it **is** the content.
+The retraction below (Correction 1) claimed the golden arc was **continuous** mathematics
+"because φ is irrational, so it cannot be a discrete QA object." **That is a category error:
+it conflates IRRATIONAL with INEXACT.**
 
-**Every one of the 20 files carries the `RT1_OBSERVER_FILE` marker**, which exempts a file's
-continuous math from the discreteness linter on the grounds that it is a *readout of a genuine
-discrete QA state*. In the 15 continuous files there was no discrete state being read out. The
-exemption was used to move the entire object into the continuum and then present it as QA's
-**discrete** structure. That is the mechanism of the error.
+φ = (1+√5)/2 is the regular-pentagon ratio — **exactly straightedge-and-compass
+constructible** — and ℤ[φ] is **exact integer arithmetic** on pairs (a,b)=a+bφ (add
+componentwise; multiply via φ²=φ+1; ×φ is (a,b)→(b,a+b)). Even the **ordering** of ℤ[φ] is
+exactly decidable in integers, with √5 never evaluated (sign of a+bφ = compare (2a+b)² to 5b²).
 
-## It is a disproof, not a discovery
+`qa_golden_exact.py` rebuilds the cut-and-project Fibonacci quasicrystal in **pure exact integer
+arithmetic, zero floats** (linter-clean with **no** `RT1_OBSERVER_FILE` exemption): 261 points,
+exactly two tiles (1 and φ), tile ratio verified = φ by the integer identity φ·(1,0)=(0,1). The
+golden structure is therefore an **exactly discrete-constructible object** — consistent with
+Volk's / QA's actual exact-geometry ethos (exact integer m:n winding ratios, exact geometric
+construction; the whitepaper maps Fibonacci winding into (b,e,d,a)).
 
-`qa_cut_and_project.py` (Phase L) established that **Fibonacci mod m is Pisano-periodic and
-structureless** — the golden quasicrystalline order exists only in the unreduced continuum, and
-mod-m reduction (the actual QA discrete layer) **destroys** it. That is a *disproof* of the
-QA↔golden-structure claim. It was mis-framed as a "reframe," and eight further phases then
-elaborated the continuous object that had just been shown not to be QA.
+**So the arc's real error was NARROWER than the retraction claimed:** it computed the golden
+structure with drift-prone **floats** (`PHI = (1+math.sqrt(5))/2`, `np.cos`, …) and hid them
+behind `RT1_OBSERVER_FILE`, instead of exact ℤ[φ]. That is a fixable *implementation* flaw, not
+a proof that the object is "continuous / not QA." The mathematics in the arc was correct; the
+representation was sloppy.
 
-## Retracted
+## Corrected net position
 
-The claim that QA's **discrete** layer possesses golden / quasicrystalline / E8-icosian / adelic
-structure. It does not. The discrete QA orbit (mod m) is periodic and carries none of it.
+- The golden structure (Fibonacci, ℤ[φ], quasicrystal, cut-and-project, E8/icosian) is an
+  **exact, discrete, constructible** object. NOT retracted as "continuous."
+- The arc's genuine flaw: **float implementation + RT1-exemption** where exact ℤ[φ] was
+  available and correct. Remediated by `qa_golden_exact.py` (the pattern others should follow).
+- **Phase L still holds, narrowly:** reducing **mod m** destroys the structure (Fibonacci mod m
+  is Pisano-periodic). This is a fact about the mod-m *reduction*, NOT about φ's nature. The
+  unreduced exact ℤ[φ] object retains the structure. So the honest distinction is:
+  QA-as-exact-geometry (Volk) *has* the golden structure; QA-as-strict-mod-m-reduction loses it.
+- The overclaim that remains retracted: presenting **float diffraction readouts as QA's
+  structure** without doing the exact construction, and using the observer-exemption to do it.
+- `qa_nonunit_experiment.py` is separately flawed (it used a float regression — the operation
+  QA forbids — and classified by ring-unit-ness, which is beside QA's exactness point).
+- Prior empirical work (EEG / seismic / climate) is independent of this arc.
 
-## What stands (correct, but not what it was labeled)
+## The rule, corrected
 
-- **The mathematics is correct** — it is standard number theory about φ (Baake–Grimm aperiodic
-  order, Elser–Sloane E8/icosian, adelic dynamics), correctly derived. It is simply **not a
-  property of QA's discrete state**; it is about the real continuum.
-- **The genuine QA-discrete results**, which survive: mod-m orbits are periodic/structureless
-  (the disproof above); `qa_exact_scramble.py` (integer permutation, needs no φ) shows exact
-  arithmetic is required for reversible/chaotic computation past a drift horizon (~N=40) and
-  ties float below it; `qa_float_drift.py` demonstrates the same drift mechanism.
-- **The `qa_nonunit_experiment.py` is itself flawed** — it classified generators by ring-unit-
-  ness (irrelevant to QA) using a *float* least-squares regression (the exact operation QA
-  forbids). Superseded by the exactness framing.
-- Prior empirical work (EEG / seismic / climate) is independent of this arc and unaffected.
+`RT1_OBSERVER_FILE` is for reading out a genuine QA state, not for making a continuous *float*
+the content. But the fix for a golden/φ computation is **not** to declare it "not QA" — it is
+to do it in **exact ℤ[φ] integer arithmetic** (as `qa_golden_exact.py` does). Irrational ≠
+inexact: an exactly-constructible algebraic quantity is a legitimate discrete QA object.
 
-## Rule going forward
+---
 
-`RT1_OBSERVER_FILE` is for reading out a genuine integer / mod-m QA state. It is **not** a
-license to make a continuous object the content and exempt it. If φ — or any irrational/float —
-is load-bearing in a claim about QA *structure*, the claim is about the continuum, not QA.
+## Correction 1 (2026-07-12, superseded above) — original retraction
+
+[Kept for provenance. Its core claim ("golden structure is continuous, therefore not QA") is
+**withdrawn** by Correction 2 above; irrational ≠ inexact.]
+
+Audit: of the 20 arc files, 15 are centrally φ/√5/real and all carry `RT1_OBSERVER_FILE`. I
+concluded the golden structure was continuous and not QA. That conclusion was wrong — the
+structure is exactly ℤ[φ]-constructible (see Correction 2). What was correct in the original
+retraction: the arc *implemented* it in floats behind the observer-exemption, and mod-m
+reduction destroys the structure (Phase L).

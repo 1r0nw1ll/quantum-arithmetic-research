@@ -25,6 +25,7 @@ DEFAULT_TRANSCRIPT = Path("results/self_improving_neural_qa/loop_transcript.json
 DEFAULT_ACTIVE_PROPOSAL_GLOB = "results/self_improving_neural_qa/curriculum_proposals/*.json"
 DEFAULT_ARCHIVE_GLOB = "results/self_improving_neural_qa/curriculum_archive/**/qa_curriculum_lifecycle_*.json"
 DEFAULT_NEURAL_GLOB = "experiments/qa_ml/results_sinqa_neural_general_adapter*.json"
+DEFAULT_PRUNE_PLAN_GLOB = "results/self_improving_neural_qa/prune_plans/qa_sinqa_artifact_prune_plan_*.json"
 DEFAULT_LAUNCHD_PLIST = Path("/Users/player3/Library/LaunchAgents/com.qa.self-improving-neural-qa.plist")
 CURRENT_FOCUSED_CHECK_MIN_RUN = 13
 CURRENT_FOCUSED_CHECK_COUNT = 6
@@ -171,6 +172,36 @@ def launchd_status(plist_path: Path) -> dict[str, Any]:
     }
 
 
+def latest_prune_plan(glob_pattern: str) -> dict[str, Any]:
+    paths = iter_glob_paths(glob_pattern)
+    if not paths:
+        return {"exists": False, "group_count": 0, "prune_candidate_count": 0}
+    best: tuple[int, Path] | None = None
+    for path in paths:
+        try:
+            mtime = path.stat().st_mtime_ns
+        except OSError:
+            continue
+        if best is None or mtime > best[0]:
+            best = (mtime, path)
+    if best is None:
+        return {"exists": False, "group_count": 0, "prune_candidate_count": 0}
+    path = best[1]
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001 - status should report parse failures.
+        return {"exists": True, "ok": False, "path": str(path), "error": str(exc)}
+    return {
+        "exists": True,
+        "ok": obj.get("schema_version") == "QA_SINQA_ARTIFACT_PRUNE_PLAN.v0",
+        "path": str(path),
+        "plan_hash": obj.get("plan_hash"),
+        "group_count": obj.get("group_count"),
+        "prune_candidate_count": obj.get("prune_candidate_count"),
+        "mode": obj.get("mode"),
+    }
+
+
 def build_status(args: argparse.Namespace) -> dict[str, Any]:
     scheduler_rows, scheduler_errors = read_jsonl(args.scheduler_log)
     latest_record = scheduler_rows[-1] if scheduler_rows else {}
@@ -187,6 +218,7 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
     active_paths = iter_glob_paths(args.active_proposal_glob)
     archive_paths = iter_glob_paths(args.archive_glob)
     archive = validate_lifecycle_paths(archive_paths)
+    prune = latest_prune_plan(args.prune_plan_glob)
 
     latest_run_ok = latest_record.get("ok") is True
     lifecycle = lifecycle_check_state(latest_record)
@@ -238,6 +270,7 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
             "archive_ok": archive.get("ok"),
             "lifecycle_checks": lifecycle,
         },
+        "prune": prune,
         "launchd": launchd_status(args.launchd_plist),
     }
 
@@ -248,6 +281,7 @@ def print_text(status: dict[str, Any]) -> None:
     ledger = status["ledger"]
     transcript = status["transcript"]
     curriculum = status["curriculum"]
+    prune = status["prune"]
     launchd = status["launchd"]
     print(f"SINQA status: {'OK' if status['ok'] else 'ATTENTION'}")
     print(
@@ -272,6 +306,11 @@ def print_text(status: dict[str, Any]) -> None:
         f"archive_ok={curriculum['archive_ok']} lifecycle_checks="
         f"{lifecycle['active_ok'] and lifecycle['archive_ok']}"
     )
+    if prune["exists"]:
+        print(
+            f"prune: groups={prune.get('group_count')} candidates={prune.get('prune_candidate_count')} "
+            f"mode={prune.get('mode')}"
+        )
     print(
         f"launchd: configured={launchd['configured']} interval={launchd.get('start_interval_sec')} "
         f"python314={launchd.get('uses_python314')}"
@@ -326,6 +365,7 @@ def self_test() -> dict[str, Any]:
             active_proposal_glob=str(active),
             archive_glob=str(archive),
             neural_glob=str(root / "missing*.json"),
+            prune_plan_glob=str(root / "missing_prune*.json"),
             launchd_plist=root / "missing.plist",
         )
         status = build_status(args)
@@ -346,6 +386,7 @@ def main() -> int:
     parser.add_argument("--active-proposal-glob", default=DEFAULT_ACTIVE_PROPOSAL_GLOB)
     parser.add_argument("--archive-glob", default=DEFAULT_ARCHIVE_GLOB)
     parser.add_argument("--neural-glob", default=DEFAULT_NEURAL_GLOB)
+    parser.add_argument("--prune-plan-glob", default=DEFAULT_PRUNE_PLAN_GLOB)
     parser.add_argument("--launchd-plist", type=Path, default=DEFAULT_LAUNCHD_PLIST)
     parser.add_argument("--text", action="store_true")
     parser.add_argument("--self-test", action="store_true")

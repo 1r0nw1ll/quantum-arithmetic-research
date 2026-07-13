@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.qa.self-improving-neural-qa</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/opt/python@3.14/bin/python3.14</string>
+    <string>/Users/player3/signal_experiments/tools/qa_self_improving_neural_qa_scheduled_run.py</string>
+    <string>--rounds-per-run</string>
+    <string>2</string>
+    <string>--glob</string>
+    <string>results/**/*correction_replay*.json</string>
+    <string>--config-glob</string>
+    <string>results/**/*sinqa_config_proposal*.json</string>
+    <string>--runtime-config</string>
+    <string>results/self_improving_neural_qa/runtime/qa_general_ml_adapter_config.json</string>
+    <string>--train-general-ml-neural</string>
+    <string>--neural-worker-out-dir</string>
+    <string>experiments/qa_ml</string>
+    <string>--neural-worker-state</string>
+    <string>results/self_improving_neural_qa/general_ml/neural_worker_state.json</string>
+    <string>--curriculum-registry</string>
+    <string>results/self_improving_neural_qa/curriculum_registry.json</string>
+    <string>--neural-worker-max-steps</string>
+    <string>60</string>
+    <string>--producer-source-glob</string>
+    <string>experiments/qa_ml/results_*.json</string>
+    <string>--producer-max-emits</string>
+    <string>1</string>
+    <string>--produce-capacity-proposals</string>
+    <string>--capacity-producer-max-emits</string>
+    <string>1</string>
+    <string>--discover-curriculum</string>
+    <string>--curriculum-proposal-out-dir</string>
+    <string>results/self_improving_neural_qa/curriculum_proposals</string>
+    <string>--curriculum-discovery-max-emits</string>
+    <string>1</string>
+    <string>--max-accepted-per-run</string>
+    <string>1</string>
+    <string>--max-rejected-per-run</string>
+    <string>1</string>
+    <string>--meta-every</string>
+    <string>12</string>
+    <string>--meta-fast</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/player3/signal_experiments</string>
+
+  <key>StartInterval</key>
+  <integer>900</integer>
+
+  <key>StandardOutPath</key>
+  <string>/Users/player3/signal_experiments/results/self_improving_neural_qa/launchd.stdout.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/player3/signal_experiments/results/self_improving_neural_qa/launchd.stderr.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

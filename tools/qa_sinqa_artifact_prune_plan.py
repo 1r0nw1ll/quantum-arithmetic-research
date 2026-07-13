@@ -21,7 +21,7 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-from qa_sinqa_artifact_prune_plan_validate import DEFAULT_REFERENCE_GLOBS, validate_plan
+from qa_sinqa_artifact_prune_plan_validate import DEFAULT_REFERENCE_GLOBS, collect_referenced_paths, validate_plan
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -246,9 +246,37 @@ def group_artifacts(paths: list[Path], min_group_size: int) -> tuple[list[dict[s
     return prune_groups, counts
 
 
+def exclude_referenced_candidates(groups: list[dict[str, Any]], reference_globs: list[str]) -> tuple[list[dict[str, Any]], int]:
+    references = collect_referenced_paths(reference_globs)
+    filtered_groups = []
+    excluded = 0
+    for group in groups:
+        candidates = []
+        for artifact in group.get("prune_candidates", []):
+            artifact_path = artifact.get("path")
+            if not isinstance(artifact_path, str):
+                continue
+            rel = repo_relative(resolve_path(Path(artifact_path)))
+            if rel in references:
+                excluded += 1
+                continue
+            candidates.append(artifact)
+        if not candidates:
+            continue
+        next_group = dict(group)
+        next_group["prune_candidates"] = candidates
+        next_group["count"] = len(candidates) + 1
+        filtered_groups.append(next_group)
+    filtered_groups.sort(key=lambda item: (-len(item["prune_candidates"]), item["signature_hash"]))
+    return filtered_groups, excluded
+
+
 def build_plan(args: argparse.Namespace) -> dict[str, Any]:
     paths = iter_glob_paths(args.glob)
     groups, counts = group_artifacts(paths, args.min_group_size)
+    referenced_excluded = 0
+    if getattr(args, "exclude_referenced_candidates", False):
+        groups, referenced_excluded = exclude_referenced_candidates(groups, args.reference_glob or DEFAULT_REFERENCE_GLOBS)
     if args.max_groups >= 0:
         groups = groups[: args.max_groups]
     total_prune = sum(len(group["prune_candidates"]) for group in groups)
@@ -262,8 +290,9 @@ def build_plan(args: argparse.Namespace) -> dict[str, Any]:
             "max_groups": args.max_groups,
             "keep_policy": "latest_mtime_per_signature",
             "apply_requires_explicit_flag": True,
+            "exclude_referenced_candidates": bool(getattr(args, "exclude_referenced_candidates", False)),
         },
-        "scan": counts,
+        "scan": {**counts, "referenced_excluded": referenced_excluded},
         "group_count": len(groups),
         "prune_candidate_count": total_prune,
         "groups": groups,
@@ -325,6 +354,8 @@ def self_test() -> dict[str, Any]:
             min_group_size=2,
             max_groups=-1,
             apply=False,
+            reference_glob=[],
+            exclude_referenced_candidates=False,
         )
         plan = build_plan(args)
         ok = plan["group_count"] == 1 and plan["prune_candidate_count"] == 2 and plan["groups"][0]["keep"]["path"].endswith("run0003.json")
@@ -340,6 +371,7 @@ def main() -> int:
     parser.add_argument("--max-groups", type=int, default=-1)
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--reference-glob", action="append", default=None)
+    parser.add_argument("--exclude-referenced-candidates", action="store_true")
     parser.add_argument("--allow-referenced-archive", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()

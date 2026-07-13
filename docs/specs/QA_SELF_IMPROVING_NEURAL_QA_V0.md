@@ -225,6 +225,8 @@ checks counts and duplicate paths, and fails closed when a prune candidate is
 still referenced by SINQA provenance such as the ledger, loop transcript,
 supervisor state, or packet files. Referenced artifacts require an archive
 resolver or explicit reference-preserving migration before they can move.
+Use `--exclude-referenced-candidates` to emit a smaller archive-safe plan that
+prunes only currently unreferenced candidates.
 
 ## Existing Project Anchors
 

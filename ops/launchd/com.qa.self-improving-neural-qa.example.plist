@@ -52,7 +52,7 @@
   <string>/Users/player3/signal_experiments</string>
 
   <key>StartInterval</key>
-  <integer>900</integer>
+  <integer>3600</integer>
 
   <key>StandardOutPath</key>
   <string>/Users/player3/signal_experiments/results/self_improving_neural_qa/launchd.stdout.log</string>

@@ -1,0 +1,30 @@
+{
+  "schema_version": "QA_SELF_IMPROVING_NEURAL_QA_CURRICULUM_REGISTRY.v0",
+  "selection_policy": "round_robin_enabled",
+  "tasks": [
+    {
+      "baseline_control": "baseline_majority",
+      "candidate_control_template": "neural_adapter_rank{rank}",
+      "description": "Synthetic integer QA residue-classification task over held-out moduli. Promotion remains replay-gated by SINQA.",
+      "enabled": true,
+      "metric": "balanced_accuracy",
+      "result_schema": "QA_GENERAL_ML_NEURAL_ADAPTER_QA_RESIDUE.v0",
+      "task_id": "qa_residue_mod3",
+      "task_type": "qa_residue_mod3",
+      "test_moduli": [33, 45, 60, 75],
+      "train_moduli": [7, 8, 9, 10, 11, 12, 15, 18, 20, 21, 24, 27, 30, 36]
+    },
+    {
+      "baseline_control": "baseline_static_selector",
+      "candidate_control_template": "neural_benchmark_selector_rank{rank}",
+      "description": "Neural selector over existing project QA-ML paired-control benchmark summaries. Promotion remains replay-gated by SINQA.",
+      "enabled": true,
+      "metric": "valid_rate_mean",
+      "result_schema": "QA_GENERAL_ML_NEURAL_BENCHMARK_SELECTOR.v0",
+      "source_glob": "experiments/qa_ml/results_pepe_ch2_qa_mol1_generalized_path_benchmark.json",
+      "static_source_control": "full_unconstrained_unseeded",
+      "task_id": "qa_ml_benchmark_selector",
+      "task_type": "qa_ml_benchmark_selector"
+    }
+  ]
+}

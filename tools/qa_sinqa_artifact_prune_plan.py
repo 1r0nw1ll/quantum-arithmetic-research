@@ -21,6 +21,8 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+from qa_sinqa_artifact_prune_plan_validate import DEFAULT_REFERENCE_GLOBS, validate_plan
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_VERSION = "QA_SINQA_ARTIFACT_PRUNE_PLAN.v0"
@@ -337,6 +339,8 @@ def main() -> int:
     parser.add_argument("--min-group-size", type=int, default=2)
     parser.add_argument("--max-groups", type=int, default=-1)
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--reference-glob", action="append", default=None)
+    parser.add_argument("--allow-referenced-archive", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.glob is None:
@@ -361,10 +365,16 @@ def main() -> int:
         "applied": False,
     }
     if args.apply:
-        apply_result = apply_plan(plan)
-        result["applied"] = True
-        result["apply"] = apply_result
-        result["ok"] = apply_result["ok"]
+        validation = validate_plan(out_path, args.reference_glob or DEFAULT_REFERENCE_GLOBS, args.allow_referenced_archive)
+        result["pre_apply_validation"] = validation
+        if validation["ok"]:
+            apply_result = apply_plan(plan)
+            result["applied"] = True
+            result["apply"] = apply_result
+            result["ok"] = apply_result["ok"]
+        else:
+            result["applied"] = False
+            result["ok"] = False
     print(json.dumps(result, sort_keys=True))
     return 0 if result["ok"] else 1
 

@@ -211,6 +211,21 @@ ledger; `tools/qa_self_improving_neural_qa_scheduled_run.py` runs neural
 training, then this producer, then the supervisor. The existing replay gate
 decides whether each new artifact is accepted or rejected.
 
+## Artifact Pruning
+
+Repetitive generated artifacts may be planned for archive, but archive is not
+the same as deletion. `tools/qa_sinqa_artifact_prune_plan.py` emits a
+hash-bound plan that groups equivalent neural result, replay, rule, rollback,
+and config-proposal artifacts by stable signature and keeps the latest artifact
+in each group.
+
+Before any archive operation, `tools/qa_sinqa_artifact_prune_plan_validate.py`
+must pass. It recomputes the plan hash, verifies every keep/candidate file hash,
+checks counts and duplicate paths, and fails closed when a prune candidate is
+still referenced by SINQA provenance such as the ledger, loop transcript,
+supervisor state, or packet files. Referenced artifacts require an archive
+resolver or explicit reference-preserving migration before they can move.
+
 ## Existing Project Anchors
 
 - `qa_lab/agents/self_improvement_agent_v2.py`: level-tagged, Lyapunov-gated

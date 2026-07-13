@@ -172,7 +172,7 @@ def launchd_status(plist_path: Path) -> dict[str, Any]:
     }
 
 
-def latest_prune_plan(glob_pattern: str) -> dict[str, Any]:
+def latest_prune_plan(glob_pattern: str, validate_prune_plan: Any | None = None) -> dict[str, Any]:
     paths = iter_glob_paths(glob_pattern)
     if not paths:
         return {"exists": False, "group_count": 0, "prune_candidate_count": 0}
@@ -191,7 +191,7 @@ def latest_prune_plan(glob_pattern: str) -> dict[str, Any]:
         obj = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:  # noqa: BLE001 - status should report parse failures.
         return {"exists": True, "ok": False, "path": str(path), "error": str(exc)}
-    return {
+    result = {
         "exists": True,
         "ok": obj.get("schema_version") == "QA_SINQA_ARTIFACT_PRUNE_PLAN.v0",
         "path": str(path),
@@ -200,6 +200,12 @@ def latest_prune_plan(glob_pattern: str) -> dict[str, Any]:
         "prune_candidate_count": obj.get("prune_candidate_count"),
         "mode": obj.get("mode"),
     }
+    if validate_prune_plan is not None:
+        validation = validate_prune_plan(path)
+        result["archive_safe"] = validation.get("ok") is True
+        result["referenced_candidate_count"] = validation.get("referenced_candidate_count")
+        result["validation_errors"] = validation.get("errors", [])[:3]
+    return result
 
 
 def build_status(args: argparse.Namespace) -> dict[str, Any]:
@@ -212,13 +218,14 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
         "validate_transcript",
     )
     validate_lifecycle_paths = load_tool_function("qa_curriculum_lifecycle.py", "validate_lifecycle_paths")
+    validate_prune_plan_fn = load_tool_function("qa_sinqa_artifact_prune_plan_validate.py", "validate_plan")
 
     ledger = validate_ledger(resolve_path(args.ledger))
     transcript = validate_transcript(resolve_path(args.transcript))
     active_paths = iter_glob_paths(args.active_proposal_glob)
     archive_paths = iter_glob_paths(args.archive_glob)
     archive = validate_lifecycle_paths(archive_paths)
-    prune = latest_prune_plan(args.prune_plan_glob)
+    prune = latest_prune_plan(args.prune_plan_glob, validate_prune_plan_fn)
 
     latest_run_ok = latest_record.get("ok") is True
     lifecycle = lifecycle_check_state(latest_record)
@@ -309,7 +316,8 @@ def print_text(status: dict[str, Any]) -> None:
     if prune["exists"]:
         print(
             f"prune: groups={prune.get('group_count')} candidates={prune.get('prune_candidate_count')} "
-            f"mode={prune.get('mode')}"
+            f"mode={prune.get('mode')} archive_safe={prune.get('archive_safe')} "
+            f"referenced={prune.get('referenced_candidate_count')}"
         )
     print(
         f"launchd: configured={launchd['configured']} interval={launchd.get('start_interval_sec')} "

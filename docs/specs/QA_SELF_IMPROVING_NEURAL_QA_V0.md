@@ -246,6 +246,26 @@ promotion. `tools/qa_self_improving_neural_qa_status.py --text` includes the
 current anti-forgetting summary, and the scheduled runner executes a bounded
 anti-forgetting focused check after archive-safe prune planning.
 
+## Prioritized Replay Sampling
+
+`tools/qa_self_improving_neural_qa_prioritized_replay.py` builds the bounded
+training-memory view used by later neural workers. It reads the append-only
+SINQA ledger, verifies each sampled packet's evidence artifact by recomputing
+the same domain-separated `evidence.source_replay_hash`, and writes a canonical
+sample under `results/self_improving_neural_qa/prioritized_replay/`.
+
+Priority is intentionally not largest-domain-first. The sampler raises failed
+safety cases, protected-harm attempts, and no-fix candidates, then adds accepted
+zero-harm examples so training batches contain both negative and positive
+experience. It also applies a `--max-per-domain` cap, so the legacy HSI backlog
+cannot monopolize the replay batch when general-ML evidence is available.
+
+Legacy ledger rows whose source evidence is missing or hash-mismatched are
+reported as unavailable and excluded from the sample. That keeps the replay
+memory usable for training without hiding provenance gaps. Status reporting
+includes selected count, eligible count, unavailable count, domain mix, decision
+mix, and source-integrity failures.
+
 ## Activation Canary
 
 Accepted `configuration_patch` and `capacity_patch` packets may change model

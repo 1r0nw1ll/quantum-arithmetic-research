@@ -27,6 +27,7 @@ DEFAULT_ARCHIVE_GLOB = "results/self_improving_neural_qa/curriculum_archive/**/q
 DEFAULT_NEURAL_GLOB = "experiments/qa_ml/results_sinqa_neural_general_adapter*.json"
 DEFAULT_PRUNE_PLAN_GLOB = "results/self_improving_neural_qa/prune_plans/qa_sinqa_artifact_prune_plan_*.json"
 DEFAULT_ACTIVATION_CANARY_GLOB = "results/self_improving_neural_qa/activation_canary/results/*_activation_canary.json"
+DEFAULT_PRIORITIZED_REPLAY_GLOB = "results/self_improving_neural_qa/prioritized_replay/qa_sinqa_prioritized_replay_*.json"
 DEFAULT_RUNTIME_CONFIG = Path("results/self_improving_neural_qa/runtime/qa_general_ml_adapter_config.json")
 DEFAULT_LAUNCHD_PLIST = Path("/Users/player3/Library/LaunchAgents/com.qa.self-improving-neural-qa.plist")
 DEFAULT_TREND_WINDOW = 20
@@ -284,6 +285,7 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
     archive = validate_lifecycle_paths(archive_paths)
     prune = latest_prune_plan(args.prune_plan_glob, validate_prune_plan_fn)
     activation_canary = latest_json_artifact(args.activation_canary_glob)
+    prioritized_replay = latest_json_artifact(args.prioritized_replay_glob)
     runtime_config = runtime_config_status(args.runtime_config)
     trends = build_trends_fn(
         argparse.Namespace(
@@ -315,6 +317,7 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
         and antiforgetting.get("ok") is True
         and (runtime_config.get("exists") is not True or runtime_config.get("ok") is True)
         and (activation_canary.get("exists") is not True or activation_canary.get("ok") is True)
+        and (prioritized_replay.get("exists") is not True or prioritized_replay.get("ok") is True)
         and (not lifecycle["required"] or (lifecycle["active_ok"] and lifecycle["archive_ok"]))
     )
     return {
@@ -367,6 +370,20 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
                 "result_hash": activation_canary.get("result_hash"),
             },
         },
+        "prioritized_replay": {
+            "exists": prioritized_replay.get("exists"),
+            "ok": prioritized_replay.get("ok"),
+            "path": prioritized_replay.get("path"),
+            "sample_hash": prioritized_replay.get("sample_hash"),
+            "selected_count": prioritized_replay.get("selected_count"),
+            "candidate_count": prioritized_replay.get("candidate_count"),
+            "eligible_count": prioritized_replay.get("eligible_count"),
+            "unavailable_count": prioritized_replay.get("unavailable_count"),
+            "selected_domains": prioritized_replay.get("selected_domains"),
+            "selected_decisions": prioritized_replay.get("selected_decisions"),
+            "source_missing": prioritized_replay.get("source_missing"),
+            "source_hash_mismatch": prioritized_replay.get("source_hash_mismatch"),
+        },
         "trends": trends,
         "antiforgetting": {
             "ok": antiforgetting.get("ok"),
@@ -391,6 +408,7 @@ def print_text(status: dict[str, Any]) -> None:
     curriculum = status["curriculum"]
     prune = status["prune"]
     activation = status["activation"]
+    prioritized_replay = status["prioritized_replay"]
     trends = status["trends"]
     antiforgetting = status["antiforgetting"]
     launchd = status["launchd"]
@@ -430,6 +448,11 @@ def print_text(status: dict[str, Any]) -> None:
         f"runtime_steps={runtime_config.get('training_max_steps')} "
         f"runtime_update={runtime_config.get('activation_update_id')} "
         f"canary_ok={latest_canary.get('ok')} canary_update={latest_canary.get('update_id')}"
+    )
+    print(
+        f"prioritized replay: selected={prioritized_replay.get('selected_count')} "
+        f"eligible={prioritized_replay.get('eligible_count')} unavailable={prioritized_replay.get('unavailable_count')} "
+        f"domains={prioritized_replay.get('selected_domains')} decisions={prioritized_replay.get('selected_decisions')}"
     )
     recent = trends["ledger"]["recent"]
     print(
@@ -499,6 +522,7 @@ def self_test() -> dict[str, Any]:
             neural_glob=str(root / "missing*.json"),
             prune_plan_glob=str(root / "missing_prune*.json"),
             activation_canary_glob=str(root / "missing_canary*.json"),
+            prioritized_replay_glob=str(root / "missing_prioritized*.json"),
             runtime_config=root / "missing_runtime.json",
             launchd_plist=root / "missing.plist",
             trend_window=20,
@@ -525,6 +549,7 @@ def main() -> int:
     parser.add_argument("--neural-glob", default=DEFAULT_NEURAL_GLOB)
     parser.add_argument("--prune-plan-glob", default=DEFAULT_PRUNE_PLAN_GLOB)
     parser.add_argument("--activation-canary-glob", default=DEFAULT_ACTIVATION_CANARY_GLOB)
+    parser.add_argument("--prioritized-replay-glob", default=DEFAULT_PRIORITIZED_REPLAY_GLOB)
     parser.add_argument("--runtime-config", type=Path, default=DEFAULT_RUNTIME_CONFIG)
     parser.add_argument("--launchd-plist", type=Path, default=DEFAULT_LAUNCHD_PLIST)
     parser.add_argument("--trend-window", type=int, default=DEFAULT_TREND_WINDOW)

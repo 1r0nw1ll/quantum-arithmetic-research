@@ -225,6 +225,27 @@ mix, duplicate source hashes, scheduler stop reasons, neural task coverage, and
 parameter-count range. `tools/qa_self_improving_neural_qa_status.py --text`
 includes a compact recent-window trend line for live check-ins.
 
+## Anti-Forgetting Replay Memory
+
+Accepted updates remain part of the protected replay memory after promotion.
+`tools/qa_self_improving_neural_qa_antiforgetting.py` reopens recent accepted
+ledger evidence, recomputes each `evidence.source_replay_hash` with the same
+domain-separated file hash used by the emitters, and checks that the referenced
+source artifact still records:
+
+- positive fixed failures,
+- non-empty protected replay,
+- zero protected harm,
+- deterministic replay for config/capacity proposals,
+- fixed/protected/harmed counts matching the accepted packet replay gate.
+
+The check is read-only and bounded by `--max-items` for scheduled use. It fails
+closed on missing evidence, source hash drift, source harm, count disagreement,
+or accepted packets whose replay gate no longer states a valid zero-harm
+promotion. `tools/qa_self_improving_neural_qa_status.py --text` includes the
+current anti-forgetting summary, and the scheduled runner executes a bounded
+anti-forgetting focused check after archive-safe prune planning.
+
 ## Artifact Pruning
 
 Repetitive generated artifacts may be planned for archive, but archive is not

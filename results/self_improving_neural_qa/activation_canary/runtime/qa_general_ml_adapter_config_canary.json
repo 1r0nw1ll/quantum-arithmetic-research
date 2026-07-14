@@ -1,0 +1,1 @@
+{"activation_plan_hash":"3b0add1e67cec4a428617e640ebfd3d576d296367b95ddfb10952cd80f0516cb","activation_update_id":"sinqa.v0.2962dba87cfdaa04","adapter.rank":16,"runtime.max_memory_mb":8192,"runtime.max_parameters":50000000,"runtime.max_runtime_sec":7200,"training.max_steps":2000}

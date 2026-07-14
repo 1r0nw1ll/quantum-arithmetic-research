@@ -26,6 +26,8 @@ DEFAULT_ACTIVE_PROPOSAL_GLOB = "results/self_improving_neural_qa/curriculum_prop
 DEFAULT_ARCHIVE_GLOB = "results/self_improving_neural_qa/curriculum_archive/**/qa_curriculum_lifecycle_*.json"
 DEFAULT_NEURAL_GLOB = "experiments/qa_ml/results_sinqa_neural_general_adapter*.json"
 DEFAULT_PRUNE_PLAN_GLOB = "results/self_improving_neural_qa/prune_plans/qa_sinqa_artifact_prune_plan_*.json"
+DEFAULT_ACTIVATION_CANARY_GLOB = "results/self_improving_neural_qa/activation_canary/results/*_activation_canary.json"
+DEFAULT_RUNTIME_CONFIG = Path("results/self_improving_neural_qa/runtime/qa_general_ml_adapter_config.json")
 DEFAULT_LAUNCHD_PLIST = Path("/Users/player3/Library/LaunchAgents/com.qa.self-improving-neural-qa.plist")
 DEFAULT_TREND_WINDOW = 20
 DEFAULT_ANTIFORGETTING_MAX_ITEMS = 32
@@ -210,6 +212,54 @@ def latest_prune_plan(glob_pattern: str, validate_prune_plan: Any | None = None)
     return result
 
 
+def latest_json_artifact(glob_pattern: str) -> dict[str, Any]:
+    paths = iter_glob_paths(glob_pattern)
+    if not paths:
+        return {"exists": False}
+    best: tuple[int, Path] | None = None
+    for path in paths:
+        try:
+            mtime = path.stat().st_mtime_ns
+        except OSError:
+            continue
+        if best is None or mtime > best[0]:
+            best = (mtime, path)
+    if best is None:
+        return {"exists": False}
+    path = best[1]
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001 - status should report parse failures.
+        return {"exists": True, "ok": False, "path": str(path), "error": str(exc)}
+    if not isinstance(obj, dict):
+        return {"exists": True, "ok": False, "path": str(path), "error": "JSON root must be object"}
+    return {"exists": True, "path": str(path), **obj}
+
+
+def runtime_config_status(path: Path) -> dict[str, Any]:
+    resolved = resolve_path(path)
+    if not resolved.exists():
+        return {"exists": False, "path": str(path)}
+    try:
+        obj = json.loads(resolved.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001 - status should report parse failures.
+        return {"exists": True, "ok": False, "path": str(path), "error": str(exc)}
+    if not isinstance(obj, dict):
+        return {"exists": True, "ok": False, "path": str(path), "error": "JSON root must be object"}
+    return {
+        "exists": True,
+        "ok": True,
+        "path": str(path),
+        "activation_update_id": obj.get("activation_update_id"),
+        "activation_plan_hash": obj.get("activation_plan_hash"),
+        "adapter_rank": obj.get("adapter.rank"),
+        "training_max_steps": obj.get("training.max_steps"),
+        "runtime_max_parameters": obj.get("runtime.max_parameters"),
+        "runtime_max_memory_mb": obj.get("runtime.max_memory_mb"),
+        "runtime_max_runtime_sec": obj.get("runtime.max_runtime_sec"),
+    }
+
+
 def build_status(args: argparse.Namespace) -> dict[str, Any]:
     scheduler_rows, scheduler_errors = read_jsonl(args.scheduler_log)
     latest_record = scheduler_rows[-1] if scheduler_rows else {}
@@ -233,6 +283,8 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
     archive_paths = iter_glob_paths(args.archive_glob)
     archive = validate_lifecycle_paths(archive_paths)
     prune = latest_prune_plan(args.prune_plan_glob, validate_prune_plan_fn)
+    activation_canary = latest_json_artifact(args.activation_canary_glob)
+    runtime_config = runtime_config_status(args.runtime_config)
     trends = build_trends_fn(
         argparse.Namespace(
             ledger=args.ledger,
@@ -261,6 +313,8 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
         and len(active_paths) == 0
         and archive.get("ok") is True
         and antiforgetting.get("ok") is True
+        and (runtime_config.get("exists") is not True or runtime_config.get("ok") is True)
+        and (activation_canary.get("exists") is not True or activation_canary.get("ok") is True)
         and (not lifecycle["required"] or (lifecycle["active_ok"] and lifecycle["archive_ok"]))
     )
     return {
@@ -299,6 +353,20 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
             "lifecycle_checks": lifecycle,
         },
         "prune": prune,
+        "activation": {
+            "runtime_config": runtime_config,
+            "latest_canary": {
+                "exists": activation_canary.get("exists"),
+                "ok": activation_canary.get("ok"),
+                "path": activation_canary.get("path"),
+                "update_id": activation_canary.get("update_id"),
+                "activation_status": activation_canary.get("activation_status"),
+                "runtime_mutated": activation_canary.get("runtime_mutated"),
+                "canary_runtime_mutated": activation_canary.get("canary_runtime_mutated"),
+                "config_after": activation_canary.get("config_after"),
+                "result_hash": activation_canary.get("result_hash"),
+            },
+        },
         "trends": trends,
         "antiforgetting": {
             "ok": antiforgetting.get("ok"),
@@ -322,6 +390,7 @@ def print_text(status: dict[str, Any]) -> None:
     transcript = status["transcript"]
     curriculum = status["curriculum"]
     prune = status["prune"]
+    activation = status["activation"]
     trends = status["trends"]
     antiforgetting = status["antiforgetting"]
     launchd = status["launchd"]
@@ -354,6 +423,14 @@ def print_text(status: dict[str, Any]) -> None:
             f"mode={prune.get('mode')} archive_safe={prune.get('archive_safe')} "
             f"referenced={prune.get('referenced_candidate_count')}"
         )
+    runtime_config = activation["runtime_config"]
+    latest_canary = activation["latest_canary"]
+    print(
+        f"activation: runtime_rank={runtime_config.get('adapter_rank')} "
+        f"runtime_steps={runtime_config.get('training_max_steps')} "
+        f"runtime_update={runtime_config.get('activation_update_id')} "
+        f"canary_ok={latest_canary.get('ok')} canary_update={latest_canary.get('update_id')}"
+    )
     recent = trends["ledger"]["recent"]
     print(
         f"trends: recent{trends['ledger']['window']} accepted={recent['accepted']} "
@@ -421,6 +498,8 @@ def self_test() -> dict[str, Any]:
             archive_glob=str(archive),
             neural_glob=str(root / "missing*.json"),
             prune_plan_glob=str(root / "missing_prune*.json"),
+            activation_canary_glob=str(root / "missing_canary*.json"),
+            runtime_config=root / "missing_runtime.json",
             launchd_plist=root / "missing.plist",
             trend_window=20,
             antiforgetting_max_items=32,
@@ -445,6 +524,8 @@ def main() -> int:
     parser.add_argument("--archive-glob", default=DEFAULT_ARCHIVE_GLOB)
     parser.add_argument("--neural-glob", default=DEFAULT_NEURAL_GLOB)
     parser.add_argument("--prune-plan-glob", default=DEFAULT_PRUNE_PLAN_GLOB)
+    parser.add_argument("--activation-canary-glob", default=DEFAULT_ACTIVATION_CANARY_GLOB)
+    parser.add_argument("--runtime-config", type=Path, default=DEFAULT_RUNTIME_CONFIG)
     parser.add_argument("--launchd-plist", type=Path, default=DEFAULT_LAUNCHD_PLIST)
     parser.add_argument("--trend-window", type=int, default=DEFAULT_TREND_WINDOW)
     parser.add_argument("--antiforgetting-max-items", type=int, default=DEFAULT_ANTIFORGETTING_MAX_ITEMS)

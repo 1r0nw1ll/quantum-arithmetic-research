@@ -246,6 +246,25 @@ promotion. `tools/qa_self_improving_neural_qa_status.py --text` includes the
 current anti-forgetting summary, and the scheduled runner executes a bounded
 anti-forgetting focused check after archive-safe prune planning.
 
+## Activation Canary
+
+Accepted `configuration_patch` and `capacity_patch` packets may change model
+capacity or runtime limits only through activation tooling. The first operational
+step is a canary, not live mutation:
+`tools/qa_self_improving_neural_qa_activation_canary.py` selects the latest
+accepted config/capacity patch, writes a non-mutating activation plan with
+`tools/qa_self_improving_neural_qa_activation_gate.py`, resets an isolated
+canary runtime config to the patch's declared `before` values, applies the plan
+there with `tools/qa_self_improving_neural_qa_apply_activation_plan.py`, and
+validates the applied plan under cert [527].
+
+The canary result records the planned and applied activation artifacts, the
+canary config hash, rollback snapshot hash, the before/after config values, and
+the [527] validation result. It explicitly sets `runtime_mutated=false` and
+`canary_runtime_mutated=true`, so a successful canary proves the self-resizing
+path without changing the live scheduled learner. Live runtime activation remains
+manual and rollback-bound.
+
 ## Artifact Pruning
 
 Repetitive generated artifacts may be planned for archive, but archive is not

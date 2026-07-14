@@ -27,6 +27,7 @@ DEFAULT_ARCHIVE_GLOB = "results/self_improving_neural_qa/curriculum_archive/**/q
 DEFAULT_NEURAL_GLOB = "experiments/qa_ml/results_sinqa_neural_general_adapter*.json"
 DEFAULT_PRUNE_PLAN_GLOB = "results/self_improving_neural_qa/prune_plans/qa_sinqa_artifact_prune_plan_*.json"
 DEFAULT_LAUNCHD_PLIST = Path("/Users/player3/Library/LaunchAgents/com.qa.self-improving-neural-qa.plist")
+DEFAULT_TREND_WINDOW = 20
 CURRENT_FOCUSED_CHECK_MIN_RUN = 13
 CURRENT_FOCUSED_CHECK_COUNT = 6
 
@@ -219,6 +220,7 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
     )
     validate_lifecycle_paths = load_tool_function("qa_curriculum_lifecycle.py", "validate_lifecycle_paths")
     validate_prune_plan_fn = load_tool_function("qa_sinqa_artifact_prune_plan_validate.py", "validate_plan")
+    build_trends_fn = load_tool_function("qa_self_improving_neural_qa_trends.py", "build_trends")
 
     ledger = validate_ledger(resolve_path(args.ledger))
     transcript = validate_transcript(resolve_path(args.transcript))
@@ -226,6 +228,14 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
     archive_paths = iter_glob_paths(args.archive_glob)
     archive = validate_lifecycle_paths(archive_paths)
     prune = latest_prune_plan(args.prune_plan_glob, validate_prune_plan_fn)
+    trends = build_trends_fn(
+        argparse.Namespace(
+            ledger=args.ledger,
+            scheduler_log=args.scheduler_log,
+            neural_glob=args.neural_glob,
+            window=args.trend_window,
+        )
+    )
 
     latest_run_ok = latest_record.get("ok") is True
     lifecycle = lifecycle_check_state(latest_record)
@@ -278,6 +288,7 @@ def build_status(args: argparse.Namespace) -> dict[str, Any]:
             "lifecycle_checks": lifecycle,
         },
         "prune": prune,
+        "trends": trends,
         "launchd": launchd_status(args.launchd_plist),
     }
 
@@ -289,6 +300,7 @@ def print_text(status: dict[str, Any]) -> None:
     transcript = status["transcript"]
     curriculum = status["curriculum"]
     prune = status["prune"]
+    trends = status["trends"]
     launchd = status["launchd"]
     print(f"SINQA status: {'OK' if status['ok'] else 'ATTENTION'}")
     print(
@@ -319,6 +331,12 @@ def print_text(status: dict[str, Any]) -> None:
             f"mode={prune.get('mode')} archive_safe={prune.get('archive_safe')} "
             f"referenced={prune.get('referenced_candidate_count')}"
         )
+    recent = trends["ledger"]["recent"]
+    print(
+        f"trends: recent{trends['ledger']['window']} accepted={recent['accepted']} "
+        f"rejected={recent['rejected']} harm_attempts={recent['harm_attempts']} "
+        f"domains={recent['domains']}"
+    )
     print(
         f"launchd: configured={launchd['configured']} interval={launchd.get('start_interval_sec')} "
         f"python314={launchd.get('uses_python314')}"
@@ -375,6 +393,7 @@ def self_test() -> dict[str, Any]:
             neural_glob=str(root / "missing*.json"),
             prune_plan_glob=str(root / "missing_prune*.json"),
             launchd_plist=root / "missing.plist",
+            trend_window=20,
         )
         status = build_status(args)
         ok = (
@@ -396,6 +415,7 @@ def main() -> int:
     parser.add_argument("--neural-glob", default=DEFAULT_NEURAL_GLOB)
     parser.add_argument("--prune-plan-glob", default=DEFAULT_PRUNE_PLAN_GLOB)
     parser.add_argument("--launchd-plist", type=Path, default=DEFAULT_LAUNCHD_PLIST)
+    parser.add_argument("--trend-window", type=int, default=DEFAULT_TREND_WINDOW)
     parser.add_argument("--text", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()

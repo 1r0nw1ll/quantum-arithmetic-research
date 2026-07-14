@@ -216,6 +216,15 @@ The producer suppresses repeated stable replay signatures across retained and
 archived artifacts, which acts as the first novelty governor for unattended
 general-ML learning.
 
+## Trend Reporting
+
+`tools/qa_self_improving_neural_qa_trends.py` is a read-only trend reporter
+over the SINQA ledger, scheduler log, and retained neural artifacts. It reports
+accepted/rejected counts, recent fixed/protected-harm totals, source-domain
+mix, duplicate source hashes, scheduler stop reasons, neural task coverage, and
+parameter-count range. `tools/qa_self_improving_neural_qa_status.py --text`
+includes a compact recent-window trend line for live check-ins.
+
 ## Artifact Pruning
 
 Repetitive generated artifacts may be planned for archive, but archive is not

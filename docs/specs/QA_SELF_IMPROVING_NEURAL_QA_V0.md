@@ -199,6 +199,8 @@ focused checks.
 packets for neural `general_ml` replay evidence and emits at most one bounded
 `capacity_patch` proposal for manual activation. It uses rollback artifacts and
 hard resource caps, and it never edits the active runtime config itself.
+The worker suppresses repeated stable config-proposal signatures so accepted
+neural evidence does not generate the same capacity patch indefinitely.
 
 ## General-ML Producer
 
@@ -210,6 +212,9 @@ activated runtime config it used. The producer never appends to the SINQA
 ledger; `tools/qa_self_improving_neural_qa_scheduled_run.py` runs neural
 training, then this producer, then the supervisor. The existing replay gate
 decides whether each new artifact is accepted or rejected.
+The producer suppresses repeated stable replay signatures across retained and
+archived artifacts, which acts as the first novelty governor for unattended
+general-ML learning.
 
 ## Artifact Pruning
 

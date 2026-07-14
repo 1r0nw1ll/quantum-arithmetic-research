@@ -36,6 +36,8 @@ REQUIRED_SUPERVISOR_ARGS = {
 LEGACY_FOCUSED_CHECK_COUNT = 4
 CURRENT_FOCUSED_CHECK_COUNT = 6
 CURRENT_FOCUSED_CHECK_MIN_RUN = 13
+PRUNE_FOCUSED_CHECK_COUNT = 7
+PRUNE_FOCUSED_CHECK_MIN_RUN = 36
 STOP_REASONS = {
     "commit_caps_reached",
     "no_candidate",
@@ -114,13 +116,16 @@ def validate_record(record: dict[str, Any], line_no: int, migrations: dict[int, 
                 errors.append(f"line {line_no}: supervisor.argv missing path args {missing}")
 
     checks = record.get("focused_checks")
-    allowed_focused_counts = {LEGACY_FOCUSED_CHECK_COUNT, CURRENT_FOCUSED_CHECK_COUNT}
+    allowed_focused_counts = {LEGACY_FOCUSED_CHECK_COUNT, CURRENT_FOCUSED_CHECK_COUNT, PRUNE_FOCUSED_CHECK_COUNT}
     if isinstance(run_no, int) and not isinstance(run_no, bool) and run_no >= CURRENT_FOCUSED_CHECK_MIN_RUN:
-        allowed_focused_counts = {CURRENT_FOCUSED_CHECK_COUNT}
+        allowed_focused_counts = {CURRENT_FOCUSED_CHECK_COUNT, PRUNE_FOCUSED_CHECK_COUNT}
+    if isinstance(run_no, int) and not isinstance(run_no, bool) and run_no >= PRUNE_FOCUSED_CHECK_MIN_RUN:
+        allowed_focused_counts = {PRUNE_FOCUSED_CHECK_COUNT}
     if not isinstance(checks, list) or len(checks) not in allowed_focused_counts:
         errors.append(
             f"line {line_no}: focused_checks must contain "
-            f"{CURRENT_FOCUSED_CHECK_COUNT} current results for run >= {CURRENT_FOCUSED_CHECK_MIN_RUN}; "
+            f"{CURRENT_FOCUSED_CHECK_COUNT} lifecycle results for run >= {CURRENT_FOCUSED_CHECK_MIN_RUN}, "
+            f"{PRUNE_FOCUSED_CHECK_COUNT} prune-aware results for run >= {PRUNE_FOCUSED_CHECK_MIN_RUN}; "
             f"legacy rows may contain {LEGACY_FOCUSED_CHECK_COUNT}"
         )
     elif not all(isinstance(check, dict) for check in checks):
@@ -139,6 +144,12 @@ def validate_record(record: dict[str, Any], line_no: int, migrations: dict[int, 
                 errors.append(f"line {line_no}: focused_checks[4] must run curriculum lifecycle validator")
             elif "validate-archive" not in archive_argv:
                 errors.append(f"line {line_no}: focused_checks[4] must validate curriculum archive")
+        if len(checks) == PRUNE_FOCUSED_CHECK_COUNT:
+            prune_argv = checks[6].get("argv")
+            if not isinstance(prune_argv, list) or "tools/qa_sinqa_artifact_prune_plan.py" not in prune_argv:
+                errors.append(f"line {line_no}: focused_checks[7] must run SINQA artifact prune planner")
+            elif "--exclude-referenced-candidates" not in prune_argv or "--validate-plan" not in prune_argv:
+                errors.append(f"line {line_no}: focused_checks[7] must emit an archive-safe validated prune plan")
 
     checkpoint_due = record.get("checkpoint_due")
     if not isinstance(checkpoint_due, bool):

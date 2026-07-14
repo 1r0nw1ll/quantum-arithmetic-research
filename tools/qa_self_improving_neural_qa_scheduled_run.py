@@ -35,6 +35,7 @@ GENERAL_ML_REPLAY_WORKER = Path("tools/qa_general_ml_replay_worker.py")
 GENERAL_ML_CAPACITY_WORKER = Path("tools/qa_general_ml_capacity_proposal_worker.py")
 CURRICULUM_DISCOVERY_WORKER = Path("tools/qa_curriculum_discovery_worker.py")
 CURRICULUM_LIFECYCLE = Path("tools/qa_curriculum_lifecycle.py")
+ARTIFACT_PRUNE_PLANNER = Path("tools/qa_sinqa_artifact_prune_plan.py")
 SUPERVISOR = Path("tools/qa_self_improving_neural_qa_supervisor.py")
 LEDGER_VALIDATOR = Path("tools/qa_self_improving_neural_qa_ledger_validate.py")
 TRANSCRIPT_VALIDATOR = Path("tools/qa_self_improving_neural_qa_transcript_validate.py")
@@ -229,6 +230,17 @@ def focused_checks(args: argparse.Namespace) -> list[dict[str, Any]]:
         run_command([sys.executable, str(CURRICULUM_LIFECYCLE), "validate-archive"], args.validator_timeout),
         run_command([sys.executable, str(CERT_524), "--self-test"], args.validator_timeout),
         run_command([sys.executable, str(CERT_525), "--self-test"], args.validator_timeout),
+        run_command(
+            [
+                sys.executable,
+                str(ARTIFACT_PRUNE_PLANNER),
+                "--max-groups",
+                "20",
+                "--exclude-referenced-candidates",
+                "--validate-plan",
+            ],
+            args.validator_timeout,
+        ),
     ]
 
 

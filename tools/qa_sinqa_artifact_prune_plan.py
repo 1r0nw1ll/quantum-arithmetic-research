@@ -373,6 +373,7 @@ def main() -> int:
     parser.add_argument("--reference-glob", action="append", default=None)
     parser.add_argument("--exclude-referenced-candidates", action="store_true")
     parser.add_argument("--allow-referenced-archive", action="store_true")
+    parser.add_argument("--validate-plan", action="store_true")
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
     if args.glob is None:
@@ -396,6 +397,10 @@ def main() -> int:
         "prune_candidate_count": plan["prune_candidate_count"],
         "applied": False,
     }
+    if args.validate_plan:
+        validation = validate_plan(out_path, args.reference_glob or DEFAULT_REFERENCE_GLOBS, args.allow_referenced_archive)
+        result["validation"] = validation
+        result["ok"] = validation["ok"]
     if args.apply:
         validation = validate_plan(out_path, args.reference_glob or DEFAULT_REFERENCE_GLOBS, args.allow_referenced_archive)
         result["pre_apply_validation"] = validation

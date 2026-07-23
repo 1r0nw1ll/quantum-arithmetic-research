@@ -55,6 +55,7 @@ python3 experiments/qa_quantum_arithmetic_mining/leak_orbit_ablation_stage19.py 
 python3 experiments/qa_quantum_arithmetic_mining/leak_orbit_ablation_stage19.py --stage-id qa_quantum_arithmetic_stage21_directrix_e_alone_control --targets directrix_distance_integer --null-iterations 200 --summary-json qa_quantum_arithmetic_stage21_directrix_e_alone_control.json --leaderboard-csv qa_quantum_arithmetic_stage21_directrix_e_alone_control_leaderboard.csv
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_param_audit_stage22.py
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.py
+python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py
 ```
 
 Default artifacts land in `results/qa_quantum_arithmetic_mining_001/`.
@@ -79,6 +80,7 @@ python3 experiments/qa_quantum_arithmetic_mining/consolidated_ledger_stage18.py 
 python3 experiments/qa_quantum_arithmetic_mining/leak_orbit_ablation_stage19.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_param_audit_stage22.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.py --self-test
+python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py --self-test
 ```
 
 Each self-test prints canonical JSON with `{"ok":true}` on success.
@@ -176,3 +178,5 @@ Each self-test prints canonical JSON with `{"ok":true}` on success.
 - Can the `D_plus_F_square` parametrization be moved from bounded audit to a
   proof cert by closing the remaining coprime-factor casework in the Stage 23
   theorem ledger?
+- Does the rational-conic proof closure for `D_plus_F_square` satisfy the
+  project bar for a formal QA theorem cert?

@@ -66,6 +66,7 @@ python3 experiments/qa_quantum_arithmetic_mining/g_square_proof_closure_stage28.
 python3 experiments/qa_quantum_arithmetic_mining/h_integer_reduction_closure_stage29.py
 python3 experiments/qa_quantum_arithmetic_mining/orbit_specific_discovery_stage30.py
 python3 experiments/qa_quantum_arithmetic_mining/orbit_dynamic_transition_stage31.py
+python3 experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py
 ```
 
 Default artifacts land in `results/qa_quantum_arithmetic_mining_001/`.
@@ -92,6 +93,7 @@ python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_param_audit_stage
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/directrix_divisibility_closure_stage25.py --self-test
+python3 experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py --self-test
 ```
 
 Each self-test prints canonical JSON with `{"ok":true}` on success.
@@ -196,3 +198,6 @@ Each self-test prints canonical JSON with `{"ok":true}` on success.
 - Should Will convert the closed `D_plus_F_square` and
   `directrix_distance_integer` results into one combined theorem cert or two
   separate cert families?
+- Do ordered global orbit-path features predict orbit-integrated arithmetic
+  labels beyond shuffled-path, unordered-path, current-cell, static-orbit, and
+  factor-signature controls?

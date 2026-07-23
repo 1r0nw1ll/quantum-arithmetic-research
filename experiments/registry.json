@@ -981,6 +981,24 @@
       "result": "PASS_NULL",
       "script": "experiments/qa_quantum_arithmetic_mining/orbit_dynamic_transition_stage31.py",
       "success_criteria": "PASS if orbit-derived controls are separated from discoveries, non-circular targets are ranked by orbit lift over best non-orbit baseline and null ceiling, and degenerate labels are not reported as null-competitive."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage32_orbit_path_invariant.json",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage32_orbit_path_target_summary.csv",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage32_orbit_path_feature_leaderboard.csv"
+      ],
+      "captured_utc": "2026-07-23T22:54:24Z",
+      "cert_id": null,
+      "domain": "qa_arithmetic_mining",
+      "hypothesis": "Ordered global orbit-path features should only count as QA-dynamic evidence if they beat shuffled-path, unordered-path, current-cell, static-orbit, and factor-signature controls on orbit-integrated labels.",
+      "id": "qa_quantum_arithmetic_stage32_orbit_path_invariant_2026-07-23",
+      "notes": "PASS_NULL. Train window 1..100, test window 101..300, path length 24, 12 orbit-integrated targets, 21 feature sets, 50 shuffled-label nulls for ordered-path features. Initial run produced one apparent candidate, path_count_F_squarefree_ge_half, but adding combined be_pair9_24 plus combined shuffled/unordered path controls showed ordered_path9_24 lift 2.120668 exactly matched by shuffled_path9_24. Final verdict split: CONTROL_BASELINE_COMPETITIVE=9, DEGENERATE_OR_LOW_TRAIN_SUPPORT=3, ORBIT_PATH_CANDIDATE=0.",
+      "open_brain_id": "3ddff613-b49b-42be-bbc1-1f1701f947a8",
+      "result": "PASS_NULL",
+      "script": "experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py",
+      "success_criteria": "PASS if the harness emits target and feature ledgers, applies ordered-path null controls, and marks no target path-specific unless ordered path features beat shuffled-path, unordered-path, current-cell, static-orbit, factor-signature, and null controls."
     }
   ]
 }

@@ -896,6 +896,23 @@
         "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage26_cert_handoff.json"
       ],
       "open_brain_id": "2ade31aa-964f-480e-aa91-251131590f5d"
+    },
+    {
+      "artifacts": [
+        "experiments/qa_quantum_arithmetic_mining/reduction_triage_stage27.py",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage27_reduction_triage.json",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage27_reduction_triage.csv"
+      ],
+      "captured_utc": "2026-07-23T21:30:08Z",
+      "cert_id": null,
+      "domain": "qa_arithmetic_mining",
+      "hypothesis": "The six remaining Stage 17/18 survivor targets split into exact component/reduced-ratio reductions versus empirical-only quadratic-form targets, preventing premature cert work on product leakage.",
+      "id": "qa_quantum_arithmetic_stage27_reduction_triage_2026-07-23",
+      "notes": "PASS. Audited b,e in 1..400 (160,000 pairs). Three targets reduced exactly with zero mismatches: semi_latus_squarefree, semi_latus_distinct_omega_2, and ecc_den_smooth_13. Three targets remained empirical-only quadratic-form labels with zero formula mismatches but no closed semiprime/squarefree theorem from this pass: D_plus_F_semiprime, D_plus_F_squarefree, and polar_scale_X_plus_F_semiprime.",
+      "open_brain_id": "21263696-9609-4609-a868-ce134e2cfef4",
+      "result": "PASS",
+      "script": "experiments/qa_quantum_arithmetic_mining/reduction_triage_stage27.py",
+      "success_criteria": "PASS if all exact reduction candidates have zero mismatches over the audited window, all quadratic-form rewrites have zero formula mismatches, and the six targets are classified into reduction versus empirical-only buckets."
     }
   ]
 }

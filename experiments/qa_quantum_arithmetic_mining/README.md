@@ -57,6 +57,7 @@ python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_param_audit_stage
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.py
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py
 python3 experiments/qa_quantum_arithmetic_mining/directrix_divisibility_closure_stage25.py
+python3 experiments/qa_quantum_arithmetic_mining/reduction_triage_stage27.py
 ```
 
 Default artifacts land in `results/qa_quantum_arithmetic_mining_001/`.

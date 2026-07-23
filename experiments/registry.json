@@ -963,6 +963,24 @@
       "result": "PASS_NULL",
       "script": "experiments/qa_quantum_arithmetic_mining/orbit_specific_discovery_stage30.py",
       "success_criteria": "PASS if the harness emits target and feature ledgers, computes orbit lift over best non-orbit baseline, applies null controls, and marks no target orbit-specific unless orbit beats the best non-orbit baseline and null ceiling."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_quantum_arithmetic_mining/orbit_dynamic_transition_stage31.py",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage31_orbit_dynamic_transition.json",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage31_orbit_dynamic_target_summary.csv",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage31_orbit_dynamic_feature_leaderboard.csv"
+      ],
+      "captured_utc": "2026-07-23T22:25:56Z",
+      "cert_id": null,
+      "domain": "qa_arithmetic_mining",
+      "hypothesis": "Orbit-derived controls should light up as circular harness checks, while non-circular T-step arithmetic-change targets should only count if orbit features beat coordinate, current-factor, dynamic-factor, and null baselines.",
+      "id": "qa_quantum_arithmetic_stage31_orbit_dynamic_transition_2026-07-23",
+      "notes": "PASS_NULL. Train window 1..100, test window 101..300, 14 targets, 13 feature sets, 50 shuffled-label nulls. Verdict split: ORBIT_DERIVED_CONTROL=4, NON_ORBIT_BASELINE_COMPETITIVE=6, ORBIT_NULL_COMPETITIVE=3, DEGENERATE_OR_LOW_TRAIN_SUPPORT=1, ORBIT_DYNAMIC_CANDIDATE=0. Orbit-derived controls behaved as expected, but no non-circular T-step arithmetic-change target survived the strict controls. t1_gcd_X_current_next_gt1 was all-positive and correctly marked degenerate after a harness fix.",
+      "open_brain_id": "7817d8c2-800f-4195-8c35-cbc244f62a7a",
+      "result": "PASS_NULL",
+      "script": "experiments/qa_quantum_arithmetic_mining/orbit_dynamic_transition_stage31.py",
+      "success_criteria": "PASS if orbit-derived controls are separated from discoveries, non-circular targets are ranked by orbit lift over best non-orbit baseline and null ceiling, and degenerate labels are not reported as null-competitive."
     }
   ]
 }

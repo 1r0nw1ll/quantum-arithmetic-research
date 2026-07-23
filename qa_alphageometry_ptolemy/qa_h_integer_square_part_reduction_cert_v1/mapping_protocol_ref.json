@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA h_integer square-part reduction cert. Certifies the structural theorem h=sqrt(F)*d is integer iff F=a*b is square, equivalently for g=gcd(a,b), both a/g and b/g are perfect squares. Here d=b+e, a=b+2e, and F=a*b. This is a structural reduction cert, not a complete conic/Euclid parametrization theorem."
+}

@@ -13968,6 +13968,37 @@ def _validate_qa_dplusf_square_parametrization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_g_square_pythagorean_parametrization_cert_family(base_dir):
+    """Cert [531]: QA G Square Pythagorean Parametrization Cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_g_square_pythagorean_parametrization_cert_v1")
+    validator = os.path.join(fam_dir, "qa_g_square_pythagorean_parametrization_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_g_square_pythagorean_parametrization_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_g_square_pythagorean_parametrization_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_g_square_pythagorean_parametrization_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_g_square_pythagorean_parametrization_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_directrix_divisibility_cert_family(base_dir):
     """Cert [530]: QA Directrix Divisibility Cert."""
     import subprocess
@@ -13999,6 +14030,37 @@ def _validate_qa_directrix_divisibility_cert_family(base_dir):
     return None
 
 
+def _validate_qa_h_integer_square_part_reduction_cert_family(base_dir):
+    """Cert [532]: QA h_integer Square-Part Reduction Cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_h_integer_square_part_reduction_cert_v1")
+    validator = os.path.join(fam_dir, "qa_h_integer_square_part_reduction_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_h_integer_square_part_reduction_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_h_integer_square_part_reduction_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_h_integer_square_part_reduction_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_h_integer_square_part_reduction_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -14010,6 +14072,16 @@ def _validate_qa_directrix_divisibility_cert_family(base_dir):
 # - New families should set must_have_dedicated_root=True and use a dedicated directory root
 #   (i.e., do not use family_root_rel="." for new families).
 FAMILY_SWEEPS = [
+    (532, "QA h_integer Square-Part Reduction Cert family",
+     _validate_qa_h_integer_square_part_reduction_cert_family,
+     "QA h_integer Square-Part Reduction Cert [532]. CLAIM: for integers b,e>=1 with d=b+e, a=b+2e, F=a*b, h=sqrt(F)*d is integer iff F is square; with g=gcd(a,b), this is equivalent to both a/g and b/g being perfect squares. Checks QA reduction from h_integer to F_square, gcd square-part decomposition, coprime-product-square theorem, bounded audit, and parametrization-strength boundary; rejects complete-geometry-parametrization overclaims; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Codex 2026-07-23.",
+     "532_qa_h_integer_square_part_reduction_cert",
+     "qa_h_integer_square_part_reduction_cert_v1", True),
+    (531, "QA G Square Pythagorean Parametrization Cert family",
+     _validate_qa_g_square_pythagorean_parametrization_cert_family,
+     "QA G Square Pythagorean Parametrization Cert [531]. CLAIM: for integers b,e>=1 with d=b+e and G=d*d+e*e, G is square iff the unordered legs {d,e} equal {t*(m*m-n*n), t*2*m*n}, filtered by d>e and b=d-e. This is the classical Euclid parametrization of integer right triangles applied to QA coordinates. Checks QA reduction, Euclid/Pythagorean parametrization, d>e branch filter, forward identity witnesses, bounded audit, and orbit-overclaim rejection; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Codex 2026-07-23.",
+     "531_qa_g_square_pythagorean_parametrization_cert",
+     "qa_g_square_pythagorean_parametrization_cert_v1", True),
     (530, "QA Directrix Divisibility Cert family",
      _validate_qa_directrix_divisibility_cert_family,
      "QA Directrix Divisibility Cert [530]. CLAIM: for integers b,e>=1 and d=b+e, directrix_distance_integer is exactly e|d*d*d, which is equivalent to e|b*b*b because d congruent b mod e; equivalently kernel3(e)=product p^ceil(v_p(e)/3) divides b. Preserves Stage 21 mod-9 QA-orbit lift as empirical context only, explicitly rejecting orbit-lift-as-theorem overclaims. Checks modular reduction, cube congruence, kernel3 prime-exponent classifier, bounded audit, and orbit-context boundary; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Codex 2026-07-23.",

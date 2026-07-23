@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [532] | [QA h_integer Square-Part Reduction Cert](532_qa_h_integer_square_part_reduction_cert.md) | Retires `h_integer` from empirical-open status: proves `h=sqrt(F)*d` is integer iff `F=a*b` is square, equivalently `a/gcd(a,b)` and `b/gcd(a,b)` are both perfect squares. | PASS |
+| [531] | [QA G Square Pythagorean Parametrization Cert](531_qa_g_square_pythagorean_parametrization_cert.md) | Promotes `G_square` into the classical Pythagorean parametrization theorem for QA coordinates: `G=d*d+e*e` square iff `{d,e}={t*(m*m-n*n),t*2*m*n}` with `d>e` and `b=d-e`. | PASS |
 | [528] | [QA HSI Material Identification Cert](528_qa_hsi_material_id_cert.md) | Gates hyperspectral material/chemical identification claims before real spectral-library ingestion: validates wavelength grid, one-time quantization boundary, material-library hash, absorption-band witnesses, pure/mixture/unknown coverage, target detection, abundance bins, unknown-rejection FPR, and synthetic-vs-real scope honesty. | PASS |
 | [530] | [QA Directrix Divisibility Cert](530_qa_directrix_divisibility_cert.md) | Retires `directrix_distance_integer` from empirical-open status: proves `e | d*d*d` iff `e | b*b*b`, validates `kernel3(e) | b`, and preserves Stage 21 QA-orbit lift only as empirical context. | PASS |
 | [529] | [QA D_plus_F Square Parametrization Cert](529_qa_dplusf_square_parametrization_cert.md) | Promotes the mined `D_plus_F_square` / director-radius-square signal into a rational-conic parametrization theorem: `D+F` square iff `b=t*2*m*n`, `e=t*(m*m-4*m*n+2*n*n)>0`. | PASS |

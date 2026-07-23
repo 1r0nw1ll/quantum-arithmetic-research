@@ -1,0 +1,37 @@
+{
+  "schema_version": "QA_H_INTEGER_SQUARE_PART_REDUCTION_CERT.v1",
+  "cert_type": "qa_h_integer_square_part_reduction_cert",
+  "certificate_id": "H_INTEGER_REDUCTION_PASS_001",
+  "theorem_status": "PROVEN_STRUCTURAL_SQUARE_PART_REDUCTION",
+  "theorem_statement": {
+    "claim": "For b,e>=1, d=b+e, a=b+2e, F=a*b, h=sqrt(F)*d is integer iff F is square iff, for g=gcd(a,b), both a/g and b/g are perfect squares.",
+    "claims_complete_geometry_parametrization": false
+  },
+  "proof_obligations": [
+    "qa_reduction_h_to_F_square",
+    "gcd_square_part_decomposition",
+    "coprime_product_square",
+    "bounded_audit",
+    "parametrization_strength_boundary"
+  ],
+  "witnesses": [
+    {"b": 1, "e": 4, "d": 5, "a": 9, "F": 9, "sqrt_F": 3, "gcd_a_b": 1, "a_reduced": 9, "b_reduced": 1, "h_integer": true, "generated_parameters": {"g": 1, "r": 1, "s": 3}},
+    {"b": 2, "e": 3, "d": 5, "a": 8, "F": 16, "sqrt_F": 4, "gcd_a_b": 2, "a_reduced": 4, "b_reduced": 1, "h_integer": true, "generated_parameters": {"g": 2, "r": 1, "s": 2}},
+    {"b": 6, "e": 3, "d": 9, "a": 12, "F": 72, "sqrt_F": 0, "gcd_a_b": 6, "a_reduced": 2, "b_reduced": 1, "h_integer": false},
+    {"b": 8, "e": 10, "d": 18, "a": 28, "F": 224, "sqrt_F": 0, "gcd_a_b": 4, "a_reduced": 7, "b_reduced": 2, "h_integer": false}
+  ],
+  "bounded_audit": {
+    "b_max": 40,
+    "e_max": 40,
+    "pair_count": 1600,
+    "support": 49,
+    "reduction_mismatch_count": 0
+  },
+  "non_claims": [
+    "complete_geometry_parametrization",
+    "prime_prediction_or_factorization_shortcut",
+    "new_square_theorem"
+  ],
+  "result": "PASS",
+  "fail_ledger": []
+}

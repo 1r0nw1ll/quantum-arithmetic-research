@@ -1,0 +1,30 @@
+{
+  "schema_version": "QA_H_INTEGER_SQUARE_PART_REDUCTION_CERT.v1",
+  "cert_type": "qa_h_integer_square_part_reduction_cert",
+  "certificate_id": "H_INTEGER_REDUCTION_FAIL_BAD_PARTS_001",
+  "theorem_status": "PROVEN_STRUCTURAL_SQUARE_PART_REDUCTION",
+  "theorem_statement": {
+    "claim": "Bad reduced parts fixture.",
+    "claims_complete_geometry_parametrization": false
+  },
+  "proof_obligations": [
+    "qa_reduction_h_to_F_square",
+    "gcd_square_part_decomposition",
+    "coprime_product_square",
+    "bounded_audit",
+    "parametrization_strength_boundary"
+  ],
+  "witnesses": [
+    {"b": 2, "e": 3, "d": 5, "a": 8, "F": 16, "sqrt_F": 4, "gcd_a_b": 2, "a_reduced": 8, "b_reduced": 1, "h_integer": true}
+  ],
+  "bounded_audit": {
+    "b_max": 40,
+    "e_max": 40,
+    "pair_count": 1600,
+    "support": 49,
+    "reduction_mismatch_count": 0
+  },
+  "non_claims": ["complete_geometry_parametrization"],
+  "result": "FAIL",
+  "fail_ledger": [{"fail_type": "REDUCED_PART_WITNESS"}]
+}

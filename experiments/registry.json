@@ -913,6 +913,22 @@
       "result": "PASS",
       "script": "experiments/qa_quantum_arithmetic_mining/reduction_triage_stage27.py",
       "success_criteria": "PASS if all exact reduction candidates have zero mismatches over the audited window, all quadratic-form rewrites have zero formula mismatches, and the six targets are classified into reduction versus empirical-only buckets."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_quantum_arithmetic_mining/g_square_proof_closure_stage28.py",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage28_g_square_proof_closure.json"
+      ],
+      "captured_utc": "2026-07-23T21:35:51Z",
+      "cert_id": null,
+      "domain": "qa_arithmetic_mining",
+      "hypothesis": "G_square closes by the classical Euclid parametrization because G=d*d+e*e asks whether d and e are integer legs of a Pythagorean triple.",
+      "id": "qa_quantum_arithmetic_stage28_g_square_proof_closure_2026-07-23",
+      "notes": "PASS. For b,e<300, implemented as b,e<=299, brute force found 379 positive pairs and the Euclid-parametrized generator found the same 379 pairs with zero misses and zero invalid generated rows. Forward identity audit checked 189,600 parametrized rows with zero failures. This is a complete generator theorem, not merely a structural reduction.",
+      "open_brain_id": "c8d61569-e349-4e6e-b933-a5a2f2e175ff",
+      "result": "PASS",
+      "script": "experiments/qa_quantum_arithmetic_mining/g_square_proof_closure_stage28.py",
+      "success_criteria": "PASS if the bounded b,e<300 audit reproduces the independently reported 379 positive pairs, has zero parametrization misses, has zero invalid generated rows, and records theorem status PROVEN_BY_EUCLID_PYTHAGOREAN_PARAMETRIZATION."
     }
   ]
 }

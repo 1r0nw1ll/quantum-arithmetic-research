@@ -4957,10 +4957,10 @@ def _validate_sixteen_identities_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_synchronous_harmonics_cert_family(base_dir: str) -> Optional[str]:
-    """QA Synchronous Harmonics Cert family [147] — certifies coprime synchronization (periods m,n coprime → sync at m×n; non-coprime → LCM<product), par-based interference (3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE), and QN product divisibility by 6 (among b,e,d at least one even and one div by 3). RE-VERIFIED 2026-07-06: confirmed clean, validator already genuinely recomputes gcd/lcm/par/product live, no bugs; independently corroborated "Synchronous Harmonics" as a real Iverson book title (QA Books 3&4) via svpwiki.com search. Source: Iverson Pyth-2 Ch XIII, QA-2 Ch 6, QA-3 Ch 4; checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok"""
+    """QA Synchronous Harmonics Cert family [147] — certifies coprime synchronization (periods m,n coprime -> sync at m*n; non-coprime -> LCM<product), par-based interference, QN product divisibility by 6, and complete Quantum Wave 5/6/7 distinct-prime wavelet witnesses including 2310/510510 minima and 5046 rejection. Source: Iverson Pyth-2 Ch XIII, QA-2 Ch 6, QA-3 Ch 4; checks SH_1+SYNC/PAR/PROD6/QWAVE/W/F; 2 PASS + 2 FAIL; self-test ok"""
     import subprocess
-    sh_dir    = os.path.join(base_dir, "qa_synchronous_harmonics_cert_v1")
-    validator = os.path.join(sh_dir, "qa_synchronous_harmonics_cert_validate.py")
+    sh_dir    = os.path.abspath(os.path.join(base_dir, "qa_synchronous_harmonics_cert_v1"))
+    validator = os.path.abspath(os.path.join(sh_dir, "qa_synchronous_harmonics_cert_validate.py"))
     if not os.path.exists(validator):
         return "missing qa_synchronous_harmonics_cert_v1/qa_synchronous_harmonics_cert_validate.py"
     proc = subprocess.run(
@@ -5279,7 +5279,7 @@ def _validate_eisenstein_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_origin_of_24_cert_family(base_dir: str) -> Optional[str]:
-    """QA Origin of 24 Cert family [130] — certifies dual derivation of mod-24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions. RE-VERIFIED 2026-07-06: theorem exhaustively reconfirmed (0 counterexamples, e<d<=30); found+fixed a real incompleteness in the doc's written mod-3 divisibility proof, which only covered the d+e≡0(mod3) case and silently omitted the d-e≡0(mod3) case -- the cert's own fixture witness (4,1) requires the omitted case. Validator already genuinely computes live, no hardening needed. Checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses) + 1 FAIL; self-test ok. Follow-up 2026-07-06: fixed a latent print-corruption bug (same class as cert [132]) and added first FAIL fixture to close a real coverage gap (part of a systemic gap across 8 sibling families in the 125-139 cluster)."""
+    """QA Origin of 24 Cert family [130] — certifies a dual arithmetic witness for 24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions. Does not certify arbitrary observer-layer projection into mod-24. RE-VERIFIED 2026-07-06: theorem exhaustively reconfirmed (0 counterexamples, e<d<=30); found+fixed a real incompleteness in the doc's written mod-3 divisibility proof, which only covered the d+e≡0(mod3) case and silently omitted the d-e≡0(mod3) case -- the cert's own fixture witness (4,1) requires the omitted case. Validator already genuinely computes live, no hardening needed. Checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses) + 1 FAIL; self-test ok. Follow-up 2026-07-06: fixed a latent print-corruption bug (same class as cert [132]) and added first FAIL fixture to close a real coverage gap (part of a systemic gap across 8 sibling families in the 125-139 cluster)."""
     import subprocess
     o24_dir   = os.path.join(base_dir, "qa_origin_of_24_cert_v1")
     validator = os.path.join(o24_dir, "qa_origin_of_24_cert_validate.py")
@@ -6973,10 +6973,10 @@ def _validate_see_capture_convergence_cert_family(base_dir: str) -> Optional[str
 
 
 def _validate_see_longitudinal_transverse_cert_family(base_dir: str) -> Optional[str]:
-    """QA See Longitudinal Transverse Cert family [197] — maps T.J.J. See's wave duality (longitudinal/compression=gravity, transverse/shear=light; same medium, orthogonal modes) to QA generator/observer duality (T-operator=discrete causal, projection=continuous measurement). Theorem NT = mode orthogonality (analogy, not physical proof -- see doc). Complementary to [153] Keely triune (3-fold within longitudinal) vs See (2-mode between generator/observer). Source: See, 'Electrodynamic Wave-Theory' (1917). Checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: sources confirmed real, but See's specific aether-wave theory documented by historians as part of his later, professionally-marginalizing, scientifically-rejected work -- fixed an overclaim treating it as physical proof of Theorem NT rather than a pedagogical analogy; also flagged an unverified 'Tesla support' claim."""
+    """QA See Longitudinal Transverse Cert family [197] — records an analogy/framework mapping from T.J.J. See's wave duality to QA generator/observer duality. Theorem NT is not proved by See's physics; it rests on QA axioms. SLT_SCOPE rejects physical-grounding overclaims. Source: See, 'Electrodynamic Wave-Theory' (1917). Checks SLT_1+SCOPE+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 2 FAIL; self-test ok."""
     import subprocess
-    fam_dir   = os.path.join(base_dir, "qa_see_longitudinal_transverse_cert_v1")
-    validator = os.path.join(fam_dir, "qa_see_longitudinal_transverse_cert_validate.py")
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_see_longitudinal_transverse_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_see_longitudinal_transverse_cert_validate.py"))
     if not os.path.exists(validator):
         return "missing qa_see_longitudinal_transverse_cert_v1/qa_see_longitudinal_transverse_cert_validate.py"
     proc = subprocess.run(
@@ -8735,7 +8735,7 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
 
 
 def _validate_qa_pisano_mod24_cosmos_period_cert_family(base_dir):
-    """QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Closing the loop: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); applied modulus 24 is period-self-consistent. Checks C1..C5; self-test ok"""
+    """QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Numeric alignment: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); these are equal values for distinct typed objects, not an identification of mod-24 with the Pisano-period operator. Checks C1..C5; self-test ok"""
     import subprocess
     fam_dir = os.path.join(base_dir, "qa_pisano_mod24_cosmos_period_cert_v1")
     validator = os.path.join(fam_dir, "qa_pisano_mod24_cosmos_period_cert_validate.py")
@@ -9141,20 +9141,32 @@ def _validate_qa_pyth2_babthe_dual_bead_chain_cert_family(base_dir):
 
 
 def _validate_qa_pyth2_wave_quarter_points_cert_family(base_dir):
-    """QA Pyth-2 Wave Quarter Points cert [369]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.43-56+. CLAIM: (C1) 4-par W: W/4,W/2,3W/4 all integers. (C2) 2-par W: W/2 integer, W/4 half-integer. (C3) Odd W: W/2 half-integer, W/4 quarter-integer. (C4) 5-par quarter=k+1/4; 3-par quarter=k+3/4; complementary. (C5) Two-wave coincidences=multiples of lcm. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    """QA Pyth-2 Wave Quarter Points cert [369]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.43-56+. CLAIM: (C1) 4-par W: W/4,W/2,3W/4 all integers. (C2) 2-par W: W/2 integer, W/4 half-integer. (C3) Odd W: W/2 half-integer, W/4 quarter-integer. (C4) 5-par quarter=k+1/4; 3-par quarter=k+3/4; complementary. (C5) Two-wave coincidences=multiples of lcm. Checks C1..C5 plus planted negative probes, including 17*23 quarter typo rejection (391/4=97.75, not 97.25); self-test ok"""
     import subprocess
     fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth2_wave_quarter_points_cert_v1"))
     validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth2_wave_quarter_points_cert_validate.py"))
     if not os.path.exists(validator):
         return "missing qa_pyth2_wave_quarter_points_cert_v1/qa_pyth2_wave_quarter_points_cert_validate.py"
     proc = subprocess.run(
-        [sys.executable, validator],
+        [sys.executable, validator, "--self-test"],
         capture_output=True, text=True, timeout=120
     )
     if proc.returncode != 0:
         return (
             f"qa_pyth2_wave_quarter_points_cert self-test failed:\n"
             f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_pyth2_wave_quarter_points_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_pyth2_wave_quarter_points_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
         )
     return None
 
@@ -9466,8 +9478,8 @@ def _validate_qa_pythagorean_g_exclusion_cert_family(base_dir):
 def _validate_qa_qn_harmonics_cert_family(base_dir):
     """QA Quantum Number Definition and Law of Harmonics cert [350]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.20-21,24-25,30-31. CLAIM: (C1) QN=2310 has 5 prime factors (in [4,7]); aboriginal 6,24 have 2 each. (C2) pf(2310) and pf(2730) share {2,3,5,7}; differ in {11} vs {13}; ratio 11/13. (C3) LCM(2310,2730)=30030=210×11×13; 13+11 aliquot cycles. (C4) Male (1,1,2,3) odd-ended; female (2,1,3,4) even-ended; ratio 24/6=4. (C5) All QN products contain 2 and 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
-    fam_dir   = os.path.join(base_dir, "qa_qn_harmonics_cert_v1")
-    validator = os.path.join(fam_dir, "qa_qn_harmonics_cert_validate.py")
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_qn_harmonics_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_qn_harmonics_cert_validate.py"))
     if not os.path.exists(validator):
         return "missing qa_qn_harmonics_cert_v1/qa_qn_harmonics_cert_validate.py"
     proc = subprocess.run(
@@ -9920,20 +9932,32 @@ def _validate_qa_harmonic_chemistry_lcm_cert_family(base_dir):
 
 
 def _validate_qa_harmonic_aliquot_structure_cert_family(base_dir):
-    """QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: (C1) 20 harmonic dyads among 15 distinct Cosmos d-values {3..17}; all aliquot parts 7-smooth. (C2) Direction law: d1<d2 implies p2>p1 for all dyads — higher harmonic carries larger unique prime, confirming Ben's reversal 'higher harmonics CREATE the lower tone' (p.43). (C3) Aliquot spectrum exactly {1,2,3,5}; no aliquot > 5 in mod-9 Cosmos. (C4) 5040=2^4*3^2*5*7 has omega=4; all Cosmos d <= 17 < 5040 (definite quantum configuration range). (C5) Exactly 3 tonal identity d-values {11,13,17} are primes > 7; each forms 5 harmonic dyads. Theory of Harmony: two d-values harmonic iff gcd=A, d1/A and d2/A are distinct primes, gcd(A,p1*p2)=1. Builds on certs [318][320][321]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    """QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: C1-C5 mod-9 d-value model plus C6-C7 source-native wave decomposition W=A*p and shared-aliquot harmony. Negative probes reject too-small aliquot, unique-prime-inside-aliquot, and mismatched aliquot cores; self-test ok"""
     import subprocess
-    fam_dir   = os.path.join(base_dir, "qa_harmonic_aliquot_structure_cert_v1")
-    validator = os.path.join(fam_dir, "qa_harmonic_aliquot_structure_cert_validate.py")
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_harmonic_aliquot_structure_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_harmonic_aliquot_structure_cert_validate.py"))
     if not os.path.exists(validator):
         return "missing qa_harmonic_aliquot_structure_cert_v1/qa_harmonic_aliquot_structure_cert_validate.py"
     proc = subprocess.run(
-        [sys.executable, validator],
+        [sys.executable, validator, "--self-test"],
         capture_output=True, text=True, timeout=60, cwd=fam_dir,
     )
     if proc.returncode != 0:
         raise RuntimeError(
             f"qa_harmonic_aliquot_structure_cert self-test failed:\n"
             f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_harmonic_aliquot_structure_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_harmonic_aliquot_structure_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
         )
     return None
 
@@ -9998,8 +10022,8 @@ def _validate_qa_equilateral_triangle_series_cert_family(base_dir):
 def _validate_qa_sh_5040_ceiling_cert_family(base_dir):
     """QA Synchronous Harmonics Ceiling Cert family [318]. Primary source: Iverson (1993) QA-2, ITAM Portland, ISBN 1-883401-07-0, Ch.6 pp.84-99. Companion: cert [147] (wavelet sync + par rules). CLAIM: (C1) 5040=2^4*3^2*5*7, tau=60, extremal (max tau below=48), div 1-10, 5039 prime, 5041=71^2. (C2) 21 harmonic fractions {k/d*5040} all positive integers, range 720-4320. (C3) min 5-prime QW=2310=2*3*5*7*11, min 7-prime QW=510510, both div 6. (C4) 5041-5045 not div 6; 5046=2*3*29^2 only 3 distinct primes. (C5) Theorem NT; Samekh open per Iverson QA-2 p.83. Builds on cert [147]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
-    fam_dir   = os.path.join(base_dir, "qa_sh_5040_ceiling_cert_v1")
-    validator = os.path.join(fam_dir, "qa_sh_5040_ceiling_cert_validate.py")
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_sh_5040_ceiling_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_sh_5040_ceiling_cert_validate.py"))
     if not os.path.exists(validator):
         return "missing qa_sh_5040_ceiling_cert_v1/qa_sh_5040_ceiling_cert_validate.py"
     proc = subprocess.run(
@@ -11398,6 +11422,74 @@ def _validate_qa_self_pumped_conjugate_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_self_improving_neural_qa_cert_family(base_dir):
+    """QA Self-Improving Neural QA Cert family [524]. CLAIM (bounded, falsifiable): a neural model may continue learning only as a proposal generator; durable promotion is decided by deterministic QA replay and an append-only ledger. The v0 packet schema records base_model.neural=true, candidate update kind, optional source replay evidence hash, replay-gate counts, deterministic trace hashes, invariant checks, and promotion.decision in {accepted,rejected}. Accepted packets require positive new failures fixed, protected_cases_replayed>0, protected_cases_harmed==0, deterministic_replay=true, and every invariant check passing. Configuration/capacity patches are allowed only as bounded proposals with approved diff keys, hard resource caps, rollback metadata, and activation_policy=manual_after_cert. Rejected packets are first-class safety evidence: they must carry rejection_reason and at least one failed gate, preventing survivorship bias. Live ledger fixture: 24 rows, 13 accepted, 11 rejected; accepted packets fix 581 failures with zero protected harm across the accepted set; total protected replays across the live ledger 365,574. This is not autonomous weight mutation and does not claim unconstrained self-modification; it certifies replay-gated continual improvement and bounded capacity proposals over neural QA candidates. Checks SINQA_ROW/SINQA_HASH/SINQA_UNIQ/SINQA_PACKET/SINQA_ACCEPT/SINQA_CAPACITY/SINQA_REJECT/SINQA_PASS_MIX; PASS compact/capacity/live fixtures and FAIL duplicate_update_id/accepted_harm/duplicate_source/unbounded_capacity fixtures; self-test ok. Scoped by docs/specs/QA_SELF_IMPROVING_NEURAL_QA_V0.md. Builds on the corrected-model replay pipeline and the existing unregistered self-improvement v2 agent/cert. Author: Will Dale + Codex 2026-07-12."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_self_improving_neural_qa_cert_v1")
+    validator = os.path.join(fam_dir, "qa_self_improving_neural_qa_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_self_improving_neural_qa_loop_cert_family(base_dir):
+    """QA Self-Improving Neural QA Loop Cert family [525]. CLAIM (bounded, falsifiable): the self-improving neural QA runner can continue learning across multiple rounds while preserving replay-gated promotion. A loop transcript is an append-only hash chain over rounds. Each round records ledger hash before/after, ledger summaries before/after, packet_hash, update_id, decision, replay evidence hash, fixed/harmed/protected counts, and promoted_state_mutated. Accepted rounds must increment accepted count, fix positive failures, harm zero protected rows, and may mutate promoted state. Rejected rounds must increment rejected count and must not mutate promoted state. Live transcript fixture: 9 bounded rounds, 5 accepted and 4 rejected, all unique packet hashes and replay evidence hashes; rejected harm cases are recorded without promoted mutation. Checks SINQAL_ROW/SINQAL_HASH/SINQAL_CHAIN/SINQAL_DELTA/SINQAL_ACCEPT/SINQAL_REJECT/SINQAL_UNIQ; PASS live transcript and FAIL tampered rejected-mutates fixture; self-test ok. Builds on cert [524]. Author: Will Dale + Codex 2026-07-12."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_self_improving_neural_qa_loop_cert_v1")
+    validator = os.path.join(fam_dir, "qa_self_improving_neural_qa_loop_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_self_improving_neural_qa_scheduler_cert_family(base_dir):
+    """QA Self-Improving Neural QA Scheduler Cert family [526]. CLAIM (bounded, falsifiable): scheduled self-improving neural QA runs are valid only when the scheduler forwards replay discovery, config proposal discovery, activated runtime-config path, and isolated mutable paths into the supervisor, passes ledger/transcript/[524]/[525] focused checks, records bounded stop reasons, and includes a passing meta-validator checkpoint when due. The scheduler cert explicitly catches the glob/path/runtime-forwarding bug class that can otherwise narrow discovery, ignore certified activation, or mutate the live ledger during tests or unattended invocation. Checks SINQAS_ROW/SINQAS_SCHEMA/SINQAS_SUPERVISOR/SINQAS_PATHS/SINQAS_FOCUSED/SINQAS_META/SINQAS_STOP; PASS scheduler-run fixture and FAIL missing-path-forwarding/failed-focused-check fixtures; self-test ok. Builds on certs [524], [525], and [527]. Author: Will Dale + Codex 2026-07-12."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_self_improving_neural_qa_scheduler_cert_v1")
+    validator = os.path.join(fam_dir, "qa_self_improving_neural_qa_scheduler_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_self_improving_neural_qa_activation_cert_family(base_dir):
+    """QA Self-Improving Neural QA Activation Cert family [527]. CLAIM (bounded, falsifiable): accepted self-improving neural QA configuration/capacity patches may produce activation plans only when the plan is manual-after-cert, resource-bounded, rollback-verifiable, replay-backed with zero protected harm, and non-mutating unless post-activation replay plus rollback proof are present. The activation plan schema records update_id, packet_hash, base_model, candidate_kind, activation_status, activation_policy, manual_approval_required, runtime_mutated, config_diff, resource_bounds, rollback artifact hash/computed hash, source evidence, replay_gate, checks, and plan_hash. Non-mutating plans must use activation_status=planned_not_applied. Mutating plans must use activation_status=applied_with_post_replay and include post_activation_proof with deterministic replay and rollback proof. Checks SINQAA_SCHEMA/SINQAA_MANUAL/SINQAA_RESOURCE/SINQAA_ROLLBACK/SINQAA_REPLAY/SINQAA_MUTATION/SINQAA_HASH; PASS activation-plan fixture and FAIL runtime-mutated-without-proof/bad-rollback-hash fixtures; self-test ok. Builds on certs [524], [525], [526]. Author: Will Dale + Codex 2026-07-12."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_self_improving_neural_qa_activation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_self_improving_neural_qa_activation_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_fwm_phase_conjugate_cert_family(base_dir):
     """QA FWM Phase Conjugate Cert family [518]. Primary sources: Hellwarth (1977) J. Opt. Soc. Am. 67(1):1-3 DOI 10.1364/JOSA.67.000001 (backward degenerate four-wave mixing); Yariv (1978) IEEE J. Quantum Electron. 14(9):650-660 DOI 10.1109/JQE.1978.1069870; Zel'dovich, Pilipetsky, Shkunov (1985) Principles of Phase Conjugation, Springer ISBN 978-3-540-13458-4; Agarwal & Friberg, scattering theory of distortion correction by phase conjugation, J. Opt. Soc. Am. CLAIM (exact, falsifiable): the degenerate four-wave-mixing phase-sum relation theta_c=theta_f+theta_b-theta_s is realized EXACTLY in the QA additive group on the A1 alphabet {1,...,m} by fwm(pf,pb,s)=qa_mod(pf+pb-s), with qa_add(a,b)=qa_mod(a+b) (identity=m, the No-Zero rep of 0) and qa_neg(a)=qa_mod(-a) (involution, exactly 2 fixed points m and m/2). Conjugate pumps pb=qa_neg(pf) give fwm=qa_neg(s) exactly (C1, exhaustive m x m). Distortion-correction theorem EXACT: aberrate by phase screen phi, conjugate, return through SAME phi -> qa_neg(s) exactly for all s,phi (C2 DC_SAME_MEDIUM); different phi' leaves residual qa_mod(-s+phi'-phi), exact recovery ONLY when phi'=phi (C3 DC_DIFF_RESID = same-medium specificity). C4 GROUP_IDENTITY: m is the unique additive identity, never 0. C5 CONJ_INVOLUTION: qa_neg involution, exactly 2 fixed points. C6 CONTROL_NONCONJ: a non-conjugate second pump does not reconstruct (conjugation load-bearing). C7 A1_RANGE: all outputs in {1,...,m}. Supplies the EXPLICIT conjugate-generating operator that emergent QA dynamics do NOT implement: companion investigation (2026-07-08) found the self-organizing QASystem coupling does only generic medium-agnostic denoising (same-medium test null; adaptation degrades recovery) and the rolling QCI 'Bearden' opposite-sign signature of cert [155] is weak (domain2 WEAK r=-0.13, domain3 NULL sign-flip); this explicit four-wave mixer instead reproduces the theorem exactly (fidelity 1.000 same medium vs 1/m chance wrong medium; 72x72 image-recovery demo). Reference impl: qa_fwm_conjugator.py (repo root, axiom-linter clean). Checks FWM_CONJUGATE/DC_SAME_MEDIUM/DC_DIFF_RESID/GROUP_IDENTITY/CONJ_INVOLUTION/CONTROL_NONCONJ/A1_RANGE/SRC/F; 3 PASS + 2 FAIL fixtures; self-test ok. Companion: cert [155] (weak emergent signature superseded), certs [510]-[514] (QA Maxwell/scalar-EM cluster). Author: Will Dale + Claude 2026-07-08."""
     import subprocess
@@ -12017,7 +12109,7 @@ def _validate_qa_witt_tower_mi_ceiling_theory_cert_family(base_dir):
 
 
 def _validate_qa_witt_tower_mi_xdomain_cert_family(base_dir):
-    """Cert [467]: QA Witt Tower Cross-Domain MI Survey -- I(orbit_tier;label) significant across 7 physical domains; 0/35000 null hits; ENSO/SEP converge at MI_ratio=70%; binary monotone with base rate; 6/6 PASS."""
+    """Cert [467]: QA Witt Tower Cross-Domain MI Survey -- I(orbit_tier;label) significant across 7 physical domains; 0/35000 null hits; ENSO/SEP both high-ratio (>=0.65) and top two by MI_ratio; binary monotone with base rate; 6/6 PASS."""
     import subprocess
     fam_dir = os.path.join(base_dir, "qa_witt_tower_mi_xdomain_cert_v1")
     validator = os.path.join(fam_dir, "qa_witt_tower_mi_xdomain_cert_validate.py")
@@ -13814,6 +13906,99 @@ def _validate_qa_orbit_prime_ideal_filtration_cert_family(base_dir):
     return None
 
 
+def _validate_qa_hsi_material_id_cert_family(base_dir):
+    """Cert [528]: QA HSI Material Identification Cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_hsi_material_id_cert_v1")
+    validator = os.path.join(fam_dir, "qa_hsi_material_id_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_hsi_material_id_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_hsi_material_id_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_hsi_material_id_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_hsi_material_id_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_qa_dplusf_square_parametrization_cert_family(base_dir):
+    """Cert [529]: QA D_plus_F Square Parametrization Cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_dplusf_square_parametrization_cert_v1")
+    validator = os.path.join(fam_dir, "qa_dplusf_square_parametrization_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_dplusf_square_parametrization_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_dplusf_square_parametrization_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_dplusf_square_parametrization_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_dplusf_square_parametrization_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_qa_directrix_divisibility_cert_family(base_dir):
+    """Cert [530]: QA Directrix Divisibility Cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_directrix_divisibility_cert_v1")
+    validator = os.path.join(fam_dir, "qa_directrix_divisibility_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_directrix_divisibility_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_directrix_divisibility_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_directrix_divisibility_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_directrix_divisibility_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -13825,6 +14010,41 @@ def _validate_qa_orbit_prime_ideal_filtration_cert_family(base_dir):
 # - New families should set must_have_dedicated_root=True and use a dedicated directory root
 #   (i.e., do not use family_root_rel="." for new families).
 FAMILY_SWEEPS = [
+    (530, "QA Directrix Divisibility Cert family",
+     _validate_qa_directrix_divisibility_cert_family,
+     "QA Directrix Divisibility Cert [530]. CLAIM: for integers b,e>=1 and d=b+e, directrix_distance_integer is exactly e|d*d*d, which is equivalent to e|b*b*b because d congruent b mod e; equivalently kernel3(e)=product p^ceil(v_p(e)/3) divides b. Preserves Stage 21 mod-9 QA-orbit lift as empirical context only, explicitly rejecting orbit-lift-as-theorem overclaims. Checks modular reduction, cube congruence, kernel3 prime-exponent classifier, bounded audit, and orbit-context boundary; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Codex 2026-07-23.",
+     "530_qa_directrix_divisibility_cert",
+     "qa_directrix_divisibility_cert_v1", True),
+    (529, "QA D_plus_F Square Parametrization Cert family",
+     _validate_qa_dplusf_square_parametrization_cert_family,
+     "QA D_plus_F Square Parametrization Cert [529]. CLAIM: for integers b,e>=1 with d=b+e, a=b+2e, D=d*d, F=a*b, D+F is a square iff there exist integers t,m,n>=1 with b=t*2*m*n and e=t*(m*m-4*m*n+2*n*n)>0; sqrt(D+F)=t*abs(m*m-2*n*n). Proof reduces D+F=k*k to k*k+2*b*b=u*u with u=e+2*b and parametrizes rational points on X*X+2*Y*Y=1 through (1,0). Checks QA reduction, rational-conic proof obligations, positive branch, forward identity witnesses, bounded audit, and orbit-overclaim rejection; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Codex 2026-07-23.",
+     "529_qa_dplusf_square_parametrization_cert",
+     "qa_dplusf_square_parametrization_cert_v1", True),
+    (528, "QA HSI Material Identification Cert family",
+     _validate_qa_hsi_material_id_cert_family,
+     "QA HSI Material Identification Cert [528]. CLAIM: hyperspectral material/chemical identification claims are valid only when they declare a positive wavelength grid, one-time observer quantization boundary, integer-only QA decision layer, material-library hash, diagnostic absorption-band witnesses on the grid, pure/mixture/unknown coverage, target detection metrics, abundance-bin metrics, unknown-rejection FPR, and honest synthetic-vs-real scope. PASS fixture accepts the synthetic/library-first HSI material-ID benchmark; FAIL fixtures catch bad material-library hash, missing unknown-rejection evidence, and synthetic real-data overclaim. Gates real spectral-library ingestion with source hashes and sensor wavelength resampling. Self-test ok. Author: Will Dale + Codex 2026-07-14.",
+     "528_qa_hsi_material_id_cert",
+     "qa_hsi_material_id_cert_v1", True),
+    (527, "QA Self-Improving Neural QA Activation Cert family",
+     _validate_qa_self_improving_neural_qa_activation_cert_family,
+     "QA Self-Improving Neural QA Activation Cert [527]. CLAIM (bounded, falsifiable): accepted self-improving neural QA configuration/capacity patches may produce activation plans only when the plan is manual-after-cert, resource-bounded, rollback-verifiable, replay-backed with zero protected harm, and non-mutating unless post-activation replay plus rollback proof are present. The activation plan schema records update_id, packet_hash, base_model, candidate_kind, activation_status, activation_policy, manual_approval_required, runtime_mutated, config_diff, resource_bounds, rollback artifact hash/computed hash, source evidence, replay_gate, checks, and plan_hash. Non-mutating plans must use activation_status=planned_not_applied. Mutating plans must use activation_status=applied_with_post_replay and include post_activation_proof with deterministic replay and rollback proof. Checks SINQAA_SCHEMA/SINQAA_MANUAL/SINQAA_RESOURCE/SINQAA_ROLLBACK/SINQAA_REPLAY/SINQAA_MUTATION/SINQAA_HASH; PASS activation-plan fixture and FAIL runtime-mutated-without-proof/bad-rollback-hash fixtures; self-test ok. Builds on certs [524], [525], [526]. Author: Will Dale + Codex 2026-07-12.",
+     "527_qa_self_improving_neural_qa_activation",
+     "qa_self_improving_neural_qa_activation_cert_v1", True),
+    (526, "QA Self-Improving Neural QA Scheduler Cert family",
+     _validate_qa_self_improving_neural_qa_scheduler_cert_family,
+     "QA Self-Improving Neural QA Scheduler Cert [526]. CLAIM (bounded, falsifiable): scheduled self-improving neural QA runs are valid only when the scheduler forwards replay discovery, config proposal discovery, activated runtime-config path, and isolated mutable paths into the supervisor, passes ledger/transcript/[524]/[525] focused checks, records bounded stop reasons, and includes a passing meta-validator checkpoint when due. The scheduler cert explicitly catches the glob/path/runtime-forwarding bug class that can otherwise narrow discovery, ignore certified activation, or mutate the live ledger during tests or unattended invocation. Checks SINQAS_ROW/SINQAS_SCHEMA/SINQAS_SUPERVISOR/SINQAS_PATHS/SINQAS_FOCUSED/SINQAS_META/SINQAS_STOP; PASS scheduler-run fixture and FAIL missing-path-forwarding/failed-focused-check fixtures; self-test ok. Builds on certs [524], [525], and [527]. Author: Will Dale + Codex 2026-07-12.",
+     "526_qa_self_improving_neural_qa_scheduler",
+     "qa_self_improving_neural_qa_scheduler_cert_v1", True),
+    (525, "QA Self-Improving Neural QA Loop Cert family",
+     _validate_qa_self_improving_neural_qa_loop_cert_family,
+     "QA Self-Improving Neural QA Loop Cert [525]. CLAIM (bounded, falsifiable): the self-improving neural QA runner can continue learning across multiple rounds while preserving replay-gated promotion. A loop transcript is an append-only hash chain over rounds. Each round records ledger hash before/after, ledger summaries before/after, packet_hash, update_id, decision, replay evidence hash, fixed/harmed/protected counts, and promoted_state_mutated. Accepted rounds must increment accepted count, fix positive failures, harm zero protected rows, and may mutate promoted state. Rejected rounds must increment rejected count and must not mutate promoted state. Live transcript fixture: 9 bounded rounds, 5 accepted and 4 rejected, all unique packet hashes and replay evidence hashes; rejected harm cases are recorded without promoted mutation. Checks SINQAL_ROW/SINQAL_HASH/SINQAL_CHAIN/SINQAL_DELTA/SINQAL_ACCEPT/SINQAL_REJECT/SINQAL_UNIQ; PASS live transcript and FAIL tampered rejected-mutates fixture; self-test ok. Builds on cert [524]. Author: Will Dale + Codex 2026-07-12.",
+     "525_qa_self_improving_neural_qa_loop",
+     "qa_self_improving_neural_qa_loop_cert_v1", True),
+    (524, "QA Self-Improving Neural QA Cert family",
+     _validate_qa_self_improving_neural_qa_cert_family,
+     "QA Self-Improving Neural QA Cert [524]. CLAIM (bounded, falsifiable): a neural model may continue learning only as a proposal generator; durable promotion is decided by deterministic QA replay and an append-only ledger. The v0 packet schema records base_model.neural=true, candidate update kind, optional source replay evidence hash, replay-gate counts, deterministic trace hashes, invariant checks, and promotion.decision in {accepted,rejected}. Accepted packets require positive new failures fixed, protected_cases_replayed>0, protected_cases_harmed==0, deterministic_replay=true, and every invariant check passing. Configuration/capacity patches are allowed only as bounded proposals with approved diff keys, hard resource caps, rollback metadata, and activation_policy=manual_after_cert. Rejected packets are first-class safety evidence: they must carry rejection_reason and at least one failed gate, preventing survivorship bias. Live ledger fixture: 24 rows, 13 accepted, 11 rejected; accepted packets fix 581 failures with zero protected harm across the accepted set; total protected replays across the live ledger 365,574. This is not autonomous weight mutation and does not claim unconstrained self-modification; it certifies replay-gated continual improvement and bounded capacity proposals over neural QA candidates. Checks SINQA_ROW/SINQA_HASH/SINQA_UNIQ/SINQA_PACKET/SINQA_ACCEPT/SINQA_CAPACITY/SINQA_REJECT/SINQA_PASS_MIX; PASS compact/capacity/live fixtures and FAIL duplicate_update_id/accepted_harm/duplicate_source/unbounded_capacity fixtures; self-test ok. Scoped by docs/specs/QA_SELF_IMPROVING_NEURAL_QA_V0.md. Builds on the corrected-model replay pipeline and the existing unregistered self-improvement v2 agent/cert. Author: Will Dale + Codex 2026-07-12.",
+     "524_qa_self_improving_neural_qa",
+     "qa_self_improving_neural_qa_cert_v1", True),
     (523, "QA Self-Pumped Phase Conjugate Cert family",
      _validate_qa_self_pumped_conjugate_cert_family,
      "QA Self-Pumped Phase Conjugate Cert [523]. CLAIM: the self-pumped ('cat') phase conjugator -- internal reflection, NO external pump (Feinberg 1982; Cronin-Golomb et al. 1984) -- is realized in the QA additive group on {1,...,m}. Where cert [518] SUPPLIES the pumps, here internal reflection self-generates the counter-pump p_b=qa_neg(p_loop) and the FWM output self_pumped(p,s)=fwm(p,qa_neg(p),s)=qa_neg(s) is INDEPENDENT of the self-pump p (PUMP_INDEPENDENCE, exhaustive m x m) -- which is exactly why the mirror needs no external reference. SELF_STARTING: the output stays qa_neg(s) as the self-pump wanders from a noise seed. THRESHOLD: the loop amplitude A'=g*A/(1+A) self-oscillates iff g>1 (fixed point A*=g-1), decays to A=0 for g<=1 (self-pumped reflectivity threshold g_c=1, g=1 marginal); gain and amplitude are observer-layer reals (Theorem NT), never QA state. SELF_PUMPED_DC: aberrate by phase screen phi -> self-conjugate (any self-pump, no external beam) -> return through the SAME phi = qa_neg(s) for all s,phi; a different screen phi' leaves the residual qa_mod(-s+phi'-phi) (same-medium specificity). Reference impl qa_self_pumped_conjugator.py (repo root, axiom-linter clean): PUMP_INDEPENDENCE 576/576, SELF_STARTING 200/200 (output locked through a wandering self-pump while amplitude self-builds), threshold sweep (g_c=1), self-referenced distortion correction over all s,phi. Distinct from cert [518] (external pump) and [519] (a phase-conjugate resonator driven by stored patterns): here the pump is internal. Checks PUMP_INDEPENDENCE/SELF_STARTING/THRESHOLD/SELF_PUMPED_DC/A1_RANGE; 3 PASS + 2 FAIL fixtures; self-test ok. Primary: Feinberg (1982) DOI:10.1364/OL.7.000486; Cronin-Golomb Fischer White Yariv (1984) DOI:10.1109/JQE.1984.1072018; Zel'dovich Pilipetsky Shkunov (1985) ISBN:978-3-540-13458-4. Builds on cert [518]; cluster companions [519],[520],[521],[522]. Author: Will Dale + Claude 2026-07-11.",
@@ -14337,7 +14557,7 @@ FAMILY_SWEEPS = [
      "qa_sixteen_identities_cert_v1", True),
     (147, "QA Synchronous Harmonics Cert family",
      _validate_synchronous_harmonics_cert_family,
-     "coprime periods sync at product; non-coprime at LCM<product; 3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6 (RE-VERIFIED 2026-07-06, confirmed clean); checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS + 1 FAIL; self-test ok. Follow-up 2026-07-07: closed zero-FAIL-fixture gap, added sh_fail_bad_sync.json (wrong sync_time + wrong interference label), confirmed no print-corruption bug present.",
+     "coprime periods sync at product; non-coprime at LCM<product; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6; complete Quantum Wave witnesses require 5/6/7 distinct prime bases with 2 and 3, validate 2310 and 510510 minima, and reject 5046=2*3*29*29 as incomplete. Checks SH_1+SYNC/PAR/PROD6/QWAVE/W/F; 2 PASS + 2 FAIL; self-test ok.",
      "147_qa_synchronous_harmonics_cert",
      "qa_synchronous_harmonics_cert_v1", True),
     (146, "QA Path Scale Cert family",
@@ -14402,7 +14622,7 @@ FAMILY_SWEEPS = [
      "qa_eisenstein_cert_v1", True),
     (130, "QA Origin of 24 Cert family",
      _validate_origin_of_24_cert_family,
-     "dual derivation of mod-24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions (RE-VERIFIED 2026-07-06, fixed incomplete mod-3 proof case); minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5) + 1 FAIL; self-test ok. Follow-up 2026-07-06: fixed a latent print-corruption bug (same class as [132]) and added first FAIL fixture.",
+     "dual arithmetic witness for 24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions (RE-VERIFIED 2026-07-06, fixed incomplete mod-3 proof case); minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); does not certify arbitrary observer-layer mod-24 projection; checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5) + 1 FAIL; self-test ok. Follow-up 2026-07-06: fixed a latent print-corruption bug (same class as [132]) and added first FAIL fixture.",
      "130_qa_origin_of_24",
      "qa_origin_of_24_cert_v1", True),
     (131, "QA Prime Bounded Certificate Scaling Cert family",
@@ -14587,7 +14807,7 @@ FAMILY_SWEEPS = [
      "qa_see_capture_convergence_cert_v1", True),
     (197, "QA See Longitudinal Transverse Cert family",
      _validate_see_longitudinal_transverse_cert_family,
-     "T.J.J. See wave duality (1917) mapped to QA generator/observer duality; longitudinal=T-operator (discrete causal), transverse=observer projection (continuous measurement); Theorem NT = mode orthogonality (analogy, not proof); complementary to [153] Keely triune (3-fold within longitudinal); source See 'Electrodynamic Wave-Theory' 1917; checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed overclaim treating See's historically-rejected aether theory as physical proof rather than analogy.",
+     "T.J.J. See wave duality (1917) recorded only as an analogy/framework mapping to QA generator/observer duality; Theorem NT is not physically grounded by See and rests on QA axioms. SLT_SCOPE rejects physical-proof overclaims. Source See 'Electrodynamic Wave-Theory' 1917; checks SLT_1+SCOPE+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 2 FAIL; self-test ok.",
      "197_qa_see_longitudinal_transverse_cert",
      "qa_see_longitudinal_transverse_cert_v1", True),
     (198, "QA Pudelko Modular Periodicity Cert family",
@@ -15058,7 +15278,7 @@ FAMILY_SWEEPS = [
      "qa_witt_tower_mi_ceiling_theory_cert_v1", True),
     (467, "QA Witt Tower Cross-Domain MI Survey Cert family",
      _validate_qa_witt_tower_mi_xdomain_cert_family,
-     "QA Witt Tower Cross-Domain MI Survey Cert [467]. Claim: I(orbit_tier;event_label) statistically significant (perm_p<0.001) across all 7 tested physical domains: ENSO (climate, 3-class), SEP solar (space weather), Seismic aftershock (seismology), EEG seizure energy (neuroscience, T2), EEG spectral entropy (neuroscience, T0), ECG VFL (cardiology), Geomagnetic storm (geomagnetism). KEY STRUCTURAL FINDING: MI_ratio=I/H(L) converges to ~70% for balanced event base rates (ENSO 69.9%, SEP 69.7%; delta=0.17%) -- a geometric ceiling of the Witt tower T0/T1/T2 partition, independent of physical mechanism. For 6 binary domains, MI_ratio is strictly monotone with event base rate (0 violations across 15 ordered pairs). Total null hits: 0/35000 (7 domains x 5000 shuffles). CERTIFIED: (C1) all 7 perm_p<0.001 PASS. (C2) all 7 MI_ratio>=0.15 PASS. (C3) ENSO/SEP both>=0.65, delta<0.05 PASS. (C4) 0 binary monotone violations PASS. (C5) ENSO MI=1.0745 bits>=1.0 PASS. (C6) 0/35000 null hits PASS. 6/6 PASS.",
+     "QA Witt Tower Cross-Domain MI Survey Cert [467]. Claim: I(orbit_tier;event_label) statistically significant (perm_p<0.001) across all 7 tested physical domains: ENSO (climate, 3-class), SEP solar (space weather), Seismic aftershock (seismology), EEG seizure energy (neuroscience, T2), EEG spectral entropy (neuroscience, T0), ECG VFL (cardiology), Geomagnetic storm (geomagnetism). CORRECTED STRUCTURAL FINDING: balanced-label domains occupy the high-ratio end; current fallback gives ENSO=78.2% and SEP=69.7%, both >=0.65 and ranked top two. The older delta<0.05 convergence claim is not certified. For 6 binary domains, MI_ratio is strictly monotone with event base rate (0 violations across 15 ordered pairs). Total null hits: 0/35000 (7 domains x 5000 shuffles). CERTIFIED: (C1) all 7 perm_p<0.001 PASS. (C2) all 7 MI_ratio>=0.15 PASS. (C3) ENSO/SEP both>=0.65 and top two PASS. (C4) 0 binary monotone violations PASS. (C5) ENSO MI>=1.0 bits PASS. (C6) 0/35000 null hits PASS. 6/6 PASS.",
      "467_qa_witt_tower_mi_xdomain",
      "qa_witt_tower_mi_xdomain_cert_v1", True),
     (466, "QA Witt Tower S-Orbit Weekly Regime Cert family",
@@ -15423,7 +15643,7 @@ FAMILY_SWEEPS = [
      "qa_witt_tower_safe_haven_null_cert_v1", True),
     (442, "QA Witt Tower Cross-Domain Regime Discriminator Cert family",
      _validate_qa_witt_tower_regime_discriminator_cert_family,
-     "QA Witt Tower Cross-Domain Regime Discriminator Cert [442]. Empirical demonstration that the Witt tower filter bank (cert [439]) discriminates physical and financial market activity regimes via fixed-layer and birth-layer occupation fractions, validated across two statistically independent domains. COMPANION: M=[[5,-1],[1,0]], p=3, r=1 (det=+1, [439]), tower level k=3 (mod 27). DOMAIN 1 SILSO Monthly Sunspot (Royal Observatory of Belgium, 1749-present, n>=3000 months live or 72-month fallback 2019-2024): encoding b=int(SN[t]) mod 27, e=int(SN[t-1]) mod 27 (direct observer projection, T2-compliant); solar_min (SN<20) fixed-layer 7.9%, solar_max (SN>100) fixed-layer 0.3%, delta=7.7pp, permutation p<0.001 (N=200). DOMAIN 2 S&P 500 Monthly Log-Returns (Yahoo Finance ^GSPC ~1982-2026 live or hardcoded 2000-2024): encoding rank-normalized log-returns to Z/27Z, state=(rank[t], rank[t-1]); NBER recession months (2001-03/11, 2007-12/2009-06, 2020-02/04) fixed-layer 9.7%, expansion fixed-layer 0.9%, delta=8.8pp, permutation p=0.015 (N=200). CERTIFIED FACTS: (C1) SILSO birth frac 66.1% in [55%,75%] PASS. (C2) SILSO |delta_fixed|=7.7pp>=4pp PASS. (C3) SILSO permutation p<0.15 PASS. (C4) S&P 500 birth frac 65.8% in [55%,75%] PASS. (C5) S&P 500 |delta_fixed|=8.8pp>=4pp PASS. (C6) S&P 500 permutation p<0.15 PASS. CROSS-DOMAIN: both domains produce birth fraction 65.8-66.1% (theory 2/3=66.7%) and large fixed-layer regime differential (7-9pp) independent of encoding scheme. Theorem NT compliance: time-series values->integer states is a one-way observer projection; filter bank output never re-enters QA layer as causal input. 6 checks PASS. Primary sources: Clette et al. (2015) doi:10.5194/jswsc-5-A9-2015 (SILSO); NBER www.nber.org/cycles; Wall (1960) doi:10.1080/00029890.1960.11989541. Validated 2026-06-17.",
+     "QA Witt Tower Cross-Domain Regime Discriminator Cert [442]. Empirical demonstration that the Witt tower filter bank (cert [439]) discriminates physical and financial market activity regimes via fixed-layer and birth-layer occupation fractions, validated across two statistically independent domains. COMPANION: M=[[5,-1],[1,0]], p=3, r=1 (det=+1, [439]), tower level k=3 (mod 27). DOMAIN 1 SILSO Monthly Sunspot (Royal Observatory of Belgium, 1749-present, n>=3000 months live or 72-month fallback 2019-2024): encoding b=int(SN[t]) mod 27, e=int(SN[t-1]) mod 27 (direct observer projection, T2-compliant); fallback solar_min fixed-layer 39.1%, solar_max 0.0%, delta=39.1pp, permutation p=0.000. DOMAIN 2 S&P 500 Monthly Log-Returns (Yahoo Finance ^GSPC ~1982-2026 live or hardcoded 2000-2024): encoding rank-normalized log-returns to Z/27Z, state=(rank[t], rank[t-1]); fallback NBER recession fixed-layer 6.5%, expansion 1.1%, delta=5.3pp, permutation p=0.080. CERTIFIED FACTS: (C1) birth fraction in [54%,75%] PASS for bundled fallback. (C2) |delta_fixed|>=4pp PASS. (C3) permutation p<0.15 PASS. CROSS-DOMAIN: both domains satisfy all three gates in offline CI. Theorem NT compliance: time-series values->integer states is a one-way observer projection; filter bank output never re-enters QA layer as causal input. Primary sources: Clette et al. (2015) doi:10.5194/jswsc-5-A9-2015 (SILSO); NBER www.nber.org/cycles; Wall (1960) doi:10.1080/00029890.1960.11989541. Validated 2026-06-17; fallback gate corrected 2026-07-12.",
      "442_qa_witt_tower_regime_discriminator",
      "qa_witt_tower_regime_discriminator_cert_v1", True),
     (441, "QA Witt Tower Fibonacci-Pisano Synthesis Cert family",
@@ -15713,7 +15933,7 @@ FAMILY_SWEEPS = [
      "qa_pyth2_babthe_dual_bead_chain_cert_v1", True),
     (369, "QA Pyth-2 Wave Quarter Points Cert family",
      _validate_qa_pyth2_wave_quarter_points_cert_family,
-     "QA Pyth-2 Wave Quarter Points Cert [369]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIII pp.43-56+. CLAIM: (C1) 4-par W (W%4==0): W/4,W/2,3W/4 all integers. (C2) 2-par W (W%4==2): W/2 integer, W/4 half-integer. (C3) Odd W: W/2 half-integer, W/4 quarter-integer (denom=4). (C4) 5-par (W%4==1): quarter=k+1/4; 3-par (W%4==3): quarter=k+3/4; complementary (sum=1). (C5) Two-wave integer coincidences=multiples of lcm(W1,W2); verified all pairs in [2,24]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok. VERIFIED 2026-07-07: independently confirmed clean via validator re-run, exact match.",
+     "QA Pyth-2 Wave Quarter Points Cert [369]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIII pp.43-56+. CLAIM: (C1) 4-par W (W%4==0): W/4,W/2,3W/4 all integers. (C2) 2-par W (W%4==2): W/2 integer, W/4 half-integer. (C3) Odd W: W/2 half-integer, W/4 quarter-integer (denom=4). (C4) 5-par (W%4==1): quarter=k+1/4; 3-par (W%4==3): quarter=k+3/4. (C5) coincidences=multiples of lcm(W1,W2). Self-test includes planted negatives for false quarter/integer/lcm claims and rejects the 17/23 diagram typo 97.25 in favor of 391/4=97.75.",
      "369_qa_pyth2_wave_quarter_points",
      "qa_pyth2_wave_quarter_points_cert_v1", True),
     (368, "QA Pyth-2 Synchronous Harmonics LCM Cert family",
@@ -15943,7 +16163,7 @@ FAMILY_SWEEPS = [
      "qa_harmonic_chemistry_lcm_cert_v1", True),
     (322, "QA Harmonic Aliquot Structure Cert family",
      _validate_qa_harmonic_aliquot_structure_cert_family,
-     "QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson (1995) QA-3, ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: (C1) 20 harmonic dyads among 15 distinct Cosmos d-values {3..17}; all aliquot parts 7-smooth. (C2) Direction law: d1<d2 implies p2>p1 for all dyads — higher harmonic creates lower tone. (C3) Aliquot spectrum exactly {1,2,3,5}. (C4) 5040=2^4*3^2*5*7 omega=4; all Cosmos d <= 17 < 5040. (C5) Tonal identity d-values {11,13,17} each form 5 harmonic dyads. Builds on certs [318][320][321]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson (1995) QA-3, ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: C1-C5 finite mod-9 d-value model; C6-C7 source-native wave decomposition W=A*p where A is the aliquot part and p the unique-prime multitude, plus shared-aliquot harmony between distinct unique primes. Self-test includes planted negatives for invalid aliquot/unique-prime structure.",
      "322_qa_harmonic_aliquot_structure",
      "qa_harmonic_aliquot_structure_cert_v1", True),
     (321, "QA Quantize-to-ONE Cert family",
@@ -16023,7 +16243,7 @@ FAMILY_SWEEPS = [
      "qa_induction_motor_slip_cert_v1", True),
     (306, "QA Pisano Mod-24 Applied Cosmos Period Cert family",
      _validate_qa_pisano_mod24_cosmos_period_cert_family,
-     "QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Closing the loop: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); applied modulus 24 is period-self-consistent. Checks C1_period_ceiling_24/C2_applied_singularity/C3_applied_satellite_analog/C4_applied_cosmos_504_states/C5_closing_the_loop_pi24_eq_pi9; 5 PASS + 0 FAIL; self-test ok",
+     "QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Numeric alignment: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); these are equal values for distinct typed objects, not an identification of mod-24 with the Pisano-period operator. Checks C1_period_ceiling_24/C2_applied_singularity/C3_applied_satellite_analog/C4_applied_cosmos_504_states/C5_numeric_alignment_pi24_eq_pi9; 5 PASS + 0 FAIL; self-test ok",
      "306_qa_pisano_mod24_cosmos_period",
      "qa_pisano_mod24_cosmos_period_cert_v1", True),
     (305, "QA Reactive Power Versor Coupling Cert family",

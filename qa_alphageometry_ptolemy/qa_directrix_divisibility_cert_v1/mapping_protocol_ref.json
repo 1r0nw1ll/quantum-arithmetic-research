@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Directrix Divisibility cert. Certifies the structural reduction directrix_distance_integer iff e divides d*d*d iff e divides b*b*b for d=b+e, plus the prime-exponent classifier kernel3(e)=product p^ceil(v_p(e)/3), where the condition holds exactly when kernel3(e) divides b. Empirical QA-orbit lift is preserved as context only, not part of the theorem statement."
+}

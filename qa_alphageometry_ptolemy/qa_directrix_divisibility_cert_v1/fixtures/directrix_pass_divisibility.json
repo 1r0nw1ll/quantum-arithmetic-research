@@ -1,0 +1,47 @@
+{
+  "schema_version": "QA_DIRECTRIX_DIVISIBILITY_CERT.v1",
+  "cert_type": "qa_directrix_divisibility_cert",
+  "certificate_id": "DIRECTRIX_DIV_PASS_001",
+  "theorem_status": "PROVEN_STRUCTURAL_DIVISIBILITY_REDUCTION",
+  "theorem_statement": {
+    "claim": "For b,e>=1 and d=b+e, directrix_distance_integer iff e divides d*d*d iff e divides b*b*b; equivalently kernel3(e) divides b.",
+    "claims_orbit_lift_as_theorem": false
+  },
+  "proof_obligations": [
+    "modular_reduction_d_congruent_b",
+    "cube_congruence",
+    "prime_exponent_kernel3",
+    "bounded_audit",
+    "orbit_context_non_theorem"
+  ],
+  "witnesses": [
+    {"b": 1, "e": 1, "d": 2, "kernel3_e": 1, "directrix_integer": true},
+    {"b": 2, "e": 8, "d": 10, "kernel3_e": 2, "directrix_integer": true},
+    {"b": 3, "e": 27, "d": 30, "kernel3_e": 3, "directrix_integer": true},
+    {"b": 2, "e": 9, "d": 11, "kernel3_e": 3, "directrix_integer": false},
+    {"b": 6, "e": 72, "d": 78, "kernel3_e": 6, "directrix_integer": true}
+  ],
+  "bounded_audit": {
+    "b_max": 40,
+    "e_max": 40,
+    "pair_count": 1600,
+    "directrix_support": 251,
+    "reduction_mismatch_count": 0,
+    "kernel_mismatch_count": 0
+  },
+  "orbit_context": {
+    "stage_id": "qa_quantum_arithmetic_stage21_directrix_e_alone_control",
+    "qa_orbit_family9_lift": 3.928,
+    "qa_orbit_id9_lift": 3.928,
+    "e_only_lift": 2.428,
+    "b_only_lift": 2.615,
+    "included_as_theorem": false
+  },
+  "non_claims": [
+    "conic_geometry_explanation",
+    "orbit_lift_theorem",
+    "prime_prediction_or_factorization_shortcut"
+  ],
+  "result": "PASS",
+  "fail_ledger": []
+}

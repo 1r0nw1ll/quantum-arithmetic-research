@@ -1,0 +1,37 @@
+{
+  "schema_version": "QA_DPLUSF_SQUARE_PARAMETRIZATION_CERT.v1",
+  "cert_type": "qa_dplusf_square_parametrization_cert",
+  "certificate_id": "DPF_PARAM_PASS_001",
+  "theorem_status": "PROVEN_BY_RATIONAL_CONIC_PARAMETRIZATION",
+  "theorem_statement": {
+    "claim": "For b,e>=1, d=b+e, a=b+2e, D=d*d, F=a*b, D+F is a square iff b=t*2*m*n and e=t*(m*m - 4*m*n + 2*n*n)>0; sqrt(D+F)=t*abs(m*m - 2*n*n).",
+    "claims_empirical_orbit_lift_as_theorem": false
+  },
+  "proof_obligations": [
+    "qa_reduction_D_plus_F",
+    "rational_conic_parametrization",
+    "positive_branch",
+    "forward_identity",
+    "bounded_audit"
+  ],
+  "witnesses": [
+    {"b": 4, "e": 1, "t": 1, "m": 1, "n": 2, "sqrt_D_plus_F": 7},
+    {"b": 6, "e": 7, "t": 1, "m": 1, "n": 3, "sqrt_D_plus_F": 17},
+    {"b": 8, "e": 2, "t": 2, "m": 1, "n": 2, "sqrt_D_plus_F": 14},
+    {"b": 8, "e": 17, "t": 1, "m": 1, "n": 4, "sqrt_D_plus_F": 31}
+  ],
+  "bounded_audit": {
+    "b_max": 40,
+    "e_max": 40,
+    "brute_solution_count": 25,
+    "param_hit_count": 25,
+    "miss_count": 0
+  },
+  "non_claims": [
+    "prime_prediction_or_factorization_shortcut",
+    "empirical_orbit_lift_theorem",
+    "physical_conic_measurement"
+  ],
+  "result": "PASS",
+  "fail_ledger": []
+}

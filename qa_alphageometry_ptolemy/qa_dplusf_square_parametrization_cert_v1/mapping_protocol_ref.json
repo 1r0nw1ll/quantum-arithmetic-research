@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA D_plus_F square parametrization cert. Certifies the integer theorem D+F square iff b=t*2*m*n and e=t*(m*m - 4*m*n + 2*n*n)>0, with sqrt(D+F)=t*abs(m*m - 2*n*n), for d=b+e, a=b+2e, D=d*d, F=a*b. Proof route reduces D+F=k*k to k*k+2*b*b=u*u with u=e+2*b and parametrizes rational points on X*X+2*Y*Y=1 through (1,0)."
+}

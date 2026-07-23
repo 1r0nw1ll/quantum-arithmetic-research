@@ -56,6 +56,7 @@ python3 experiments/qa_quantum_arithmetic_mining/leak_orbit_ablation_stage19.py 
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_param_audit_stage22.py
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.py
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py
+python3 experiments/qa_quantum_arithmetic_mining/directrix_divisibility_closure_stage25.py
 ```
 
 Default artifacts land in `results/qa_quantum_arithmetic_mining_001/`.
@@ -81,6 +82,7 @@ python3 experiments/qa_quantum_arithmetic_mining/leak_orbit_ablation_stage19.py 
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_param_audit_stage22.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py --self-test
+python3 experiments/qa_quantum_arithmetic_mining/directrix_divisibility_closure_stage25.py --self-test
 ```
 
 Each self-test prints canonical JSON with `{"ok":true}` on success.
@@ -180,3 +182,5 @@ Each self-test prints canonical JSON with `{"ok":true}` on success.
   theorem ledger?
 - Does the rational-conic proof closure for `D_plus_F_square` satisfy the
   project bar for a formal QA theorem cert?
+- Should `directrix_distance_integer` be retired from empirical-open status now
+  that it reduces exactly to `e | b*b*b`, equivalently `kernel3(e) | b`?

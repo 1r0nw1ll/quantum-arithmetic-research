@@ -945,6 +945,24 @@
       "result": "PASS",
       "script": "experiments/qa_quantum_arithmetic_mining/h_integer_reduction_closure_stage29.py",
       "success_criteria": "PASS if the 400x400 reduction audit has zero mismatches, the derived enumeration has zero misses and zero invalid generated rows, and theorem status is PROVEN_STRUCTURAL_SQUARE_PART_REDUCTION."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_quantum_arithmetic_mining/orbit_specific_discovery_stage30.py",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage30_orbit_specific_discovery.json",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage30_orbit_specific_target_summary.csv",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage30_orbit_specific_feature_leaderboard.csv"
+      ],
+      "captured_utc": "2026-07-23T22:14:03Z",
+      "cert_id": null,
+      "domain": "qa_arithmetic_mining",
+      "hypothesis": "A new orbit-specific discovery harness should rank targets by orbit lift over b-only, e-only, b/e-pair, derived-scalar, factor-signature, exact-reduction, and shuffled-label controls rather than raw lift.",
+      "id": "qa_quantum_arithmetic_stage30_orbit_specific_discovery_2026-07-23",
+      "notes": "PASS as a controlled null. Train window 1..100, test window 101..300, 14 joint targets, 13 feature sets, 50 shuffled-label nulls. Verdict split: EXACT_REDUCTION_AVAILABLE=4, NON_ORBIT_BASELINE_COMPETITIVE=9, ORBIT_NULL_COMPETITIVE=1, ORBIT_SPECIFIC_CANDIDATE=0. Directrix still shows mod-9 orbit lift above b-only/e-only baselines, but b/e-pair and factor-signature baselines beat orbit, and the exact kernel3 reduction dominates. Honest conclusion: no static target in this pack is orbit-specific under the strict control definition.",
+      "open_brain_id": "514c7b30-8973-4aee-87a0-05507c1a8312",
+      "result": "PASS_NULL",
+      "script": "experiments/qa_quantum_arithmetic_mining/orbit_specific_discovery_stage30.py",
+      "success_criteria": "PASS if the harness emits target and feature ledgers, computes orbit lift over best non-orbit baseline, applies null controls, and marks no target orbit-specific unless orbit beats the best non-orbit baseline and null ceiling."
     }
   ]
 }

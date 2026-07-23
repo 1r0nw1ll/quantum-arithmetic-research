@@ -5,6 +5,10 @@ It is deliberately scoped as exploration: the scripts generate relational tables
 validate known identities, and export inspectable CSV cuts. They do not claim a new
 prime theorem or a factorization shortcut.
 
+The current orbit-specificity conclusion is documented in
+`docs/theory/empirical/qa_arithmetic_orbit_specificity_null.md`: Stages 30 and
+31 form controlled negative results for this residue-label mining style.
+
 ## Tables
 
 `generate_dataset.py` writes a SQLite database with two linked tables:

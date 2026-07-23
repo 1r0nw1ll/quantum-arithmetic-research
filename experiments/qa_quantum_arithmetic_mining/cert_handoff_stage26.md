@@ -6,6 +6,12 @@ This handoff flags two QA arithmetic geometry targets that moved from empirical
 mining signals to proof-grade structural results. It does not scaffold a cert
 family. The intended owner for the cert decision is Will.
 
+Decision recorded after review: split these into two separate cert families.
+The `D_plus_F_square` result is a closed conic-parametrization theorem. The
+`directrix_distance_integer` result is a structural divisibility theorem, with a
+separate empirical observation that mod-9 QA orbit membership beat single
+generator residue baselines in Stage 21.
+
 ## Candidate 1: `D_plus_F_square`
 
 Status: `PROVEN_BY_RATIONAL_CONIC_PARAMETRIZATION`
@@ -69,9 +75,18 @@ Cert recommendation:
 Cert-worthy, but smaller and more elementary than Candidate 1. Suggested family
 label: `qa_directrix_divisibility_cert_v1`.
 
+Stage 21 orbit note:
+The directrix target is no longer an unexplained conic invariant, but Stage 21
+did find a QA-specific residue effect: `qa_orbit_family9` and `qa_orbit_id9`
+lifted `3.93`, beating `e_only` lift `2.43` and `b_only` lift `2.61`. That
+orbit-vs-generator gap should be described as empirical context or a separate
+observation, not as part of the divisibility theorem itself.
+
 ## Suggested Next Action
 
-Ask Will whether to create one combined QA arithmetic geometry theorem cert or
-two separate cert families. A combined cert reduces documentation overhead; two
-separate families keep the conic-parametrization theorem distinct from the
-directrix divisibility reduction.
+Create two separate cert-family specs if Will approves cert conversion:
+
+1. `qa_dplusf_square_parametrization_cert_v1`
+2. `qa_directrix_divisibility_cert_v1`
+
+Do not combine them unless Will explicitly reverses this split decision.

@@ -184,3 +184,6 @@ Each self-test prints canonical JSON with `{"ok":true}` on success.
   project bar for a formal QA theorem cert?
 - Should `directrix_distance_integer` be retired from empirical-open status now
   that it reduces exactly to `e | b*b*b`, equivalently `kernel3(e) | b`?
+- Should Will convert the closed `D_plus_F_square` and
+  `directrix_distance_integer` results into one combined theorem cert or two
+  separate cert families?

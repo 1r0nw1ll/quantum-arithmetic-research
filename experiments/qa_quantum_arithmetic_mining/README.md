@@ -59,6 +59,7 @@ python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_sta
 python3 experiments/qa_quantum_arithmetic_mining/directrix_divisibility_closure_stage25.py
 python3 experiments/qa_quantum_arithmetic_mining/reduction_triage_stage27.py
 python3 experiments/qa_quantum_arithmetic_mining/g_square_proof_closure_stage28.py
+python3 experiments/qa_quantum_arithmetic_mining/h_integer_reduction_closure_stage29.py
 ```
 
 Default artifacts land in `results/qa_quantum_arithmetic_mining_001/`.

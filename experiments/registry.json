@@ -999,6 +999,22 @@
       "result": "PASS_NULL",
       "script": "experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py",
       "success_criteria": "PASS if the harness emits target and feature ledgers, applies ordered-path null controls, and marks no target path-specific unless ordered path features beat shuffled-path, unordered-path, current-cell, static-orbit, factor-signature, and null controls."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_quantum_arithmetic_mining/semi_latus_reduction_closure_stage33.py",
+        "results/qa_quantum_arithmetic_mining_001/qa_quantum_arithmetic_stage33_semi_latus_reduction_closure.json"
+      ],
+      "captured_utc": "2026-07-24T00:55:00Z",
+      "cert_id": null,
+      "domain": "qa_arithmetic_mining",
+      "hypothesis": "semi_latus_squarefree and semi_latus_distinct_omega_2 both close as elementary structural factorization reductions on the two QA generators a=b+2e and b: they follow from rad(F)=rad(a) union rad(b) for F=a*b, with no dependence on residues or orbit structure.",
+      "id": "qa_quantum_arithmetic_stage33_semi_latus_reduction_closure_2026-07-24",
+      "notes": "PASS. Closes the two remaining REDUCIBLE_TO_COMPONENT_FACTORIZATION targets from the Stage 27 triage (the third, ecc_den_smooth_13, was already reduced to d/gcd(e,b) in Stage 27 itself). Audited b,e<=400 (160,000 pairs). semi_latus_squarefree support 45,648, exactly matching Stage 27; reduces to squarefree(a) AND squarefree(b) AND gcd(a,b)=1, zero mismatches. semi_latus_distinct_omega_2 support 16,114, exactly matching Stage 27; reduces to |primes(a) union primes(b)|=2, zero mismatches. Both derive from the single identity rad(a*b)=rad(a) union rad(b) (audited directly, zero mismatches over all 160,000 pairs). Strength class: elementary structural reduction, [530]/[532]-style if certified, not [529]/[531]-class parametrization.",
+      "open_brain_id": null,
+      "result": "PASS",
+      "script": "experiments/qa_quantum_arithmetic_mining/semi_latus_reduction_closure_stage33.py",
+      "success_criteria": "PASS if the 400x400 reduction audit has zero mismatches for both targets, the rad-union identity has zero mismatches, and theorem status is PROVEN_STRUCTURAL_FACTORIZATION_REDUCTION."
     }
   ]
 }

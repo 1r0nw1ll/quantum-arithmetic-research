@@ -6,8 +6,11 @@ validate known identities, and export inspectable CSV cuts. They do not claim a 
 prime theorem or a factorization shortcut.
 
 The current orbit-specificity conclusion is documented in
-`docs/theory/empirical/qa_arithmetic_orbit_specificity_null.md`: Stages 30 and
-31 form controlled negative results for this residue-label mining style.
+`docs/theory/empirical/qa_arithmetic_orbit_specificity_null.md`: Stages 30,
+31, and 32 form controlled negative results for this residue-label mining
+style. Stage 33 closes the two remaining `REDUCIBLE_TO_COMPONENT_FACTORIZATION`
+targets from the Stage 27 triage (`semi_latus_squarefree`,
+`semi_latus_distinct_omega_2`) as elementary factorization reductions.
 
 ## Tables
 
@@ -67,6 +70,7 @@ python3 experiments/qa_quantum_arithmetic_mining/h_integer_reduction_closure_sta
 python3 experiments/qa_quantum_arithmetic_mining/orbit_specific_discovery_stage30.py
 python3 experiments/qa_quantum_arithmetic_mining/orbit_dynamic_transition_stage31.py
 python3 experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py
+python3 experiments/qa_quantum_arithmetic_mining/semi_latus_reduction_closure_stage33.py
 ```
 
 Default artifacts land in `results/qa_quantum_arithmetic_mining_001/`.
@@ -94,6 +98,7 @@ python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_theorem_stage23.p
 python3 experiments/qa_quantum_arithmetic_mining/dplusf_square_proof_closure_stage24.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/directrix_divisibility_closure_stage25.py --self-test
 python3 experiments/qa_quantum_arithmetic_mining/orbit_path_invariant_stage32.py --self-test
+python3 experiments/qa_quantum_arithmetic_mining/semi_latus_reduction_closure_stage33.py --self-test
 ```
 
 Each self-test prints canonical JSON with `{"ok":true}` on success.

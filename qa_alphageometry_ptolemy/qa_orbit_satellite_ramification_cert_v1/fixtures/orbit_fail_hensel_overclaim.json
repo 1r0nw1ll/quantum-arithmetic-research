@@ -1,0 +1,286 @@
+{
+  "bounded_audit": {
+    "per_modulus": [
+      {
+        "m": 15,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 30,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 45,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 60,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 75,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      }
+    ]
+  },
+  "cert_type": "qa_orbit_satellite_ramification_cert",
+  "certificate_id": "ORBIT_RAMIFICATION_FAIL_HENSEL_OVERCLAIM_001",
+  "crt_examples": [
+    {
+      "b": 1,
+      "e": 3,
+      "m": 15
+    },
+    {
+      "b": 1,
+      "e": 8,
+      "m": 15
+    },
+    {
+      "b": 1,
+      "e": 13,
+      "m": 15
+    }
+  ],
+  "fail_ledger": [
+    {
+      "fail_type": "HENSEL_GENERALIZATION_OVERCLAIM"
+    }
+  ],
+  "known_moduli_check": {
+    "per_modulus": [
+      {
+        "m": 9,
+        "shortcut_miss_count": 0
+      },
+      {
+        "m": 24,
+        "shortcut_miss_count": 0
+      }
+    ]
+  },
+  "mod3_witnesses": [
+    {
+      "b": 1,
+      "e": 1,
+      "period": 8
+    },
+    {
+      "b": 1,
+      "e": 2,
+      "period": 8
+    },
+    {
+      "b": 1,
+      "e": 3,
+      "period": 8
+    },
+    {
+      "b": 2,
+      "e": 1,
+      "period": 8
+    },
+    {
+      "b": 2,
+      "e": 2,
+      "period": 8
+    },
+    {
+      "b": 2,
+      "e": 3,
+      "period": 8
+    },
+    {
+      "b": 3,
+      "e": 1,
+      "period": 8
+    },
+    {
+      "b": 3,
+      "e": 2,
+      "period": 8
+    },
+    {
+      "b": 3,
+      "e": 3,
+      "period": 1
+    }
+  ],
+  "mod5_witnesses": [
+    {
+      "b": 1,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 1,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 1,
+      "e": 3,
+      "period": 4
+    },
+    {
+      "b": 1,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 1,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 1,
+      "period": 4
+    },
+    {
+      "b": 2,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 4,
+      "period": 4
+    },
+    {
+      "b": 3,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 2,
+      "period": 4
+    },
+    {
+      "b": 4,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 5,
+      "period": 1
+    }
+  ],
+  "non_claims": [
+    "prime_prediction_or_factorization_shortcut",
+    "general_prime_power_hensel_lifting_proof_for_arbitrary_exponents",
+    "replacement_for_canonical_orbit_period_simulation",
+    "empirical_orbit_lift_theorem"
+  ],
+  "proof_obligations": [
+    "qa_step_fibonacci_conjugacy",
+    "mod3_irreducible_period8",
+    "mod5_jordan_eigenspace_period4",
+    "crt_lcm_composition",
+    "shortcut_miss_count_bounded_audit",
+    "known_moduli_shortcut_exact"
+  ],
+  "qa_step_fibonacci_conjugacy_samples": [
+    {
+      "b": 1,
+      "e": 1,
+      "m": 9
+    },
+    {
+      "b": 7,
+      "e": 13,
+      "m": 24
+    },
+    {
+      "b": 15,
+      "e": 15,
+      "m": 15
+    },
+    {
+      "b": 3,
+      "e": 11,
+      "m": 30
+    }
+  ],
+  "result": "FAIL",
+  "schema_version": "QA_ORBIT_SATELLITE_RAMIFICATION_CERT.v1",
+  "theorem_statement": {
+    "claim": "Invalidly claims a general p-adic/Hensel-lifting proof for arbitrary prime-power exponents, beyond what was verified computationally for m in {15,30,45,60,75}.",
+    "claims_empirical_orbit_lift_as_theorem": false,
+    "claims_general_hensel_lifting_proof": true,
+    "claims_replaces_canonical_orbit_period": false
+  },
+  "theorem_status": "PROVEN_BY_DISCRIMINANT_5_RAMIFICATION"
+}

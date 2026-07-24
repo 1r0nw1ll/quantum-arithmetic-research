@@ -18,16 +18,46 @@ Canonical classifier (empirical, based on orbit period under qa_step):
                                 gcd(m, 5) = 1; under-counts period-8 states
                                 by 32 when 5 | m. Verified for m ∈ KNOWN_MODULI.
 
-Why orbit_family is empirical:
-  The algebraic shortcut "(m//3)|b ∧ (m//3)|e ∧ not singularity" agrees with
-  orbit_period == 8 on m ∈ {9, 24} (both coprime to 5) and on every other
-  modulus tested with gcd(m, 5) = 1. For m with 5 | m (e.g., 15, 30, 45,
-  60, 75) the shortcut under-counts by exactly 32 period-8 pairs that arise
-  from the Pisano-period structure of Fibonacci-mod-5 lifted through the
-  mod-3 factor. The canonical satellite predicate is therefore orbit_period
-  == 8, not the divisor shortcut. The shortcut is preserved as a named
-  helper for callers that explicitly want the fast algebraic answer on
-  verified moduli.
+Why orbit_family is empirical (orbit_period is simulated, not closed-form):
+  qa_step(b, e, m) is conjugate to the Fibonacci matrix M = [[0,1],[1,1]]
+  acting on (Z/mZ)^2, with 0 relabeled m (that is all A1's no-zero rule is
+  doing here). M's characteristic polynomial is x^2 - x - 1, discriminant 5.
+
+  Mod 3: disc 5 ≡ 2 is a non-residue, so x^2-x-1 is irreducible over F_3.
+  M's eigenvalues then live in F_9 and have order exactly 8 in F_9^*, so M
+  has order 8 in GL_2(F_3) and fixes only the zero vector. Consequence:
+  EVERY nonzero vector of (Z/3Z)^2 has orbit period exactly 8 — this is
+  the origin of the period-8 "satellite" class, and it is what the divisor
+  shortcut "(m//3)|b ∧ (m//3)|e" is actually detecting (the subgroup of
+  (Z/mZ)^2 that reduces to (Z/3Z)^2).
+
+  Mod 5: disc 5 ≡ 0, so x^2-x-1 has a REPEATED root (5 ramifies here, same
+  fact as "5 ramifies Z[φ]" elsewhere in this project). M mod 5 is a
+  non-diagonalizable Jordan block with eigenvalue 3 (order 4 in (Z/5Z)^*).
+  Its 1-dimensional eigenspace has 4 nonzero vectors with orbit period
+  exactly 4 (pure scalar multiplication by 3); every other nonzero vector
+  gets the full Jordan-block order, 20 (= Pisano period π(5)).
+
+  Why the shortcut under-counts by exactly 32 when 5 | m: by CRT, the full
+  orbit period is the lcm of the periods at each coprime prime-power part
+  of m. Since 4 | 8, an (b,e) that is "generic mod 3" (local period 8) and
+  lands in the mod-5 eigenspace (local period 4) still gets combined period
+  lcm(8,4) = 8 — a genuine satellite — but the divisor shortcut only looks
+  for the mod-5 part being trivial (period 1), so it misses this whole
+  class. Count: 8 (nonzero mod-3 states) × 4 (mod-5 eigenspace) = 32,
+  exactly. Verified against orbit_family/orbit_family_divisor_shortcut for
+  m ∈ {15, 30, 45, 60, 75} (all five moduli this module already names) —
+  32 misses every time, and each miss lands in exactly this "mod-3 generic,
+  mod-5 eigenspace" class. The mod-3/mod-5 (prime-level) facts above are
+  proven by the eigenvalue argument for any m; the persistence of the same
+  period values at higher prime powers (9, 25, as seen for m ∈ {45, 75})
+  is verified computationally here, not re-derived from a general p-adic
+  lifting argument. Full derivation and cert: qa_alphageometry_ptolemy/
+  qa_orbit_satellite_ramification_cert_v1/.
+
+  The canonical satellite predicate is therefore orbit_period == 8, not the
+  divisor shortcut. The shortcut is preserved as a named helper for callers
+  that explicitly want the fast algebraic answer on verified moduli.
 
 Why NOT v₃(f(b,e)):
   f(b,e) = b*b + b*e - e*e ≡ 0 (mod 3) requires b≡0 AND e≡0 (mod 3),

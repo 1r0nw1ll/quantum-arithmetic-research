@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=negative fixture for exact integer matrix proof from Fibonacci transition matrix. -->",
+  "description": "Corrupts T^8-I, so the exact period-kernel theorem must reject the artifact.",
+  "kind": "cross_modulus_exact_period_rule",
+  "moduli": [9, 12],
+  "expected_residual_matrices": {
+    "T4_minus_I": [[1, 3], [3, 4]],
+    "T8_minus_I": [[12, 21], [21, 34]]
+  },
+  "expected_counts": {
+    "9": {"cosmos": 72, "satellite": 8, "singularity": 1},
+    "12": {"cosmos": 135, "satellite": 8, "singularity": 1}
+  },
+  "expected": "FAIL"
+}

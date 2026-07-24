@@ -10505,7 +10505,7 @@ def _validate_qa_koenig_spread_optimality_cert_family(base_dir):
 
 
 def _validate_qa_fibonacci_matrix_orbit_periods_cert_family(base_dir):
-    """QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly DOI 10.1080/00029890.1960.11989541 (Pisano period = order of Fibonacci matrix in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA orbits). CLAIM: M=[[0,1],[1,1]] has order 24 in GL(2,Z/9Z); period distribution 1/8/72; satellite={3|b,3|e}\\{(0,0)}; Fibonacci pairs period-24; Tribonacci period-8; Ninbonacci period-1. Extended theorem-map predicate: T^4-I=[[1,3],[3,4]], T^8-I=[[12,21],[21,33]], and period8_fixed AND NOT period4_fixed -> Satellite, period1_fixed -> Singularity, otherwise Cosmos has 0 errors on m={9,12,15,18,21,24,27,30}. GCD-3 EXTENSION (verified not proved-in-general): the {3|b,3|e} satellite predicate is a genuine subgroup only when 3|m (proved in general); for gcd(m,3)=1 the literal predicate is not closed under mod-m addition, and for the 8 tested moduli {7,10,11,13,14,16,17,20} the satellite class is empty (no period-8 states) -- proved via a determinant-(-5) argument when gcd(m,5)=1, confirmed only by enumeration for m=10,20 (5|m case still open) -- with the orbit-period spectrum instead following a richer divisor lattice of pi(m). Suggestive of (not proved identical to) the mod-3-invertibility mechanism cert [515] (QA Orbit-Lattice Mod-3 Collapse) proves for its own qa_step recursion. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE/EXACT_PERIOD_KERNELS/CROSS_MODULUS_RULE/COUNTS/GCD3_SUBGROUP_CLOSURE/SATELLITE_EMPTY_OFF3/NONMULT3_SPECTRUM; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    """QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly DOI 10.1080/00029890.1960.11989541 (Pisano period = order of Fibonacci matrix in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA orbits). CLAIM: M=[[0,1],[1,1]] has order 24 in GL(2,Z/9Z); period distribution 1/8/72; satellite={3|b,3|e}\\{(0,0)}; Fibonacci pairs period-24; Tribonacci period-8; Ninbonacci period-1. Extended theorem-map predicate: T^4-I=[[1,3],[3,4]], T^8-I=[[12,21],[21,33]], and period8_fixed AND NOT period4_fixed -> Satellite, period1_fixed -> Singularity, otherwise Cosmos has 0 errors on m={9,12,15,18,21,24,27,30}. GCD-3 EXTENSION (verified not proved-in-general): the {3|b,3|e} satellite predicate is a genuine subgroup only when 3|m (proved in general); for gcd(m,3)=1 the literal predicate is not closed under mod-m addition, and for the 8 tested moduli {7,10,11,13,14,16,17,20} the satellite class is empty (no period-8 states) -- proved via a determinant-(-5) argument when gcd(m,5)=1, confirmed only by enumeration for m=10,20 (5|m case now CLOSED by cert [533]: discriminant-5 mod-5 ramification gives M mod 5 only periods {1,4,20}, and no lcm with the 2-part's periods ever equals 8) -- with the orbit-period spectrum instead following a richer divisor lattice of pi(m). Suggestive of (not proved identical to) the mod-3-invertibility mechanism cert [515] (QA Orbit-Lattice Mod-3 Collapse) proves for its own qa_step recursion. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE/EXACT_PERIOD_KERNELS/CROSS_MODULUS_RULE/COUNTS/GCD3_SUBGROUP_CLOSURE/SATELLITE_EMPTY_OFF3/NONMULT3_SPECTRUM; 6 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
     fam_dir = os.path.join(base_dir, "qa_fibonacci_matrix_orbit_periods_cert_v1")
     validator = os.path.join(fam_dir, "qa_fibonacci_matrix_orbit_periods_cert_validate.py")
@@ -14061,6 +14061,37 @@ def _validate_qa_h_integer_square_part_reduction_cert_family(base_dir):
     return None
 
 
+def _validate_qa_orbit_satellite_ramification_cert_family(base_dir):
+    """Cert [533]: QA Orbit Satellite Ramification Cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_orbit_satellite_ramification_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_satellite_ramification_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_satellite_ramification_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_satellite_ramification_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_satellite_ramification_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_satellite_ramification_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -14072,6 +14103,11 @@ def _validate_qa_h_integer_square_part_reduction_cert_family(base_dir):
 # - New families should set must_have_dedicated_root=True and use a dedicated directory root
 #   (i.e., do not use family_root_rel="." for new families).
 FAMILY_SWEEPS = [
+    (533, "QA Orbit Satellite Ramification Cert family",
+     _validate_qa_orbit_satellite_ramification_cert_family,
+     "QA Orbit Satellite Ramification Cert [533]. CLAIM: qa_step(b,e,m) is conjugate to the Fibonacci matrix M=[[0,1],[1,1]] on (Z/mZ)^2 with 0 relabeled m; x*x-x-1 has discriminant 5, which is irreducible mod 3 (every nonzero mod-3 vector has orbit period exactly 8, the source of the satellite class) and has a repeated root mod 5 (5 is the ramified prime), giving a 4-vector eigenspace of period 4 versus 20 vectors of period 20 (=Pisano period pi(5)). By CRT/lcm composition, states that are generic mod 3 (period 8) and land in the mod-5 eigenspace (period 4) still have combined period 8, producing exactly 8x4=32 satellites the (m//3)|b,e divisor shortcut misses whenever 5|m; verified for m in {15,30,45,60,75}, with the shortcut exact (0 misses) on m in {9,24}. Checks Fibonacci-matrix conjugacy, mod-3 irreducibility/period-8, mod-5 Jordan-eigenspace/period-4, CRT composition examples, full bounded-audit recomputation of the 32-miss count, known-moduli exactness, and rejects Hensel-generalization/classifier-replacement/orbit-lift overclaims; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Claude 2026-07-23.",
+     "533_qa_orbit_satellite_ramification_cert",
+     "qa_orbit_satellite_ramification_cert_v1", True),
     (532, "QA h_integer Square-Part Reduction Cert family",
      _validate_qa_h_integer_square_part_reduction_cert_family,
      "QA h_integer Square-Part Reduction Cert [532]. CLAIM: for integers b,e>=1 with d=b+e, a=b+2e, F=a*b, h=sqrt(F)*d is integer iff F is square; with g=gcd(a,b), this is equivalent to both a/g and b/g being perfect squares. Checks QA reduction from h_integer to F_square, gcd square-part decomposition, coprime-product-square theorem, bounded audit, and parametrization-strength boundary; rejects complete-geometry-parametrization overclaims; 1 PASS + 2 FAIL fixtures; self-test ok. Author: Will Dale + Codex 2026-07-23.",
@@ -16390,7 +16426,7 @@ FAMILY_SWEEPS = [
      "qa_koenig_spread_optimality_cert_v1", True),
     (291, "QA Fibonacci Matrix Orbit Periods Cert family",
      _validate_qa_fibonacci_matrix_orbit_periods_cert_family,
-     "QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541 (Pisano period pi(m) = order of Fibonacci matrix [[0,1],[1,1]] in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA T-operator, BEDA tuples, orbit classification). CLAIM: M=[[0,1],[1,1]] has order exactly 24 in GL(2,Z/9Z); three orbit types partition (Z/9Z)^2: Singularity {(0,0)} period 1, Satellite {3|b AND 3|e}\\{(0,0)} 8 states period 8, Cosmos 72 states period 24. Extended theorem-map predicate: T^4-I=[[1,3],[3,4]], T^8-I=[[12,21],[21,33]], and period8_fixed AND NOT period4_fixed -> Satellite, period1_fixed -> Singularity, otherwise Cosmos has 0 errors on m={9,12,15,18,21,24,27,30}. GCD-3 EXTENSION (verified not proved-in-general): the {3|b,3|e} satellite predicate is a genuine subgroup only when 3|m (proved in general); for gcd(m,3)=1 the literal predicate is not closed under mod-m addition, and for the 8 tested moduli {7,10,11,13,14,16,17,20} the satellite class is empty (no period-8 states) -- proved via a determinant-(-5) argument when gcd(m,5)=1, confirmed only by enumeration for m=10,20 (5|m case still open) -- with the orbit-period spectrum instead following a richer divisor lattice of pi(m). Suggestive of (not proved identical to) the mod-3-invertibility mechanism cert [515] (QA Orbit-Lattice Mod-3 Collapse) proves for its own qa_step recursion. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE/EXACT_PERIOD_KERNELS/CROSS_MODULUS_RULE/COUNTS/GCD3_SUBGROUP_CLOSURE/SATELLITE_EMPTY_OFF3/NONMULT3_SPECTRUM; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541 (Pisano period pi(m) = order of Fibonacci matrix [[0,1],[1,1]] in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA T-operator, BEDA tuples, orbit classification). CLAIM: M=[[0,1],[1,1]] has order exactly 24 in GL(2,Z/9Z); three orbit types partition (Z/9Z)^2: Singularity {(0,0)} period 1, Satellite {3|b AND 3|e}\\{(0,0)} 8 states period 8, Cosmos 72 states period 24. Extended theorem-map predicate: T^4-I=[[1,3],[3,4]], T^8-I=[[12,21],[21,33]], and period8_fixed AND NOT period4_fixed -> Satellite, period1_fixed -> Singularity, otherwise Cosmos has 0 errors on m={9,12,15,18,21,24,27,30}. GCD-3 EXTENSION (verified not proved-in-general): the {3|b,3|e} satellite predicate is a genuine subgroup only when 3|m (proved in general); for gcd(m,3)=1 the literal predicate is not closed under mod-m addition, and for the 8 tested moduli {7,10,11,13,14,16,17,20} the satellite class is empty (no period-8 states) -- proved via a determinant-(-5) argument when gcd(m,5)=1, confirmed only by enumeration for m=10,20 (5|m case now CLOSED by cert [533]: discriminant-5 mod-5 ramification gives M mod 5 only periods {1,4,20}, and no lcm with the 2-part's periods ever equals 8) -- with the orbit-period spectrum instead following a richer divisor lattice of pi(m). Suggestive of (not proved identical to) the mod-3-invertibility mechanism cert [515] (QA Orbit-Lattice Mod-3 Collapse) proves for its own qa_step recursion. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE/EXACT_PERIOD_KERNELS/CROSS_MODULUS_RULE/COUNTS/GCD3_SUBGROUP_CLOSURE/SATELLITE_EMPTY_OFF3/NONMULT3_SPECTRUM; 6 PASS + 4 FAIL fixtures; self-test ok",
      "291_qa_fibonacci_matrix_orbit_periods",
      "qa_fibonacci_matrix_orbit_periods_cert_v1", True),
     (290, "QA Classical Subfamily Ford Cusps Cert family",

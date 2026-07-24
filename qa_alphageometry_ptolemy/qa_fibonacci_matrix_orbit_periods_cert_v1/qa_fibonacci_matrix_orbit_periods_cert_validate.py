@@ -44,11 +44,31 @@ GCD-3 STRUCTURAL REQUIREMENT (extends the cross-modulus rule above):
   invertible whenever gcd(m,3)=1, so the period8_fixed system reduces to a
   determinant-(-5) system with only the trivial solution WHEN gcd(m,5)=1
   (m=7,11,13,14,16,17 above). For m=10,20 (both divisible by 5), emptiness
-  is confirmed by exhaustive enumeration, not yet by a closed-form argument
-  for the 5|m case -- that gap is open, not glossed over. The orbit-period
-  spectrum for all 8 moduli is instead a richer, m-specific divisor lattice
-  of pi(m) (e.g. m=7: only {1,16}; m=10: six distinct periods
-  {1,3,4,12,20,60}; no period-8 class anywhere).
+  was confirmed by exhaustive enumeration only, not by a closed-form
+  argument for the 5|m case. The orbit-period spectrum for all 8 moduli is
+  instead a richer, m-specific divisor lattice of pi(m) (e.g. m=7: only
+  {1,16}; m=10: six distinct periods {1,3,4,12,20,60}; no period-8 class
+  anywhere).
+
+  5|m GAP CLOSED BY CERT [533] (QA Orbit Satellite Ramification Cert):
+  x^2-x-1 (the char. poly of M) has discriminant 5. Mod 5 this discriminant
+  vanishes, so x^2-x-1 has a REPEATED root and M mod 5 is a Jordan block:
+  its periods are exactly {1, 4, 20} (1 fixed point, a 4-vector eigenspace
+  of period 4, everything else period 20 = Pisano pi(5)) -- period 8 never
+  occurs at the 5-part in isolation. For m=10 (2-part=2, periods {1,3}) and
+  m=20 (2-part=4, periods {1,3,6}), CRT gives orbit_period(b,e,m) =
+  lcm(2-part period, 5-part period); no combination of {1,3}x{1,4,20} (or
+  {1,3,6}x{1,4,20}) ever equals 8, so the Satellite class being empty for
+  m=10,20 is now a closed-form consequence of the 5-part's period set, not
+  merely an enumeration. [533] proves this mod-5 Jordan-block structure is
+  also exactly why the *divisor shortcut* used by the separate qa_orbit_rules
+  module (a different Satellite predicate, {(m//3)|b AND (m//3)|e}) under-
+  counts by exactly 32 whenever 3|m AND 5|m (m in {15,30,45,60,75}): the
+  same period-4 eigenspace combines with the mod-3 generic period-8 class
+  via lcm(8,4)=8, producing satellites the shortcut's trivial-mod-5-part
+  check misses. That is a distinct predicate from this cert's {3|b,3|e}
+  Satellite characterization, but the same discriminant-5 ramification is
+  the root cause in both places.
 
   This is SUGGESTIVE of (not proved identical to) the structural mechanism
   cert [515] (QA Orbit-Lattice Mod-3 Collapse) proves for its own qa_step

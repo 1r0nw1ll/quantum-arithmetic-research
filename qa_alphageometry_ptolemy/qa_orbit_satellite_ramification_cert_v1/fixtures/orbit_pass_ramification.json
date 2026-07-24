@@ -1,0 +1,282 @@
+{
+  "bounded_audit": {
+    "per_modulus": [
+      {
+        "m": 15,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 30,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 45,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 60,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      },
+      {
+        "m": 75,
+        "satellite_count": 40,
+        "shortcut_miss_count": 32
+      }
+    ]
+  },
+  "cert_type": "qa_orbit_satellite_ramification_cert",
+  "certificate_id": "ORBIT_RAMIFICATION_PASS_001",
+  "crt_examples": [
+    {
+      "b": 1,
+      "e": 3,
+      "m": 15
+    },
+    {
+      "b": 1,
+      "e": 8,
+      "m": 15
+    },
+    {
+      "b": 1,
+      "e": 13,
+      "m": 15
+    }
+  ],
+  "fail_ledger": [],
+  "known_moduli_check": {
+    "per_modulus": [
+      {
+        "m": 9,
+        "shortcut_miss_count": 0
+      },
+      {
+        "m": 24,
+        "shortcut_miss_count": 0
+      }
+    ]
+  },
+  "mod3_witnesses": [
+    {
+      "b": 1,
+      "e": 1,
+      "period": 8
+    },
+    {
+      "b": 1,
+      "e": 2,
+      "period": 8
+    },
+    {
+      "b": 1,
+      "e": 3,
+      "period": 8
+    },
+    {
+      "b": 2,
+      "e": 1,
+      "period": 8
+    },
+    {
+      "b": 2,
+      "e": 2,
+      "period": 8
+    },
+    {
+      "b": 2,
+      "e": 3,
+      "period": 8
+    },
+    {
+      "b": 3,
+      "e": 1,
+      "period": 8
+    },
+    {
+      "b": 3,
+      "e": 2,
+      "period": 8
+    },
+    {
+      "b": 3,
+      "e": 3,
+      "period": 1
+    }
+  ],
+  "mod5_witnesses": [
+    {
+      "b": 1,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 1,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 1,
+      "e": 3,
+      "period": 4
+    },
+    {
+      "b": 1,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 1,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 1,
+      "period": 4
+    },
+    {
+      "b": 2,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 2,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 3,
+      "e": 4,
+      "period": 4
+    },
+    {
+      "b": 3,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 2,
+      "period": 4
+    },
+    {
+      "b": 4,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 4,
+      "e": 5,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 1,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 2,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 3,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 4,
+      "period": 20
+    },
+    {
+      "b": 5,
+      "e": 5,
+      "period": 1
+    }
+  ],
+  "non_claims": [
+    "prime_prediction_or_factorization_shortcut",
+    "general_prime_power_hensel_lifting_proof_for_arbitrary_exponents",
+    "replacement_for_canonical_orbit_period_simulation",
+    "empirical_orbit_lift_theorem"
+  ],
+  "proof_obligations": [
+    "qa_step_fibonacci_conjugacy",
+    "mod3_irreducible_period8",
+    "mod5_jordan_eigenspace_period4",
+    "crt_lcm_composition",
+    "shortcut_miss_count_bounded_audit",
+    "known_moduli_shortcut_exact"
+  ],
+  "qa_step_fibonacci_conjugacy_samples": [
+    {
+      "b": 1,
+      "e": 1,
+      "m": 9
+    },
+    {
+      "b": 7,
+      "e": 13,
+      "m": 24
+    },
+    {
+      "b": 15,
+      "e": 15,
+      "m": 15
+    },
+    {
+      "b": 3,
+      "e": 11,
+      "m": 30
+    }
+  ],
+  "result": "PASS",
+  "schema_version": "QA_ORBIT_SATELLITE_RAMIFICATION_CERT.v1",
+  "theorem_statement": {
+    "claim": "qa_step(b,e,m) is conjugate to the Fibonacci matrix M=[[0,1],[1,1]] on (Z/mZ)^2 (0 relabeled m). x^2-x-1 has discriminant 5: irreducible mod 3, giving every nonzero mod-3 vector orbit period exactly 8 (the source of the satellite class); repeated root mod 5 (the ramified prime), giving a 4-vector eigenspace of period 4 and 20 vectors of period 20 (=Pisano period pi(5)). By CRT, an (b,e) that is generic mod 3 (period 8) and lands in the mod-5 eigenspace (period 4) has combined period lcm(8,4)=8, a satellite the divisor shortcut (m//3)|b,e misses because it only checks for a trivial mod-5 part. This produces exactly 8x4=32 shortcut-missed satellites whenever 5|m, verified for m in {15,30,45,60,75}; the shortcut is exact (0 misses) on m in {9,24}, which have no factor of 5.",
+    "claims_empirical_orbit_lift_as_theorem": false,
+    "claims_general_hensel_lifting_proof": false,
+    "claims_replaces_canonical_orbit_period": false
+  },
+  "theorem_status": "PROVEN_BY_DISCRIMINANT_5_RAMIFICATION"
+}

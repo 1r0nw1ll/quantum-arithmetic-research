@@ -82,6 +82,38 @@ Last updated: 2026-06-25
 
 ## SOTA Scan Log
 
+### Scan #24 — 2026-07-30 (window: July 27–30, 2026)
+Full report: `sota_scans/scan_2026-07-30.md`
+OB entry: `QAnotes/SOTA_scan_24_2026-07-30.md`
+
+**Key finds:**
+- arXiv:2606.29391 + arXiv:2607.07939 + arXiv:2607.13338 + arXiv:2607.14168 (IGE cluster, June–July 2026, Fokam Souop/Bitjoka, Ngaoundere) — **MEDIUM-HIGH/MEDIUM/MEDIUM/LOW-MEDIUM. MEGA-SLIP scans #21–23.** Isometric Group Embedding framework: any connected graph embeds isometrically into a finite abelian Cayley host; on cyclic host Z/nZ, GE-GFT = DFT exactly; exact convolution theorem. QA's Cosmos orbit σ-transition graph embeds into Cayley(Z/24Z); minimal host order = 24; GE-GFT = DFT = QA orbit character transform. Closes chain: graph theory → GSP → QA orbit Fourier analysis. Cert candidate: `qa_graph_orbit_ge_gft_cert_v1` → **[541]** (after [534]–[540] scaffolded).
+- arXiv:2607.24844 (Christoffel Words as Extremal Structures in Collatz Dynamics, Fernández/Ibáñez, July 24) — **LOW-MEDIUM.** Christoffel words maximize C_min(d) over binary words of fixed weight; Sturmian connection; analogous to QA Cosmos 3:1 orbit balance. Fifth paper in Collatz Modular Orbit Thread.
+- arXiv:2607.26534 (Fuglede's Conjecture on Square-Free Cyclic Groups) — **LOW-MEDIUM.** Spectral ↔ tiling duality for square-free Z/nZ. Does NOT apply to Z/24Z or Z/9Z (neither square-free). Adjacent to Gauss periods rank-8 top-10.
+- arXiv:2607.12069 (Floquet-Bloch Nilpotent Groups, Katsuda) — **LOW.** Nilpotent group extension; not QA's abelian/cyclic state space.
+
+**No HIGH finds. No Show HN/Lobsters/Papers With Code finds.**
+
+**External event**: Jacobian Conjecture disproved July 20 (Alpoge + Claude Fable 5). Not QA-relevant.
+
+**Registry: [533].** No new certs since scan #23.
+
+**New gap found**: docs/families missing for [524]–[528] (5 entries; sequence jumps 523→529).
+
+**New cross-domain thread**: Isometric Group Embedding Thread (MEDIUM-HIGH) — arXiv:2606.29391 + 2607.07939 + 2607.13338 + 2607.14168. Shared insight: cyclic Cayley host → GE-GFT = DFT.
+
+**[261] orbit stratification: TWENTY-FOURTH consecutive scan — README + SPEC missing.**
+
+**SAIR IGP24**: August 1 check in 2 days. Stage 1 closes August 15. **Manual action at competition.sair.foundation — cannot be automated.**
+
+**OB scan #22 entry**: still missing. Scan #24 OB written; scan #22 OB still needs creation.
+
+**Search battery additions for scan #25**: "isometric embedding abelian group Cayley graph," "GE-GFT group-embedding graph Fourier," "Fokam Souop Bitjoka graph isometric," "Fuglede spectral tiling cyclic group," "Christoffel words Sturmian Collatz orbit balance."
+
+**Next scan**: no later than August 10.
+
+---
+
 ### Scan #19 — 2026-07-09 (window: July 6 – July 9, 2026)
 Full report: `sota_scans/scan_2026-07-09.md`
 

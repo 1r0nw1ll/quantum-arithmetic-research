@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-06-25
+Last updated: 2026-08-03
 
 ## Current QA Direction
 
@@ -81,6 +81,33 @@ Last updated: 2026-06-25
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #25 — 2026-08-03 (window: July 30 – August 3, 2026)
+Full report: `sota_scans/scan_2026-08-03.md`
+OB entry: `QAnotes/SOTA_scan_25_2026-08-03.md`
+
+**Key finds:**
+- arXiv:2607.13749 (Algebraic Representability as Limiting Regime of Grokking, Kam/Cadet/Bessafi/Cadet, July 14) — **LOW-MEDIUM. MEGA-SLIP scans #21–24.** Holomorphic degree-d networks represent f: Z/mZ → ℂ iff Fourier spectrum ⊆ span{χ^0,...,χ^d}. Closes the "representability layer" gap in the grokking→character→orbit chain (scan #17 HIGHs). Not cert-worthy standalone; adds to [534]+[535] evidence. Root cause of mega-slip: Université des Antilles / non-standard geographic cluster.
+
+**No HIGH finds. No Show HN/Lobsters/Papers With Code/MathOverflow finds.**
+
+**OB Alert RESOLVED**: Scan #22 OB entry was created August 2 — "OB scan #22 missing" flag now cleared.
+
+**Registry: [533].** No new certs since scan #24.
+
+**Grokking chain now complete (4 layers)**: representability (2607.13749) → convergence (2606.02993) → geometry (2606.08985) → CRT structure (2606.23044).
+
+**Non-standard cluster mega-slip pattern**: 2 consecutive scans (#24 Ngaoundere Cameroon, #25 Guadeloupe). Add broad monthly cs.LG sweep to battery.
+
+**[261] orbit stratification: TWENTY-FIFTH consecutive scan — README + SPEC missing.**
+
+**SAIR IGP24**: August 1 manual check OVERDUE (now August 3). Stage 1 closes August 15. **Urgent manual browser check required at competition.sair.foundation.**
+
+**Search battery additions for scan #26**: "holomorphic activation grokking representability modular" + "Kam Cadet Bessafi modular holomorphic" + monthly cs.LG sweep (modular/cyclic/group content).
+
+**Next scan**: no later than August 15 (SAIR Stage 1 deadline).
+
+---
 
 ### Scan #24 — 2026-07-30 (window: July 27–30, 2026)
 Full report: `sota_scans/scan_2026-07-30.md`

@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-08-03
+Last updated: 2026-08-06
 
 ## Current QA Direction
 
@@ -81,6 +81,33 @@ Last updated: 2026-08-03
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #26 — 2026-08-06 (window: August 3 – August 6, 2026)
+Full report: `sota_scans/scan_2026-08-06.md`
+OB entry: `QAnotes/SOTA_scan_26_2026-08-06.md`
+
+**Key finds:**
+- arXiv:2506.21797 (Algebraic & Geometric Foundation for Neurosymbolic Reasoning, Wang/Wang UT Austin, June 2026) — **LOW-MEDIUM. MEGA-SLIP scans #15–25 (11 scans).** Wasserstein gradient flow + commutative semi-ring constraint → potentials act as ring homomorphisms. Z/24Z is a commutative ring; QA T-operator is a ring endomorphism. Adds theoretical foundation (Layer 0) to grokking chain. Not standalone cert; adds to [535] evidence. Root cause: NeuS workshop proceedings not in battery.
+- arXiv:2608.01318 (Sheaf-theoretic SP on Graphs, D'Acunto et al., Sapienza, August 2, 2026) — **LOW.** Cellular sheaf SSP framework; Sheaf Fourier Transform (SFT) for heterogeneous local spaces. QA's orbit graph is homogeneous (not a sheaf) — SFT reduces to ordinary GSP. No cyclic/orbit structure.
+- arXiv:2608.02708 (Extended Fargues-Scholze spectral action, Dillery/Eteve, August 2026) — **LOW.** Categorical Langlands for non-quasi-split G. Adjacent to Langlands sprint [403]–[418] thematically; no cyclic/modular arithmetic content.
+
+**No HIGH finds. No Show HN/Lobsters/Papers With Code/MathOverflow finds.**
+
+**AI-in-mathematics event**: OpenAI "Ten advances in mathematics and theoretical computer science" (August 1, 2026) — Astra solved 10 long-standing open problems (non-sofic groups, Connes rigidity disproved, sphere packing, Ehrhart conjecture, Ramsey, etc.). All proofs in Lean at github.com/openai/ten-proofs. NOT QA structurally relevant (group theory items involve non-abelian groups, not cyclic Z/nZ). Lean infrastructure adjacent to QA cert pathway.
+
+**Grokking chain now 5 layers** (complete): theoretical foundation (2506.21797) → representability (2607.13749) → convergence (2606.02993) → geometry (2606.08985) → CRT structure (2606.23044).
+
+**Registry: [533].** No new certs since scan #23.
+
+**[261] orbit stratification: TWENTY-SIXTH consecutive scan — README + SPEC missing.**
+
+**SAIR IGP24: Stage 1 closes August 15 (9 days). August 1 manual check was 5 days overdue at scan time. Manual check at competition.sair.foundation is CRITICAL — cannot be automated.**
+
+**Search battery additions for scan #27**: "neurosymbolic ring homomorphism semi-ring gradient flow modular" + NeuS proceedings + "Wang Zhangyang neurosymbolic symbolic algebraic" + "Astra mathematics Lean proof modular" + full 2608 sweep.
+
+**Next scan**: no later than August 15 (SAIR Stage 1 deadline).
+
+---
 
 ### Scan #25 — 2026-08-03 (window: July 30 – August 3, 2026)
 Full report: `sota_scans/scan_2026-08-03.md`

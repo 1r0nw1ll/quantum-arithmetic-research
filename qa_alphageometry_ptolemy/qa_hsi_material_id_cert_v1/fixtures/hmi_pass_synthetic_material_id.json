@@ -1,0 +1,68 @@
+{
+  "schema_version": "QA_HSI_MATERIAL_ID_CERT.v1",
+  "cert_type": "qa_hsi_material_id_cert",
+  "certificate_id": "HMI_SYNTHETIC_MATERIAL_ID_PASS_001",
+  "title": "Synthetic HSI material-identification PASS",
+  "created_utc": "2026-07-14T02:24:27Z",
+  "source_type": "synthetic",
+  "scope_claim": {
+    "claims_real_data_validation": false,
+    "claim": "Synthetic/library-first material identification with pure, mixture, target, abundance-bin, and unknown-rejection evidence."
+  },
+  "observer_boundary": {
+    "quantization": "reflectance-like spectra quantized once to 8-bit integer bands",
+    "quantized_once": true,
+    "qa_layer_integer_only": true
+  },
+  "wavelength_grid_nm": [450, 650, 1730, 2200, 2300],
+  "material_library": {
+    "carbonate_mineral": {
+      "domain": "mining",
+      "signature": "carbonate absorption trough around 2300 nm",
+      "spectrum": [78, 96, 160, 150, 96],
+      "absorption_bands_nm": [2300]
+    },
+    "clay_mineral": {
+      "domain": "mining",
+      "signature": "Al-OH clay absorption around 2200 nm",
+      "spectrum": [62, 84, 140, 72, 118],
+      "absorption_bands_nm": [2200]
+    },
+    "plastic_polymer": {
+      "domain": "industrial_sorting",
+      "signature": "polymer C-H absorption near 1730 and 2300 nm",
+      "spectrum": [92, 110, 104, 166, 98],
+      "absorption_bands_nm": [1730, 2300]
+    }
+  },
+  "hashes": {
+    "wavelength_grid_sha256": "ce5a9a6918d8bf4ca0920dfc12fa72372f225e6ed89305eefa86b7449119e79e",
+    "material_library_sha256": "1de3a4ca3f99e7a88d1f36dd375601039f7cd0b10bd2c0d1898da675c9619eb6"
+  },
+  "sample_counts": {
+    "pure_total": 640,
+    "mixture_total": 360,
+    "unknown_total": 160,
+    "known_total": 1000
+  },
+  "success_criteria": {
+    "pure_top1_accuracy_min": 0.9,
+    "mixture_dominant_top1_accuracy_min": 0.75,
+    "target_detection_f1_min": 0.75,
+    "abundance_bin_accuracy_min": 0.65,
+    "unknown_rejection_fpr_max": 0.1
+  },
+  "metrics": {
+    "pure_top1_accuracy": 0.9328125,
+    "mixture_dominant_top1_accuracy": 0.9055555555555556,
+    "target_detection_f1": 0.9597523219814241,
+    "abundance_bin_accuracy": 0.9333333333333333,
+    "unknown_rejection_fpr": 0.05
+  },
+  "thresholds": {
+    "unknown_nearest_distance_threshold": 899,
+    "target_rule": "best integer pure/two-endmember model contains target material"
+  },
+  "result": "PASS",
+  "fail_ledger": []
+}

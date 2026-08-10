@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA HSI Material Identification Cert. Certifies that a hyperspectral material-identification claim declares its wavelength grid, observer quantization boundary, material library hash, diagnostic absorption-band witnesses, pure/mixture/unknown sample coverage, target detection metrics, abundance-bin metrics, unknown-rejection FPR, and honest synthetic-vs-real scope. This family gates HSI material/chemical identification experiments before real spectral-library ingestion and sensor wavelength resampling."
+}

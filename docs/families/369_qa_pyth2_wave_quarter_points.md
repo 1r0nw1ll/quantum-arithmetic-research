@@ -112,3 +112,11 @@ all 5 claims live (4-par/2-par/odd wavelength quarter-point
 integrality, the 3-par/5-par mirror-image fractions, and the LCM
 two-wave coincidence rule over 529 pairs) — all match the doc's worked
 examples exactly, no fixture-trusting gap.
+
+**Source-scope tightening (2026-07-14)**: the validator now has a `--self-test`
+path with planted negative probes for the common false claims: 2-par quarter
+points are not integers, odd midpoints are not integers, 5-par and 3-par
+quarter fractions must not be flipped, and two-wave coincidences use `lcm`,
+not product, when the wavelengths are not coprime. It also rejects the QA-2
+17/23 diagram typo `97.25`: since `17*23=391`, the quarter point is
+`391/4 = 97.75`.

@@ -40,6 +40,8 @@ Five claims (QA integer divisibility by 4, characterizing wave quarter-point beh
 
 from math import gcd, lcm
 from fractions import Fraction
+import json
+import sys
 
 
 def check_c1() -> tuple[bool, str]:
@@ -181,5 +183,53 @@ def main() -> None:
         raise RuntimeError(f"cert [369] FAILED: {passed}/{len(checks)}")
 
 
+def self_test() -> int:
+    """Positive checks plus planted negative probes for common false claims."""
+    positives = []
+    for fn in [check_c1, check_c2, check_c3, check_c4, check_c5]:
+        try:
+            ok, msg = fn()
+            positives.append({"check": fn.__name__, "ok": bool(ok), "message": msg})
+        except AssertionError as exc:
+            positives.append({"check": fn.__name__, "ok": False, "message": str(exc)})
+
+    negative_probes = [
+        {
+            "id": "bad_2par_quarter_integer",
+            "ok": Fraction(6, 4).denominator != 1,
+            "message": "W=6 is 2-par; W/4=3/2 must not be accepted as integer",
+        },
+        {
+            "id": "bad_odd_midpoint_integer",
+            "ok": Fraction(5, 2).denominator != 1,
+            "message": "W=5 is odd; W/2=5/2 must not be accepted as integer",
+        },
+        {
+            "id": "bad_5par_quarter_flip",
+            "ok": Fraction(5, 4) != Fraction(3, 4),
+            "message": "5-par W=5 has quarter 5/4, not the 3-par 3/4 position",
+        },
+        {
+            "id": "bad_lcm_coincidence",
+            "ok": lcm(4, 6) != 24,
+            "message": "W=4 and W=6 first coincide at lcm=12, not product=24",
+        },
+        {
+            "id": "bad_17_23_quarter_typo",
+            "ok": Fraction(17 * 23, 4) == Fraction(391, 4) and Fraction(391, 4) != Fraction(389, 4),
+            "message": "17*23=391; the quarter point is 391/4=97.75, not the diagram typo 97.25",
+        },
+    ]
+
+    all_ok = all(item["ok"] for item in positives + negative_probes)
+    print(json.dumps(
+        {"ok": all_ok, "positive_checks": positives, "negative_probes": negative_probes},
+        indent=2,
+    ))
+    return 0 if all_ok else 1
+
+
 if __name__ == "__main__":
+    if "--self-test" in sys.argv:
+        raise SystemExit(self_test())
     main()

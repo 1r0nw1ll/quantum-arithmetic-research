@@ -87,8 +87,9 @@ def validate_fixture(fixture: dict) -> dict:
     results["SHELL_I"]      = (_I(b, e) == k)
     results["SHELL_PRES"]   = (_I(b2, e2) == k)
     results["SIGN_FLIP"]    = (_raw(b2, e2) == -_raw(b, e))
-    results["FAREY_K"]      = (abs(b * e2 - b2 * e) == k)
-    results["SPREAD_K"]     = (Fraction((b * e2 - b2 * e) ** 2, G * G2)
+    det = b * e2 - b2 * e
+    results["FAREY_K"]      = (abs(det) == k)
+    results["SPREAD_K"]     = (Fraction(det * det, G * G2)
                                 == Fraction(k * k, G * G2))
     dev = abs(_s(b, e) - _ONE_THIRD)
     results["SPREAD_DEV_K"] = (dev == Fraction(k, 3 * G))

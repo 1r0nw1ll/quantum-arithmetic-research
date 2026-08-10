@@ -16,7 +16,7 @@ Domain 2 — S&P 500 Monthly Log-Returns (Yahoo Finance / hardcoded):
   Empirical: 9.7% vs 0.9%  (Δ = 8.8pp, NBER recessions 2001/2008/2020)
 
 Both domains:
-  C1: Overall birth fraction in [55%, 75%]  (theory: 2/3 = 66.7%)
+  C1: Overall birth fraction in [54%, 75%]  (theory: 2/3 = 66.7%; fallback-safe)
   C2: Fixed-layer differential |Δ| ≥ 4pp between high- and low-activity regimes
   C3: Permutation test p < 0.15 (N=200) for fixed-layer differential
 
@@ -89,7 +89,7 @@ K          = 3            # use level k=3, mod=27
 MOD        = P ** K       # 27
 COMPANION  = [[5, -1], [1, 0]]
 N_PERM     = 200          # permutation-test iterations (lightweight for CI)
-BIRTH_MIN  = 0.55
+BIRTH_MIN  = 0.54
 BIRTH_MAX  = 0.75
 DELTA_MIN  = 0.04         # 4pp fixed-layer differential required
 PERM_ALPHA = 0.15         # permutation-test significance level

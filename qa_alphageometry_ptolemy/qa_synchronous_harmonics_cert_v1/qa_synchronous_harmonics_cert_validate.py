@@ -49,6 +49,19 @@ def lcm(a, b):
     return a * b // gcd(a, b)
 
 
+def prime_factors(n):
+    factors = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d)
+            n //= d
+        d += 1 if d == 2 else 2
+    if n > 1:
+        factors.append(n)
+    return factors
+
+
 def par_sign(n):
     """Quarter-point phase sign for odd wavelet of period n.
     5-par (n%4==1): +1 at 1/4 mark (HIGH).
@@ -150,6 +163,38 @@ def validate(cert, *, collect_errors=True):
         if product % 6 != 0:
             err("SH_PROD6", f"qn[{i}] ({b},{e}): product={product} not divisible by 6")
 
+    # --- SH_QWAVE: complete Quantum Wave factor structure from QA-2 Ch.6 ---
+    complete_waves = cert.get("complete_wave_witnesses", [])
+    for i, wave in enumerate(complete_waves):
+        wavelength = wave.get("wavelength", 0)
+        declared_factors = wave.get("prime_factors", [])
+        if wavelength <= 0:
+            err("SH_QWAVE", f"complete_wave[{i}] invalid wavelength={wavelength}")
+            continue
+
+        factors = prime_factors(wavelength)
+        if declared_factors and declared_factors != factors:
+            err("SH_QWAVE", f"complete_wave[{i}] wavelength={wavelength}: declared factors={declared_factors} but computed={factors}")
+
+        distinct = set(factors)
+        distinct_factor_count = len(distinct)
+        if distinct_factor_count < 5 or distinct_factor_count > 7:
+            err("SH_QWAVE", f"complete_wave[{i}] wavelength={wavelength}: requires 5, 6, or 7 distinct prime wavelets, got {distinct_factor_count}")
+        if 2 not in distinct:
+            err("SH_QWAVE", f"complete_wave[{i}] wavelength={wavelength}: missing required factor 2")
+        if 3 not in distinct:
+            err("SH_QWAVE", f"complete_wave[{i}] wavelength={wavelength}: missing required factor 3")
+        if wave.get("requires_5_or_7") and not (5 in distinct or 7 in distinct):
+            err("SH_QWAVE", f"complete_wave[{i}] wavelength={wavelength}: expected factor 5 and/or 7")
+        if wavelength % 6 != 0:
+            err("SH_QWAVE", f"complete_wave[{i}] wavelength={wavelength}: Quantum Wave wavelength must be divisible by 6")
+
+        expected_min = wave.get("expected_minimum")
+        if expected_min == "five_factors" and wavelength != 2 * 3 * 5 * 7 * 11:
+            err("SH_QWAVE", f"complete_wave[{i}] expected minimum 5-factor wave 2310, got {wavelength}")
+        if expected_min == "seven_factors" and wavelength != 2 * 3 * 5 * 7 * 11 * 13 * 17:
+            err("SH_QWAVE", f"complete_wave[{i}] expected minimum 7-factor wave 510510, got {wavelength}")
+
     # --- SH_W: witness counts ---
     total = len(sync_pairs) + len(par_pairs)
     if total < 5:
@@ -171,6 +216,7 @@ def self_test():
         "sh_pass_sync_and_par.json": True,
         "sh_pass_qn_products.json": True,
         "sh_fail_bad_sync.json": False,
+        "sh_fail_bad_quantum_wave.json": False,
     }
     results = []
     for fname, should_pass in expected.items():

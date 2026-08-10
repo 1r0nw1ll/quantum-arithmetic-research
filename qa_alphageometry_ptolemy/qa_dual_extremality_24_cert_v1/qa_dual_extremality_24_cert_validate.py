@@ -239,7 +239,7 @@ def validate(path):
         )
     if square_sum != EXPECTED_CANNONBALL_SQRT * EXPECTED_CANNONBALL_SQRT:
         errors.append(
-            f"DE_CANNON: cannonball sum {square_sum} != 70^2 = {EXPECTED_CANNONBALL_SQRT ** 2}"
+            f"DE_CANNON: cannonball sum {square_sum} != 70^2 = {EXPECTED_CANNONBALL_SQRT * EXPECTED_CANNONBALL_SQRT}"
         )
 
     # DE_24THM: p^2 - 1 ≡ 0 (mod 24) for primes p in [5, 50]

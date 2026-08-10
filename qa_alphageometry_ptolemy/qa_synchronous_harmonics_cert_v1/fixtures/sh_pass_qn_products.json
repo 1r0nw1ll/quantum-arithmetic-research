@@ -57,11 +57,35 @@
     {"b": 2, "e": 1, "product": 24,    "note": "QN (2,1,3,4); 24=2³×3 (female of fundamental)"}
   ],
 
+  "complete_wave_witnesses": [
+    {
+      "wavelength": 2310,
+      "prime_factors": [2, 3, 5, 7, 11],
+      "expected_minimum": "five_factors",
+      "requires_5_or_7": true,
+      "note": "QA-2 Ch.6 minimum complete wave using five prime wavelets: 2*3*5*7*11"
+    },
+    {
+      "wavelength": 30030,
+      "prime_factors": [2, 3, 5, 7, 11, 13],
+      "requires_5_or_7": true,
+      "note": "six-prime complete wave witness preserving required 2 and 3 factors"
+    },
+    {
+      "wavelength": 510510,
+      "prime_factors": [2, 3, 5, 7, 11, 13, 17],
+      "expected_minimum": "seven_factors",
+      "requires_5_or_7": true,
+      "note": "QA-2 Ch.6 minimum seven-wavelet complete wave: 2*3*5*7*11*13*17"
+    }
+  ],
+
   "validation_checks": [
     {"check_id": "SH_1",     "description": "schema_version correct", "passed": true},
     {"check_id": "SH_SYNC",  "description": "3 sync pairs verified", "passed": true},
     {"check_id": "SH_PAR",   "description": "3 par pairs verified", "passed": true},
     {"check_id": "SH_PROD6", "description": "8 QN products all divisible by 6", "passed": true},
+    {"check_id": "SH_QWAVE", "description": "complete Quantum Wave witnesses have 5/6/7 distinct prime wavelets and required factors 2 and 3", "passed": true},
     {"check_id": "SH_W",     "description": "6 sync+par witnesses + 8 QN witnesses", "passed": true},
     {"check_id": "SH_F",     "description": "fundamental (3,5) present", "passed": true}
   ],

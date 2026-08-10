@@ -122,12 +122,15 @@ fractions (0.0, 0.1, 0.3, 0.5, 0.8) at `seed=0` gives E =
 (0.000, 0.190, 0.464, 0.657, 0.825) — matches the doc's rounded
 (0.0, 0.19, 0.46, 0.66, 0.83) precisely.
 
-`EBM_BOLTZMANN` is honestly a **weak** check (the validator's own comment
-says so): it only verifies the occupancy distribution is well-formed
-(sums to 1, no zero entries), not that `T = 2π/m` is actually the correct
-temperature — that stronger claim is explicitly deferred to cert [215]
-as a corollary, not tested here. This is disclosed in the code, not a
-hidden gap.
+**Follow-up (2026-07-07)**: tightened `EBM_BOLTZMANN`. The validator no
+longer uses a weak random-occupancy well-formedness check. It now verifies
+the exact finite-state Boltzmann distribution for every declared modulus:
+`T = 2π/m`, `Z = 1 + (m-1)*exp(-1/T)`, the on-manifold probability
+`1/Z`, the off-manifold probability `exp(-1/T)/Z`, positive
+normalization, and argmax agreement with the T-operator. The schema check
+also now requires all five axiom declaration keys and the cert [215]
+temperature cross-reference, so the FAIL fixture targets the missing
+Boltzmann/temperature claim specifically.
 
 Ran `--self-test`: PASS fixture passes all 9 checks, FAIL fixture
 correctly fails.

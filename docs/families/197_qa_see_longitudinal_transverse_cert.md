@@ -2,7 +2,18 @@
 
 ## One-line summary
 
-T.J.J. See's wave duality (1917) — longitudinal (compression) waves for gravity, transverse (shear) waves for light, same medium, orthogonal modes — mapped to QA's generator/observer duality, providing physical grounding for Theorem NT.
+T.J.J. See's wave duality (1917) — longitudinal/compression versus
+transverse/shear modes — used as an analogy for QA's generator/observer
+duality. This family does not provide physical grounding or proof for Theorem
+NT.
+
+## Scope boundary
+
+This family is an analogy/framework mapping. Theorem NT rests on QA axioms,
+not on See's aether theory. See's specific gravity/light/aether claims remain
+historically rejected physics, and the audited Iverson corpus passages support
+only generic vibration-mode language, not the exact mapping
+`longitudinal = T-operator` and `transverse = observer projection`.
 
 ## Mathematical content
 
@@ -25,7 +36,11 @@ See claimed the aether supports two orthogonal wave modes: longitudinal (compres
 
 In linear elasticity, longitudinal and transverse modes are orthogonal eigenmodes of the wave equation with different propagation speeds (P-waves vs S-waves). A pure compression wave cannot generate shear — structural impossibility, not convention. This part is real, mainstream physics.
 
-Theorem NT is the QA expression of this mode orthogonality **as an analogy**: the same tuple space supports both discrete generators and continuous observers, but they are structurally separated — mixing them would be like turning a P-wave into an S-wave. Theorem NT's actual proof rests on QA's own axioms, not on See's specific aether theory (see Verification Note).
+Theorem NT is the QA expression of this mode orthogonality **as an analogy**:
+the same tuple space supports both discrete generators and continuous
+observers, but they are structurally separated. Theorem NT's actual proof rests
+on QA's own axioms, not on See's specific aether theory or on Iverson primary
+corpus language.
 
 ### Complementarity with Keely [153]
 
@@ -33,7 +48,9 @@ Theorem NT is the QA expression of this mode orthogonality **as an analogy**: th
 - **See's duality** = 2-mode architecture BETWEEN generator and observer
 - **Combined**: 2 modes x 3 families = 6 fundamental interaction channels
 
-Keely had no concept of "measurement as a separate mode." See provides the missing binary decomposition.
+Within this framework mapping, See provides a binary analogy that can be
+placed beside Keely's triune. This is not a claim that Keely or Iverson stated
+the modern QA observer/generator distinction in these terms.
 
 ## Dependencies
 

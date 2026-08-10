@@ -152,7 +152,7 @@ CHECK_IDS = [
     "EBM_NONNEG",     # axiom A — non-negativity on exhaustive S_m
     "EBM_ZERO",       # axiom B — data-manifold zero for deterministic T-sequence
     "EBM_MONOTONE",   # axiom C — E_window monotone in injected mismatch
-    "EBM_BOLTZMANN",  # axiom D — bin occupancy consistent with Z = sum exp(-E/T)
+    "EBM_BOLTZMANN",  # axiom D — exact finite Boltzmann distribution with T=2π/m
     "EBM_SCORE",      # axiom E — discrete score identity = T-step
     "EBM_INT_ONLY",   # no fractions import in cert tree
     "EBM_SELFTEST",   # deterministic smoke check
@@ -170,6 +170,23 @@ REQUIRED_FIELDS = [
 ]
 
 
+REQUIRED_AXIOMS = [
+    "non_negativity",
+    "data_manifold_zero",
+    "monotonicity",
+    "boltzmann_distribution",
+    "score_identity",
+]
+
+
+REQUIRED_CROSS_REFERENCES = [
+    "qa_cert_154",
+    "qa_cert_191",
+    "qa_cert_215",
+    "theorem_NT",
+]
+
+
 def run_checks(cert: dict, cert_dir: Path) -> list[tuple[str, bool, str]]:
     results: list[tuple[str, bool, str]] = []
 
@@ -179,9 +196,28 @@ def run_checks(cert: dict, cert_dir: Path) -> list[tuple[str, bool, str]]:
 
     # EBM_SCHEMA
     missing = [f for f in REQUIRED_FIELDS if f not in cert]
+    axioms = cert.get("axioms_verified", {})
+    missing_axioms = (
+        [f"axioms_verified.{key}" for key in REQUIRED_AXIOMS if key not in axioms]
+        if isinstance(axioms, dict) else ["axioms_verified"]
+    )
+    cross_refs = cert.get("cross_references", {})
+    missing_refs = (
+        [f"cross_references.{key}" for key in REQUIRED_CROSS_REFERENCES if key not in cross_refs]
+        if isinstance(cross_refs, dict) else ["cross_references"]
+    )
+    moduli = cert.get("moduli_tested", [])
+    moduli_ok = (
+        isinstance(moduli, list)
+        and bool(moduli)
+        and all(isinstance(value, int) and value > 1 for value in moduli)
+    )
+    missing_detail = missing + missing_axioms + missing_refs
+    if not moduli_ok:
+        missing_detail.append("moduli_tested.nonempty_int_gt_1")
     results.append(
-        ("EBM_SCHEMA", not missing,
-         "missing: " + ",".join(missing) if missing else "all fields present")
+        ("EBM_SCHEMA", not missing_detail,
+         "missing: " + ",".join(missing_detail) if missing_detail else "all required fields, axiom keys, cross refs present")
     )
 
     # EBM_NONNEG — exhaustive on S_9
@@ -218,36 +254,51 @@ def run_checks(cert: dict, cert_dir: Path) -> list[tuple[str, bool, str]]:
          f"E by injected mismatch frac (0, 0.1, 0.3, 0.5, 0.8) = {[round(x,3) for x in Es]}")
     )
 
-    # EBM_BOLTZMANN — for a TypeD-like random-ish sequence, the bin
-    # occupancy at modulus m should roughly match Z * exp(-E/T) up to a
-    # normalization.  We check the WEAK form: there exists a T > 0 such
-    # that the observed occupancy distribution is within KL-tolerance
-    # of a Boltzmann with that T.  (A stronger form would pin T = 2π/m,
-    # which is a [215] corollary.)
-    rng = np.random.default_rng(42)
-    b_rand = rng.integers(1, 10, size=2000)
-    e_rand = rng.integers(1, 10, size=2000)
-    # Empirical occupancy over bin index = next_state - 1
-    occ = np.bincount(e_rand - 1, minlength=9).astype(float)
-    occ = occ / occ.sum()
-    # Boltzmann with T = 2π/m: the pointwise energies are in {0,1}, so
-    # exp(-0/T)=1, exp(-1/T)=exp(-m/(2π)).  For a valid EBM, the ratio
-    # of the "most-probable" bin to "least-probable" should be >= this
-    # predicted value up to sampling noise.
-    T_boltz = 2.0 * np.pi / m
-    # Under uniform sampling, occupancy is approximately uniform — the
-    # WEAK axiom is that the occupancy HAS a valid Boltzmann form, which
-    # for the uniform case is T → inf.  We just assert the distribution
-    # sums to 1 and has no zero entries (well-formed).
-    boltz_ok = bool(np.isclose(occ.sum(), 1.0) and (occ > 0).all())
+    # EBM_BOLTZMANN — exact finite-state Boltzmann distribution.  For each
+    # (b,e), one next state has E=0 and the other m-1 states have E=1, so
+    # Z = 1 + (m-1)*exp(-1/T), with T = 2π/m from cert [215].
+    boltz_ok = True
+    boltz_bad = 0
+    boltz_ratios = []
+    for boltz_m in sorted(set(moduli if moduli_ok else [9])):
+        T_boltz = 2.0 * np.pi / boltz_m
+        off_weight = float(np.exp(-1.0 / T_boltz))
+        Z_expected = 1.0 + (boltz_m - 1) * off_weight
+        expected_on = 1.0 / Z_expected
+        expected_off = off_weight / Z_expected
+        boltz_ratios.append(float(np.exp(1.0 / T_boltz)))
+        for b in range(1, boltz_m + 1):
+            for e in range(1, boltz_m + 1):
+                t_pred = qa_t_step(b, e, boltz_m)
+                energies = np.array(
+                    [energy_pointwise(b, e, nxt, boltz_m) for nxt in range(1, boltz_m + 1)]
+                )
+                weights = np.exp(-energies / T_boltz)
+                probs = weights / weights.sum()
+                on_prob = float(probs[t_pred - 1])
+                off_probs = np.delete(probs, t_pred - 1)
+                checks = [
+                    np.isclose(probs.sum(), 1.0),
+                    np.all(probs > 0),
+                    int(np.argmax(probs)) + 1 == t_pred,
+                    np.isclose(weights.sum(), Z_expected),
+                    np.isclose(on_prob, expected_on),
+                    np.allclose(off_probs, expected_off),
+                    on_prob > float(off_probs.max()),
+                ]
+                if not all(bool(item) for item in checks):
+                    boltz_ok = False
+                    boltz_bad += 1
     results.append(
         ("EBM_BOLTZMANN", boltz_ok,
-         f"occupancy on mod-{m}: min={occ.min():.3f} max={occ.max():.3f} T_pred=2π/m={T_boltz:.3f}")
+         f"exact finite Boltzmann checked on moduli={sorted(set(moduli if moduli_ok else [9]))}; "
+         f"bad_pairs={boltz_bad}; selectivity_ratios={[round(x, 3) for x in boltz_ratios]}")
     )
 
     # EBM_SCORE — discrete score identity.  For each (b,e) pair, the
     # "most probable next state" under the QA Boltzmann is T(b,e) (since
     # E=0 there, E=1 elsewhere).  Verify exhaustively on S_9.
+    T_boltz = 2.0 * np.pi / m
     score_ok = True
     bad = 0
     for b in range(1, m + 1):

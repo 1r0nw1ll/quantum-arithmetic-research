@@ -12,7 +12,7 @@ Validates that the QA-KG classifier IS Candidate F [family 202]:
   SC6  tier_for_coord agrees with qa_orbit_rules.orbit_family for all 81 cells.
   SC7  Empty content raises — Unassigned requires no declared observer.
 
-Source of truth: tools/qa_kg/orbit.py::{dr, compute_be, NODE_TYPE_RANK}
+Source of truth: tools/qa_kg/orbit.py::{dr, compute_index, NODE_TYPE_RANK}
 """
 from __future__ import annotations
 
@@ -27,7 +27,13 @@ if str(_REPO) not in sys.path:
 
 from qa_orbit_rules import orbit_family as _canonical_orbit_family
 from tools.qa_kg.orbit import (
-    Coord, Tier, NODE_TYPE_RANK, char_ord_sum, compute_be, dr, tier_for_coord,
+    Index as Coord,
+    Tier,
+    NODE_TYPE_RANK,
+    char_ord_sum,
+    compute_index as compute_be,
+    dr,
+    tier_for_index as tier_for_coord,
 )
 
 

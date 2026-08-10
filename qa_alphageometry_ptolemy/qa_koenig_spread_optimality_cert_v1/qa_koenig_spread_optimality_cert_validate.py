@@ -128,7 +128,8 @@ def self_test() -> bool:
     for i in range(len(pell) - 1):
         b0, e0 = pell[i]
         b1, e1 = pell[i + 1]
-        det_sq = (b0 * e1 - b1 * e0) ** 2
+        det = b0 * e1 - b1 * e0
+        det_sq = det * det
         denom = _G(b0, e0) * _G(b1, e1)
         inter_spread = Fraction(det_sq, denom)
         expected = Fraction(1, denom)   # det=±1 from Pell Farey property

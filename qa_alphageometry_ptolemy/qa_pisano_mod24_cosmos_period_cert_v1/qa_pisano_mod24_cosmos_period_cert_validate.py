@@ -12,8 +12,9 @@ applied QA state space {1,...,24}².
 
 The theoretical system (mod 9) has Cosmos period 24 = π(9) (cert [291]).
 The applied system (mod 24) has Pisano period π(24) = lcm(π(3),π(8)) = lcm(8,12) = 24 (cert [302]).
-This cert proves these two "24"s name the same phenomenon in the applied dynamics:
-the maximum T-orbit period in {1,...,24}² is exactly 24.
+This cert proves a numerical alignment, not an identity of types: the applied
+state modulus, the Pisano period, and the maximum T-orbit period are distinct
+objects that all evaluate to 24 in this setting.
 
 Five claims:
 
@@ -31,8 +32,9 @@ Five claims:
       characterization: 3∤gcd(b,e) AND 8∤gcd(b,e);
       count = 576 − 64 − 9 + 1 = 504 by inclusion-exclusion
 
-  C5  Closing the loop: max orbit period (24) = π(24) (cert [302]) = π(9) = Cosmos period
-      (cert [291]); applied modulus 24 is period-self-consistent
+  C5  Numeric alignment: max orbit period (24) = π(24) (cert [302]) = π(9) =
+      Cosmos period (cert [291]); this does not identify mod-24 with the
+      Pisano-period operator
 """
 
 import sys
@@ -271,7 +273,7 @@ def main():
         ("C2_applied_singularity",           check_c2, {"pm": pm}),
         ("C3_applied_satellite_analog",      check_c3, {"pm": pm}),
         ("C4_applied_cosmos_504_states",     check_c4, {"pm": pm}),
-        ("C5_closing_the_loop_pi24_eq_pi9",  check_c5, {"pm": pm}),
+        ("C5_numeric_alignment_pi24_eq_pi9", check_c5, {"pm": pm}),
     ]
     all_pass = True
     for label, fn, kwargs in checks:

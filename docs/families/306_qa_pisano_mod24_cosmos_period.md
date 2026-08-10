@@ -11,7 +11,7 @@
 | C2 | T(24,24)=(24,24): unique period-1 fixed point, characterized by 24\|gcd(b,e) — applied Singularity | PASS |
 | C3 | {8,16,24}²\{(24,24)} = 8 states all have period 8; characterized by 8\|gcd and 3∤gcd — applied Satellite analog; parallel: mod-9 Satellite = {3,6,9}²\{(9,9)} | PASS |
 | C4 | Applied Cosmos = 504 states with period 24 = 21 orbits × 24; characterized by 3∤gcd(b,e) AND 8∤gcd(b,e); count = 576 − 64 − 9 + 1 = 504 (inclusion-exclusion) | PASS |
-| C5 | Closing the loop: max orbit period (24) = π(24) (cert [302]) = π(9) = Cosmos period (cert [291]); mod-24 is period-self-consistent | PASS |
+| C5 | Numeric alignment: max orbit period (24) = π(24) (cert [302]) = π(9) = Cosmos period (cert [291]); these are equal values for distinct typed objects | PASS |
 
 ## Key result
 
@@ -19,7 +19,7 @@ This cert closes the arc [291]–[305] by connecting the Pisano period tower to 
 
 The theoretical system (mod 9) has Cosmos period 24 = π(9) (cert [291]).  
 The CRT tower shows π(24) = lcm(π(3),π(8)) = lcm(8,12) = 24 (cert [302]).  
-This cert proves both "24"s name the same phenomenon in the applied dynamics: the maximum T-orbit period in {1,...,24}² is exactly 24.
+This cert proves numerical alignment only: the state modulus 24, the Pisano period value 24, and the maximum T-orbit period 24 are distinct typed objects that coincide in this setting.
 
 ### Orbit structure of {1,...,24}²
 
@@ -59,7 +59,7 @@ Applied Cosmos = 576 − 64 − 9 + 1 = **504**
 max T-period  — maximum orbit in {1,...,24}²         (this cert)
 ```
 
-All three are equal. The applied QA modulus 24 is not arbitrary: it is precisely the value where π(m) equals the theoretical Cosmos cycle, making the applied system **period-self-consistent**.
+All three values are equal. The applied QA modulus 24 is not justified by identifying a modulus with a period; it is the value where the applied modulus, its Pisano period, and the theoretical Cosmos cycle have matching numeric size.
 
 ## Primary sources
 

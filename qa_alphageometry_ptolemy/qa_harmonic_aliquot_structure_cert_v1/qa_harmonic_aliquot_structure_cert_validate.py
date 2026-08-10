@@ -70,6 +70,8 @@ Five claims:
 """
 
 from math import gcd
+import json
+import sys
 
 QA_COMPLIANCE = (
     "cert_validator -- integer arithmetic: d=b+e raw for all BEDA; "
@@ -117,6 +119,26 @@ def is_7smooth(n: int) -> bool:
         while n % p == 0:
             n //= p
     return n == 1
+
+
+def prime_factors(n: int) -> list[int]:
+    factors = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d)
+            n //= d
+        d += 1 if d == 2 else 2
+    if n > 1:
+        factors.append(n)
+    return factors
+
+
+def product(values: list[int]) -> int:
+    out = 1
+    for value in values:
+        out *= value
+    return out
 
 
 def harmonic_dyads(d_vals: list[int]) -> list[tuple[int, int, int, int, int]]:
@@ -264,6 +286,66 @@ def check_c5() -> list[str]:
     return failures
 
 
+def check_c6() -> list[str]:
+    """C6: source-native aliquot/multitude wave decomposition."""
+    failures = []
+    witnesses = [
+        {
+            "wave": 2 * 3 * 5 * 7 * 11 * 13 * 17,
+            "aliquot": 2 * 3 * 5 * 7 * 11 * 13,
+            "unique_prime": 17,
+            "factor_count": 7,
+        },
+        {
+            "wave": 2 * 3 * 5 * 7 * 11 * 13 * 19,
+            "aliquot": 2 * 3 * 5 * 7 * 11 * 13,
+            "unique_prime": 19,
+            "factor_count": 7,
+        },
+        {
+            "wave": 2 * 3 * 5 * 7 * 11,
+            "aliquot": 2 * 3 * 5 * 7,
+            "unique_prime": 11,
+            "factor_count": 5,
+        },
+    ]
+    for i, w in enumerate(witnesses):
+        wave = w["wave"]
+        A = w["aliquot"]
+        p = w["unique_prime"]
+        factors = prime_factors(wave)
+        if len(factors) != w["factor_count"]:
+            failures.append(f"wave[{i}] factor count {len(factors)} != {w['factor_count']}")
+        if wave != A * p:
+            failures.append(f"wave[{i}] {wave} != aliquot {A} * unique prime {p}")
+        if not is_prime(p):
+            failures.append(f"wave[{i}] unique prime {p} is not prime")
+        if A % p == 0:
+            failures.append(f"wave[{i}] unique prime {p} divides aliquot {A}")
+        if A != product([q for q in factors if q != p]):
+            failures.append(f"wave[{i}] aliquot {A} is not product of non-unique factors {factors}")
+        if A <= p:
+            failures.append(f"wave[{i}] aliquot {A} must be larger than unique prime {p}")
+    return failures
+
+
+def check_c7() -> list[str]:
+    """C7: harmony is shared aliquot with distinct unique-prime multitudes."""
+    failures = []
+    A = 2 * 3 * 5 * 7 * 11 * 13
+    p1, p2 = 17, 19
+    w1, w2 = A * p1, A * p2
+    if gcd(w1, w2) != A:
+        failures.append(f"shared aliquot gcd({w1},{w2})={gcd(w1,w2)} != {A}")
+    if w1 // A != p1 or w2 // A != p2:
+        failures.append("unique-prime multitudes not recovered by dividing by shared aliquot")
+    if not (is_prime(p1) and is_prime(p2) and p1 != p2):
+        failures.append("unique multitudes must be distinct primes")
+    if gcd(A, p1 * p2) != 1:
+        failures.append(f"unique primes must not be factors of aliquot A={A}")
+    return failures
+
+
 # ---------------------------------------------------------------------------
 # Runner
 # ---------------------------------------------------------------------------
@@ -274,6 +356,8 @@ CHECKS = [
     ("C3", "Aliquot spectrum = {1,2,3,5} — no aliquot > 5 in mod-9 Cosmos", check_c3),
     ("C4", "5040 = 2^4·3^2·5·7, ω=4; all Cosmos d < 5040",                check_c4),
     ("C5", "Tonal identity d-values {11,13,17} each form 5 harmonic dyads", check_c5),
+    ("C6", "Source-native wave decomposition W=A*p with A larger than unique prime", check_c6),
+    ("C7", "Source-native harmony: shared aliquot A, distinct unique-prime multitudes", check_c7),
 ]
 
 
@@ -290,5 +374,42 @@ def main() -> int:
     return 0 if all_pass else 1
 
 
+def self_test() -> int:
+    results = []
+    for cid, desc, fn in CHECKS:
+        failures = fn()
+        results.append({
+            "check_id": cid,
+            "description": desc,
+            "ok": not failures,
+            "failures": failures,
+        })
+
+    bad_A = 2 * 3
+    bad_p = 7
+    negative_probes = [
+        {
+            "id": "bad_aliquot_not_larger_than_unique_prime",
+            "ok": not (bad_A > bad_p),
+            "message": "A=6, p=7 is an invalid size relation; the aliquot part must be larger than the unique prime",
+        },
+        {
+            "id": "bad_unique_prime_inside_aliquot",
+            "ok": gcd(2 * 3 * 5 * 7, 7) != 1,
+            "message": "Unique prime p=7 must not also be a factor of aliquot A=210",
+        },
+        {
+            "id": "bad_shared_aliquot",
+            "ok": gcd(2 * 3 * 5 * 17, 2 * 3 * 7 * 19) != 2 * 3 * 5,
+            "message": "Waves with different aliquot cores must not be accepted as same-aliquot harmony",
+        },
+    ]
+    all_ok = all(item["ok"] for item in results + negative_probes)
+    print(json.dumps({"ok": all_ok, "results": results, "negative_probes": negative_probes}, indent=2))
+    return 0 if all_ok else 1
+
+
 if __name__ == "__main__":
+    if "--self-test" in sys.argv:
+        raise SystemExit(self_test())
     raise SystemExit(main())

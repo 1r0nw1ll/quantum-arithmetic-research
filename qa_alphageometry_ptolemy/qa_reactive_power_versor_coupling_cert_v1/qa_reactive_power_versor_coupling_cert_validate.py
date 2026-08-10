@@ -248,7 +248,8 @@ def check_c5():
         Gp = e * e + d * d        # quadrance of image direction
 
         # Cross-spread: (b*d - e*e)^2 / (G * G') — exact Fraction
-        num = (b * d - e * e) ** 2
+        det = b * d - e * e
+        num = det * det
         cs = Fraction(num, G * Gp)
 
         # Must be rational in (0, 1)
@@ -260,7 +261,7 @@ def check_c5():
         # Verify it equals the Wildberger cross-spread formula:
         # cs = (b1*e2 - b2*e1)^2 / (G1*G2) with (b1,e1)=(b,e), (b2,e2)=(e,d)
         # = (b*d - e*e)^2 / (G*G')  ← same formula
-        cs_formula = Fraction((b * d - e * e) ** 2, G * Gp)
+        cs_formula = Fraction(det * det, G * Gp)
         if cs != cs_formula:
             failures.append(
                 f"Cross-spread formula mismatch at ({b},{e}): {cs} != {cs_formula}"
@@ -273,7 +274,8 @@ def check_c5():
         d   = t_step_a1(b, e)[1]
         G   = b * b + e * e
         Gp  = e * e + d * d
-        cs  = Fraction((b * d - e * e) ** 2, G * Gp)
+        det = b * d - e * e
+        cs  = Fraction(det * det, G * Gp)
         all_cs.append(cs)
 
     if any(cs < 0 or cs > 1 for cs in all_cs):
@@ -285,7 +287,8 @@ def check_c5():
     d = t_step_a1(b, e)[1]
     G = b * b + e * e
     Gp = e * e + d * d
-    cs_sing = Fraction((b * d - e * e) ** 2, G * Gp)
+    det = b * d - e * e
+    cs_sing = Fraction(det * det, G * Gp)
     if cs_sing != Fraction(0):
         failures.append(
             f"Singularity (9,9) cross-spread = {cs_sing}, expected 0 (self-coupling)"

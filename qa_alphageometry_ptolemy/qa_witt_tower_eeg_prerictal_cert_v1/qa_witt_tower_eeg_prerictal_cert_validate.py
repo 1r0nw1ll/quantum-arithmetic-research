@@ -197,6 +197,7 @@ def _compute():
     if os.environ.get("QA_LIVE") != "1": return None
     if not _LIVE_OK: return None
     results = []
+    skipped_reads = []
     for (patient, edf_file, reg_start, seiz_start) in _CATALOG:
         edf_path = f"{SIENA}/{patient}/{edf_file}"
         if not os.path.exists(edf_path): continue
@@ -205,7 +206,13 @@ def _compute():
         try:
             inter_data = _read_seg(edf_path, INTER_SKIP*SR, INTER_SEC*SR)
             pre_data   = _read_seg(edf_path, (onset_s - PRERICTAL_SEC)*SR, PRERICTAL_SEC*SR)
-        except Exception: continue
+        except Exception as exc:
+            skipped_reads.append({
+                "patient": patient,
+                "file": edf_file,
+                "error": f"{exc.__class__.__name__}: {exc}",
+            })
+            continue
         inter_rms = _rms_windows(inter_data)
         pre_rms   = _rms_windows(pre_data)
         if len(inter_rms) < 10 or len(pre_rms) < 10: continue
@@ -257,11 +264,13 @@ def _compute():
         "n_recordings_exceed": sum(1 for r in results if r["pre_t2_rate"] > r["inter_t2_rate"]),
         "n_monotone":          sum(1 for r in results if r["late_t2_rate"] >= r["early_t2_rate"]),
         "per_recording":       results,
+        "skipped_reads":        skipped_reads,
     }
 
 
 def _run_checks(d):
     res = {}
+    res["C0_NO_SKIPPED_LIVE_READS"] = not d.get("skipped_reads")
     res["C1_PRE_T2_GT_45PCT"]   = d["pre_t2_rate"] > 0.45
     res["C2_PERM_P_LT_001"]     = d["perm_p"] < 0.001
     res["C3_N_PATIENTS_GE_8"]   = d["n_patients"] >= 8

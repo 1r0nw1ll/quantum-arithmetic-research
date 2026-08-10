@@ -394,7 +394,7 @@ FIXTURES = [
         "id": "DET_MINUS1_FIB_LAMBDA0_SQ_NEG1",
         "description": "Fibonacci t=1, p=5: lambda0=3, lambda0^2=9=4=-1 mod 5",
         "expected": True,
-        "fn": lambda: (_lambda0(1, 5) ** 2) % 5 == 4,
+        "fn": lambda: (_lambda0(1, 5) * _lambda0(1, 5)) % 5 == 4,
     },
     {
         "id": "DET_PLUS1_SPECIFIC_COLLAPSE",

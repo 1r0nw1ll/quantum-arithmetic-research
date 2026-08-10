@@ -40,8 +40,8 @@
   },
 
   "connection_to_mod24_arithmetic": {
-    "statement": "The QA cosmos orbit period π(9)=24 equals the Pisano period of Fibonacci mod 9. The same 24 appears as the exact minimum gap H²-G²=24 at the fundamental Pythagorean direction (d,e)=(2,1). This is not a coincidence: both arise from the Fibonacci/golden-ratio structure of Z[φ] and its reduction mod 9.",
-    "significance": "Ben Iverson identified this as the origin of QA's mod-24 structure. The number 24 is not arbitrary — it is the natural periodicity forced by the fundamental Pythagorean geometry. The formula H²-G²=2CF links QA's two key elements: C (green quadrance) and F (red quadrance)."
+    "statement": "The QA cosmos orbit period π(9)=24 equals the Pisano period of Fibonacci mod 9. The same numeric value appears as the exact minimum gap H²-G²=24 at the fundamental Pythagorean direction (d,e)=(2,1). These are numerically aligned claims grounded in the Fibonacci/golden-ratio structure of Z[φ], but the orbit period and applied modulus remain distinct typed objects.",
+    "significance": "Ben Iverson identified this as part of QA's 24-structure. The number 24 is not arbitrary, but this fixture certifies only the Pythagorean arithmetic witness H²-G²=2CF and its divisibility by 24; it does not prove that arbitrary observer-layer data should be reduced modulo 24."
   },
 
   "validation_checks": [

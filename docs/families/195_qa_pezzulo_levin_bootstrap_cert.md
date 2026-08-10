@@ -27,7 +27,7 @@ own prose) and "Creativity" (the paper's title's endpoint).
 
 ### Intelligence ratchet
 
-π(9) = 24: the Pisano period operator applied to mod-9 produces mod-24. The arithmetic generates the conditions for its own enhancement. This is L₃ (modulus-changing) bootstrapping — certified in [192] as the minimum non-trivial Pisano fixed point.
+π(9) = 24: the Pisano period operator sends the modulus value 9 to the period value 24. That period value matches the applied modulus size, but the modulus and period remain distinct typed objects. This is L₃ (modulus-changing) bootstrapping — certified in [192] as the minimum non-trivial Pisano fixed point.
 
 ### Five design principles ↔ QA operations
 

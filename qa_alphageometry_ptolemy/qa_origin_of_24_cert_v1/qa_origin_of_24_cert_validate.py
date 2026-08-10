@@ -4,9 +4,14 @@ qa_origin_of_24_cert_validate.py
 
 Validator for QA_ORIGIN_OF_24_CERT.v1  [family 129]
 
-Certifies the dual derivation of mod-24 as the natural modulus of QA arithmetic:
+Certifies the dual arithmetic witness for the number 24 used by QA's conventional
+applied modulus:
   - Route 1 (Pyth-1): H²-G²=G²-I²=24 for the 3-4-5 triangle; ≡0(mod 24) generally
   - Route 2 (crystal): 7²-5²=24 at the fundamental Pythagorean direction (d,e)=(2,1)
+
+Scope guard: this validator proves the integer identities and divisibility
+claims only. It does not prove that arbitrary observer-layer data should be
+projected into a mod-24 alphabet.
 
 Checks
 ------

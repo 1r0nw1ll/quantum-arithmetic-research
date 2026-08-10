@@ -605,6 +605,125 @@ the QA-ML chain. Further structural extensions (v3.3 GCN, T2, other
 cert families) are deferred — they would not change the v3
 conclusion.
 
+## v3.3 — Pepe E1 + E1.5 results (2026-05-15)
+
+Per `docs/specs/QA_ML_PEPE_MAPPING_CATALOG.md`. Two patterns from
+Pepe (2025) tested:
+
+| Pattern | Verdict | Key number |
+|---|---|---|
+| **E1** Sandwich product (Pepe Ch 1.3, 4.4) | **PARTIAL** (after correction) | strict rediscover_277 = 0.156 with 4×4×4 conjugation; full v3.3 packet reaches 1.000/1.000 |
+| **E1.5** GA-ReLU → QA-ReLU (Pepe Ch 5.3) | **PASS/MIXED** | after canonical boundary feature: QA-ReLU rediscover_277 = 1.000 and rediscover_278 = 1.000 |
+| **E2** Canonical-equivariant hybrid (Pepe Ch 3.8 analog) | **PASS** | drops all 9 canonical residue/boundary helper fields and still gets rediscover_277 = 1.000, rediscover_278 = 1.000 |
+| **E3** Define / Refine / Align (Pepe Ch 4.3 analog) | **PASS** | 284 fallback proposals corrected by Align; final rediscovery remains 1.000/1.000 |
+| **E4** QA-ResNet / generator residual stack (Pepe Ch 5.5 analog) | **PARTIAL / FAIL on monotone-depth criterion** | MLP depth 0/4/8/16 rediscover_277 = 0.510/0.542/0.500/0.688; CART probe reaches 1.000 by depth 4 |
+
+**E1 interpretation (twice-corrected):** Two rounds of Will pushback
+landed on the proper construction:
+
+1. **First correction** ("QA has all features of GA"): initial impl
+   used forward action g(x) only, not the proper sandwich `g·h·g⁻¹`.
+   Switched to 4×4 conjugation grid with σ⁻¹ (inverse Fibonacci step,
+   bijection on {1..m}²), μ⁻¹ = μ, λ₂/ν as partial inverses. Strict
+   score lifted 0.219 → 0.260. Top sandwich feature `sw_sigma_nu_e`
+   at importance 0.183.
+
+2. **Second correction** ("you are only using two of the four — there
+   are four for a reason"): each conjugate was exposing only (b', e').
+   QA state per `qa/core.py` is the 4-tuple (b, e, d, a). Updated each
+   conjugate to yield the full 4-tuple with d' = b'+e', a' = b'+2e'
+   (raw per A2). Sandwich grid is now 4×4×4 = 64 features.
+
+**The empirical payoff is on the MLP path, not CART:** plain ReLU
+MLP on (v3 + 64 sandwich) hits rediscover_277 = 0.500, rediscover_278
+= 1.000 — up from 0.396 / 0.500 with the 2-tuple version. Will's
+correction alone delivered the [278] solution without any
+architecture change.
+
+On the CART path, the strict score actually worsened (0.260 → 0.156)
+because trees can't combine the richer (d', a') features productively
+on this gcd-structured task; the top sandwich feature is now
+`sw_lambda_2_mu_a` at importance 0.173 (the a-coordinate of
+`λ₂ μ λ₂⁻¹`), confirming the (d, a) projections carry information.
+
+**E1.5 interpretation:** There were two separate observer issues. First,
+the QA-ReLU phase helper returned the period-closing index, so all period-8
+satellites got the same envelope; fixing it to canonical 8-cycle position
+lifted QA-ReLU rediscover_277 to 0.823. Second, numeric residues still left
+the MLP approximating a sparse finite interaction. The final packet adds
+canonical residue fields plus `canonical_pisano5_boundary_candidate`, an
+integer structural feature for:
+`canonical_m = 15 ∧ canonical_e ≡ 3*canonical_b (mod 5)` with the mod-3
+exclusion. That closes [277].
+
+**Final E1.5 numbers with 103-feature packet:**
+
+| Activation | rediscover_277 | rediscover_278 | macro_f1 |
+|---|---|---|---|
+| Standard ReLU | 1.000 | 0.111 | 0.701 |
+| QA-ReLU | 1.000 | 1.000 | 0.660 |
+
+**Position vs CART baseline:** CART on the same packet is exact on both
+cert rediscovery targets and puts `canonical_pisano5_boundary_candidate`
+at top importance (0.500). The engineering lesson is now sharper: QA did
+carry the missing [277] information, but the observer needed the canonical
+boundary interaction exposed. E2 remains the cleaner architecture target:
+learn/share over canonical-equivalent states rather than hand-materializing
+the certified interaction as a feature.
+
+**E2 canonical-equivariant hybrid:** Implemented
+`tools/qa_ml/qa_equivariant_v3_3.py` plus
+`experiments/qa_ml/06_e2_canonical_equivariant.py`. The stricter E2 probe
+drops all 9 canonical residue/boundary helper fields, learns the 32
+positive canonical class-1 signatures from training labels, routes
+`canonical_m == 15` states through that shared canonical head, and uses a
+CART fallback for the non-equivariant [278] regime.
+
+| Model | Features | rediscover_277 | rediscover_278 | m75 | m8 | macro_f1 |
+|---|---:|---:|---:|---:|---:|---:|
+| E2 canonical-equivariant hybrid | 30 | 1.000 | 1.000 | 1.000 | 1.000 | 0.995 |
+
+This is the cleanest current result: [277] is recovered by architectural
+sharing over canonical representatives, not by feeding the exact boundary
+predicate as a feature; [278] remains intact through the fallback path.
+
+**E3 Define/Refine/Align:** Implemented `tools/qa_ml/qa_dra_v3_3.py` and
+`experiments/qa_ml/07_e3_define_refine_align.py`. This is the same
+architecture made traceable as stages:
+
+| Stage | QA analog | Test-set diagnostic |
+|---|---|---:|
+| Define | fallback CART proposes a T1 class | fallback class-1 on routed states = 376 |
+| Refine | canonical-equivariant head proposes class 1 by signature | positive signatures = 32 |
+| Align | route `canonical_m == 15` through refined canonical proposal | 576 routed, 284 fallback proposals changed |
+
+Final E3 metrics match E2: rediscover_277 = 1.000, rediscover_278 =
+1.000, m75 = 1.000, m8 = 1.000, macro_f1 = 0.995. This is a useful
+interpretability layer, not a separate accuracy gain.
+
+**E4 QA-ResNet / generator residual stack:** Implemented
+`tools/qa_ml/qa_resnet_v3_3.py` and
+`experiments/qa_ml/08_e4_qa_resnet.py`. The strict packet again drops all
+9 materialized canonical residue/boundary helper fields. Each residual
+block applies one QA generator in the cycle σ, μ, λ₂, ν to the current
+integer state and appends the active-packet delta; undefined partial
+generators append a zero residual and leave the state unchanged.
+
+| Depth | Features | MLP rediscover_277 | MLP rediscover_278 | MLP macro_f1 | CART rediscover_277 | CART rediscover_278 | CART macro_f1 |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 30 | 0.510 | 0.500 | 0.460 | 0.979 | 1.000 | 0.793 |
+| 4 | 150 | 0.542 | 0.500 | 0.469 | 1.000 | 1.000 | 0.838 |
+| 8 | 270 | 0.500 | 0.056 | 0.495 | 1.000 | 1.000 | 0.869 |
+| 16 | 510 | 0.688 | 0.167 | 0.594 | 0.990 | 1.000 | 0.946 |
+
+Verdict: **partial only.** The generator residual packet contains useful
+[277] information; the CART probe reaches 1.000 by depth 4. The ReLU MLP
+does improve by depth 16, but the curve is not monotone and [278] becomes
+unstable. This fails the pre-declared E4 monotonic-depth pass criterion.
+The result reinforces E2/E3: QA's strongest transferred Pepe analog here
+is not "deeper residual stack over generators" but explicit
+canonical-equivariant routing.
+
 ## External references added
 
 - **Pepe, A. (2025).** *Machine Learning with Geometric Algebra:

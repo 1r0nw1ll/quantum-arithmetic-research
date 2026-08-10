@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_SEE_LONGITUDINAL_TRANSVERSE_CERT.v1",
+  "certificate_id": "qa.cert.see_longitudinal_transverse.fail.physical_grounding_overclaim.v1",
+  "cert_type": "qa_see_longitudinal_transverse_cert",
+  "title": "See Longitudinal/Transverse FAIL: physical grounding overclaim",
+  "created_utc": "2026-07-14T00:00:00Z",
+
+  "_fixture_purpose": "Maps See's wave duality to QA generator/observer duality and treats Theorem NT as physically grounded by that wave theory.",
+
+  "source_attribution": "T.J.J. See, 'Electrodynamic Wave-Theory of Physical Forces' Vols I-II (See, 1917). QA mapping: Will Dale + Claude.",
+
+  "longitudinal_mode": {
+    "see_description": "Compression/longitudinal waves in the aether.",
+    "qa_mapping": "Generator action: the T-operator acts along the orbit path, driving discrete causal state transitions."
+  },
+
+  "transverse_mode": {
+    "see_description": "Shear/transverse waves in the aether.",
+    "qa_mapping": "Observer projection: continuous measurement of QA states."
+  },
+
+  "orthogonality": {
+    "see_claim": "Longitudinal and transverse modes cannot mix.",
+    "qa_claim": "Generator dynamics and observer projections are separated.",
+    "physical_basis": "Linear elasticity separates compression and shear modes."
+  },
+
+  "theorem_nt_link": {
+    "statement": "Theorem NT: observer projections never enter QA logic as causal inputs.",
+    "see_grounding": "See's theory physically grounds Theorem NT and elevates it from design rule to structural theorem.",
+    "implication": "Theorem NT follows from See's wave-duality physics."
+  },
+
+  "keely_complementarity": {
+    "keely_scope": "Triune (3 orbit types)",
+    "see_scope": "Duality (2 access modes)",
+    "relation": "Complementary"
+  },
+
+  "witnesses": [
+    {"mode": "longitudinal", "example": "T-operator", "note": "generator"},
+    {"mode": "transverse", "example": "E8 alignment", "note": "observer"}
+  ],
+
+  "fail_ledger": [
+    "SLT_SCOPE: fixture treats See's rejected aether theory as physical grounding/proof instead of analogy"
+  ],
+  "result": "FAIL"
+}

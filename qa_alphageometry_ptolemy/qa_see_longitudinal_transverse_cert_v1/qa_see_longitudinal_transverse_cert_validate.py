@@ -4,9 +4,10 @@ qa_see_longitudinal_transverse_cert_validate.py
 
 Validator for QA_SEE_LONGITUDINAL_TRANSVERSE_CERT.v1  [family 197]
 
-Certifies: T.J.J. See's wave duality (1917) — longitudinal (compression)
-waves = gravity/magnetism; transverse (shear) waves = light/heat — mapped
-to QA's generator/observer duality.
+Records an analogy/framework mapping: T.J.J. See's wave duality (1917) —
+longitudinal (compression) vs transverse (shear) modes — mapped to QA's
+generator/observer duality. This cert does not prove Theorem NT and does not
+certify See's aether physics as valid.
 
 See's claim (Electrodynamic Wave-Theory of Physical Forces, 1917):
     The same aether medium supports two orthogonal wave modes:
@@ -24,17 +25,16 @@ QA mapping:
                           observer projections NEVER enter QA logic as
                           causal inputs.
 
-Physical grounding for Theorem NT:
+Analogy for Theorem NT:
     In a linear elastic medium, longitudinal and transverse modes are
     orthogonal eigenmodes of the wave equation. A pure compression wave
     cannot generate shear, and vice versa, because they belong to
     different eigenspaces of the stress tensor. This is not a convention
     but a structural impossibility.
 
-    See's insight: the same medium can carry both modes, but they propagate
-    independently. QA's insight: the same tuple space supports both
-    generator dynamics and observer projections, but they operate in
-    orthogonal 'directions' (discrete vs continuous).
+    The same-medium/two-mode picture is used only as a mnemonic analogy for
+    QA's generator/observer separation. Theorem NT rests on QA axioms, not on
+    See's historical wave theory.
 
 Complementarity with Keely/SVP [153]:
     Keely's triune (enharmonic/harmonic/dominant) maps to THREE orbit types
@@ -46,10 +46,12 @@ Complementarity with Keely/SVP [153]:
 
 Source: T.J.J. See, "Electrodynamic Wave-Theory of Physical Forces" (1917),
 Vols I-II; "New Theory of the Aether", Astronomische Nachrichten 211-226
-(1920-1926). Tesla endorsement noted.
+(1920-1926). QA mapping: Will Dale + Claude, 2026-04-07. Any Tesla
+endorsement claim is unverified and not part of the validator.
 
 Checks:
     SLT_1       — schema_version matches
+    SLT_SCOPE   — analogy boundary explicit; no physical-proof overclaim
     SLT_LONG    — longitudinal mode mapping well-formed
     SLT_TRANS   — transverse mode mapping well-formed
     SLT_ORTH    — orthogonality claim articulated
@@ -80,15 +82,30 @@ def _run_checks(fixture):
     # SLT_1: schema version
     results["SLT_1"] = fixture.get("schema_version") == SCHEMA_VERSION
 
+    # SLT_SCOPE: analogy/framework boundary must be explicit.
+    purpose = str(fixture.get("_fixture_purpose", "")).lower()
+    nt = fixture.get("theorem_nt_link", {})
+    see_grounding = str(nt.get("see_grounding", "")).lower()
+    implication = str(nt.get("implication", "")).lower()
+    results["SLT_SCOPE"] = (
+        ("analogy" in purpose or "framework" in purpose)
+        and ("not proved" in purpose or "not prove" in purpose or "rests on qa axioms" in purpose)
+        and "analogy" in see_grounding
+        and ("not physical proof" in see_grounding or "not prove" in see_grounding)
+        and "axiom" in implication
+    )
+
     # SLT_LONG: longitudinal mode mapping
     long_mode = fixture.get("longitudinal_mode", {})
     results["SLT_LONG"] = (
         "see_description" in long_mode
         and "qa_mapping" in long_mode
-        and "causal" in str(long_mode.get("qa_mapping", "")).lower()
-        or "generator" in str(long_mode.get("qa_mapping", "")).lower()
-        or "t-operator" in str(long_mode.get("qa_mapping", "")).lower()
-        or "discrete" in str(long_mode.get("qa_mapping", "")).lower()
+        and (
+            "causal" in str(long_mode.get("qa_mapping", "")).lower()
+            or "generator" in str(long_mode.get("qa_mapping", "")).lower()
+            or "t-operator" in str(long_mode.get("qa_mapping", "")).lower()
+            or "discrete" in str(long_mode.get("qa_mapping", "")).lower()
+        )
     )
 
     # SLT_TRANS: transverse mode mapping
@@ -111,7 +128,6 @@ def _run_checks(fixture):
     )
 
     # SLT_NT: Theorem NT link
-    nt = fixture.get("theorem_nt_link", {})
     results["SLT_NT"] = (
         "statement" in nt
         and ("firewall" in str(nt.get("statement", "")).lower()

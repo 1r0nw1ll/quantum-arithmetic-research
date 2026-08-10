@@ -6,7 +6,7 @@
 
 ## What It Certifies
 
-The **dual derivation of mod-24** as the natural modulus of QA arithmetic.
+The **dual arithmetic witness for the number 24** used by QA's conventional applied modulus.
 
 Two independent routes both produce exactly 24 at the fundamental Pythagorean direction (d,e)=(2,1), which encodes the 3-4-5 triangle:
 
@@ -19,13 +19,13 @@ For all primitive Pythagorean directions (gcd(d,e)=1, d+e odd): **24 | 2CF alway
 
 ## Why 24 Is Not Arbitrary
 
-Ben Iverson identified the mod-24 structure of QA as *Plato's independent 2nd dimension* — not an engineering choice but a mathematical inevitability forced by Pythagorean geometry. The same 24 appears as:
+Ben Iverson identified the 24-structure of QA as *Plato's independent 2nd dimension*. This cert supports the arithmetic importance of the number 24, but it does not by itself prove that arbitrary observer-layer data should be reduced modulo 24. The same numeric value appears as:
 
 1. The QA cosmos orbit period π(9)=24 (Pisano period of Fibonacci mod 9)
 2. The minimum gap H²-G²=24 at the fundamental Pythagorean direction
 3. The crystal identity 7²-5²=24 in QA-4 Iota geometry
 
-These three coincidences are one: they all arise from the Fibonacci/golden-ratio structure of Z[φ] and its reduction mod 9.
+These three occurrences are numerically aligned, but they remain distinct typed claims: an orbit period, a Pythagorean gap, and a crystal identity. The shared source is the Fibonacci/golden-ratio structure of Z[φ] and its reduction mod 9.
 
 ## Proof Sketch
 
@@ -91,7 +91,7 @@ python qa_alphageometry_ptolemy/qa_origin_of_24_cert_v1/qa_origin_of_24_cert_val
 ## Connection to QA Math
 
 - **Family [125]** (Chromogeometry): C=2de is the green quadrance. The identity 2CF is the product of the two non-hypotenuse chromogeometric quadrances.
-- **Family [128]** (Spread Period): The orbit period π(9)=24 is the same 24 derived here from geometry.
+- **Family [128]** (Spread Period): The orbit period π(9)=24 is numerically aligned with the 24 derived here from geometry; period and modulus remain distinct typed objects.
 - **Family [127]** (UHG Null): The triple (F,C,G) forms a null point in UHG; H²-G²=2CF is an identity of null quadrangles.
 - **Source**: Ben Iverson Pyth-1 (primary); QA-4 Iota crystal geometry.
 

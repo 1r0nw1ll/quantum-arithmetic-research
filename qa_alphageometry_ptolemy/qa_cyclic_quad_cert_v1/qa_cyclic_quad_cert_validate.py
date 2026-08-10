@@ -141,7 +141,9 @@ def check_witness(w):
     E  = d1*e2 + d2*e1
     Dp = d1*d2 + e1*e2
     Ep = abs(d1*e2 - d2*e1)
-    G3 = (d1*d2 - e1*e2)**2 + (d1*e2 + d2*e1)**2  # = G1*G2
+    D_for_G = d1*d2 - e1*e2
+    E_for_G = d1*e2 + d2*e1
+    G3 = D_for_G*D_for_G + E_for_G*E_for_G  # = G1*G2
 
     for key, val in [("D", D), ("E", E), ("G3", G3), ("Dp", Dp), ("Ep", Ep)]:
         declared = w.get(key)

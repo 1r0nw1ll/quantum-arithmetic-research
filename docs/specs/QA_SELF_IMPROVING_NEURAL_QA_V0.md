@@ -1,5 +1,7 @@
 # Self-Improving Neural QA v0
 
+<!-- PRIMARY-SOURCE-EXEMPT: reason=internal engineering spec for this repo's own SINQA scaffold; no external literature to cite, content is a design contract over this project's own tools and ledger. -->
+
 Status: scaffold contract, not a live cert.
 
 ## Goal
@@ -215,6 +217,43 @@ decides whether each new artifact is accepted or rejected.
 The producer suppresses repeated stable replay signatures across retained and
 archived artifacts, which acts as the first novelty governor for unattended
 general-ML learning.
+
+## QA Quantum Arithmetic Mining Producer
+
+`tools/qa_mining_replay_worker.py` routes candidates from the QA quantum
+arithmetic mining experiment (`experiments/qa_quantum_arithmetic_mining/`)
+through the same `candidate -> deterministic replay gate -> ledger` shape as
+the general-ML and HSI domains, treating the mining Hebbian prototype as the
+`base_model.neural=true` proposal generator and each mining stage's
+leak/orbit-controlled evaluation as the replay evidence.
+
+Mapping from mining semantics onto the generic replay schema:
+
+- `base_model`: `{"name": "qa_quantum_arithmetic_mining_hebbian", "kind":
+  "residue_pattern_miner", "neural": true}`.
+- `candidate.kind`: `correction_rule` via the existing generic emitter (the
+  schema's dedicated `generator_pattern` kind is a natural fit for a future
+  emitter variant, not yet implemented).
+- `new_failures_fixed`: re-derived directly from the harness, not read from a
+  cached leaderboard — true positives on the test window in excess of what a
+  chance-level predictor at the same predicted-positive count would get
+  right (`tp - round(predicted_positive * base_rate)`).
+- `protected_cases_replayed` / `protected_cases_harmed`: the mining-specific
+  protected regression suite in `tools/qa_mining_protected_regression_suite.py`
+  — a small, fixed set of already-established facts from Stages 19-34 (e.g.
+  "orbit does not beat `be_pair` on `directrix_distance_integer`", the
+  `gcd(X,D)=d <=> gcd(X,F)=1` identity, the `director_radius_sq_square` /
+  `D_plus_F_square` equivalence, `I` and `D_plus_F` remaining distinct
+  quantities) re-verified by direct recomputation, not by re-reading old
+  JSON. A future mining candidate that silently reverses one of these shows
+  up as `protected_cases_harmed > 0` and is rejected, the same way a general-ML
+  candidate that regresses a previously-fixed case is.
+
+The producer never appends to the SINQA ledger itself; promotion goes through
+the existing `tools/qa_emit_self_improving_neural_qa_packet.py --append-ledger`
+step, same as every other domain. First candidate routed through this path:
+`I_square` (Stage 34's Koenig-invariant target), accepted with
+`new_failures_fixed=198`, `protected_cases_harmed=0`.
 
 ## Trend Reporting
 

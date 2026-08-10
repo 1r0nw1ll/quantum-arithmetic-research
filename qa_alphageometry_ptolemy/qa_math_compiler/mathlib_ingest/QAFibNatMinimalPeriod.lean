@@ -65,7 +65,7 @@ theorem fib_mat_pow_eq_one_iff (m : ℕ) : fib_mat ^ m = 1 ↔ 24 ∣ m := by
     have hlt : m % 24 < 24 := Nat.mod_lt _ (by norm_num)
     rcases Nat.eq_zero_or_pos (m % 24) with h0 | hpos
     · exact Nat.dvd_of_mod_eq_zero h0
-    · exact absurd hpow (fib_mat_order_exact ⟨m % 24, hlt⟩ (by omega))
+    · exact absurd hpow (fib_mat_order_exact ⟨m % 24, hlt⟩ hpos.ne')
   · rintro ⟨k, rfl⟩
     rw [pow_mul, fib_mat_pow_24, one_pow]
 
@@ -84,7 +84,7 @@ theorem fib_vec_period_iff (m : ℕ) : fib_vec m = fib_vec 0 ↔ 24 ∣ m := by
     have hlt : m % 24 < 24 := Nat.mod_lt _ (by norm_num)
     rcases Nat.eq_zero_or_pos (m % 24) with h0 | hpos
     · exact Nat.dvd_of_mod_eq_zero h0
-    · exact absurd hmod (fib_vec_ne_fib_vec_zero ⟨m % 24, hlt⟩ (by omega))
+    · exact absurd hmod (fib_vec_ne_fib_vec_zero ⟨m % 24, hlt⟩ hpos.ne')
   · rintro ⟨k, rfl⟩
     have h24k : 24 * k % 24 = 0 := by omega
     rw [fib_vec_mod24, h24k]
@@ -115,10 +115,10 @@ theorem pisano_period_9_exact (m : ℕ) :
     -- Reconstruct fib_vec m = fib_vec 0 from the two components.
     ext i
     fin_cases i
-    · simp only [fib_vec, Matrix.cons_val_zero]
-      rw [hm1]; native_decide
-    · simp only [fib_vec, Matrix.cons_val_one, Matrix.head_cons]
-      rw [hm]; native_decide
+    · show (Nat.fib (m + 1) : ZMod 9) = (Nat.fib (0 + 1) : ZMod 9)
+      rw [hm1]; decide
+    · show (Nat.fib m : ZMod 9) = (Nat.fib 0 : ZMod 9)
+      rw [hm]; decide
   · intro heq n
     -- Use the matrix-action chain: fib_vec(n+m) = F^n · fib_vec(m) = F^n · fib_vec(0) = fib_vec(n).
     have key : fib_vec (n + m) = fib_vec n :=

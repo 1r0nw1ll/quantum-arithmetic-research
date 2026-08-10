@@ -1,0 +1,31 @@
+{
+  "schema_version": "QA_SYNCHRONOUS_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.synchronous_harmonics.fail.bad_quantum_wave.v1",
+  "cert_type": "qa_synchronous_harmonics_cert",
+  "title": "Synchronous Harmonics FAIL: incomplete quantum wave factor structure",
+  "created_utc": "2026-07-14T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: 5046 is divisible by 6 but QA-2 Ch.6 explicitly says it is not a quantum wavelength because it factors only as 2*3*29*29, i.e. three distinct prime bases rather than 5, 6, or 7 prime wavelets.",
+
+  "sync_pairs": [
+    {"m": 3, "n": 5, "coprime": true, "sync_time": 15}
+  ],
+  "par_pairs": [
+    {"p1": 3, "p2": 5, "par1": "3-par", "par2": "5-par", "interference": "OPPOSE"},
+    {"p1": 7, "p2": 11, "par1": "3-par", "par2": "3-par", "interference": "SUPPORT"},
+    {"p1": 5, "p2": 13, "par1": "5-par", "par2": "5-par", "interference": "SUPPORT"},
+    {"p1": 11, "p2": 17, "par1": "3-par", "par2": "5-par", "interference": "OPPOSE"}
+  ],
+  "complete_wave_witnesses": [
+    {
+      "wavelength": 5046,
+      "prime_factors": [2, 3, 29, 29],
+      "requires_5_or_7": true,
+      "note": "Divisible by 6 but not complete under QA-2 Ch.6: only three distinct prime bases and no 5/7 factor."
+    }
+  ],
+  "fail_ledger": [
+    "SH_QWAVE: 5046 has only three distinct prime bases and is missing 5/7, so it is not a complete Quantum Wave"
+  ],
+  "result": "FAIL"
+}

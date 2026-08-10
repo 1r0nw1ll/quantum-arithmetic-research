@@ -4,6 +4,17 @@
 
 Coprime periods synchronize at their product (minimum time); same-par odd wavelets SUPPORT at quarter-points while cross-par wavelets OPPOSE; all QN products are divisible by 6.
 
+## Scope boundary
+
+This family certifies a narrow arithmetic slice of Iverson's Synchronous
+Harmonics corpus: synchronization arithmetic, quarter-point par interference,
+QN product divisibility by 6, and the source-stated 5/6/7-prime-factor
+complete-wave rule with minimum 5-factor and 7-factor witnesses. It does not
+certify the full QA-2 Ch.6 wave doctrine: elliptical male/female wave framing,
+wave-packet/null-packet morphology, micro-waveform persistence, or
+bonding/gear-wheel claims. Those remain source-grounded topics for separate
+certs.
+
 ## Mathematical content
 
 ### Synchronization theorem
@@ -43,6 +54,23 @@ Among {b, e, d}, at least one must be even (since d=b+e, if both b,e are odd the
 
 **Witnesses**: (1,1,2,3) product=6; (1,2,3,5) product=30; (2,1,3,4) product=24; (3,5,8,13) product=1560.
 
+### Complete Quantum Wave factor rule
+
+QA-2 Ch.6 states that a complete Quantum Wave needs 5, 6, or 7 prime
+wavelets, always including factors 2 and 3 and usually including 5 and/or 7.
+The validator recomputes the prime factorization of each complete-wave witness.
+For eligibility it counts distinct prime bases, matching the source's own
+`5046 = 2*3*29*29` discussion where the repeated `29` is still described as
+"only three prime factors."
+
+- Minimum 5-factor wave: 2*3*5*7*11 = 2310
+- 6-factor witness: 2*3*5*7*11*13 = 30030
+- Minimum 7-factor wave: 2*3*5*7*11*13*17 = 510510
+
+The negative fixture uses 5046 = 2*3*29*29. It is divisible by 6, but it is
+not accepted as a complete Quantum Wave because it has only three distinct
+prime bases and no 5 or 7 wavelet.
+
 ## Checks
 
 | ID | Description |
@@ -51,6 +79,7 @@ Among {b, e, d}, at least one must be even (since d=b+e, if both b,e are odd the
 | SH_SYNC | coprime pairs sync at product; non-coprime at LCM < product |
 | SH_PAR | par classification correct; same-par SUPPORT, cross-par OPPOSE |
 | SH_PROD6 | all QN products b×e×d×a divisible by 6 |
+| SH_QWAVE | complete Quantum Wave witnesses have 5/6/7 distinct prime bases, include 2 and 3, satisfy 5/7 expectation, and match 2310/510510 minima where declared |
 | SH_W | ≥5 total witnesses (sync + par pairs) |
 | SH_F | fundamental pair (3,5) present |
 
@@ -71,8 +100,9 @@ Among {b, e, d}, at least one must be even (since d=b+e, if both b,e are odd the
 ## Fixture files
 
 - `fixtures/sh_pass_sync_and_par.json` — 7 sync pairs (5 coprime, 2 non-coprime) + 7 par pairs (4 support, 3 oppose)
-- `fixtures/sh_pass_qn_products.json` — 8 QN product witnesses (all ÷6) + 3 sync + 3 par pairs
+- `fixtures/sh_pass_qn_products.json` — 8 QN product witnesses (all ÷6), 3 complete-wave witnesses (2310, 30030, 510510), 3 sync pairs, and 3 par pairs
 - `fixtures/sh_fail_bad_sync.json` — Falsifier: sync_pair (3,5) with wrong sync_time=999, and par_pair (3,7) wrongly declared OPPOSE instead of SUPPORT (added 2026-07-07)
+- `fixtures/sh_fail_bad_quantum_wave.json` — Falsifier: 5046=2*3*29*29 is divisible by 6 but fails the complete-wave 5/6/7 distinct-prime rule and lacks 5/7
 
 ## Verification Note (2026-07-06)
 
@@ -102,3 +132,8 @@ short-circuit exists (no print-corruption bug risk). Added
 (sync_pair (3,5) with wrong sync_time=999; par_pair (3,7) wrongly
 declared OPPOSE) and wired it into `self_test()`; verified SH_SYNC and
 SH_PAR both genuinely catch their respective defects.
+
+**Source-scope tightening (2026-07-14)**: added `SH_QWAVE` so the cert no
+longer stops at generic product divisibility. It now rejects the source's
+explicit non-example 5046 and validates the stated 2310 and 510510 complete
+wave minima by recomputed prime factorization.

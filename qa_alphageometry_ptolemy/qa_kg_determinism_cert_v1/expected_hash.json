@@ -1,9 +1,10 @@
 {
   "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 5 determinism anchor; bootstrap-written by qa_kg_determinism_cert_validate.py on first meta_validator run. Grounds in docs/specs/QA_MEM_SCOPE.md (Dale, 2026), tools/qa_kg/canonicalize.py (Dale, 2026), tools/qa_kg/fixtures/corpus_snapshot_v1/CANONICAL_MANIFEST.json (Dale, 2026). Any intentional refresh: delete this file and rerun `python qa_alphageometry_ptolemy/qa_meta_validator.py`. -->",
-  "captured_at_utc": "2026-07-05T20:06:09Z",
+  "captured_at_utc": "2026-07-12T19:25:23Z",
   "fixture_hash": "81ce926db27c3b1aadf182274d2d1b3fe893b29fb932ec298779cf183aa9db23",
   "fixture_rebuild_graph_hash": {
-    "Darwin": "022607880edb9ef9183d72eeddd0847ec2fd7c1fec63b87728d3ecdae6985d9f"
+    "Darwin": "870fea30ae63d6c81c285c8d2db4221bd0a4c6f81d88f0f85349a5e2b5ddf463"
   },
-  "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes (per-platform)"
+  "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes (per-platform)",
+  "refresh_reason": "Phase 5.1 hermetic fixture rebuild: repo-local inputs now read from CANONICAL_MANIFEST metadata.repo_head via git archive, so the Darwin anchor records the pinned fixture graph rather than the prior live-worktree rebuild."
 }

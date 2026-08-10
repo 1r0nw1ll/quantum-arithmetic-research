@@ -5,7 +5,7 @@
   "title": "Origin of 24 PASS: fundamental direction (d,e)=(2,1), H²-G²=G²-I²=24 exactly",
   "created_utc": "2026-03-30T00:00:00Z",
 
-  "_fixture_purpose": "Anchor fixture. The fundamental QA direction (d,e)=(2,1) encodes the 3-4-5 Pythagorean triple: C=2de=4 (green quadrance), F=d²-e²=3 (red quadrance), G=d²+e²=5 (blue quadrance). The derived quantities H=C+F=7 and I=C-F=1 satisfy H²-G²=49-25=24 and G²-I²=25-1=24. This is the primary origin of mod-24 in QA: 24 is the exact difference at the fundamental direction. Ben Iverson (Pyth-1) identified this as 'Plato's independent 2nd dimension'.",
+  "_fixture_purpose": "Anchor fixture. The fundamental QA direction (d,e)=(2,1) encodes the 3-4-5 Pythagorean triple: C=2de=4 (green quadrance), F=d²-e²=3 (red quadrance), G=d²+e²=5 (blue quadrance). The derived quantities H=C+F=7 and I=C-F=1 satisfy H²-G²=49-25=24 and G²-I²=25-1=24. This is a primary arithmetic witness for QA's 24-structure: 24 is the exact difference at the fundamental direction. Ben Iverson (Pyth-1) identified this as 'Plato's independent 2nd dimension'.",
 
   "inherits_from": "QA_CORE_SPEC.v1",
   "spec_scope": "family_extension",
@@ -37,7 +37,7 @@
       "_source": "QA-4 Iota crystal geometry: 7²-5²=24 at the fundamental direction"
     },
     "equality_check": "H²-G² = G²-I² = 24 — both routes give the same 24 ✓",
-    "modulus_meaning": "QA arithmetic uses mod 24 because 24 is the exact gap at the fundamental Pythagorean direction. The cosmos orbit period π(9)=24 (Pisano period) is the same 24."
+    "modulus_meaning": "The exact gap at the fundamental Pythagorean direction is 24, and the cosmos orbit period π(9)=24 has the same numeric value. This is a typed numeric alignment, not a proof that every observer-layer quantity should be reduced modulo 24."
   },
 
   "validation_checks": [

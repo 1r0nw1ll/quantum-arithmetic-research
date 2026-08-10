@@ -1,0 +1,98 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.hsi_corrected_model_retrospective_consistent.v1",
+  "title": "HSI corrected-model retrospective rectification — CONSISTENT with zero-harm QA conjunction correction on PaviaU and Salinas",
+  "created_utc": "2026-06-11T00:00:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "tools/qa_hsi_corrected_model.py",
+    "captured_utc": "2026-06-11T00:00:00Z",
+    "domain": "hyperspectral_image_classification",
+    "summary": "The frozen HSI corrected-model artifacts validate an interpretable ensemble plus QA conjunction correction layer. PaviaU improved from 55 ensemble errors to 45 corrected errors with 0 harms. Salinas improved from 11 ensemble errors to 7 corrected errors with 0 harms. The rule predicates are exact integer feature inequalities and the corrected-model validator checks zero calibration/full-train/test false positives, zero wrong held-out error hits, zero corrected-model harms, and rule/result accounting consistency.",
+    "key_numbers": {
+      "paviau_ensemble_errors": 55,
+      "paviau_corrected_errors": 45,
+      "paviau_fixed_errors": 10,
+      "paviau_harmed_rows": 0,
+      "paviau_corrected_accuracy": 0.9958,
+      "salinas_ensemble_errors": 11,
+      "salinas_corrected_errors": 7,
+      "salinas_fixed_errors": 4,
+      "salinas_harmed_rows": 0,
+      "salinas_corrected_accuracy": 0.9995
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_HSI_CORRECTED_MODEL_ARTIFACT.v1",
+    "certificate_id": "qa.hsi.corrected_model.validation.2026_06_09",
+    "claim": "Calibration-gated QA conjunction corrections can reduce residual HSI ensemble errors without harming correct ensemble rows on the tested PaviaU and Salinas splits."
+  },
+  "verdict": "CONSISTENT",
+  "evidence": [
+    {
+      "type": "artifact",
+      "description": "PaviaU frozen corrected-model artifact",
+      "value": "results/qa_hsi_paviau_corrected_model_2026_06_09.json"
+    },
+    {
+      "type": "artifact",
+      "description": "Salinas frozen corrected-model artifact",
+      "value": "results/qa_hsi_salinas_corrected_model_2026_06_09.json"
+    },
+    {
+      "type": "artifact",
+      "description": "Strict zero-harm validation report",
+      "value": "results/qa_hsi_corrected_model_validation_2026_06_09.json"
+    },
+    {
+      "type": "quantitative",
+      "description": "Error reductions",
+      "value": "PaviaU 55->45 errors, 0 harms; Salinas 11->7 errors, 0 harms"
+    }
+  ],
+  "open_questions": [
+    "Can a train/calibration-only selector reproduce or improve these corrections without using held-out residual error rows as seeds?",
+    "Can higher-depth conjunctions, validation folds, and spatial/coordinate-aware QA features drive the remaining residual errors to zero?",
+    "Which residual rows are sensor/label ambiguity versus missing QA feature expressivity?"
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script'"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_HSI_CORRECTED_MODEL_ARTIFACT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "not applicable"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 4 entries"
+    }
+  ],
+  "limits": [
+    "This is not a 100% classifier result.",
+    "The current frozen artifacts record uses_heldout_labels_for_selection=true because local rules were seeded from held-out residual error rows before validation.",
+    "The result is certifying retrospective zero-harm interpretable correction, not yet a clean prospective no-heldout-selection deployment protocol."
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

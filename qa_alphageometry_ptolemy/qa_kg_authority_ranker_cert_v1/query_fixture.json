@@ -170,10 +170,10 @@
     {
       "id": "q21_iverson_halley_primary",
       "query": "Halley",
-      "expected_top_1_authority": "primary",
+      "expected_top_1_authority": "derived",
       "expected_top_5_node_ids": ["sc:iverson_qa2_halley_qn"],
-      "rationale": "Phase 4.5 Iverson QA-2 (1993) worked-example claim: Halley's Comet QN=(1,29,30,59). Unambiguous token; primary dominance via authority_weight=10 plus bm25 exact match. domain=qa_core populated (exercises R10 implicitly — non-empty domain passes).",
-      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_populated"]
+      "rationale": "Phase 4.5 Iverson QA-2 (1993) worked-example claim: Halley's Comet QN=(1,29,30,59). Originally expected primary, but cert [335] QA Halley Comet QN was added post-4.5 and its cert:fs stub wins BM25 on the short exact-title match 'qa_halley_comet_qn_cert_v1' — same Pass-A semantics as q27 (primary-dominance conditional on BM25, not absolute). Primary claim sc:iverson_qa2_halley_qn still appears in top-5 (position 2 of 3 total matches). domain=qa_core populated (exercises R10 implicitly).",
+      "tags": ["derived_certified", "phase_4_5_corpus", "domain_populated", "cert_added_post_fixture"]
     },
     {
       "id": "q22_iverson_transposable_primary",

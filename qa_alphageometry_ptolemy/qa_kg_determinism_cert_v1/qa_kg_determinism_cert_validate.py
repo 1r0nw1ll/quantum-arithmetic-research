@@ -59,6 +59,14 @@ def _load_manifest() -> dict:
     return json.loads(_MANIFEST_PATH.read_text(encoding="utf-8"))
 
 
+def _manifest_repo_head(manifest: dict | None = None) -> str:
+    manifest = manifest if manifest is not None else _load_manifest()
+    repo_head = manifest.get("metadata", {}).get("repo_head", "")
+    if not isinstance(repo_head, str) or not repo_head:
+        raise ValueError("fixture manifest metadata.repo_head is required for hermetic rebuild")
+    return repo_head
+
+
 def _load_expected_hash() -> dict | None:
     if not _EXPECTED_HASH_PATH.exists():
         return None
@@ -167,14 +175,25 @@ def _build_in_memory_graph() -> tuple[sqlite3.Connection, str]:
     """
     from tools.qa_kg.schema import init_db
     from tools.qa_kg.kg import KG
-    from tools.qa_kg.build_context import BuildContext, run_pipeline
+    from tools.qa_kg.build_context import (
+        BuildContext,
+        materialize_pinned_repo,
+        run_pipeline,
+    )
     from tools.qa_kg.canonicalize import graph_hash
 
     conn = init_db(":memory:")
     kg = KG(conn)
-    ctx = BuildContext.from_fixture(_FIXTURE_DIR)
-    run_pipeline(kg, ctx)
-    return conn, graph_hash(conn)
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            pinned_root = materialize_pinned_repo(_manifest_repo_head(), Path(td))
+            ctx = BuildContext.from_fixture(_FIXTURE_DIR, repo_root=pinned_root)
+            run_pipeline(kg, ctx)
+            h = graph_hash(conn)
+    except Exception:
+        conn.close()
+        raise
+    return conn, h
 
 
 # --- Gates ----------------------------------------------------------------
@@ -219,7 +238,7 @@ def check_d1_5_repo_head_drift() -> tuple[str, str]:
     return (
         "WARN",
         f"fixture pinned at {pinned[:12]}…; current HEAD={head[:12]}… — "
-        f"Phase 5.1 will pin reproducibility to manifest.repo_head via git archive"
+        f"D2/D3 read fixture repo inputs from the pinned archive"
     )
 
 
@@ -270,7 +289,7 @@ def check_d2_in_process_idempotent() -> tuple[str, str]:
         "FAIL",
         f"drift vs expected_hash.json[{platform.system()}]: "
         f"want={want[:12]}… got={hash_a[:12]}… — "
-        f"pipeline output changed; refresh expected_hash.json if intentional"
+        f"hermetic fixture pipeline output changed; investigate before refresh"
     )
 
 
@@ -281,26 +300,35 @@ def check_d3_subprocess_reproducible() -> tuple[str, str]:
     in two separate subprocesses with isolated QA_KG_DB. Hashes must
     match each other and the D2 in-process hash.
     """
+    from tools.qa_kg.build_context import materialize_pinned_repo
+
     hashes = []
-    for i in range(2):
-        with tempfile.NamedTemporaryFile(suffix=f".d3_{i}.db", delete=False) as tf:
-            tmp_db = tf.name
-        try:
-            env = os.environ.copy()
-            env["QA_KG_DB"] = tmp_db
-            # Remove stale DB file to force rebuild from scratch.
-            if os.path.exists(tmp_db):
-                os.remove(tmp_db)
-            result = subprocess.run(
-                [sys.executable, "-m", "tools.qa_kg.cli",
-                 "build", "--fixture", str(_FIXTURE_DIR), "--hash-only"],
-                env=env, cwd=str(_REPO),
-                capture_output=True, text=True, timeout=120, check=True,
-            )
-            hashes.append(result.stdout.strip())
-        finally:
-            if os.path.exists(tmp_db):
-                os.remove(tmp_db)
+    with tempfile.TemporaryDirectory() as td:
+        pinned_root = materialize_pinned_repo(_manifest_repo_head(), Path(td))
+        for i in range(2):
+            with tempfile.NamedTemporaryFile(suffix=f".d3_{i}.db", delete=False) as tf:
+                tmp_db = tf.name
+            try:
+                env = os.environ.copy()
+                env["QA_KG_DB"] = tmp_db
+                # Remove stale DB file to force rebuild from scratch.
+                if os.path.exists(tmp_db):
+                    os.remove(tmp_db)
+                result = subprocess.run(
+                    [
+                        sys.executable, "-m", "tools.qa_kg.cli",
+                        "build",
+                        "--fixture", str(_FIXTURE_DIR),
+                        "--pinned-repo-root", str(pinned_root),
+                        "--hash-only",
+                    ],
+                    env=env, cwd=str(_REPO),
+                    capture_output=True, text=True, timeout=120, check=True,
+                )
+                hashes.append(result.stdout.strip())
+            finally:
+                if os.path.exists(tmp_db):
+                    os.remove(tmp_db)
     if hashes[0] != hashes[1]:
         return (
             "FAIL",

@@ -2,10 +2,10 @@
   "schema_version": "QA_SEE_LONGITUDINAL_TRANSVERSE_CERT.v1",
   "certificate_id": "qa.cert.see_longitudinal_transverse.pass.duality.v1",
   "cert_type": "qa_see_longitudinal_transverse_cert",
-  "title": "See Longitudinal/Transverse PASS: wave duality maps to QA generator/observer duality",
+  "title": "See Longitudinal/Transverse PASS: analogy maps wave duality to QA generator/observer duality",
   "created_utc": "2026-04-07T00:00:00Z",
 
-  "_fixture_purpose": "Maps T.J.J. See's wave duality (longitudinal=gravity, transverse=light, same medium, orthogonal modes) to QA's generator/observer duality (T-operator=discrete causal, projection=continuous measurement, same tuple space, orthogonal access modes). Theorem NT is the special case: modes cannot mix.",
+  "_fixture_purpose": "Records an analogy/framework mapping from T.J.J. See's wave duality (longitudinal=gravity, transverse=light, same medium, orthogonal modes in See's rejected aether theory) to QA's generator/observer duality (T-operator=discrete causal, projection=continuous measurement, same tuple space, orthogonal access modes). Theorem NT is not proved by See's theory; it rests on QA axioms.",
 
   "source_attribution": "T.J.J. See, 'Electrodynamic Wave-Theory of Physical Forces' Vols I-II (See, 1917); 'New Theory of the Aether', Astronomische Nachrichten 211-226, published 1920 through 1926 (See, 1920). Both confirmed real (Internet Archive, Smithsonian, library catalogs). NOTE (2026-07-06): 'Tesla noted support' is an unverified claim found only on fringe-sympathetic secondary sources (e.g. rexresearch.com); no primary Tesla correspondence or publication confirming this was located. QA mapping: Will Dale + Claude, 2026-04-07.",
 
@@ -63,14 +63,14 @@
       "example": "T-operator step: (1,1) -> (1,2) -> (2,3) -> ... (24-cycle cosmos orbit)",
       "see_analogue": "Gravitational force propagating between two bodies along the line connecting them",
       "properties": "Discrete, integer, causal, orbit-generating",
-      "note": "The T-operator IS the longitudinal wave: it propagates state information along the orbit path sequentially, producing 'force' (state change) at each step."
+      "note": "In this framework analogy, the T-operator plays the longitudinal role: it propagates state information along the orbit path sequentially, producing state change at each step."
     },
     {
       "mode": "transverse",
       "example": "E8 alignment: project 4D tuple (b,e,d,a) to 8D, compute cosine similarity with 240 E8 root vectors",
       "see_analogue": "Light radiating from a body perpendicular to the gravitational field line — carries information about the body but exerts no gravitational force",
       "properties": "Continuous, float, non-causal, measurement-only",
-      "note": "E8 alignment MEASURES the QA state but does not change it. The cosine similarity is a 'transverse' observable — it reads the state perpendicular to the generator direction."
+      "note": "E8 alignment measures the QA state but does not change it. In this framework analogy, cosine similarity is a transverse observable — it reads the state perpendicular to the generator direction."
     },
     {
       "mode": "longitudinal",

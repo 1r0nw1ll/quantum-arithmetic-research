@@ -119,7 +119,7 @@ def check_c3() -> tuple[bool, str]:
     total_levels = 7 * 7
     assert total_levels == 49 == 7 * 7
     # 7^2 = 49
-    assert total_levels == 7**2
+    assert total_levels == 7 * 7
     # mod 24: Cosmos class
     assert 49 % 24 == 1, f"49 mod 24 = {49%24}, expected 1"
     # Class 1 in mod 24 is the Singularity orbit (the fixed point)
@@ -166,13 +166,13 @@ def check_c4() -> tuple[bool, str]:
                 f"Non-unique: e={e_test}, b={b_test} also satisfies b=3e with gcd=1"
             )
     # Pythagorean triple check: 3^2 + 4^2 = 5^2
-    assert ratios[0]**2 + ratios[1]**2 == ratios[2]**2  # 9+16=25 ✓
+    assert ratios[0]*ratios[0] + ratios[1]*ratios[1] == ratios[2]*ratios[2]  # 9+16=25 ✓
     # Verify QA identities for (3,1,4,5) (the embedding triple)
     r = _all_identities(3, 1)
     assert r['d'] == 4 and r['a'] == 5
     assert r['C'] == 8 and r['F'] == 15 and r['G'] == 17  # 8-15-17 bead triple
     # 8^2 + 15^2 = 64+225 = 289 = 17^2 ✓
-    assert r['C']**2 + r['F']**2 == r['G']**2
+    assert r['C']*r['C'] + r['F']*r['F'] == r['G']*r['G']
     return True, (
         f"Bugle C:F:A:C = 3:4:5:6 (just intonation, multiply ratios by 3); "
         f"arithmetic chain b=3,e=1 → (b,d,a,a+e)=(3,4,5,6) with a+e=2b (octave); "

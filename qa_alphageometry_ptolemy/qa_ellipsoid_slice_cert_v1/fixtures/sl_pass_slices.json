@@ -92,7 +92,7 @@
   "pisano_bands": {
     "n_bands": 24,
     "band_width_deg": 15.0,
-    "_note": "π(24)=24 → the mod-24 T-operator creates 24 equally-spaced longitude bands, each 15° wide. These correspond to: (a) 24 hours of sidereal rotation, (b) 24 time zones, (c) the 24-fold symmetry of the cosmos orbit. The TIME ZONE SYSTEM is a Pisano-period partition.",
+    "_note": "The fixture certifies 24 equally-spaced longitude bands, each 15° wide. This shares the numeric value 24 with π(24)=24 and the 24-fold cosmos orbit, but it does not identify longitude bands or civil time zones with the Pisano-period operator.",
     "bands": [
       {"band": 1, "lon_range": "0°-15°E", "example_city": "London/Paris"},
       {"band": 7, "lon_range": "90°-105°E", "example_city": "Bangkok"},
@@ -104,7 +104,7 @@
   "qa_connection": {
     "self_similarity": "Meridional slicing recovers the shape QN — the ellipsoid is self-similar. Latitude slicing produces circles whose radius is a QN expression. The 3D shape encodes its own 2D generator.",
     "three_slice_families": "C-constant, F-constant, G-constant curves partition the surface into three families satisfying C²+F²=G² everywhere. These are the green (area), red (Minkowski), and blue (Euclidean) level sets — chromogeometric slicing.",
-    "time_zones_are_pisano": "The 24 time zones = 24 Pisano bands of 15° each. This is NOT a coincidence — the sidereal day divides naturally into 24 equal parts because the mod-24 cosmos orbit has period 24. Time zones are a Pisano-period partition of the quantum ellipse.",
+    "time_zone_analogy": "Civil time zones are an analogy for a 24-band partition. The certified arithmetic is only n_bands=24 and band_width_deg=15.0; no claim is made that time zones are Pisano-period objects.",
     "tropic_is_quantum": "The Tropic of Cancer (23.44°) falls within 0.34° of the quantum lattice point s_φ = C/G = 1980/12181 (23.78°). The green/blue ratio of the shape QN nearly predicts the axial tilt."
   },
 

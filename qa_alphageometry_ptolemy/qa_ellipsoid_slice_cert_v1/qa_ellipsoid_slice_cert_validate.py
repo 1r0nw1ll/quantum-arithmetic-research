@@ -28,10 +28,13 @@ TIER 1+2 — EXACT REFORMULATION + STRUCTURAL:
     C-slices, F-slices, G-slices form three orthogonal families
     satisfying C² + F² = G² at every point.
 
-  PISANO LATITUDE BANDS:
-    π(24) = 24 → the mod-24 T-operator divides the longitude into 24 bands.
+  24-FOLD LONGITUDE BANDS:
+    The fixture certifies 24 equal longitude bands of 15 degrees each.
+    This has the same numeric value as π(24)=24 but does not identify
+    longitude bands, time zones, or the mod-24 state alphabet with the
+    Pisano-period operator.
     Each band spans 360°/24 = 15° of longitude.
-    The 24-fold partition = the 24 hours of the day = the mod-24 compass.
+    The 24-fold partition is a longitude-band arithmetic witness only.
 
 SOURCE: WGS84; cert [156]; cert [140] conic discriminant;
         cert [125] chromogeometry.
@@ -42,7 +45,7 @@ SL_1         schema_version == 'QA_ELLIPSOID_SLICE_CERT.v1'
 SL_LAT       R² = a²·d²·c_φ/(d²-e²·s_φ) verified at witness latitudes
 SL_MER       meridian axis ratio = √F/d verified
 SL_CHROMO    C²+F²=G² for witness chromogeometric slices
-SL_BAND      24-fold Pisano partition verified (360/24 = 15°)
+SL_BAND      24-fold longitude partition verified (360/24 = 15°)
 SL_W         at least 3 slice witnesses
 SL_F         fail detection
 """

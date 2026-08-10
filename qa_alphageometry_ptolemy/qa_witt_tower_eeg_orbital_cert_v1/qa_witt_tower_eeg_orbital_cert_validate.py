@@ -197,6 +197,7 @@ def _compute():
     if os.environ.get("QA_LIVE") != "1": return None
     if not _LIVE_OK: return None
     records = []
+    skipped_reads = []
     for (patient, edf_file, reg_start, seiz_start) in _CATALOG:
         edf_path = f"{SIENA}/{patient}/{edf_file}"
         if not os.path.exists(edf_path): continue
@@ -205,7 +206,13 @@ def _compute():
         try:
             inter_data = _read_seg(edf_path, INTER_SKIP*SR, INTER_SEC*SR)
             pre_data   = _read_seg(edf_path, (onset_s - PRERICTAL_SEC)*SR, PRERICTAL_SEC*SR)
-        except Exception: continue
+        except Exception as exc:
+            skipped_reads.append({
+                "patient": patient,
+                "file": edf_file,
+                "error": f"{exc.__class__.__name__}: {exc}",
+            })
+            continue
         inter_rms = _rms_windows(inter_data)
         pre_rms   = _rms_windows(pre_data)
         if len(inter_rms) < 10 or len(pre_rms) < 10: continue
@@ -240,11 +247,13 @@ def _compute():
         "pearson_r_t0_t2": round(_pearson_r(t0_all, t2_all), 4),
         "n_quiet_t0_enriched": sum(1 for r in quiet if r["t0"] > 0.45),
         "per_recording": records,
+        "skipped_reads": skipped_reads,
     }
 
 
 def _run_checks(d):
     res = {}
+    res["C0_NO_SKIPPED_LIVE_READS"] = not d.get("skipped_reads")
     res["C1_N_COSMOS_GE_5"]      = d["n_cosmos"] >= 5
     res["C2_N_QUIET_GE_2"]       = d["n_quiet"]  >= 2
     res["C3_COSMOS_T2_GT_075"]   = d["mean_cosmos_t2"] > 0.75

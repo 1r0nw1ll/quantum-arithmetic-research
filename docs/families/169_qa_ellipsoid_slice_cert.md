@@ -27,12 +27,11 @@ All rational in spreads + QN components. Circle radius decreases from equator (R
 
 ### Pisano longitude bands
 
-pi(24) = 24 divides longitude into 24 bands of 15 degrees each. This corresponds to:
-- 24 hours of sidereal rotation
-- 24 time zones
-- 24-fold cosmos orbit symmetry
-
-**Time zones are a Pisano-period partition of the quantum ellipse.**
+The 24-fold partition divides longitude into 24 bands of 15 degrees each.
+The arithmetic witness is the same numeric value as pi(24)=24, but the
+longitude partition, civil time zones, and Pisano period remain distinct
+objects. Time zones are an analogy for the 24-band partition, not a certified
+Pisano-period structure.
 
 ## Cross-references
 

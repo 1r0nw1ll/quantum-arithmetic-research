@@ -1,0 +1,64 @@
+{
+  "ablation": {
+    "callable": "legacy_script_specific_ablation",
+    "destroyed_structure": "shuffle QA observer labels before scoring",
+    "expected_direction": "claimed QA advantage should vanish under the ablation"
+  },
+  "baselines": [
+    {
+      "implementation_ref": "sklearn.ensemble.RandomForestClassifier",
+      "name": "RandomForest"
+    }
+  ],
+  "benchmark_id": "tools_legacy_hsi_and_graph_benchmarks_v1",
+  "calibration_provenance": {
+    "domain_of_origin": "script_specific_training_split",
+    "learned_on": "training_split",
+    "procedure": "Legacy tools compute observer projections and model fits inside each script."
+  },
+  "datasets": [
+    {
+      "name": "hsi_or_synthetic_graph_dataset",
+      "source": "script_specific_loader"
+    }
+  ],
+  "framework_inheritance": {
+    "mode": "novel"
+  },
+  "metrics": [
+    "accuracy",
+    "balanced_accuracy",
+    "cohen_kappa"
+  ],
+  "parity_contract": {
+    "same_data_split": true,
+    "same_preprocessing": true,
+    "same_seed_all_methods": true
+  },
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "qa_method": {
+    "description": "Legacy tools compare QA-derived exact packets or observer residues against baseline features under the same split.",
+    "name": "QA legacy tool benchmark",
+    "observer_projection": "Script-specific integer QA packets or observer-side residue bins."
+  },
+  "reproducibility": {
+    "data_sha256": "pending",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime"
+    },
+    "results_ledger": "results/qa_benchmark_runs.jsonl",
+    "seed": 42
+  },
+  "sota_baseline": {
+    "metric": "balanced_accuracy",
+    "name": "RandomForest",
+    "null_result_acceptable": true,
+    "null_result_reason": "Legacy benchmark scripts report comparisons; this sibling protocol gates declaration only."
+  },
+  "source_mapping": {
+    "mapping_rationale": "Sibling protocol for legacy tools that predate per-script protocol refs.",
+    "primary_source": "Part B — Benchmark Axioms",
+    "theory_doc": "../EXPERIMENT_AXIOMS_BLOCK.md"
+  }
+}

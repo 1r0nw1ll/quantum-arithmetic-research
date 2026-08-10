@@ -9,10 +9,23 @@ ISBN 978-0-387-97329-6.
 
 from __future__ import annotations
 
+QA_COMPLIANCE = "cert_validator - integer arithmetic on (b, e, m); recomputes orbit_period/orbit_family from qa_orbit_rules; no float feedback into QA layer"
+
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
+
+REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO))
+
+from qa_orbit_rules import (  # noqa: E402
+    orbit_family,
+    orbit_family_divisor_shortcut,
+    orbit_period,
+    qa_step,
+)
 
 
 SCHEMA_VERSION = "QA_ORBIT_SATELLITE_RAMIFICATION_CERT.v1"
@@ -44,39 +57,6 @@ class Out:
     def fail(self, code: str, msg: str) -> None:
         self.detected_fails.add(code)
         self.errors.append(f"{code}: {msg}")
-
-
-def qa_step(b: int, e: int, m: int) -> tuple[int, int]:
-    return e, ((b + e - 1) % m) + 1
-
-
-def orbit_period(b: int, e: int, m: int) -> int:
-    cb, ce = b, e
-    seen: set[tuple[int, int]] = set()
-    for _ in range(m * m + 1):
-        if (cb, ce) in seen:
-            break
-        seen.add((cb, ce))
-        cb, ce = qa_step(cb, ce, m)
-    return len(seen)
-
-
-def orbit_family(b: int, e: int, m: int) -> str:
-    period = orbit_period(b, e, m)
-    if period == 1:
-        return "singularity"
-    if period == 8:
-        return "satellite"
-    return "cosmos"
-
-
-def orbit_family_divisor_shortcut(b: int, e: int, m: int) -> str:
-    sat_divisor = m // 3
-    if b == m and e == m:
-        return "singularity"
-    if sat_divisor > 0 and b % sat_divisor == 0 and e % sat_divisor == 0:
-        return "satellite"
-    return "cosmos"
 
 
 def prime_power_part(m: int, p: int) -> int:

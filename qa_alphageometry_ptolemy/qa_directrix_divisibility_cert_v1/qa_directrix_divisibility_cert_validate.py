@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
+# <!-- PRIMARY-SOURCE-EXEMPT: reason="internal elementary-number-theory derivation (e|d^3 <=> kernel3(e)|b), no external source cited by cert [530]'s registry entry" -->
 """QA Directrix Divisibility Cert validator."""
 
 from __future__ import annotations
+
+QA_COMPLIANCE = "cert_validator - exact integer divisibility check e|d*d*d <=> kernel3(e)|b on QA coordinates b,e>=1 with d=b+e; no float, no orbit-lift theorem claim"
 
 import argparse
 import json

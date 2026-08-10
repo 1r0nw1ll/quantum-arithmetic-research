@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Unregistered cert-family stub for QA Self-Improving Neural QA v0. Validates append-only ledgers of neural-model update proposals where accepted packets require deterministic replay, positive fixes, zero protected harm, and passing invariants; rejected packets preserve failed-gate evidence with explicit rejection reasons. Promotion to qa_meta_validator.py is deferred."
+}

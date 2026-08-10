@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Self-Improving Neural QA Loop Cert [525]. Registers multi-round continual learning transcripts for the replay-gated neural QA loop. A transcript is an append-only hash chain over loop rounds. Each round records ledger hash before/after, ledger summaries before/after, packet hash, update_id, decision, replay evidence hash, fixed/harmed/protected counts, and whether promoted state was allowed to mutate. Accepted rounds must increment accepted count, fix positive failures, and have zero harm. Rejected rounds must increment rejected count and must not mutate promoted state. Live fixture records 5 bounded rounds: 3 accepted and 2 rejected."
+}

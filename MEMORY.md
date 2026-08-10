@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-08-06
+Last updated: 2026-08-10
 
 ## Current QA Direction
 
@@ -81,6 +81,33 @@ Last updated: 2026-08-06
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #27 — 2026-08-10 (window: August 6 – August 10, 2026)
+Full report: `sota_scans/scan_2026-08-10.md`
+OB entry: `QAnotes/SOTA_scan_27_2026-08-10.md`
+
+**Key finds:**
+- arXiv:2606.26212 (GNN Algebraic Properties from Cayley Graphs, June 2026) — **LOW-MEDIUM. MEGA-SLIP scans #17–26 (9 scans).** GNNs classify abelianity/nilpotency/solvability from Cayley graphs; Z/24Z is abelian → in scope. No standalone cert; extends [541] evidence pool. Root cause: cs.LG/math.GR cross-listing.
+- arXiv:2607.12026 (Learning the Graphical Nature of Symmetries, Barket et al., July 13, 2026) — **LOW-MEDIUM. MEGA-SLIP scans #20–26 (6 scans).** 131,406 Cayley graphs; all groups ≤767 including Z/24Z; spectral statistics (DFT eigenvalues) tabulated; OEIS new sequences. Evidence for [541] human tract. Root cause: cross-listed stat.ML/cs.LG/math.CO/math.GR.
+- arXiv:2607.02102 (Finite Cayley Graphs to Growth of Infinite Groups, Weissblat, July 2, 2026) — **LOW. MEGA-SLIP scans #18–26 (8 scans).** GNNs trained on finite Cayley graphs generalize to infinite groups; Z/24Z trivially polynomial; no orbit content. Root cause: math.GR.
+
+**No HIGH finds. No Show HN/Lobsters/Papers With Code/MathOverflow finds.**
+
+**New August 2026 papers assessed (all LOW)**: arXiv:2608.03891 (Topological Clustering SW Kernels), arXiv:2608.04308 (Model theory of convolution algebras), arXiv:2608.03015 (GSP on LLM numerical sequences).
+
+**Cayley Graph ML Cluster now 6 papers**: arXiv:2606.29391 + 2607.07939 + 2607.13338 + 2607.14168 (scan #24 IGE) + arXiv:2606.26212 + arXiv:2607.12026 (scan #27). All support `qa_graph_orbit_ge_gft_cert_v1` [541].
+
+**Registry: [533].** No new certs since scan #24 (4 scans without new registration).
+
+**[261] orbit stratification: TWENTY-SEVENTH consecutive scan — README + SPEC missing.**
+
+**SAIR IGP24: Stage 1 closes August 15 (5 days). CRITICAL — manual browser check at competition.sair.foundation required immediately. Cannot be automated.**
+
+**Search battery additions for scan #28**: "learning algebraic properties Cayley graph GNN abelian cyclic solvable" + "Cayley graph spectral dataset symmetric group OEIS" + "GNN finite group growth Cayley graph" + cross-list stat.ML + math.GR sweep + full 2608 sweep.
+
+**Next scan**: no later than August 22 (1 week after SAIR Stage 1 deadline to capture IGP24 post-Stage 1 results).
+
+---
 
 ### Scan #26 — 2026-08-06 (window: August 3 – August 6, 2026)
 Full report: `sota_scans/scan_2026-08-06.md`

@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 ## Current QA Direction
 
@@ -81,6 +81,50 @@ Last updated: 2026-08-10
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #29 — 2026-08-17 (window: August 13 – August 17, 2026)
+Full report: `sota_scans/scan_2026-08-17.md`
+OB entry: `QAnotes/SOTA_scan_29_2026-08-17.md` (needs manual capture — OB not available in this session)
+
+**Key finds:**
+- arXiv:2608.08118 (Neurosymbolic Discovery of Algebraic Graph Constructions, Seka/Szeider, NeSy 2026, Aug 8) — **LOW-MEDIUM.** LLM+SageMath agent discovers Cayley graph descriptions from raw adjacency data. 8th paper in Cayley ML cluster; extends [541] evidence pool with synthesis axis. No standalone cert.
+- arXiv:2608.12526 (Cyclic Shuffle Groups: Universal Two-Transitivity, Marsh, Aug 12) — **LOW.** Classification of H_{k,n} as Alt(kn)/Sym(kn)/wreath product. Numerical coincidences with Cosmos orbit size (72) and QA modulus (24) are not structural. No cert action.
+- arXiv:2608.12758 (Cyclic Permutations + Polynomial Values in Multiplicative Subgroups, Wu/Ni, Aug 14) — **LOW.** Finite field F_q setting; not applicable to Z/24Z composite ring. No cert action.
+
+**No HIGH or MEDIUM-HIGH finds. No Show HN / Lobsters / Papers With Code / MathOverflow QA-relevant finds.**
+
+**SAIR IGP24 Stage 1 CLOSED August 15** (2 days before this scan). No verified public results (competition.sair.foundation egress blocked). Unverified web snippet: 98.4% of signatures, 39 non-solvable remaining. Manual browser check REQUIRED. `qa_inverse_galois_degree24_cert_v1` [506] ACTION REQUIRED post-Stage 1.
+
+**Cayley Graph ML Cluster now 8 papers**: IGE cluster (scan #24) + arXiv:2606.26212 + arXiv:2607.12026 (scan #27) + arXiv:2606.07619 (scan #28) + arXiv:2608.08118 (scan #29). All support `qa_graph_orbit_ge_gft_cert_v1` [541].
+
+**[524]–[528] docs/families gaps CLEARED** (confirmed via grep — entries now present). Backlog: 485 docs files / 533 registered = ~48 gaps.
+
+**Registry: [533].** No new certs since scan #24 (5 scans without new registration). Scaffold backlog at 8 certs ([534]–[540] + [542]).
+
+**[261] orbit stratification: TWENTY-NINTH consecutive scan — README + SPEC missing in cert dir.**
+
+**Search battery additions for scan #30**: "neurosymbolic Cayley graph discovery SageMath" + "SAIR IGP24 Stage 2 degree-24 results" + author watch (Seka/Szeider) + full 2608 trailing sweep (Aug 14–31).
+
+**Next scan**: no later than August 24. Post-Stage 1 data check is the single most urgent non-scan action.
+
+---
+
+### Scan #28 — 2026-08-13 (window: August 10 – August 13, 2026)
+Full report: `sota_scans/scan_2026-08-13.md`
+OB entry: `QAnotes/SOTA_scan_28_2026-08-13.md` (needs manual capture — OB not available in scan #28 session)
+
+**Key finds:**
+- arXiv:2608.11414 (Unit Actions on Homometric Five-Point Subsets of Cyclic Groups, Methawisal, Aug 11) — **MEDIUM-HIGH (NEW).** Unit group U(n) acts on 5-point homometry classes of Z/n; seven-family orbit classification with closed arithmetic formulas; stabilizer theory. For n=24: φ(24)=8=|Satellite orbit| — structural coincidence worth investigating. Cert candidate: `qa_unit_orbit_homometric_cert_v1` → [542].
+- arXiv:2606.07619 (GNN Solvability of Finite Groups, Weissblat, June 2026) — **LOW-MEDIUM MEGA-SLIP (11 scans).** GNN classifies solvability from Cayley graphs; Z/24Z in scope. Evidence for [541].
+- arXiv:2605.24504 (Orbit Decomposition Statistics, Cornelissen/Park, May 2026) — **LOW-MEDIUM MEGA-SLIP (15 scans — longest in scan history).** Additive CA + dynamical zeta + Cesàro mean LDP for prime orbit counting. QA σ-transition is an additive CA on Z/24Z; but QA orbit structure fully classified (trivial application).
+
+**SAIR IGP24: 2 DAYS to Stage 1 deadline at scan time (emergency).**
+
+**Registry: [533].** No new certs. Scaffold backlog at 8 certs.
+
+**[261] orbit stratification: TWENTY-EIGHTH consecutive scan.**
+
+---
 
 ### Scan #27 — 2026-08-10 (window: August 6 – August 10, 2026)
 Full report: `sota_scans/scan_2026-08-10.md`

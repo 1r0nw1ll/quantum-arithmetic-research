@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-08-17
+Last updated: 2026-08-27
 
 ## Current QA Direction
 
@@ -81,6 +81,18 @@ Last updated: 2026-08-17
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #32 — 2026-08-27 (window: August 24 – August 27, 2026)
+Full report: `sota_scans/scan_2026-08-27.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2608.08538 (M₂₃ as Galois group over ℚ, Huang/Jackson/Lee/Poonen/Pries/Zhang, Aug 8–9) — **MEDIUM-HIGH (MEGA-SLIP scans #29–#31).** Last sporadic group realized over Q. M₂₃ ⊂ M₂₄ → direct degree-24 adjacency. Supporting evidence for [506]. All 26 sporadic groups now realized. Search battery updated with M₂₄ watch.
+- arXiv:2608.19961 (Fractional Revival on Oriented Cayley/Semi-Cayley Graphs over Abelian Groups, Jiang/Liu/Wang) — **LOW-MEDIUM.** Cayley graph + abelian group spectral theory; no proper FR on oriented Cayley over abelian; characterization for semi-Cayley. 10th evidence piece for [541] cluster.
+- arXiv:2608.01318 (Sheaf-theoretic Signal Processing on Graphs, D'Acunto et al., Aug 2) — **LOW-MEDIUM (MEGA-SLIP scan #29).** Unified sheaf GSP framework. Weak QA adjacency via signal injection/orbit heterogeneity. Submitted Aug 2; missed 3 scans.
+- arXiv:2608.24373 (Modular Forms / Cycle Integrals, Stumpenhusen, Aug 25) — **LOW.** Automorphic forms sense of "modular"; no Z/nZ content.
+
+**No HIGH finds. Top-10 unchanged.** SAIR IGP24 Stage 2 not yet announced — CASC 2026 starts Aug 31. [261] 32nd consecutive scan (README+SPEC missing). Cayley cluster [541] at 10 supporting papers, still unscaffolded.
 
 ### Scan #29 — 2026-08-17 (window: August 13 – August 17, 2026)
 Full report: `sota_scans/scan_2026-08-17.md`

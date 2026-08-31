@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-08-27
+Last updated: 2026-08-31
 
 ## Current QA Direction
 
@@ -81,6 +81,22 @@ Last updated: 2026-08-27
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #33 — 2026-08-31 (window: August 28 – August 31, 2026)
+Full report: `sota_scans/scan_2026-08-31.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2608.28141 (Lattice Green's function hyperkagome lattice, Nasr/Maillard, Aug 28) — **LOW.** FALSE COGNATES: "modular" = automorphic forms (Γ₀(30)+), "Galois group" = differential Galois (ODE symmetry). No Z/nZ modular arithmetic or orbit dynamics.
+- arXiv:2608.14524 (Iterated Galois groups + fixed-point proportion, Radi) — **LOW-MEDIUM.** Probabilistic arithmetic statistics for polynomial iteration. "Inverse Galois" label misleading — not about realizing specific groups over Q. Adjacent to [506] by vocabulary only. No cert action.
+- arXiv:2508.06670 (Machines learn number fields, Kyu-Hwan Lee / Seewoo Lee, Aug 2025 / May 2026 update) — **LOW-MEDIUM (POSSIBLE MEGA-SLIP).** ML (decision trees) classifies Galois groups degree 4–10 from Dedekind zeta coefficients. Degree-9 case → Z/9Z ↔ QA mod-9 orbit structure. Author Kyu-Hwan Lee also co-authored M₂₃ breakthrough (2608.08538). Add to [506] human tract.
+- arXiv:2608.20600 (LCA reversibility over infinite groups, Castillo-Ramirez, Aug 20) — **LOW.** Non-locally-finite group result; inapplicable to QA's finite Z/24Z.
+- arXiv:2608.03254 (Zassenhaus conjectures cyclic-by-abelian, Verbeken) — **LOW.** Group ring theory; no orbit/modular arithmetic content.
+- arXiv:2608.21084 (Abelian pattern complexity 2D words, Zeng/Xue/Zeng, Aug 21) — **LOW.** "Abelian" = letter-permutation equivalence; not group actions on Z/nZ.
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged.** SAIR IGP24 Stage 2 not announced — CASC 2026 opened Aug 31. [261] 33rd consecutive scan (README+SPEC missing). Cayley cluster [541] at 10 supporting papers, still unscaffolded. 9 total unscaffolded candidates (12 weeks pending).
+
+**Action items from scan #33**: [506] human tract needs arXiv:2608.08538 + arXiv:2508.06670 added. CASC 2026 post-proceedings sweep required by Sep 10. Kyu-Hwan Lee full author watch added to battery.
 
 ### Scan #32 — 2026-08-27 (window: August 24 – August 27, 2026)
 Full report: `sota_scans/scan_2026-08-27.md`

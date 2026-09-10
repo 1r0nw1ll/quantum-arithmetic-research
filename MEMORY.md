@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-08-31
+Last updated: 2026-09-10
 
 ## Current QA Direction
 
@@ -81,6 +81,51 @@ Last updated: 2026-08-31
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #36 — 2026-09-10 (window: September 8–10, 2026)
+Full report: `sota_scans/scan_2026-09-10.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2609.05932 (Cyclic matrix — companion matrix / linear algebra, Sep 5) — **LOW.** FALSE COGNATE: "cyclic matrix" = companion matrix of a characteristic polynomial, NOT Z/nZ cyclic group. No orbit dynamics, no modular arithmetic.
+- arXiv:2606.31900 (Galois orbit conjecture for étale local systems, Litt, Jun 30) — **LOW-MEDIUM (MEGA-SLIP scans #17–#35).** Missed because math.GR not swept during June convergence surge. FALSE COGNATE on "orbit": H-orbit of field elements under automorphisms (Galois theory). Structurally incompatible with QA's Z/24Z orbit tripartition; no cert action.
+- arXiv:2607.12761 (Codes on Cayley graphs over abelian groups, Huang/Su, Jul 14) — **LOW-MEDIUM (MEGA-SLIP scans #19–#35).** Missed because cs.IT/math.CO cross-listing absent from battery and Guangzhou author cluster not in geographic watch. Cayley graph codes over abelian groups — weak adjacency to [541] cluster but no Z/24Z structure, no orbit tripartition. Battery updated.
+- arXiv:2609.04993 (Fibonacci Dirichlet series, Sep 6) — **LOW.** FALSE COGNATE on "Fibonacci": analytic number theory (Dirichlet series Σ Fₙ^{-s}), not Pisano period π(m). No cyclic group structure.
+- arXiv:2609.09619 (Affine groups over F_{p^h}, Sep 9) — **LOW.** Exclusion filter: 24 = 2³×3 is NOT a prime power → Z/24Z excluded by construction. No QA overlap.
+
+**CORRECTIONS from scan #35:**
+- Fixtures [529]–[533] confirmed **PRESENT** (3 files each: 1 pass + 2 fail scenarios). Scan #35 uncertainty resolved.
+- CASC 2026 proceedings published **August 8–10** (NOT Sep 10–14 as predicted by scan #35). Alert updated.
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged** (4th consecutive scan). Registry [533] unchanged. SAIR IGP24 Stage 2 not announced. [261] THIRTY-SIXTH consecutive scan — README+SPEC still absent. Scaffold backlog static (9 unscaffolded candidates, 14 weeks). [506] human tract still absent; inputs confirmed: IGP24 completion + arXiv:2608.08538 + arXiv:2508.06670.
+
+**Action items**: [261] documentation CRITICAL. [506] human tract CRITICAL. CASC 2026 proceedings manual sweep (Springer egress-blocked). SAIR Stage 2 watch (terrytao.wordpress.com). Paderborn Arithmetic Statistics arXiv sweep (Sep 7–20). Scaffold 9 cert candidates.
+
+### Scan #35 — 2026-09-07 (window: September 4–7, 2026)
+Full report: `sota_scans/scan_2026-09-07.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2609.03896 (Prime Clockwork, Emmerich, Sep 4) — **LOW-MEDIUM.** Two-hand clock DDS generates primes via Sieve dynamics. Genuine structural parallel to QA (b,e) pair + σ-map, but: multi-modulus (one clock per prime), 0-indexed {0,...,p-1} violates QA A1, goal is prime sieve not orbit tripartition. Interesting independent parallel; no cert action.
+- arXiv:2609.04583 (Finite-field inversion redundancy, Zhang/Zhang, Sep 4) — **LOW.** FALSE COGNATE on "Galois orbit": Frobenius action on F₂-bases of F₂ⁿ, not Z/24Z cyclic orbit dynamics. No cert action.
+- arXiv:2609.03306 (Geometry-aware graph construction, Sep 2026) — **LOW.** Continuous manifold learning / Gaussian kernel bandwidth selection. No modular arithmetic, no cyclic groups.
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged** (3rd consecutive scan). Registry [533] unchanged. SAIR IGP24 Stage 2 not announced — CASC 2026 (Bath) concluded Sep 4 without announcement. CASC 2026 proceedings 21-paper Springer LNCS volume — "expected Sep 10–14" (CORRECTION in scan #36: actually published Aug 8–10). [261] THIRTY-FIFTH consecutive scan. Fixtures [529]–[533] status uncertain in this scan (resolved in scan #36: all confirmed present).
+
+**Action items from scan #35**: CASC proceedings sweep on scan #36. SAIR Stage 2 watch continues (terrytao.wordpress.com / Persiflage). Paderborn post-conference arXiv sweep (Sep 7–20 window).
+
+### Scan #34 — 2026-09-03 (window: September 1–3, 2026)
+Full report: `sota_scans/scan_2026-09-03.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- **SAIR IGP24 COMPLETE — HIGH (EVENT, NOT PAPER)**: All 25,000 transitive permutation groups of degree 24 realized as Galois groups over ℚ. Confirmed by Andrew Sutherland (MIT) at Harvard CMSA Big Data Conference (Sep 3–4, 2026). Stage 1 goal fully achieved; Stage 2 not yet announced. Non-solvable cases include M₂₄ (order 244,823,040, same combinatorial base as QA's Z/24Z). **Critical event for cert [506] human tract.**
+- arXiv:2609.00733 (Permutation groups with fixity 4, Baumeister et al., Sep 1) — **LOW.** FALSE SIGNAL: mod-9 in search snippet was proof-internal divisibility (not Z/9Z orbit structure). Riemann surface / Weierstrass point motivation, no QA structural overlap.
+- arXiv:2508.18578 (Arithmetic dynamics of discrete Painlevé over finite fields, Joshi/Roffelsen, Aug 2025 / boundary) — **LOW.** Genuine discrete dynamics over F_p (closest structural overlap), but Painlevé map is nonlinear birational vs. QA's linear affine σ-map. Finite fields F_p (prime) vs. Z/24Z composite ring. No QA orbit tripartition.
+
+**No HIGH arXiv papers. Top-10 unchanged** (2nd consecutive scan). Registry [533] unchanged. IGP24 Stage 2 not announced. [261] THIRTY-FOURTH consecutive scan — README+SPEC still absent.
+
+**Action items from scan #34**: [506] human tract NOW URGENT (Stage 1 complete). IGP24 completion confirmed adds to [506] alongside arXiv:2608.08538 + arXiv:2508.06670.
 
 ### Scan #33 — 2026-08-31 (window: August 28 – August 31, 2026)
 Full report: `sota_scans/scan_2026-08-31.md`

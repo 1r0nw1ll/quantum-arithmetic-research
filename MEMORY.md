@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-09-10
+Last updated: 2026-09-17
 
 ## Current QA Direction
 
@@ -81,6 +81,43 @@ Last updated: 2026-09-10
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #38 — 2026-09-17 (window: September 14–17, 2026)
+Full report: `sota_scans/scan_2026-09-17.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2609.16178 (Long, Mathieu property for compact Lie groups) — **LOW.** FALSE NAME COGNATE: Mathieu–Zhao subspace theory ≠ Mathieu sporadic groups M₂₃/M₂₄. No orbit relevance.
+- arXiv:2609.13142 (Sofos, Brauer symbol statistics) — **LOW.** Class field theory / Brauer groups.
+- arXiv:2609.13131 (Eta-quotients, Rogers-Ramanujan) — **LOW.** FALSE COGNATE: "modular" = modular forms, not Z/nZ.
+- arXiv:2609.16381 (Local Langlands / Yu supercuspidals) — **LOW.** p-adic representation theory.
+- arXiv:2609.16360 (Number fields as curves over F₁) — **LOW.** Absolute algebraic geometry.
+- arXiv:2506.20118 (Tan/Li, Jun 2025 MEGA-SLIP, ~38-scan; predates project) — **LOW-MEDIUM.** Graph structure of permutation maps over Z/p^k. Genuine structural overlap at Z/9Z; adjacent to [537]. Prime-power only (not Z/24Z). No cert action.
+- Scientific Reports April 2026 (MEGA-SLIP, ~17-scan) — **LOW-MEDIUM.** Lucas sequences + signal processing bridge. Adjacent QA domain. No cert action.
+- **NEW SAIR competition**: Lean Kernel Challenge Stage 1 launched Sep 16. SEPARATE from IGP24 (verified computation in Lean 4, deadline Nov 20, 2026). IGP24 Stage 2 NOT announced — 6th consecutive scan since Stage 1 completion.
+- Paderborn Arithmetic Statistics sweep: WINDOW CLOSED (Sep 7–20). No papers found. Priority downgraded.
+- Tao blog Sep 15–16: academic/AI epistemology posts — NOT QA-relevant.
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged** (6th consecutive scan #33–#38). [261] THIRTY-EIGHTH consecutive scan — README+SPEC still absent. [506] human tract CRITICAL (6 scans since Stage 1 completion, 4 inputs ready). Scaffold backlog static (9 unscaffolded candidates, 16+ weeks).
+
+**Action items**: [261] documentation CRITICAL. [506] human tract CRITICAL. SAIR Stage 2 watch continues (competition.sair.foundation). CASC 2026 proceedings manual sweep still pending. Scaffold 9 cert candidates.
+
+---
+
+### Scan #37 — 2026-09-14 (window: September 10–14, 2026)
+Full report: `sota_scans/scan_2026-09-14.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2609.06000 (Kasubuchi, ModularPhaseNet, Sep 5) — **LOW-MEDIUM.** Finite cyclic group G=⟨g⟩⊆F_p* as auxiliary phase channel in Transformers. Cyclic quotient filtration hierarchy most interesting QA resonance. Third paper in NN cyclic geometry cluster (join [535],[536]).
+- arXiv:2608.06222 (Kun-Thom, nonsofic wreath products, Aug 7, 6-scan MEGA-SLIP) — **LOW.** First robust non-sofic group construction. QA operates in the sofic (finite-ring) regime; this defines the opposite boundary.
+- arXiv:2608.02025 (Fournier-Facio, torsion-free non-sofic group, Aug 17, 5-scan MEGA-SLIP) — **LOW.** Same LOW assessment. Tao blog Sep 11.
+- arXiv:2603.26315 (~13-scan MEGA-SLIP from March 2026) — **LOW-MEDIUM.** Z_nG structure as Galois ring direct sums. Supporting reference for [537] at most.
+- SAIR IGP24 Stage 2 NOT announced (5th scan since Stage 1 completion).
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged** (5th consecutive scan #33–#37). [261] THIRTY-SEVENTH consecutive scan. [506] human tract absent (4 confirmed inputs). Scaffold backlog static.
+
+---
 
 ### Scan #36 — 2026-09-10 (window: September 8–10, 2026)
 Full report: `sota_scans/scan_2026-09-10.md`

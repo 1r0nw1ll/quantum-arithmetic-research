@@ -82,6 +82,25 @@ Last updated: 2026-09-17
 
 ## SOTA Scan Log
 
+### Scan #40 — 2026-09-24 (window: September 21–24, 2026)
+Full report: `sota_scans/scan_2026-09-24.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2507.03762 (Draper/Elduque/Kochetov, Jul 2025, ~12-scan MEGA-SLIP) — **LOW-MEDIUM.** "Special pure gradings on E8" — five canonical grading groups Z₄, Z₅, Z₆, Z₃², Z₂×Z₄ (complete classification, published LA&A 737 2026). Z₂×Z₄ (order 8 = Satellite) and Z₃² (order 9 = mod-9 domain) structurally adjacent to QA. Supporting background for E8 alignment certs; no standalone cert. Battery item CONFIRMED.
+- arXiv:2508.02245 (Cuenca/Draper/Meyer, Aug 2025, ~11-scan MEGA-SLIP) — **LOW.** Z₂³-grading of exceptional Lie algebras; 860 contractions. Z₂³ not a subgroup of Z/24Z. No cert action.
+- arXiv:2609.17926 (NeurReps 2026, Sep 15, 2-scan MEGA-SLIP) — **LOW-MEDIUM.** "Symmetry without a Manifold: Intrinsic Dimension on Orbits." Scaling laws fail for algebraic tasks without continuous manifold; orbit-dimension framework. Theorem NT observer-layer instantiation. Supporting context for [534]–[536].
+- arXiv:2609.10657 (Sep 10, 2-scan MEGA-SLIP) — **LOW-MEDIUM.** Grokking scaling laws + phase structure quantified. Supporting context for grokking chain.
+- arXiv:2609.13526 (battery item) — **LOW.** Spectral conjugate gradient. Battery item cleared.
+- **M23 Sep 23 press coverage**: arXiv:2608.08538 (scan #32) getting wider media attention. Not new.
+- **SAIR IGP24 Stage 2**: NOT announced — **8th consecutive scan** since Stage 1 completion (Sep 3–4). 21 days post-Stage 1.
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged** (8th consecutive scan #33–#40). [261] FORTIETH consecutive scan — README+SPEC still absent (NEW ALL-TIME MAXIMUM MILESTONE). [506] human tract CRITICAL (8 scans since Stage 1 completion, 4 inputs ready). Scaffold backlog static (9 unscaffolded candidates, 18+ weeks).
+
+**Action items**: [261] documentation CRITICAL (40th scan — MILESTONE). [506] human tract CRITICAL. SAIR Stage 2 watch (8th scan — likely October announcement). E8 grading: add Draper/Elduque author watch. Full 2610 arXiv sweep priority for scan #41 (no later than Oct 5).
+
+---
+
 ### Scan #39 — 2026-09-21 (window: September 17–21, 2026)
 Full report: `sota_scans/scan_2026-09-21.md`
 OB entry: needs manual capture — OB not available in this session

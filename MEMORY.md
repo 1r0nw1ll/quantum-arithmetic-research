@@ -82,6 +82,24 @@ Last updated: 2026-09-17
 
 ## SOTA Scan Log
 
+### Scan #41 — 2026-09-28 (window: September 24–28, 2026)
+Full report: `sota_scans/scan_2026-09-28.md`
+OB entry: needs manual capture — OB not available in this session
+
+**Key finds:**
+- arXiv:2608.22513 (Zheng/Na Zhang, Aug 23, ~6-scan MEGA-SLIP) — **LOW-MEDIUM.** "From Symmetry to Invariance: Learning Galois Equivalent Representations in Finite Fields." Galois group Z/nZ = Gal(F_{p^n}/F_p) organizes basis representations into orbits; transfer learning via orbit equivalence. Grokking chain supporting context. No cert action.
+- arXiv:2608.10894 (Nie et al., Aug 11, ~5-scan MEGA-SLIP) — **LOW-MEDIUM.** "FormaTheoria" — 994k-line Lean 4 formalization of Feit-Thompson/Glauberman/Bender-Suzuki (CFSG building blocks). Adjacent to [506] (M23/M24 cluster). Add as 4th input to [506] human tract.
+- arXiv:2606.13307 (Li/Yuan, Jun 2026, ~15-scan MEGA-SLIP) — **LOW-MEDIUM.** DFT characterization of Z/nZ cyclically covering subspaces of 𝔽_q^n. Battery-watched authors. DFT-orbit coverage parallel. No cert action.
+- arXiv:2507.10782 (~12-scan MEGA-SLIP) — **LOW.** FALSE COGNATE. Futorny-Ovsienko "Galois rings" ≠ GR(p^r, m). Coulomb branches.
+- arXiv:2508.02513 (~11-scan MEGA-SLIP) — **LOW.** FALSE COGNATE. "Modular arithmetic" = positional digit decomposition in LLMs.
+- **SAIR IGP24 Stage 2**: NOT announced — **9th consecutive scan** since Stage 1 completion (Sep 3–4). 25 days post-Stage 1. October 2026 most likely window.
+
+**No HIGH or MEDIUM-HIGH finds. Top-10 unchanged** (9th consecutive scan #33–#41). [261] FORTY-FIRST consecutive scan — README+SPEC absent. [506] human tract CRITICAL (9 scans since Stage 1, 4 inputs ready). Li/Yuan battery watch broadened to general author watch.
+
+**Action items**: [261] documentation CRITICAL (41st scan). [506] human tract CRITICAL (add arXiv:2608.10894 as 4th input). SAIR Stage 2 watch (October 2026 window). CASC 2026 manual sweep (9 scans overdue). Scaffold 9 cert candidates [534]–[542]. Scan #42 no later than Oct 5 (first-week 2610 sweep).
+
+---
+
 ### Scan #40 — 2026-09-24 (window: September 21–24, 2026)
 Full report: `sota_scans/scan_2026-09-24.md`
 OB entry: needs manual capture — OB not available in this session
